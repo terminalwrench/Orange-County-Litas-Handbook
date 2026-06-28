@@ -8,8 +8,7 @@ For venue-specific notes, sponsor details, or event planning records, use `../06
 
 | Role | Name | Phone | Email | Instagram | Notes |
 | --- | --- | --- | --- | --- | --- |
-| Cofounder Lead | Jessica Madrid |  |  Jessmadrid12@gmail.com| [punkndatrunk1221](https://www.instagram.com/punkndatrunk1221/)
- |  |
+| Cofounder Lead | Jessica Madrid |  |  Jessmadrid12@gmail.com| [punkndatrunk1221](https://www.instagram.com/punkndatrunk1221/)|  |
 | Cofounder Lead | Jessica Hogan |  | hogan21j@gmail.com | [garpagepail.scumbagg](https://www.instagram.com/garbagepail.scumbagg/) |  |
 | Cofounder Lead | Aly Humphreys |  | alyciahumphreys@gmail.com | [alyd_7of9](https://www.instagram.com/alyd_7of9/) |  |
 | Sweep Rider | Sandi |  |  |  |  |
