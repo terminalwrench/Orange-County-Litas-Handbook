@@ -1,32 +1,54 @@
-# Orange County Litas Handbook
+Orange County Litas Handbook
 
-This handbook is the operating reference for the Orange County chapter of The Litas. It brings chapter practices, event systems, media operations, social workflows, routes, partnerships, merch, photography, and archives into one organized package.
+Welcome to the official operating handbook for The Litas – Orange County Chapter.
 
-The handbook is written for current leaders, future leaders, volunteers, ride leads, sweeps, media contributors, and trusted helpers. It should make the chapter easier to run without making the chapter feel rigid.
+This handbook serves as the chapter’s central knowledge base, preserving our history, documenting how we operate, and providing future leadership with the information needed to confidently continue building the chapter.
 
-## Start Here
+It is intended for chapter leadership, volunteers, ride leads, sweeps, photographers, media contributors, and trusted helpers. The goal is to keep our operations organized while preserving the creativity, personality, and culture that make the Orange County chapter unique.
 
-- [HOME.md](HOME.md) gives a practical entry point.
-- [INDEX.md](INDEX.md) lists every major handbook section.
-- [ROADMAP.md](ROADMAP.md) describes planned improvements.
-- [CHANGELOG.md](CHANGELOG.md) records handbook changes.
+This handbook is a living document. As the chapter grows, it should evolve with us.
 
-## Modules
+⸻
 
-| Module | Purpose |
-| --- | --- |
-| [00-Global-Litas](00-Global-Litas/) | Official Litas references and global alignment notes. |
-| [01-Chapter](01-Chapter/) | Local chapter identity, leadership, history, calendar, and operating practices. |
-| [02-Events](02-Events/) | Event planning, ride operations, venue selection, weather decisions, recaps, and templates. |
-| [03-Media](03-Media/) | Media asset organization, technical standards, naming, archiving, and publishing support. |
-| [04-Social](04-Social/) | Social media workflow, community management, collaborations, event posts, and templates. |
-| [05-Routes](05-Routes/) | Reusable route planning references, stops, gas, and route templates. |
-| [06-Partnerships](06-Partnerships/) | Sponsors, venues, discounts, contacts, and thank-you workflows. |
-| [07-Merch](07-Merch/) | Patch, sticker, apparel, and merchandise operations. |
-| [08-Photography](08-Photography/) | Shot lists, editing, delivery, gallery standards, and photo archive workflow. |
-| [09-Archive](09-Archive/) | Long-term preservation rules for completed chapter work. |
+Getting Started
 
-## Maintenance Standard
+Begin with these documents:
 
-When a chapter practice becomes repeatable, document it here. When a process changes, update the relevant module and add an entry to [CHANGELOG.md](CHANGELOG.md). When a file is only useful for one event, store it with that event record rather than turning it into permanent handbook guidance.
+* HOME.md – Starting point for navigating the handbook.
+* INDEX.md – Complete handbook index.
+* ROADMAP.md – Planned improvements and future projects.
+* CHANGELOG.md – History of handbook updates.
 
+⸻
+
+Handbook Structure
+
+Module	Purpose
+00 – Global Litas	Official information, references, and resources from The Litas.
+01 – Chapter	Chapter history, leadership, calendar, contacts, and organizational information.
+02 – Events	Event planning, archives, templates, checklists, and event documentation.
+03 – Media	Branding, flyers, photography standards, videos, asset organization, and media workflows.
+04 – Social	Social media planning, posting guides, captions, hashtags, collaborations, and engagement.
+05 – Routes	Ride planning, route documentation, ride reports, fuel stops, scenic locations, and templates.
+07 – Photography	Event photography workflows, editing, galleries, delivery, and archival practices.
+08 – Archive	Historical records, retired assets, and long-term preservation of chapter materials.
+09 – Leadership	Leadership resources, planning, meeting notes, decision tracking, and chapter management.
+10 – Events Database	The master record of every Orange County Litas event and the primary historical source for the handbook.
+11 – Venues	Locations used by the chapter, venue history, parking notes, and planning references.
+12 – Community	Community rides, collaborations, other Litas chapters, and motorcycle events we participate in.
+13 – History	Chapter timeline, milestones, traditions, leadership history, and memorable moments.
+14 – Knowledge	Lessons learned, best practices, FAQs, onboarding resources, and accumulated chapter knowledge.
+15 – Operations	Operational references, recurring workflows, annual planning, and administrative guidance.
+
+⸻
+
+Guiding Principles
+
+* Keep information accurate and up to date.
+* Document real experience—not assumptions.
+* Preserve chapter history for future leadership.
+* Store permanent knowledge here; store event-specific files with the event whenever practical.
+* Keep the handbook organized, practical, and easy to navigate.
+* Support creativity rather than restrict it.
+
+The handbook should make running the chapter easier—not more complicated.
