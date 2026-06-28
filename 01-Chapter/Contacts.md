@@ -8,10 +8,10 @@ For venue-specific notes, sponsor details, or event planning records, use `../06
 
 | Role | Name | Phone | Email | Instagram | Notes |
 | --- | --- | --- | --- | --- | --- |
-| Cofounder Lead |  |  |  |  |  |
-| Cofounder Lead |  |  |  |  |  |
-| Cofounder Lead |  |  |  |  |  |
-| Ride Lead |  |  |  |  |  |
+| Cofounder Lead | Jessica Madrid |  |  |  |  |
+| Cofounder Lead | Jessica Hogan |  |  |  |  |
+| Cofounder Lead | Aly Humphreys |  |  |  |  |
+| Sweep Rider | Sandi |  |  |  |  |
 | Sweep Rider |  |  |  |  |  |
 | Sweep Rider |  |  |  |  |  |
 
