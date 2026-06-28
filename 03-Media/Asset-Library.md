@@ -1,0 +1,87 @@
+# Asset Library
+
+The asset library stores reusable media files that support OC Litas production. Its purpose is organization and reliability: leaders, designers, photographers, and social contributors should know where to find approved source files without searching old messages.
+
+Use this with [File-Organization.md](File-Organization.md), [Logo-Library.md](Logo-Library.md), and [Archive-Workflow.md](Archive-Workflow.md).
+
+## Library Scope
+
+The library may include:
+
+- Official Litas logo files
+- OC chapter logo files
+- Partner or sponsor logos approved for current use
+- Fonts or font reference files, when available for use
+- Icons and recurring utility graphics
+- Reusable templates
+- Reference assets for event production
+
+The library should not become a dumping ground for every exported flyer, every camera roll, or every draft. Final event media belongs with the event archive.
+
+## Logos
+
+Store reusable logos in [Assets/Logos](Assets/Logos/).
+
+Maintain:
+
+- Source files when available
+- Transparent PNG exports
+- SVG files when available
+- AI or other editable files when available
+- Notes about file origin and usage approval
+
+See [Logo-Library.md](Logo-Library.md) for logo-specific handling.
+
+## Fonts
+
+Store usable font files or font reference notes in [Assets/Fonts](Assets/Fonts/).
+
+For each font asset, keep:
+
+- Font name
+- File type
+- License or usage note if known
+- Source location
+- Date added
+
+Do not assume a font can be shared, embedded, or used commercially unless the license is known.
+
+## Icons
+
+Store reusable icon files in [Assets/Icons](Assets/Icons/).
+
+Keep icons organized by purpose or set. If an icon is only part of one event's creative, archive it with that event rather than adding it to the reusable library.
+
+## Templates
+
+Reusable workflow templates live in [Templates](Templates/). Design templates or editable creative source files may live in the relevant production area or a dedicated asset folder when they are intended for repeated use.
+
+Each reusable template should have:
+
+- Clear name
+- Intended use
+- Current version
+- Owner or maintainer when known
+- Notes on required logos, export sizes, or platform requirements
+
+## Reference Assets
+
+Reference assets are files used to support production, such as venue images, event examples, partner materials, screenshots, or prior deliverables.
+
+Store reference assets near the project they support unless they are useful across many projects. Reusable references should be named clearly and separated from final deliverables.
+
+## Maintenance
+
+Review the asset library periodically.
+
+During review:
+
+- Remove duplicates from reusable folders.
+- Keep the highest-quality source version.
+- Retain final exports only when they are needed for reuse.
+- Update names to match [Naming-Conventions.md](Naming-Conventions.md).
+- Move completed event media to the archive.
+- Confirm partner or sponsor logos are still approved for use.
+
+When an asset is replaced, keep the old version only if it is needed for historical records or active files still reference it.
+
