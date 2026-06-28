@@ -1,0 +1,41 @@
+# OC Litas Holiday Meet & Greet
+
+## Event Details
+
+| Field | Value |
+| --- | --- |
+| Title | OC Litas Holiday Meet & Greet |
+| Date | 2023-12-14 |
+| Event Type | Meet & Greet |
+| Status | Completed |
+| Location | Golden Road Brewing, 16390 Pacific Coast Hwy, Huntington Beach, CA 92649, USA |
+| Address | 16390 Pacific Coast Hwy, Huntington Beach, CA 92649, USA |
+| Hosted By | Orange County Litas |
+| Partner(s) |  |
+| Category | Meet & Greet |
+| Instagram Link |  |
+| Route |  |
+| Venue | Golden Road Brewing |
+
+## Description
+
+Come to our holiday meet and greet
+Golden Road Brewery
+
+16390 Pacific Coast Hwy
+Unit 100
+Huntington Beach, CA 92649
+United States
+
+## Lessons Learned
+
+
+
+## Future Notes
+
+
+
+## Related Files
+
+- [Event-Lifecycle.md](../../02-Events/Event-Lifecycle.md)
+- [Meet-and-Greet-Planning.md](../../02-Events/Meet-and-Greet-Planning.md)

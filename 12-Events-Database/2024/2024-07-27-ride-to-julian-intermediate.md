@@ -1,0 +1,36 @@
+# Ride to Julian (intermediate+)
+
+## Event Details
+
+| Field | Value |
+| --- | --- |
+| Title | Ride to Julian (intermediate+) |
+| Date | 2024-07-27 |
+| Event Type | Ride |
+| Status | Completed |
+| Location |  |
+| Address |  |
+| Hosted By | Orange County Litas |
+| Partner(s) |  |
+| Category | Intermediate Ride |
+| Instagram Link |  |
+| Route | Ride to Julian (intermediate+) |
+| Venue |  |
+
+## Description
+
+
+
+## Lessons Learned
+
+
+
+## Future Notes
+
+
+
+## Related Files
+
+- [Event-Lifecycle.md](../../02-Events/Event-Lifecycle.md)
+- [Ride-Planning.md](../../02-Events/Ride-Planning.md)
+- [README.md](../../05-Routes/README.md)

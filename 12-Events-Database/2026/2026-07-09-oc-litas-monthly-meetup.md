@@ -1,0 +1,35 @@
+# OC Litas Monthly Meetup
+
+## Event Details
+
+| Field | Value |
+| --- | --- |
+| Title | OC Litas Monthly Meetup |
+| Date | 2026-07-09 |
+| Event Type | Meet & Greet |
+| Status | Scheduled |
+| Location | Cook's Corner, 19152 Santiago Cyn Rd, Trabuco Canyon, CA 92679, USA |
+| Address | 19152 Santiago Cyn Rd, Trabuco Canyon, CA 92679, USA |
+| Hosted By | Orange County Litas |
+| Partner(s) |  |
+| Category | Meet & Greet |
+| Instagram Link |  |
+| Route |  |
+| Venue | Cook's Corner |
+
+## Description
+
+
+
+## Lessons Learned
+
+
+
+## Future Notes
+
+
+
+## Related Files
+
+- [Event-Lifecycle.md](../../02-Events/Event-Lifecycle.md)
+- [Meet-and-Greet-Planning.md](../../02-Events/Meet-and-Greet-Planning.md)

@@ -1,0 +1,35 @@
+# Meet and Greet
+
+## Event Details
+
+| Field | Value |
+| --- | --- |
+| Title | Meet and Greet |
+| Date | 2024-08-15 |
+| Event Type | Meet & Greet |
+| Status | Completed |
+| Location | Rodeo 39 Public Market, 12885 Beach Blvd, Stanton, CA 90680, USA |
+| Address | 12885 Beach Blvd, Stanton, CA 90680, USA |
+| Hosted By | Orange County Litas |
+| Partner(s) |  |
+| Category | Meet & Greet |
+| Instagram Link |  |
+| Route |  |
+| Venue | Rodeo 39 Public Market |
+
+## Description
+
+
+
+## Lessons Learned
+
+
+
+## Future Notes
+
+
+
+## Related Files
+
+- [Event-Lifecycle.md](../../02-Events/Event-Lifecycle.md)
+- [Meet-and-Greet-Planning.md](../../02-Events/Meet-and-Greet-Planning.md)
