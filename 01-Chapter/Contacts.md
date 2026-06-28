@@ -8,12 +8,11 @@ For venue-specific notes, sponsor details, or event planning records, use `../06
 
 | Role | Name | Phone | Email | Instagram | Notes |
 | --- | --- | --- | --- | --- | --- |
-| Chapter Lead |  |  |  |  |  |
-| Operations Lead |  |  |  |  |  |
-| Events Lead |  |  |  |  |  |
-| Communications Lead |  |  |  |  |  |
-| Creative Lead |  |  |  |  |  |
+| Cofounder Lead |  |  |  |  |  |
+| Cofounder Lead |  |  |  |  |  |
+| Cofounder Lead |  |  |  |  |  |
 | Ride Lead |  |  |  |  |  |
+| Sweep Rider |  |  |  |  |  |
 | Sweep Rider |  |  |  |  |  |
 
 ## Venues
