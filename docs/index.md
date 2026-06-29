@@ -1,82 +1,144 @@
 <div class="portal-home" markdown="1">
 
-<section class="portal-hero">
-  <div class="portal-eyebrow">Orange County chapter hub</div>
-  <h1>Orange County Litas Portal</h1>
-  <p class="portal-subtitle">Plan rides. Preserve history. Grow the chapter.</p>
-  <p class="portal-intro">This is the central hub for Orange County Litas leadership: event planning, ride knowledge, media workflows, venue notes, chapter history, and the everyday details that keep the chapter moving.</p>
-  <div class="portal-actions">
-    <a class="portal-button portal-button-primary" href="./02-Events/">Events</a>
-    <a class="portal-button" href="./05-Routes/">Routes</a>
-    <a class="portal-button" href="./03-Media/">Media</a>
-    <a class="portal-button" href="./09-Leadership/">Leadership</a>
+<section class="portal-hero portal-hero--split" aria-labelledby="portal-title">
+  <div class="portal-hero-copy">
+    <div class="portal-eyebrow">Orange County Litas internal portal</div>
+    <h1 id="portal-title">Orange County Litas Portal</h1>
+    <p class="portal-subtitle">Plan rides. Welcome members. Preserve the chapter.</p>
+    <p class="portal-intro">A central home base for the work behind the rides: events, routes, media, venues, leadership notes, history, and the shared knowledge that keeps Orange County Litas moving together.</p>
+    <div class="portal-actions" aria-label="Primary portal actions">
+      <a class="portal-button portal-button-primary" href="./02-Events/">Plan an Event</a>
+      <a class="portal-button" href="./05-Routes/">Find Ride Resources</a>
+      <a class="portal-button" href="./01-Chapter/New-Rider-Guide/">New Member Guide</a>
+      <a class="portal-button" href="./09-Leadership/">Officer Resources</a>
+    </div>
   </div>
+  <aside class="portal-hero-panel" aria-label="Portal status">
+    <span class="portal-panel-label">Today at a glance</span>
+    <div class="portal-stat-list">
+      <a href="./10-Events-Database/">Event records</a>
+      <a href="./11-Venues/">Venue knowledge</a>
+      <a href="./12-History/">Chapter history</a>
+    </div>
+  </aside>
 </section>
 
 <section class="portal-note">
   You do not need to know GitHub to use this portal. Click a section, find what you need, and send updates to chapter leadership.
 </section>
 
-## Main Modules
-
-<div class="portal-card-grid">
-  <a class="portal-card" href="./02-Events/">
-    <span class="portal-card-kicker">Plan</span>
-    <strong>Events</strong>
-    <span>Move meetups, rides, recaps, and special events from idea to archive.</span>
-  </a>
-  <a class="portal-card" href="./05-Routes/">
-    <span class="portal-card-kicker">Ride</span>
-    <strong>Routes</strong>
-    <span>Keep tested route knowledge, regroup points, hazards, and ride reports together.</span>
-  </a>
-  <a class="portal-card" href="./03-Media/">
-    <span class="portal-card-kicker">Create</span>
-    <strong>Media</strong>
-    <span>Find file standards, asset workflows, sizing guidance, and archive habits.</span>
-  </a>
-  <a class="portal-card" href="./11-Venues/">
-    <span class="portal-card-kicker">Gather</span>
-    <strong>Venues</strong>
-    <span>Look up places the chapter has used, considered, or learned from.</span>
-  </a>
-  <a class="portal-card" href="./09-Leadership/">
-    <span class="portal-card-kicker">Lead</span>
-    <strong>Leadership</strong>
-    <span>Track internal planning, decisions, assignments, feedback, and continuity.</span>
-  </a>
-  <a class="portal-card" href="./12-History/">
-    <span class="portal-card-kicker">Remember</span>
-    <strong>History</strong>
-    <span>Preserve chapter milestones, leadership changes, traditions, and stories.</span>
-  </a>
-</div>
-
 ## Quick Actions
 
-<div class="quick-grid">
-  <a class="quick-card" href="./02-Events/Event-Lifecycle/">Plan an event</a>
-  <a class="quick-card" href="./05-Routes/Route-Categories/">Find a route</a>
-  <a class="quick-card" href="./03-Media/File-Organization/">Upload or find media</a>
-  <a class="quick-card" href="./11-Venues/Venue-Index/">Look up a venue</a>
-  <a class="quick-card" href="./12-History/Chapter-Timeline/">Review chapter history</a>
-  <a class="quick-card" href="./10-Events-Database/Events-Index/">Update event records</a>
+<div class="portal-action-grid">
+  <a class="portal-action-card portal-icon portal-icon--event" href="./02-Events/Event-Lifecycle/">
+    <span>Plan an event</span>
+    <strong>Use the event lifecycle, planning guides, and templates.</strong>
+  </a>
+  <a class="portal-action-card portal-icon portal-icon--ride" href="./05-Routes/">
+    <span>Find ride resources</span>
+    <strong>Review route standards, hazards, fuel stops, and ride reports.</strong>
+  </a>
+  <a class="portal-action-card portal-icon portal-icon--media" href="./03-Media/File-Organization/">
+    <span>Find media</span>
+    <strong>Locate files, naming rules, sizes, and archive workflows.</strong>
+  </a>
+  <a class="portal-action-card portal-icon portal-icon--venue" href="./11-Venues/Venue-Index/">
+    <span>Look up a venue</span>
+    <strong>Check venue notes, favorites, categories, and evaluation guidance.</strong>
+  </a>
 </div>
 
-## Living Portal
+## Upcoming Events
 
-<div class="status-grid">
-  <div class="status-card">
-    <span class="status-label">Recently updated</span>
-    <p>Use this space to point leaders toward the latest handbook updates.</p>
+<div class="portal-feature-row">
+  <section class="portal-feature-card portal-feature-card--accent">
+    <span class="portal-card-kicker">Calendar placeholder</span>
+    <h3>Upcoming chapter work</h3>
+    <p>No upcoming event has been pinned on the homepage yet. Use the Events Database and current leadership calendar to confirm what is next.</p>
+    <a href="./10-Events-Database/Events-Index/">Open Events Index</a>
+  </section>
+  <section class="portal-feature-card">
+    <span class="portal-card-kicker">Records</span>
+    <h3>Update completed events</h3>
+    <p>After a ride, meetup, or collaboration, update the event record with what happened, what worked, and what future leaders should know.</p>
+    <a href="./10-Events-Database/Templates/Event/">Use Event Template</a>
+  </section>
+</div>
+
+## Featured Resources
+
+<div class="portal-card-grid portal-card-grid--featured">
+  <a class="portal-card portal-icon portal-icon--officer" href="./09-Leadership/">
+    <span class="portal-card-kicker">Officer shortcut</span>
+    <strong>Leadership Workspace</strong>
+    <span>Meeting notes, decisions, goals, assignments, feedback themes, and succession planning.</span>
+  </a>
+  <a class="portal-card portal-icon portal-icon--member" href="./01-Chapter/New-Rider-Guide/">
+    <span class="portal-card-kicker">New member shortcut</span>
+    <strong>New Rider Guide</strong>
+    <span>A welcoming first stop for what to expect at an Orange County Litas event or ride.</span>
+  </a>
+  <a class="portal-card portal-icon portal-icon--route" href="./05-Routes/Planning-Checklist/">
+    <span class="portal-card-kicker">Ride shortcut</span>
+    <strong>Route Planning Checklist</strong>
+    <span>Pre-ride planning checks for leaders before approving or announcing a route.</span>
+  </a>
+  <a class="portal-card portal-icon portal-icon--chapter" href="./01-Chapter/">
+    <span class="portal-card-kicker">Chapter shortcut</span>
+    <strong>Chapter Manual</strong>
+    <span>How the Orange County chapter operates locally, welcomes riders, and keeps continuity.</span>
+  </a>
+</div>
+
+## Portal Sections
+
+<div class="portal-section-grid">
+  <a href="./02-Events/">
+    <span>Events</span>
+    <strong>Planning, ride operations, meetups, special events, weather calls, recaps.</strong>
+  </a>
+  <a href="./10-Events-Database/">
+    <span>Event Database</span>
+    <strong>Canonical history of chapter events and calendar-based records.</strong>
+  </a>
+  <a href="./05-Routes/">
+    <span>Routes</span>
+    <strong>Route standards, hazards, ride reports, fuel stops, and seasonal notes.</strong>
+  </a>
+  <a href="./11-Venues/">
+    <span>Venues</span>
+    <strong>Venue records, favorites, evaluation notes, and event history.</strong>
+  </a>
+  <a href="./03-Media/">
+    <span>Media</span>
+    <strong>Asset organization, image sizes, naming conventions, and archive workflow.</strong>
+  </a>
+  <a href="./04-Social/">
+    <span>Social</span>
+    <strong>Posting workflow, community management, announcements, recaps, and templates.</strong>
+  </a>
+  <a href="./12-History/">
+    <span>History</span>
+    <strong>Milestones, leadership history, traditions, annual recaps, and chapter growth.</strong>
+  </a>
+  <a href="./13-Knowledge/">
+    <span>Knowledge</span>
+    <strong>FAQs, lessons learned, best practices, onboarding, resources, and glossary.</strong>
+  </a>
+</div>
+
+## Community & Chapter
+
+<div class="portal-community-band">
+  <div>
+    <span class="portal-card-kicker">Keep the culture visible</span>
+    <h3>Built for the people doing chapter work</h3>
+    <p>This portal is here to make the behind-the-scenes work lighter: fewer lost details, clearer handoffs, better planning, and more room for the actual reason everyone is here.</p>
   </div>
-  <div class="status-card">
-    <span class="status-label">Upcoming work</span>
-    <p>Track the next handbook areas that need review, cleanup, or chapter input.</p>
-  </div>
-  <div class="status-card">
-    <span class="status-label">Event database</span>
-    <p>Keep event records current so future planning starts from real chapter history.</p>
+  <div class="portal-community-links">
+    <a href="./01-Chapter/OC-Chapter-Identity/">Chapter Identity</a>
+    <a href="./12-History/Chapter-Timeline/">Chapter Timeline</a>
+    <a href="./13-Knowledge/Frequently-Asked-Questions/">FAQ</a>
   </div>
 </div>
 
