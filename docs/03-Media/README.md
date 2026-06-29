@@ -16,6 +16,8 @@
   <a href="Templates/Flyer-Brief/">Flyer Brief</a>
   <a href="Templates/General-Social-Media-Checklist/">Social Media Checklist</a>
   <a href="Instagram-Guidelines/">Instagram Guidelines</a>
+  <a href="../07-Photography/Shot-List/">Photo Shot List</a>
+  <a href="../07-Photography/Delivery-Workflow/">Photo Delivery</a>
 </div>
 
 This module keeps OC Litas media assets organized, findable, and consistent across deliverables while leaving creative decisions to the designer. It standardizes where files live, how assets are requested, what technical details are needed, how final media is named, and how completed work is archived.
@@ -33,6 +35,8 @@ Use this folder with the event operating system in [../02-Events](../02-Events/R
 | [Image-Sizes.md](Image-Sizes.md) | Recommended export sizes for social, event, and print deliverables. |
 | [Instagram-Guidelines.md](Instagram-Guidelines.md) | Operational posting requirements, tagging, accessibility, and publishing workflow. |
 | [File-Organization.md](File-Organization.md) | Where every media-related asset belongs in the repository. |
+| [../07-Photography/Shot-List.md](../07-Photography/Shot-List.md) | Practical event shot list for photographers and social recaps. |
+| [../07-Photography/Delivery-Workflow.md](../07-Photography/Delivery-Workflow.md) | How final photos are handed back to leadership for posting and records. |
 
 ## Templates
 

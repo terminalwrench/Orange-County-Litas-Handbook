@@ -51,10 +51,10 @@ Use this checklist before approving a route for a chapter event or adding it to 
 - [ ] Alternate destination, parking, restroom, or fuel stop is identified when needed.
 - [ ] Emergency response expectations are understood.
 
-## Documentation
+## After Approval
 
-- [ ] Route file uses [Templates/Route-Template.md](Templates/Route-Template.md).
-- [ ] Route file includes known hazards.
-- [ ] Route file includes revision history.
-- [ ] Ride report will be completed after the event if the route is new, revised, or worth repeating.
-- [ ] Lessons learned will be added back to the route file.
+- [ ] Public ride description matches the approved difficulty.
+- [ ] Event record links to the route or ride planning notes.
+- [ ] Known hazards are included in the ride brief when relevant.
+- [ ] Lead and Sweep know what should be updated after the ride.
+- [ ] Lessons learned will be added to the route file or event record if the ride should be repeated.

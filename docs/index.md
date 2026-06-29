@@ -148,13 +148,13 @@
   </div>
 </div>
 
-<h2 id="start-here">Start Here</h2>
+<h2 id="operations-map">Operations Map</h2>
 
 <div class="module-link-grid compact">
-  <a href="./HOME/">Home</a>
-  <a href="./Handbook-Index/">Handbook Index</a>
-  <a href="./ROADMAP/">Roadmap</a>
-  <a href="./CHANGELOG/">Changelog</a>
+  <a href="./Handbook-Index/">Open Operations Map</a>
+  <a href="./01-Chapter/Calendar/">Check Calendar</a>
+  <a href="./10-Events-Database/Events-Index/">Find Past Event</a>
+  <a href="./04-Social/Email-Center/">Write Email</a>
 </div>
 
 </div>

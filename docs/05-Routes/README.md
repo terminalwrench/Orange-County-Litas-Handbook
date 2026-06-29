@@ -1,10 +1,10 @@
-# Routes
+# Ride Planner
 
 <section class="module-hero">
-  <span class="module-kicker">Ride knowledge</span>
-  <h1>Routes</h1>
-  <p class="module-subtitle">Institutional route knowledge for rides the chapter has planned, tested, completed, and improved.</p>
-  <p class="module-intro">Use this module to evaluate route difficulty, plan fuel and regroup stops, record hazards, and preserve ride reports.</p>
+  <span class="module-kicker">Ride planning</span>
+  <h1>Ride Planner</h1>
+  <p class="module-subtitle">A working hub for approving rides, matching routes to riders, and preparing lead/sweep plans.</p>
+  <p class="module-intro">Use this module when leadership needs to decide whether a ride is ready, beginner-friendly, properly supported, and realistic for the planned group.</p>
 </section>
 
 ## Start Here
@@ -12,27 +12,27 @@
 <div class="module-link-grid">
   <a href="Route-Planning-Standards/">Route Planning Standards</a>
   <a href="Planning-Checklist/">Planning Checklist</a>
-  <a href="Route-Categories/">Route Categories</a>
+  <a href="Route-Categories/">Ride Types</a>
   <a href="Fuel-Stops/">Fuel Stops</a>
-  <a href="Hazard-Notes/">Hazard Notes</a>
-  <a href="Ride-Reports/">Ride Reports</a>
+  <a href="Seasonal-Riding/">Seasonal Riding</a>
+  <a href="Routes/">Route Library</a>
 </div>
 
-This module is the Orange County Litas route knowledge base. It documents rides the chapter has planned, tested, completed, reviewed, and improved over time.
+The Ride Planner is the Orange County Litas working space for chapter rides. It helps leadership evaluate difficulty, plan stops, assign lead and sweep, check seasonal conditions, and decide whether a route is ready to publish.
 
-This is not a GPS library. Route files should not replace current navigation, traffic review, weather review, or day-of judgment. They exist to preserve institutional knowledge so future leaders can plan safer, clearer, and more consistent rides.
+This is not a GPS library. Route files should not replace current navigation, traffic review, weather review, or day-of judgment. They exist to preserve practical ride knowledge so future leaders can plan safer, clearer, and more consistent chapter rides.
 
 Use this module with [../02-Events/Ride-Planning.md](../02-Events/Ride-Planning.md), [../02-Events/Beginner-Rides.md](../02-Events/Beginner-Rides.md), and [../02-Events/Weather-Contingencies.md](../02-Events/Weather-Contingencies.md).
 
 ## Purpose
 
-The route knowledge base helps leadership:
+The Ride Planner helps leadership:
 
+- Decide whether a ride is appropriate for the intended riders.
+- Confirm lead, sweep, regroup, fuel, restroom, parking, and contingency plans.
+- Publish honest difficulty descriptions.
 - Reuse routes that have been reviewed by the chapter.
-- Understand why a route worked or did not work for a specific group.
-- Preserve fuel, restroom, food, parking, regroup, and photo stop details.
-- Record seasonal risks, recurring hazards, and traffic concerns.
-- Make difficulty ratings more consistent across events.
+- Preserve practical notes from completed rides without turning the portal into a map app.
 - Improve handoff between current and future ride leaders.
 
 ## Standard
@@ -45,19 +45,11 @@ Every route should be treated as a living document. Conditions change, construct
 
 | Document | Purpose |
 | --- | --- |
-| [Route-Categories.md](Route-Categories.md) | Defines the route categories used in this module. |
-| [Route-Planning-Standards.md](Route-Planning-Standards.md) | Planning standards for route testing, regroup locations, fuel, restrooms, parking, communication, and contingencies. |
-| [Ride-Reports.md](Ride-Reports.md) | Explains how completed rides should be reviewed and documented. |
-| [Seasonal-Riding.md](Seasonal-Riding.md) | Seasonal considerations for heat, winter conditions, rain, wind, fire season, and holiday traffic. |
-| [Fuel-Stops.md](Fuel-Stops.md) | Structure for documenting reliable fuel stops used during rides. |
-| [Photo-Stops.md](Photo-Stops.md) | Structure for documenting scenic and group photo locations. |
-| [Hazard-Notes.md](Hazard-Notes.md) | Guidance for recording recurring route hazards. |
-| [Planning-Checklist.md](Planning-Checklist.md) | Reusable checklist for approving a route before an event. |
-
-## Templates
-
-- [Templates/Route-Template.md](Templates/Route-Template.md)
-- [Templates/Ride-Report-Template.md](Templates/Ride-Report-Template.md)
+| [Route-Planning-Standards.md](Route-Planning-Standards.md) | How to test, describe, staff, and adjust a chapter ride. |
+| [Planning-Checklist.md](Planning-Checklist.md) | The approval checklist before a ride is announced or added to the library. |
+| [Route-Categories.md](Route-Categories.md) | A practical ride-type guide for choosing the right format and difficulty. |
+| [Fuel-Stops.md](Fuel-Stops.md) | How to record reliable fuel, restroom, and waiting-area stops. |
+| [Seasonal-Riding.md](Seasonal-Riding.md) | Heat, rain, wind, fire season, holiday traffic, and other timing concerns. |
 
 ## Route Library
 
@@ -77,3 +69,12 @@ Route files are organized under [Routes](Routes/README.md) by category:
 - Destination
 
 Some routes may fit more than one category. Store the main route file in the category that best describes its primary use, then cross-reference it from other planning notes when helpful.
+
+## After A Ride
+
+After a ride, update the related route file or event record with only the details that help future leaders:
+
+- What changed from the plan.
+- Any road, traffic, fuel, restroom, or parking issues.
+- Whether the difficulty rating was accurate.
+- Whether the route should be repeated, revised, or retired.

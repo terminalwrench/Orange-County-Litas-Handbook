@@ -1,7 +1,5 @@
 site_name: Orange County Litas Portal
-site_description: A friendly website for the Orange County Litas chapter handbook.
-repo_url: https://github.com/terminalwrench/Orange-County-Litas-Handbook
-repo_name: terminalwrench/Orange-County-Litas-Handbook
+site_description: The operations center for Orange County Litas chapter leadership.
 docs_dir: docs
 site_dir: site
 use_directory_urls: true
@@ -38,12 +36,8 @@ plugins:
 
 nav:
   - Portal Home: index.md
-  - Start Here:
-      - Home: HOME.md
-      - Index: Handbook-Index.md
-      - Roadmap: ROADMAP.md
-      - Changelog: CHANGELOG.md
-  - Global Litas:
+  - Operations Map: Handbook-Index.md
+  - Litas Reference:
       - Overview: 00-Global-Litas/README.md
       - Brand Standards: 00-Global-Litas/Brand-Standards.md
       - Chapter Requirements: 00-Global-Litas/Chapter-Requirements.md
@@ -91,6 +85,9 @@ nav:
           - Logos: 03-Media/Assets/Logos/README.md
           - Fonts: 03-Media/Assets/Fonts/README.md
           - Icons: 03-Media/Assets/Icons/README.md
+      - Photo Tools:
+          - Shot List: 07-Photography/Shot-List.md
+          - Delivery Workflow: 07-Photography/Delivery-Workflow.md
       - Templates:
           - Overview: 03-Media/Templates/README.md
           - Flyer Brief: 03-Media/Templates/Flyer-Brief.md
@@ -115,29 +112,14 @@ nav:
       - Hashtag Library: 04-Social/Hashtag-Library.md
       - Reel Best Practices: 04-Social/Reel-Best-Practices.md
       - Story Best Practices: 04-Social/Story-Best-Practices.md
-  - Routes:
+  - Ride Planner:
       - Overview: 05-Routes/README.md
-      - Fuel Stops: 05-Routes/Fuel-Stops.md
-      - Hazard Notes: 05-Routes/Hazard-Notes.md
-      - Photo Stops: 05-Routes/Photo-Stops.md
+      - Ride Planning Standards: 05-Routes/Route-Planning-Standards.md
       - Planning Checklist: 05-Routes/Planning-Checklist.md
-      - Ride Reports: 05-Routes/Ride-Reports.md
-      - Route Categories: 05-Routes/Route-Categories.md
-      - Route Planning Standards: 05-Routes/Route-Planning-Standards.md
+      - Ride Types: 05-Routes/Route-Categories.md
+      - Fuel and Restroom Stops: 05-Routes/Fuel-Stops.md
       - Seasonal Riding: 05-Routes/Seasonal-Riding.md
       - Route Library: 05-Routes/Routes/README.md
-      - Templates:
-          - Ride Report Template: 05-Routes/Templates/Ride-Report-Template.md
-          - Route Template: 05-Routes/Templates/Route-Template.md
-  - Photography:
-      - Overview: 07-Photography/README.md
-      - Archive Workflow: 07-Photography/Archive-Workflow.md
-      - Delivery Workflow: 07-Photography/Delivery-Workflow.md
-      - Editing Workflow: 07-Photography/Editing-Workflow.md
-      - Gallery Standards: 07-Photography/Gallery-Standards.md
-      - Shot List: 07-Photography/Shot-List.md
-  - Archive:
-      - Overview: 08-Archive/README.md
   - Leadership:
       - Overview: 09-Leadership/README.md
       - Action Items: 09-Leadership/Action-Items.md
@@ -297,22 +279,11 @@ nav:
           - Venue: 11-Venues/Templates/Venue.md
   - History:
       - Overview: 12-History/README.md
-      - Annual Recaps: 12-History/Annual-Recaps.md
       - Chapter Growth: 12-History/Chapter-Growth.md
-      - Chapter Timeline: 12-History/Chapter-Timeline.md
+      - Major Events: 12-History/Chapter-Timeline.md
       - Leadership History: 12-History/Leadership-History.md
-      - Memorable Stories: 12-History/Memorable-Stories.md
       - Milestones: 12-History/Milestones.md
       - Traditions: 12-History/Traditions.md
-      - Timeline:
-          - 2023: 12-History/Timeline/2023.md
-          - 2024: 12-History/Timeline/2024.md
-          - 2025: 12-History/Timeline/2025.md
-          - 2026: 12-History/Timeline/2026.md
-      - Templates:
-          - Annual Recap: 12-History/Templates/Annual-Recap.md
-          - Historical Entry: 12-History/Templates/Historical-Entry.md
-          - Milestone: 12-History/Templates/Milestone.md
   - Knowledge Base:
       - Overview: 13-Knowledge/README.md
       - Best Practices: 13-Knowledge/Best-Practices.md

@@ -1,77 +1,39 @@
-# Route Categories
+# Ride Types
 
-Route categories help leadership find rides that match the purpose, rider level, season, and event format. Categories are planning tools, not permanent labels. If a route changes because of traffic, construction, timing, or rider needs, update the category or add notes explaining when it should be used.
+Use this page to choose the right ride format before publishing an event. Ride types are planning tools. They help leadership set expectations, choose the right lead and sweep, and decide what details must be confirmed before the ride goes live.
 
-Do not add a route to any category until the chapter has direct knowledge of it through planning, pre-riding, partner input, or completed ride experience.
+Do not label a ride based only on distance. The full experience matters: traffic, parking, freeway transitions, canyon sections, heat, fuel gaps, rider count, and destination pressure.
 
-## Beginner
+## Difficulty
 
-Use for routes designed to reduce pressure on newer riders.
+| Type | Use When | Must Confirm |
+| --- | --- | --- |
+| Beginner | The whole ride supports newer riders. | Predictable roads, conservative pace, easy parking, clear regroup points, nearby services, patient sweep. |
+| Intermediate | Riders need comfort with group riding, distance, curves, traffic, or freeway sections. | Honest description, fuel plan, regroup plan, route timing, lead/sweep coordination. |
+| Advanced | The ride includes technical roads, longer distance, remote areas, sustained freeway, steep grades, or limited services. | Experienced lead/sweep, contingency plan, rider screening language, clear no-surprises description. |
 
-Beginner routes should have predictable roads, manageable distance, clear regroup points, conservative pacing, simple parking, nearby fuel, and limited freeway complexity. A ride should not be marked beginner-friendly if the full experience includes confusing freeway transitions, technical canyon sections, difficult parking, high-pressure traffic, or long stretches without safe regroup options.
+## Common Formats
 
-## Intermediate
+| Type | Best For | Planning Notes |
+| --- | --- | --- |
+| Coffee | Low-pressure connection, short social rides, new member meetups. | Confirm parking, restrooms, seating, and whether the stop can handle a group arrival. |
+| Food | Lunch rides, dinner rides, destination meals. | Confirm parking, seating, reservation needs, payment expectations, and destination-only option. |
+| Beach | Coastal rides, beach days, ocean-view destinations. | Check paid parking, crowding, sand, pedestrian activity, holiday traffic, and backup parking. |
+| Scenic | Routes where the view or photo stop is part of the draw. | Confirm legal pullouts, safe staging, weather exposure, and whether stopping adds pressure. |
+| Mountains | Elevation, curves, remote roads, or temperature shifts. | Check weather, debris, fuel gaps, restrooms, cellular coverage, and rider comfort. |
+| Destination | Getting to a venue, event, show, market, or gathering. | Prioritize reliable arrival time, parking, fuel nearby, address, and direct-arrival option. |
+| Collaboration | Ride with another chapter, partner, sponsor, or community group. | Clarify route owner, shared responsibilities, meeting points, contacts, public messaging, and decision authority. |
+| Charity | Fundraiser, benefit ride, donation drive, or service event. | Confirm check-in, donation instructions, staging, arrival window, partner expectations, and public-facing details. |
+| Holiday | Seasonal or holiday-themed ride. | Plan for traffic spikes, closures, crowds, limited parking, and conservative timing. |
 
-Use for routes that require more comfort with group riding, traffic, distance, curves, or freeway sections.
+## Publishing Standard
 
-Intermediate routes may include longer mileage, moderate canyon roads, busier destinations, or more complex timing. They should still have clear regroup plans, known fuel options, and realistic pacing.
+Every ride announcement should state:
 
-## Advanced
-
-Use for routes that require experienced riders and careful screening.
-
-Advanced routes may include longer distances, technical roads, steep grades, remote areas, limited services, sustained freeway riding, or conditions that leave little room for uncertainty. These rides should have strong lead and sweep coordination, clear contingency plans, and honest public descriptions.
-
-## Coffee
-
-Use for low-commitment rides centered on a coffee stop, casual meetup, or short social destination.
-
-Coffee routes are useful for new member connection, weekday rides, morning meetups, and easy re-entry rides after a chapter break. Confirm parking, seating capacity, restroom availability, and whether the location can handle a group arrival.
-
-## Beach
-
-Use for rides with a beach destination, coastal route, or ocean-view stop.
-
-Beach routes need special review for seasonal traffic, parking limits, paid lots, sand on pavement, pedestrian activity, and holiday crowding. Plan arrival timing carefully and document alternate parking when available.
-
-## Scenic
-
-Use for routes where scenery, overlooks, or photo opportunities are a major part of the ride.
-
-Scenic value should never override safety. Document safe pullouts, legal parking, photo staging limits, weather exposure, and whether the scenic section is appropriate for the intended rider level.
-
-## Mountains
-
-Use for routes involving mountain roads, elevation changes, remote stretches, or technical curves.
-
-Mountain routes require careful review for weather, temperature changes, road debris, limited services, wildlife, low visibility, and cellular dead zones. Confirm fuel and restroom options before the ride reaches remote areas.
-
-## Food
-
-Use for rides where a meal, food stop, restaurant, market, or food-focused destination is the primary purpose.
-
-Food routes should document parking capacity, group seating expectations, reservation needs, payment considerations, restroom access, and whether riders can meet directly at the destination.
-
-## Charity
-
-Use for routes connected to a fundraiser, benefit ride, donation drive, or service event.
-
-Charity routes often include additional timing, check-in, donation, sponsor, or partner requirements. Document staging areas, arrival windows, public-facing expectations, and any coordination needed with event organizers.
-
-## Holiday
-
-Use for seasonal or holiday-themed rides.
-
-Holiday routes should account for traffic surges, road closures, parade activity, crowded destinations, limited parking, and higher pedestrian activity. Include backup plans and conservative timing.
-
-## Collaboration
-
-Use for rides planned with another chapter, partner, sponsor, venue, creator, or community group.
-
-Collaboration routes should document shared responsibilities, meeting points, public communication, route ownership, contact names, arrival timing, and how decisions will be made if conditions change.
-
-## Destination
-
-Use for rides where the main purpose is reaching a specific event, venue, landmark, show, market, or gathering.
-
-Destination routes should focus on arrival reliability. Document destination address, parking plan, arrival window, event start time, nearby fuel, restrooms, and whether a destination-only option is available for riders who do not join the group ride.
+- Ride type.
+- Difficulty.
+- Approximate distance and time.
+- Freeway, canyon, mountain, night, or long-distance exposure.
+- Fuel expectations.
+- Destination and parking notes.
+- Whether riders may meet directly at the destination.

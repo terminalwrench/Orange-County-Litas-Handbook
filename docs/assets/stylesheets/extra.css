@@ -887,9 +887,14 @@
     --oc-drawer-width: min(86vw, 20rem);
   }
 
+  .md-header {
+    min-height: 2.75rem;
+  }
+
   .md-header__button {
-    width: 2.6rem;
-    height: 2.6rem;
+    width: 2.35rem;
+    height: 2.35rem;
+    margin: 0.12rem;
   }
 
   .md-sidebar--primary {
@@ -911,9 +916,9 @@
   }
 
   .md-sidebar--primary .md-sidebar__scrollwrap {
-    width: calc(100% - 1.1rem);
-    max-height: calc(100vh - 1.1rem);
-    margin: 0.55rem;
+    width: calc(100% - 0.8rem);
+    max-height: calc(100vh - 0.8rem);
+    margin: 0.4rem;
     border: 1px solid rgba(35, 31, 28, 0.1);
     border-radius: 0.9rem;
     background: var(--oc-panel);
@@ -921,8 +926,8 @@
   }
 
   .md-sidebar--primary .md-nav__title {
-    min-height: 3.1rem;
-    padding: 0.72rem 0.9rem;
+    min-height: 2.75rem;
+    padding: 0.55rem 0.78rem;
     border-bottom: 1px solid var(--oc-line);
     background: rgba(255, 248, 239, 0.96) !important;
     color: var(--oc-ink) !important;
@@ -932,9 +937,9 @@
   }
 
   .md-sidebar--primary .md-nav__title::before {
-    width: 2.15rem;
-    height: 2.15rem;
-    background-size: 1.62rem auto;
+    width: 1.9rem;
+    height: 1.9rem;
+    background-size: 1.45rem auto;
   }
 
   .md-sidebar--primary .md-nav__source {
@@ -947,18 +952,18 @@
   }
 
   .md-sidebar--primary .md-nav--primary > .md-nav__list {
-    padding: 0.65rem 0.65rem 1rem;
+    padding: 0.45rem 0.5rem 0.85rem;
   }
 
   .md-sidebar--primary .md-nav--primary > .md-nav__list > .md-nav__item {
-    margin: 0.18rem 0 0.4rem;
+    margin: 0.12rem 0 0.3rem;
   }
 
   .md-sidebar--primary .md-nav--primary > .md-nav__list > .md-nav__item > .md-nav__link {
-    min-height: 2.75rem;
-    padding: 0.7rem 0.72rem;
-    border-radius: 0.65rem;
-    font-size: 0.78rem;
+    min-height: 2.35rem;
+    padding: 0.52rem 0.62rem;
+    border-radius: 0.58rem;
+    font-size: 0.75rem;
   }
 
   .md-sidebar--primary .md-nav--primary .md-nav[data-md-level="1"] {
@@ -968,10 +973,10 @@
 
   .md-sidebar--primary .md-nav--primary .md-nav[data-md-level="1"] .md-nav__link,
   .md-sidebar--primary .md-nav--primary .md-nav[data-md-level="2"] .md-nav__link {
-    min-height: 2.25rem;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-    font-size: 0.76rem;
+    min-height: 2rem;
+    padding-top: 0.38rem;
+    padding-bottom: 0.38rem;
+    font-size: 0.72rem;
   }
 
   .md-search__form {

@@ -64,8 +64,7 @@ Document:
 - Any known long gaps without restroom access.
 - Alternate stops if the primary location is closed or unavailable.
 
-Do not assume a restroom exists because a business or park appears on a map.pip install -r requirements.txt
-mkdocs gh-deploy
+Do not assume a restroom exists because a business or park appears on a map.
 
 ## Parking Capacity
 

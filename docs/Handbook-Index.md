@@ -1,12 +1,15 @@
-# Handbook Index
+# Operations Map
 
-Use this page as a plain-language map of the portal. Folder numbers still exist in the repository, but day-to-day navigation should start with the work an officer is trying to do.
+Use this page as a plain-language map of the Operations Center. Start with the job you need to do, not the folder where a file lives.
 
-## Start Here
+## Weekly Operations
 
-- [Home](HOME.md)
-- [Roadmap](ROADMAP.md)
-- [Changelog](CHANGELOG.md)
+- [Open the Chapter Calendar](01-Chapter/Calendar.md)
+- [Plan an Event](02-Events/README.md)
+- [Plan a Ride](05-Routes/README.md)
+- [Find a Venue](11-Venues/Venue-Index.md)
+- [Write an Email](04-Social/Email-Center.md)
+- [Open Meeting Notes](09-Leadership/Meeting-Notes.md)
 
 ## Chapter Operations
 
@@ -27,31 +30,10 @@ Use this page as a plain-language map of the portal. Folder numbers still exist 
 - [Media Center](03-Media/README.md)
 - [Social & Email](04-Social/README.md)
 - [Email Center](04-Social/Email-Center.md)
-- [Photography](07-Photography/README.md)
+- [Photo Shot List](07-Photography/Shot-List.md)
+- [Photo Delivery Workflow](07-Photography/Delivery-Workflow.md)
 
 ## Records And Reference
 
 - [Global Litas Reference](00-Global-Litas/README.md)
-- [Archive](08-Archive/README.md)
 - [Chapter History](12-History/README.md)
-
-## Repository Paths
-
-The repository still uses numbered folders so the handbook remains stable and easy to sort:
-
-| Portal Area | Repository Path |
-| --- | --- |
-| Global Litas | `00-Global-Litas/` |
-| Chapter | `01-Chapter/` |
-| Events | `02-Events/` |
-| Media Center | `03-Media/` |
-| Social & Email | `04-Social/` |
-| Routes | `05-Routes/` |
-| Photography | `07-Photography/` |
-| Archive | `08-Archive/` |
-| Leadership | `09-Leadership/` |
-| Events Database | `10-Events-Database/` |
-| Venues | `11-Venues/` |
-| History | `12-History/` |
-| Knowledge Base | `13-Knowledge/` |
-| Operations | `14-Operations/` |
