@@ -14,10 +14,10 @@ theme:
       primary: black
       accent: orange
   features:
-    - navigation.instant
+     - navigation.instant
+    - navigation.sections
     - navigation.tracking
     - navigation.top
-    - navigation.expand
     - search.highlight
     - search.suggest
     - toc.follow
