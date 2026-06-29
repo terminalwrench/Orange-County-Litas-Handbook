@@ -1,3 +1,11 @@
+# Orange County Litas Portal — Project Charter
+
+> This document is the governing reference for the Orange County Litas Portal.
+>
+> Before making structural, architectural, or design changes, contributors (human or AI) should read this document.
+>
+> Unless explicitly approved by J, the repository structure, module organization, and overall architecture should be considered stable.
+
 # Orange County Litas Portal — Project Baseline
 
 ## Current Product
