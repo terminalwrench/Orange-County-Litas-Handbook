@@ -110,7 +110,6 @@ After the event:
 - Note attendance estimate
 - Document parking and staff notes
 - Record whether the venue should be used again
-- Add any improvements to [Lessons-Learned.md](Lessons-Learned.md)
+- Add any improvements to the event record, venue record, or relevant operating page.
 
 Use [Event-Recap.md](Event-Recap.md) for the complete recap process.
-

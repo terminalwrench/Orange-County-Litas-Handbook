@@ -28,7 +28,7 @@ Related files:
 Related files:
 
 - [../02-Events/Ride-Planning.md](../02-Events/Ride-Planning.md)
-- [../05-Routes/Route-Planning-Standards.md](../05-Routes/Route-Planning-Standards.md)
+- [../05-Routes/README.md](../05-Routes/README.md)
 
 ## Meet & Greets
 
@@ -53,6 +53,29 @@ Related files:
 
 - [../03-Media/Social-Media-Guidelines.md](../03-Media/Social-Media-Guidelines.md)
 - [../09-Leadership/Meeting-Notes.md](../09-Leadership/Meeting-Notes.md)
+
+## Leadership Rhythm
+
+- Keep the chapter rhythm sustainable; not every event needs to be elaborate.
+- Write decisions, venue notes, route notes, and event lessons while they are fresh.
+- Make ownership clear before details become public.
+- Announce only what is confirmed.
+- Keep first-timers visible and welcomed.
+- Separate public operational lessons from private member-specific context.
+
+Related files:
+
+- [../14-Operations/Operations-Checklist.md](../14-Operations/Operations-Checklist.md)
+- [../14-Operations/Leadership-Handoff.md](../14-Operations/Leadership-Handoff.md)
+- [../09-Leadership/Meeting-Notes.md](../09-Leadership/Meeting-Notes.md)
+
+## Volunteers
+
+- Give each volunteer one specific task.
+- Explain who they report to.
+- Avoid assigning safety-critical ride roles without the right experience.
+- Thank volunteers and capture what worked.
+- Ask after the event what was easy, confusing, or worth changing.
 
 ## Knowledge Capture
 

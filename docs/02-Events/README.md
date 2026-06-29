@@ -1,72 +1,56 @@
-# OC Litas Event Operating System
+# Events
 
 <section class="module-hero">
-  <span class="module-kicker">Event planning</span>
+  <span class="module-kicker">Event workspace</span>
   <h1>Events</h1>
-  <p class="module-subtitle">A practical system for turning ideas into clear, welcoming chapter events.</p>
-  <p class="module-intro">Use this module to plan meetups, rides, photo shoots, poker runs, special events, cancellations, recaps, and event templates.</p>
+  <p class="module-subtitle">The single workspace for planning upcoming events and finding past event records.</p>
+  <p class="module-intro">Use this module when leadership needs to plan, confirm, search, recap, or reference chapter events.</p>
 </section>
 
 ## Start Here
 
 <div class="module-link-grid">
+  <a href="../10-Events-Database/Events-Index/">Event Records</a>
+  <a href="../10-Events-Database/Timeline/">Timeline</a>
+  <a href="../10-Events-Database/Statistics/">Statistics</a>
+  <a href="../10-Events-Database/Event-Categories/">Categories</a>
   <a href="Event-Lifecycle/">Event Lifecycle</a>
   <a href="Ride-Planning/">Ride Planning</a>
   <a href="Meet-and-Greet-Planning/">Meet and Greet Planning</a>
-  <a href="Beginner-Rides/">Beginner Rides</a>
-  <a href="Venue-Selection/">Venue Selection</a>
-  <a href="Event-Recap/">Event Recap</a>
+  <a href="Weather-Contingencies/">Weather Calls</a>
 </div>
 
-This module is the operating handbook for OC Litas events. It explains how the chapter turns an idea into a safe, welcoming, well-communicated event and how each event is captured afterward so future leaders can improve the next one.
+Events is the operational home for both upcoming work and past records. Planning tools live here, and completed events are preserved in the [Events Index](../10-Events-Database/Events-Index.md).
 
-Use this folder for repeatable systems: event planning, ride planning, venue decisions, weather calls, cancellation communication, recap standards, and reusable templates. One-time working files for a specific event should be created from the templates in [Templates](Templates/README.md) and archived with the event record when the event is complete.
+Use the site search when looking for a specific venue, ride name, collaboration, month, or event title.
 
-## How The Module Works
+## Event Workflow
 
 Every event should move through the same basic lifecycle:
 
 1. Idea
 2. Planning
 3. Venue confirmation
-4. Flyer request
-5. Social media
-6. Email
-7. Ride planning, if applicable
-8. Event execution
-9. Photography
-10. Recap
-11. Archive
+4. Public details
+5. Ride planning, if applicable
+6. Event execution
+7. Recap and record update
 
-The full process is documented in [Event-Lifecycle.md](Event-Lifecycle.md). The lifecycle keeps planning clear without making every event feel formal. A casual meet and greet may move through the process quickly. A poker run, destination ride, collaboration, or beach day needs more time, more owners, and more documentation.
+The [Event Lifecycle](Event-Lifecycle.md) keeps planning clear without making every event feel formal. A casual meet and greet may move through the process quickly. A destination ride, collaboration, beach day, charity event, or larger gathering needs more owners and more confirmation.
 
-## Core Documents
+## Operational Pages
 
 | Document | Use It For |
 | --- | --- |
+| [../10-Events-Database/Events-Index.md](../10-Events-Database/Events-Index.md) | Canonical list of past and scheduled chapter events. |
+| [../10-Events-Database/Timeline.md](../10-Events-Database/Timeline.md) | Chronological view of chapter event history. |
+| [../10-Events-Database/Statistics.md](../10-Events-Database/Statistics.md) | Event counts, recurring patterns, and venue usage. |
+| [../10-Events-Database/Event-Categories.md](../10-Events-Database/Event-Categories.md) | Event category definitions. |
 | [Event-Lifecycle.md](Event-Lifecycle.md) | Standard workflow from first idea through archive. |
 | [Ride-Planning.md](Ride-Planning.md) | Routes, leads, sweeps, gas stops, regroup points, and safety planning. |
 | [Meet-and-Greet-Planning.md](Meet-and-Greet-Planning.md) | Social gatherings, venue communication, first-timer welcome, and recap. |
 | [Beginner-Rides.md](Beginner-Rides.md) | Planning rides for newer or returning riders. |
-| [Photo-Shoots.md](Photo-Shoots.md) | Photography events, rider flow, payment handling, staging, and delivery. |
-| [Poker-Runs.md](Poker-Runs.md) | Checkpoints, scorekeeping, volunteers, timing, prizes, and wrap-up. |
-| [Special-Events.md](Special-Events.md) | Larger events such as beach days, holiday rides, charity events, collaborations, and destination events. |
-| [Venue-Selection.md](Venue-Selection.md) | How to evaluate venues before committing the chapter to a location. |
 | [Weather-Contingencies.md](Weather-Contingencies.md) | Decision guidelines for rain, heat, wind, smoke, and visibility. |
-| [Cancellation-Policy.md](Cancellation-Policy.md) | How to cancel, postpone, or modify events without confusion. |
-| [Event-Recap.md](Event-Recap.md) | Standard post-event follow-up, thanks, asset archive, and repository updates. |
-| [Lessons-Learned.md](Lessons-Learned.md) | Reusable log format for improving the chapter's event operations. |
-
-## Templates
-
-Start event planning from the templates in [Templates](Templates/README.md):
-
-- [Ride-Template.md](Templates/Ride-Template.md)
-- [Meet-and-Greet-Template.md](Templates/Meet-and-Greet-Template.md)
-- [Event-Brief.md](Templates/Event-Brief.md)
-- [Event-Checklist.md](Templates/Event-Checklist.md)
-
-Templates should be copied into the working area for a specific event, completed with real details, and kept with that event's final recap and assets.
 
 ## Operating Standard
 

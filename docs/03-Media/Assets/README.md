@@ -5,9 +5,7 @@ This folder stores reusable media assets for OC Litas production. It supports co
 Use this folder with:
 
 - [../Asset-Library.md](../Asset-Library.md)
-- [../Logo-Library.md](../Logo-Library.md)
-- [../Asset-Library.md](../Asset-Library.md)
-- [../Logo-Library.md](../Logo-Library.md)
+- [Logos](Logos/README.md)
 
 ## Folders
 
@@ -15,7 +13,6 @@ Use this folder with:
 | --- | --- |
 | [Logos](Logos/README.md) | Official, chapter, partner, and sponsor logo files approved for current or repeatable use. |
 | [Fonts](Fonts/README.md) | Font files or font reference notes with license information when available. |
-| [Icons](Icons/README.md) | Reusable icons or utility graphics. |
 
 ## Asset Rules
 

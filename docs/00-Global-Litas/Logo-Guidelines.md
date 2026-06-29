@@ -4,7 +4,7 @@ This page covers operational handling for official and chapter logo files. It do
 
 ## Storage
 
-Store reusable logo files in [../03-Media/Assets/Logos](../03-Media/Assets/Logos/README.md). Keep source files, transparent exports, and dated versions organized according to [../03-Media/Logo-Library.md](../03-Media/Logo-Library.md).
+Store reusable logo files in [../03-Media/Assets/Logos](../03-Media/Assets/Logos/README.md). Keep source files, transparent exports, and dated versions organized in the [Media Center](../03-Media/README.md).
 
 ## Handling
 
@@ -27,4 +27,3 @@ Preferred formats:
 ## Approval
 
 When logo usage involves merch, sponsors, paid promotions, or global representation, confirm approval before production.
-

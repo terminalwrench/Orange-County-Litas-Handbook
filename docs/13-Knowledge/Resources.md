@@ -12,10 +12,10 @@ This file is a directory of useful references, tools, and external resources. Ke
 | Social publishing checks | [../03-Media/Social-Media-Guidelines.md](../03-Media/Social-Media-Guidelines.md) |
 | Routes | [../05-Routes](../05-Routes/README.md) |
 | Partnerships | [../11-Venues](../11-Venues/README.md) |
-| Leadership workspace | [../09-Leadership](../09-Leadership/README.md) |
+| Operations workspace | [../14-Operations](../14-Operations/README.md) |
 | Events Database | [../10-Events-Database](../10-Events-Database/README.md) |
 | Venues | [../11-Venues](../11-Venues/README.md) |
-| Community events | [../10-Events-Database](../10-Events-Database/README.md) |
+| Community events | [../10-Events-Database/Events-Index.md](../10-Events-Database/Events-Index.md) |
 | Event timeline | [../10-Events-Database/Timeline.md](../10-Events-Database/Timeline.md) |
 
 ## Planning Tools

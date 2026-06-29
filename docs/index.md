@@ -60,7 +60,7 @@
   <section class="portal-feature-card portal-feature-card--accent">
     <span class="portal-card-kicker">Calendar placeholder</span>
     <h3>Upcoming chapter work</h3>
-    <p>No upcoming event has been pinned on the homepage yet. Use the Events Database and current leadership calendar to confirm what is next.</p>
+    <p>No upcoming event has been pinned on the homepage yet. Use Events and the current leadership calendar to confirm what is next.</p>
     <a href="./10-Events-Database/Events-Index/">Open Events Index</a>
   </section>
   <section class="portal-feature-card">
@@ -84,7 +84,7 @@
     <strong>New Rider Guide</strong>
     <span>A welcoming first stop for what to expect at an Orange County Litas event or ride.</span>
   </a>
-  <a class="portal-card portal-icon portal-icon--route" href="./05-Routes/Planning-Checklist/">
+  <a class="portal-card portal-icon portal-icon--route" href="./05-Routes/">
     <span class="portal-card-kicker">Ride shortcut</span>
     <strong>Route Planning Checklist</strong>
     <span>Pre-ride planning checks for leaders before approving or announcing a route.</span>
@@ -140,10 +140,10 @@
   </div>
 </div>
 
-<h2 id="operations-map">Operations Map</h2>
+<h2 id="operations-map">Operations</h2>
 
 <div class="module-link-grid compact">
-  <a href="./Handbook-Index/">Open Operations Map</a>
+  <a href="./14-Operations/">Open Operations</a>
   <a href="./01-Chapter/Calendar/">Check Calendar</a>
   <a href="./10-Events-Database/Events-Index/">Find Past Event</a>
   <a href="./03-Media/Social-Media-Guidelines/">Prepare Social Post</a>

@@ -28,7 +28,7 @@ Challenge: A ride is described as easier than it feels to newer riders.
 
 Suggested approach:
 
-- Use [../05-Routes/Route-Planning-Standards.md](../05-Routes/Route-Planning-Standards.md).
+- Use [../05-Routes](../05-Routes/README.md).
 - Identify freeway, canyon, night, distance, and traffic exposure.
 - Avoid calling a ride beginner-friendly unless the whole experience supports newer riders.
 
@@ -69,5 +69,15 @@ Challenge: Lessons stay in memory or chat instead of being added to the handbook
 Suggested approach:
 
 - Update the event record after each event.
-- Add reusable lessons to [Lessons-Learned.md](Lessons-Learned.md).
+- Update venue records, ride notes, or operating pages when a lesson changes how the chapter should work.
 - Review open documentation during leadership check-ins.
+
+Watch for repeated patterns:
+
+- Venue parking problems.
+- Route difficulty being misunderstood.
+- Public event copy missing key details.
+- Volunteer roles being unclear.
+- Weather decisions happening too late.
+- First-time attendees not knowing who to approach.
+- Photo, recap, or media follow-up slipping after events.

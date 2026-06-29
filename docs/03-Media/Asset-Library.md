@@ -2,7 +2,7 @@
 
 The asset library stores reusable media files that support OC Litas production. Its purpose is organization and reliability: leaders, designers, photographers, and social contributors should know where to find approved source files without searching old messages.
 
-Use this with [Logo-Library.md](Logo-Library.md), [Photography-Tools.md](Photography-Tools.md), and [Social-Media-Guidelines.md](Social-Media-Guidelines.md).
+Use this with [Assets/Logos](Assets/Logos/README.md), [Photography-Tools.md](Photography-Tools.md), and [Social-Media-Guidelines.md](Social-Media-Guidelines.md).
 
 ## Library Scope
 
@@ -29,7 +29,7 @@ Maintain:
 - AI or other editable files when available
 - Notes about file origin and usage approval
 
-See [Logo-Library.md](Logo-Library.md) for logo-specific handling.
+Use the highest-quality approved logo file available and do not alter official Litas assets unless leadership has confirmed the intended use.
 
 ## Fonts
 
@@ -44,12 +44,6 @@ For each font asset, keep:
 - Date added
 
 Do not assume a font can be shared, embedded, or used commercially unless the license is known.
-
-## Icons
-
-Store reusable icon files in [Assets/Icons](Assets/Icons/README.md).
-
-Keep icons organized by purpose or set. If an icon is only part of one event's creative, archive it with that event rather than adding it to the reusable library.
 
 ## Reference Assets
 

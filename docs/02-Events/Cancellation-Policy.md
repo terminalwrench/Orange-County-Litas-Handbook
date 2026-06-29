@@ -90,7 +90,6 @@ Afterward:
 - Thank the venue or partner if they were flexible
 - Archive the cancellation message
 - Add the reason and timing to the event recap
-- Update [Lessons-Learned.md](Lessons-Learned.md) if the process should improve
+- Update the related event record or operating page if the process should improve
 
 Canceled events still teach the chapter something.
-

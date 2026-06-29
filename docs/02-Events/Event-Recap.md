@@ -2,7 +2,7 @@
 
 The recap closes the loop after every event. It preserves what happened, thanks the people who made it work, and turns experience into better operations.
 
-Use this with [Lessons-Learned.md](Lessons-Learned.md), [Event-Lifecycle.md](Event-Lifecycle.md), and the relevant event planning guide.
+Use this with [Event-Lifecycle.md](Event-Lifecycle.md), the relevant event planning guide, and the related event record in the [Events Index](../10-Events-Database/Events-Index.md).
 
 ## Timing
 
@@ -71,7 +71,7 @@ Ask:
 - Did the route match the audience?
 - Did weather, parking, or communication create issues?
 
-Record improvements in [Lessons-Learned.md](Lessons-Learned.md).
+Record improvements in the related event record, venue record, route note, or operating page.
 
 ## Archive Assets
 
@@ -103,4 +103,3 @@ After every event:
 - Remove working confusion from the final record.
 
 The archive should help the next leader move faster and make better decisions.
-

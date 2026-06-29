@@ -2,7 +2,7 @@
 
 Use this page to capture practical details a ride lead should know before repeating or approving a route. Keep notes short, current, and tied to decisions: pacing, regrouping, rider suitability, weather, parking, fuel, and day-of communication.
 
-This is not a standalone hazard archive. If a note changes whether a ride should happen, update the route file, event plan, or [Planning Checklist](Planning-Checklist.md).
+This is not a standalone hazard archive. If a note changes whether a ride should happen, update the route file, event plan, or [Ride Planner](README.md).
 
 ## What To Record
 

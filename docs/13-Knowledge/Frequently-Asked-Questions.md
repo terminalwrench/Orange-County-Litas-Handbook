@@ -10,7 +10,7 @@ No. Arriving alone is common. See [../01-Chapter/New-Rider-Guide.md](../01-Chapt
 
 ### How do I know whether a ride is beginner friendly?
 
-Check the event description for route difficulty, pace, freeway or canyon exposure, distance, regroup points, and whether a Ride Lead and Sweep Rider are identified. See [../02-Events/Beginner-Rides.md](../02-Events/Beginner-Rides.md) and [../05-Routes/Route-Planning-Standards.md](../05-Routes/Route-Planning-Standards.md).
+Check the event description for route difficulty, pace, freeway or canyon exposure, distance, regroup points, and whether a Ride Lead and Sweep Rider are identified. See [../02-Events/Beginner-Rides.md](../02-Events/Beginner-Rides.md) and [../05-Routes](../05-Routes/README.md).
 
 ### What if I am nervous about joining a ride?
 
@@ -28,11 +28,21 @@ For social events, arrive when you can. For rides, do not chase the group. Meet 
 
 ### Where do I start as a new leader?
 
-Start with [New-Leader-Onboarding.md](New-Leader-Onboarding.md), then review [../01-Chapter/Leadership.md](../01-Chapter/Leadership.md), [../09-Leadership/README.md](../09-Leadership/README.md), and the current Events Database.
+Start with the current leadership team, then review [../01-Chapter/Leadership.md](../01-Chapter/Leadership.md), [Operations](../14-Operations/README.md), [Events](../02-Events/README.md), the [Events Index](../10-Events-Database/Events-Index.md), and the [Venue Database](../11-Venues/Venue-Index.md).
+
+New leader orientation should cover:
+
+- Current leadership structure.
+- Public, internal, and sensitive information boundaries.
+- Communication channels and calendar access.
+- Current role or focus area.
+- Upcoming events and owners.
+- Safety expectations for rides and public events.
+- Where to document decisions, event updates, venue notes, and ride notes.
 
 ### Where should I document an event?
 
-The canonical event record belongs in [../10-Events-Database](../10-Events-Database/README.md). Use [../02-Events](../02-Events/README.md) for planning workflow and this module for reusable lessons that apply beyond one event.
+The canonical event record belongs in the [Events Index](../10-Events-Database/Events-Index.md). Use [../02-Events](../02-Events/README.md) for planning workflow.
 
 ### Where should I document a route?
 
@@ -41,6 +51,12 @@ Use [../05-Routes](../05-Routes/README.md) only for tested, reviewed, or complet
 ### Where should private leadership notes go?
 
 Use [../09-Leadership](../09-Leadership/README.md) for internal planning and decision tracking. Do not put sensitive personal details in broad handbook files.
+
+### How should volunteers help?
+
+Give volunteers one clear task, one point of contact, and realistic expectations. Volunteers can help greet first-timers, support check-in, point riders toward parking, coordinate photos, share observations with the event owner, or help with setup and teardown.
+
+Do not assign safety-critical ride roles unless the rider has the right experience.
 
 ## Event Organizers
 
@@ -54,7 +70,7 @@ Review [../02-Events/Venue-Selection.md](../02-Events/Venue-Selection.md), [../1
 
 ### How do I capture lessons after an event?
 
-Use [Lessons-Learned.md](Lessons-Learned.md) for reusable lessons and update the event record in [../10-Events-Database](../10-Events-Database/README.md) with event-specific notes.
+Update the event record in the [Events Index](../10-Events-Database/Events-Index.md). If the lesson affects a venue, route, or recurring process, update the relevant venue record, route note, or operating page directly.
 
 ## Future Questions
 

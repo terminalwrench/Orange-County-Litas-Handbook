@@ -136,7 +136,6 @@ After the run:
 - Confirm any donation totals
 - Share recap photos
 - Archive score rules, route notes, and volunteer notes
-- Record improvements in [Lessons-Learned.md](Lessons-Learned.md)
+- Record improvements in the event record, route note, venue record, or relevant operating page.
 
 Use [Event-Recap.md](Event-Recap.md) while details are still fresh.
-

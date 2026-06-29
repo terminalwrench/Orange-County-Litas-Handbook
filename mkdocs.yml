@@ -12,24 +12,28 @@ not_in_nav: |
   01-Chapter/How-We-Operate.md
   01-Chapter/Leadership.md
   01-Chapter/OC-Chapter-Identity.md
+  02-Events/Beginner-Rides.md
   02-Events/Cancellation-Policy.md
   02-Events/Event-Recap.md
-  02-Events/Lessons-Learned.md
   02-Events/Photo-Shoots.md
   02-Events/Poker-Runs.md
   02-Events/Special-Events.md
   02-Events/Venue-Selection.md
   02-Events/Templates/**
+  03-Media/Assets/README.md
   03-Media/Assets/**
-  05-Routes/Route-Planning-Standards.md
+  09-Leadership/Ideas-Parking-Lot.md
+  09-Leadership/Leadership-Roles.md
+  09-Leadership/README.md
   10-Events-Database/Calendar-Import-Notes.md
-  10-Events-Database/Event-Categories.md
+  10-Events-Database/README.md
   10-Events-Database/2023/**
   10-Events-Database/2024/**
   10-Events-Database/2025/**
   10-Events-Database/2026/**
   10-Events-Database/Templates/**
   11-Venues/Venue-Categories.md
+  11-Venues/README.md
   11-Venues/Bars/*.md
   11-Venues/Beaches/*.md
   11-Venues/Breweries/*.md
@@ -38,11 +42,7 @@ not_in_nav: |
   11-Venues/Restaurants/*.md
   11-Venues/Templates/**
   11-Venues/Wineries/*.md
-  13-Knowledge/Leadership-Tips.md
-  13-Knowledge/New-Leader-Onboarding.md
-  13-Knowledge/Resources.md
-  13-Knowledge/Volunteer-Guide.md
-  13-Knowledge/Templates/**
+  Site-README.md
 
 theme:
   name: material
@@ -78,64 +78,37 @@ plugins:
 
 nav:
   - Home: index.md
-  - Operations Map: Handbook-Index.md
-  - Events:
-      - Event Planning: 02-Events/README.md
-      - Event Lifecycle: 02-Events/Event-Lifecycle.md
-      - Meet & Greet Planning: 02-Events/Meet-and-Greet-Planning.md
-      - Ride Planning: 02-Events/Ride-Planning.md
-      - Beginner Rides: 02-Events/Beginner-Rides.md
-      - Weather Calls: 02-Events/Weather-Contingencies.md
-  - Events Database:
-      - Overview: 10-Events-Database/README.md
-      - Events Index: 10-Events-Database/Events-Index.md
-      - Timeline: 10-Events-Database/Timeline.md
-      - Statistics: 10-Events-Database/Statistics.md
-  - Venues:
-      - Overview: 11-Venues/README.md
+  - Operations:
+      - Operations Hub: 14-Operations/README.md
+      - Operations Checklist: 14-Operations/Operations-Checklist.md
+      - Meeting Notes: 09-Leadership/Meeting-Notes.md
+      - Yearly Planning Board: 09-Leadership/Quarterly-Planning.md
       - Venue Index: 11-Venues/Venue-Index.md
       - Favorites: 11-Venues/Favorites.md
       - New Venue Evaluation: 11-Venues/New-Venue-Evaluation.md
-      - Breweries: 11-Venues/Breweries/README.md
-      - Coffee: 11-Venues/Coffee/README.md
-      - Restaurants: 11-Venues/Restaurants/README.md
-      - Bars: 11-Venues/Bars/README.md
-      - Beaches: 11-Venues/Beaches/README.md
-      - Wineries: 11-Venues/Wineries/README.md
-      - Miscellaneous: 11-Venues/Misc/README.md
+      - Incident Response: 14-Operations/Incident-Response.md
+      - Leadership Handoff: 14-Operations/Leadership-Handoff.md
+  - Events:
+      - Event Workspace: 02-Events/README.md
+      - Event Records: 10-Events-Database/Events-Index.md
+      - Timeline: 10-Events-Database/Timeline.md
+      - Statistics: 10-Events-Database/Statistics.md
+      - Categories: 10-Events-Database/Event-Categories.md
+      - Event Lifecycle: 02-Events/Event-Lifecycle.md
+      - Meet & Greet Planning: 02-Events/Meet-and-Greet-Planning.md
+      - Ride Planning: 02-Events/Ride-Planning.md
+      - Weather Calls: 02-Events/Weather-Contingencies.md
   - Ride Planner:
-      - Overview: 05-Routes/README.md
-      - Planning Checklist: 05-Routes/Planning-Checklist.md
-      - Ride Types: 05-Routes/Route-Categories.md
-      - Ride Lead Notes: 05-Routes/Ride-Lead-Notes.md
-      - Fuel & Restroom Stops: 05-Routes/Fuel-Stops.md
-      - Seasonal Riding: 05-Routes/Seasonal-Riding.md
+      - Ride Planner: 05-Routes/README.md
       - Route Library: 05-Routes/Routes/README.md
+      - Ride Lead Notes: 05-Routes/Ride-Lead-Notes.md
   - Media Center:
-      - Overview: 03-Media/README.md
+      - Media Center: 03-Media/README.md
       - Asset Library: 03-Media/Asset-Library.md
-      - Logos: 03-Media/Logo-Library.md
+      - Logos: 03-Media/Assets/Logos/README.md
+      - Fonts: 03-Media/Assets/Fonts/README.md
       - Photography Tools: 03-Media/Photography-Tools.md
       - Social Media Guidelines: 03-Media/Social-Media-Guidelines.md
-  - Leadership:
-      - Overview: 09-Leadership/README.md
-      - Yearly Planning Board: 09-Leadership/Quarterly-Planning.md
-      - Meeting Notes: 09-Leadership/Meeting-Notes.md
-      - Leadership Roles: 09-Leadership/Leadership-Roles.md
-      - Ideas: 09-Leadership/Ideas-Parking-Lot.md
-  - Operations:
-      - Overview: 14-Operations/README.md
-      - Monthly Checklist: 14-Operations/Monthly-Checklist.md
-      - Incident Response: 14-Operations/Incident-Response.md
-      - Financial Tracking: 14-Operations/Financial-Tracking.md
-      - Leadership Handoff: 14-Operations/Leadership-Handoff.md
-  - Knowledge Base:
-      - Overview: 13-Knowledge/README.md
-      - FAQs: 13-Knowledge/Frequently-Asked-Questions.md
-      - Lessons Learned: 13-Knowledge/Lessons-Learned.md
-      - Best Practices: 13-Knowledge/Best-Practices.md
-      - Common Challenges: 13-Knowledge/Common-Challenges.md
-      - Glossary: 13-Knowledge/Glossary.md
   - Reference:
       - Global Litas: 00-Global-Litas/README.md
       - Brand Standards: 00-Global-Litas/Brand-Standards.md
@@ -143,4 +116,7 @@ nav:
       - Official Links: 00-Global-Litas/Official-Links.md
       - Chapter Basics: 01-Chapter/README.md
       - New Rider Guide: 01-Chapter/New-Rider-Guide.md
-      - Site Maintenance: Site-README.md
+      - FAQs: 13-Knowledge/Frequently-Asked-Questions.md
+      - Resources: 13-Knowledge/Resources.md
+      - Best Practices: 13-Knowledge/Best-Practices.md
+      - Common Challenges: 13-Knowledge/Common-Challenges.md

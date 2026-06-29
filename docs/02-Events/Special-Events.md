@@ -143,5 +143,4 @@ Capture:
 - What should repeat
 - What should change
 
-Update [Lessons-Learned.md](Lessons-Learned.md) within one week.
-
+Update the related event record, venue record, route note, or operating page within one week.

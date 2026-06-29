@@ -174,7 +174,7 @@ Capture:
 - Photos or asset links
 - Thank-you notes sent
 
-Use [Event-Recap.md](Event-Recap.md) and update [Lessons-Learned.md](Lessons-Learned.md).
+Use [Event-Recap.md](Event-Recap.md) and update the related event record in the [Events Index](../10-Events-Database/Events-Index.md).
 
 ## 11. Archive
 
@@ -192,4 +192,3 @@ Keep:
 - Photo delivery or asset link
 
 Archive only final materials. Drafts should not clutter the record unless they explain a major decision.
-

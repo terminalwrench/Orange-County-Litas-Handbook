@@ -2,7 +2,7 @@
 
 Leadership handoff protects continuity when someone joins, changes role, steps back, or transfers responsibility.
 
-Use this with [../09-Leadership/Leadership-Roles.md](../09-Leadership/Leadership-Roles.md), [../13-Knowledge/New-Leader-Onboarding.md](../13-Knowledge/New-Leader-Onboarding.md), and [../09-Leadership/Meeting-Notes.md](../09-Leadership/Meeting-Notes.md).
+Use this with [../09-Leadership/Leadership-Roles.md](../09-Leadership/Leadership-Roles.md), [../13-Knowledge/Frequently-Asked-Questions.md](../13-Knowledge/Frequently-Asked-Questions.md), and [../09-Leadership/Meeting-Notes.md](../09-Leadership/Meeting-Notes.md).
 
 ## When to Use a Handoff
 

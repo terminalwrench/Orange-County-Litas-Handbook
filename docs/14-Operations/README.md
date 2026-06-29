@@ -1,45 +1,49 @@
-# Operations Manual
+# Operations
 
 <section class="module-hero">
-  <span class="module-kicker">Run the chapter</span>
+  <span class="module-kicker">Administrative workspace</span>
   <h1>Operations</h1>
-  <p class="module-subtitle">A compact set of active tools for recurring leadership operations.</p>
-  <p class="module-intro">Use this module for monthly checks, incident notes, simple financial tracking, and handoffs.</p>
+  <p class="module-subtitle">The working area for chapter administration, venues, planning, meeting notes, and handoffs.</p>
+  <p class="module-intro">Use this module when leadership needs to run the chapter, not read about running it.</p>
 </section>
 
 ## Start Here
 
 <div class="module-link-grid">
-  <a href="Monthly-Checklist/">Monthly Checklist</a>
+  <a href="Operations-Checklist/">Operations Checklist</a>
+  <a href="../09-Leadership/Quarterly-Planning/">Yearly Planning Board</a>
+  <a href="../09-Leadership/Meeting-Notes/">Meeting Notes</a>
+  <a href="../11-Venues/Venue-Index/">Venue Database</a>
+  <a href="../11-Venues/Favorites/">Venue Favorites</a>
+  <a href="../11-Venues/New-Venue-Evaluation/">New Venue Evaluation</a>
   <a href="Leadership-Handoff/">Leadership Handoff</a>
   <a href="Incident-Response/">Incident Response</a>
-  <a href="Financial-Tracking/">Financial Tracking</a>
 </div>
 
-This module is intentionally small. If a page is mainly informational, it belongs in the [Knowledge Base](../13-Knowledge/README.md). Operations is for tools leadership actively opens.
-
-This is different from the private [Leadership](../09-Leadership/README.md) workspace. Leadership planning, decisions, goals, and internal accountability live there. This manual is the repeatable operating layer that future leadership can use to keep the chapter running consistently.
+Operations is the administrative workspace for current chapter work. Keep it lightweight and current: calendars, meeting notes, venue decisions, leadership assignments, incident notes, and handoffs.
 
 ## Related Modules
 
 | Module | Use |
 | --- | --- |
-| [Events Database](../10-Events-Database/README.md) | Canonical event records. |
-| [Leadership](../09-Leadership/README.md) | Internal planning, decisions, assignments, and succession. |
-| [Venues](../11-Venues/README.md) | Venue knowledge and evaluation notes. |
-| [Knowledge Base](../13-Knowledge/README.md) | Reusable lessons, FAQs, tips, and common challenges. |
-| [Events](../02-Events/README.md) | Event planning standards and templates. |
-| [Media](../03-Media/README.md) | Digital assets, photography, video, and file standards. |
+| [Events](../02-Events/README.md) | Planning and event records. |
+| [Ride Planner](../05-Routes/README.md) | Ride tools, route library, and lead notes. |
+| [Media Center](../03-Media/README.md) | Assets, logos, photography tools, and social guidance. |
+| [Reference](../00-Global-Litas/README.md) | Policies, national guidance, FAQs, and resources. |
 
 ## Documents
 
 | Document | Purpose |
 | --- | --- |
-| [Monthly-Checklist.md](Monthly-Checklist.md) | Recurring monthly operations checklist. |
+| [Operations-Checklist.md](Operations-Checklist.md) | Daily and monthly operating reminders. |
+| [../09-Leadership/Quarterly-Planning.md](../09-Leadership/Quarterly-Planning.md) | Yearly planning board for events, owners, and venues. |
+| [../09-Leadership/Meeting-Notes.md](../09-Leadership/Meeting-Notes.md) | Quarterly notebook for notes, decisions, and follow-ups. |
+| [../11-Venues/Venue-Index.md](../11-Venues/Venue-Index.md) | Permanent venue database. |
+| [../11-Venues/Favorites.md](../11-Venues/Favorites.md) | Favorite venues by use case. |
+| [../11-Venues/New-Venue-Evaluation.md](../11-Venues/New-Venue-Evaluation.md) | Checklist for evaluating a new venue. |
 | [Leadership-Handoff.md](Leadership-Handoff.md) | Procedure for leadership transitions and responsibility transfer. |
 | [Incident-Response.md](Incident-Response.md) | Framework for documenting and escalating incidents. |
-| [Financial-Tracking.md](Financial-Tracking.md) | Basic recordkeeping for chapter money movement, not accounting advice. |
 
 ## Operating Standard
 
-Use this manual as a framework. Do not treat it as legal, financial, medical, or safety certification guidance. When an issue involves money, injury, law enforcement, insurance, or private member details, leadership should handle the situation carefully, limit access to sensitive information, and seek qualified help when needed.
+Use this workspace as a framework. Do not treat it as legal, financial, medical, or safety certification guidance. When an issue involves money, injury, law enforcement, insurance, or private member details, leadership should handle the situation carefully, limit access to sensitive information, and seek qualified help when needed.

@@ -10,12 +10,7 @@
 ## Start Here
 
 <div class="module-link-grid">
-  <a href="Route-Planning-Standards/">Route Planning Standards</a>
-  <a href="Planning-Checklist/">Planning Checklist</a>
-  <a href="Route-Categories/">Ride Types</a>
   <a href="Ride-Lead-Notes/">Ride Lead Notes</a>
-  <a href="Fuel-Stops/">Fuel Stops</a>
-  <a href="Seasonal-Riding/">Seasonal Riding</a>
   <a href="Routes/">Route Library</a>
 </div>
 
@@ -25,16 +20,54 @@ This is not a GPS library. Route files should not replace current navigation, tr
 
 Use this module with [../02-Events/Ride-Planning.md](../02-Events/Ride-Planning.md), [../02-Events/Beginner-Rides.md](../02-Events/Beginner-Rides.md), and [../02-Events/Weather-Contingencies.md](../02-Events/Weather-Contingencies.md).
 
-## Purpose
+## Ride Readiness
 
-The Ride Planner helps leadership:
+Before a ride is announced, leadership should be able to answer:
 
-- Decide whether a ride is appropriate for the intended riders.
-- Confirm lead, sweep, regroup, fuel, restroom, parking, and contingency plans.
-- Publish honest difficulty descriptions.
-- Reuse routes that have been reviewed by the chapter.
-- Preserve practical notes from completed rides without turning the portal into a map app.
-- Improve handoff between current and future ride leaders.
+- Who is the Ride Lead?
+- Who is the Sweep Rider?
+- What rider level is this ride for?
+- Is the route beginner, intermediate, or advanced?
+- Are freeway, canyon, mountain, night, heat, wind, or distance concerns clear?
+- Where are fuel, restroom, parking, and regroup options?
+- What happens if weather, traffic, road conditions, or group size changes?
+- Can riders meet directly at the destination?
+
+## Ride Types
+
+Use ride types to set expectations before a route is public.
+
+| Type | Use When | Must Confirm |
+| --- | --- | --- |
+| Beginner | The whole ride supports newer riders. | Predictable roads, conservative pace, easy parking, clear regroups, nearby services, patient sweep. |
+| Intermediate | Riders need comfort with group riding, distance, curves, traffic, or freeway sections. | Honest description, fuel plan, regroup plan, timing, lead/sweep coordination. |
+| Advanced | The ride includes technical roads, long distance, remote areas, sustained freeway, grades, or limited services. | Experienced lead/sweep, contingency plan, rider screening language, no-surprises description. |
+| Coffee or food | The stop is the primary reason for the ride. | Parking, restrooms, seating, reservation needs, payment expectations, destination-only option. |
+| Beach or scenic | The view, coast, or photo stop is part of the draw. | Legal pullouts, paid parking, crowds, sand, pedestrian activity, and backup parking. |
+| Mountain or destination | The ride has elevation, curves, remote roads, or a specific arrival window. | Weather, debris, fuel gaps, restrooms, cellular coverage, and direct-arrival option. |
+| Collaboration or charity | Another group, partner, sponsor, or cause is involved. | Route owner, shared responsibilities, contacts, public messaging, check-in, and decision authority. |
+
+## Fuel, Restrooms, And Regroups
+
+Confirm these before publishing:
+
+- Start location has enough room for the group to gather.
+- Fuel expectations are clear before departure.
+- Fuel stops can handle the group safely.
+- Restrooms are available at the start, destination, or planned stop.
+- Regroup points are legal, visible, and easy to re-enter from.
+- Parking at the destination can handle motorcycles and late arrivals.
+
+## Seasonal Checks
+
+Review seasonal conditions before final approval:
+
+- Summer heat and dehydration.
+- Winter temperature changes, especially elevation.
+- Rain, wet roads, and cancellation timing.
+- Wind exposure on freeway, canyon, bridge, or mountain sections.
+- Smoke, fire activity, road closures, and evacuation routes.
+- Holiday traffic, crowding, paid parking, and venue hours.
 
 ## Standard
 
@@ -42,16 +75,12 @@ Do not invent rides, fabricate routes, or add untested route details. A route be
 
 Every route should be treated as a living document. Conditions change, construction appears, parking access shifts, and businesses close. Update files when the chapter learns something new.
 
-## Documents
+## Active Tools
 
 | Document | Purpose |
 | --- | --- |
-| [Route-Planning-Standards.md](Route-Planning-Standards.md) | How to test, describe, staff, and adjust a chapter ride. |
-| [Planning-Checklist.md](Planning-Checklist.md) | The approval checklist before a ride is announced or added to the library. |
-| [Route-Categories.md](Route-Categories.md) | A practical ride-type guide for choosing the right format and difficulty. |
 | [Ride-Lead-Notes.md](Ride-Lead-Notes.md) | Practical notes for lead/sweep briefings, road concerns, regroups, and adjustments. |
-| [Fuel-Stops.md](Fuel-Stops.md) | How to record reliable fuel, restroom, and waiting-area stops. |
-| [Seasonal-Riding.md](Seasonal-Riding.md) | Heat, rain, wind, fire season, holiday traffic, and other timing concerns. |
+| [Routes](Routes/README.md) | Route library for rides with direct chapter knowledge. |
 
 ## Route Library
 
