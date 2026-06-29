@@ -283,8 +283,8 @@
 .module-hero::after {
   position: absolute;
   inset: auto -8rem -8rem auto;
-  width: 22rem;
-  height: 22rem;
+  width: min(38vw, 18rem);
+  height: min(38vw, 18rem);
   content: "";
   background: radial-gradient(circle, rgba(215, 100, 36, 0.38), transparent 68%);
 }
@@ -432,6 +432,13 @@
 .portal-home .quick-grid,
 .portal-home .status-grid,
 .portal-home .portal-section-grid,
+.portal-home .module-link-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin: 1rem 0 1.8rem;
+}
+
 .module-link-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
@@ -446,6 +453,9 @@
 .portal-home .portal-section-grid a,
 .module-link-grid a {
   display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
   min-height: 7.5rem;
   padding: 1rem;
   border: 1px solid var(--oc-line);
@@ -458,7 +468,7 @@
 }
 
 .portal-home .portal-action-grid {
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  grid-template-columns: 1fr;
 }
 
 .portal-home .portal-action-card,
@@ -477,7 +487,7 @@
 }
 
 .portal-home .portal-card-grid--featured {
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  grid-template-columns: 1fr;
 }
 
 .portal-home .portal-card strong {
@@ -584,7 +594,7 @@
 
 .portal-feature-row {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+  grid-template-columns: 1fr;
   gap: 1rem;
   margin: 1rem 0 1.8rem;
 }
@@ -671,5 +681,35 @@
   .portal-home .portal-actions {
     display: grid;
     grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media screen and (min-width: 45em) {
+  .portal-home .portal-card-grid,
+  .portal-home .portal-action-grid,
+  .portal-home .quick-grid,
+  .portal-home .status-grid,
+  .portal-home .portal-section-grid,
+  .portal-home .module-link-grid {
+    grid-template-columns: repeat(2, minmax(18.75rem, 1fr));
+  }
+
+  .portal-feature-row {
+    grid-template-columns: repeat(2, minmax(18.75rem, 1fr));
+  }
+}
+
+@media screen and (min-width: 72em) {
+  .portal-home .portal-card-grid,
+  .portal-home .portal-action-grid,
+  .portal-home .quick-grid,
+  .portal-home .status-grid,
+  .portal-home .portal-section-grid,
+  .portal-home .module-link-grid {
+    grid-template-columns: repeat(3, minmax(18.75rem, 1fr));
+  }
+
+  .portal-feature-row {
+    grid-template-columns: repeat(2, minmax(20rem, 1fr));
   }
 }
