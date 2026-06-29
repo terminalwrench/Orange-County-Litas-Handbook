@@ -1,6 +1,6 @@
 <div class="portal-home">
 
-<section class="portal-hero portal-hero--split" aria-labelledby="portal-title">
+<section class="portal-hero" aria-labelledby="portal-title">
   <div class="portal-hero-copy">
     <div class="portal-eyebrow">Orange County Litas internal portal</div>
     <h1 id="portal-title">Orange County Litas Portal</h1>
@@ -13,14 +13,15 @@
       <a class="portal-button" href="./09-Leadership/">Officer Resources</a>
     </div>
   </div>
-  <aside class="portal-hero-panel" aria-label="Portal status">
-    <span class="portal-panel-label">Today at a glance</span>
-    <div class="portal-stat-list">
-      <a href="./10-Events-Database/">Event records</a>
-      <a href="./11-Venues/">Venue knowledge</a>
-      <a href="./12-History/">Chapter history</a>
-    </div>
-  </aside>
+</section>
+
+<section class="portal-hero-panel" aria-label="Portal status">
+  <span class="portal-panel-label">Today at a glance</span>
+  <div class="portal-stat-list">
+    <a href="./10-Events-Database/">Event records</a>
+    <a href="./11-Venues/">Venue knowledge</a>
+    <a href="./12-History/">Chapter history</a>
+  </div>
 </section>
 
 <section class="portal-note">
