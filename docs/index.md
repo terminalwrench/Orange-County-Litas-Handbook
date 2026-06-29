@@ -1,13 +1,15 @@
+<div class="portal-home" markdown="1">
+
 <section class="portal-hero">
   <div class="portal-eyebrow">Orange County chapter hub</div>
   <h1>Orange County Litas Portal</h1>
   <p class="portal-subtitle">Plan rides. Preserve history. Grow the chapter.</p>
   <p class="portal-intro">This is the central hub for Orange County Litas leadership: event planning, ride knowledge, media workflows, venue notes, chapter history, and the everyday details that keep the chapter moving.</p>
   <div class="portal-actions">
-    <a class="portal-button portal-button-primary" href="02-Events/README/">Events</a>
-    <a class="portal-button" href="05-Routes/README/">Routes</a>
-    <a class="portal-button" href="03-Media/README/">Media</a>
-    <a class="portal-button" href="09-Leadership/README/">Leadership</a>
+    <a class="portal-button portal-button-primary" href="./02-Events/">Events</a>
+    <a class="portal-button" href="./05-Routes/">Routes</a>
+    <a class="portal-button" href="./03-Media/">Media</a>
+    <a class="portal-button" href="./09-Leadership/">Leadership</a>
   </div>
 </section>
 
@@ -18,32 +20,32 @@
 ## Main Modules
 
 <div class="portal-card-grid">
-  <a class="portal-card" href="02-Events/README/">
+  <a class="portal-card" href="./02-Events/">
     <span class="portal-card-kicker">Plan</span>
     <strong>Events</strong>
     <span>Move meetups, rides, recaps, and special events from idea to archive.</span>
   </a>
-  <a class="portal-card" href="05-Routes/README/">
+  <a class="portal-card" href="./05-Routes/">
     <span class="portal-card-kicker">Ride</span>
     <strong>Routes</strong>
     <span>Keep tested route knowledge, regroup points, hazards, and ride reports together.</span>
   </a>
-  <a class="portal-card" href="03-Media/README/">
+  <a class="portal-card" href="./03-Media/">
     <span class="portal-card-kicker">Create</span>
     <strong>Media</strong>
     <span>Find file standards, asset workflows, sizing guidance, and archive habits.</span>
   </a>
-  <a class="portal-card" href="11-Venues/README/">
+  <a class="portal-card" href="./11-Venues/">
     <span class="portal-card-kicker">Gather</span>
     <strong>Venues</strong>
     <span>Look up places the chapter has used, considered, or learned from.</span>
   </a>
-  <a class="portal-card" href="09-Leadership/README/">
+  <a class="portal-card" href="./09-Leadership/">
     <span class="portal-card-kicker">Lead</span>
     <strong>Leadership</strong>
     <span>Track internal planning, decisions, assignments, feedback, and continuity.</span>
   </a>
-  <a class="portal-card" href="12-History/README/">
+  <a class="portal-card" href="./12-History/">
     <span class="portal-card-kicker">Remember</span>
     <strong>History</strong>
     <span>Preserve chapter milestones, leadership changes, traditions, and stories.</span>
@@ -53,12 +55,12 @@
 ## Quick Actions
 
 <div class="quick-grid">
-  <a class="quick-card" href="02-Events/Event-Lifecycle/">Plan an event</a>
-  <a class="quick-card" href="05-Routes/Route-Categories/">Find a route</a>
-  <a class="quick-card" href="03-Media/File-Organization/">Upload or find media</a>
-  <a class="quick-card" href="11-Venues/Venue-Index/">Look up a venue</a>
-  <a class="quick-card" href="12-History/Chapter-Timeline/">Review chapter history</a>
-  <a class="quick-card" href="10-Events-Database/Events-Index/">Update event records</a>
+  <a class="quick-card" href="./02-Events/Event-Lifecycle/">Plan an event</a>
+  <a class="quick-card" href="./05-Routes/Route-Categories/">Find a route</a>
+  <a class="quick-card" href="./03-Media/File-Organization/">Upload or find media</a>
+  <a class="quick-card" href="./11-Venues/Venue-Index/">Look up a venue</a>
+  <a class="quick-card" href="./12-History/Chapter-Timeline/">Review chapter history</a>
+  <a class="quick-card" href="./10-Events-Database/Events-Index/">Update event records</a>
 </div>
 
 ## Living Portal
@@ -81,8 +83,10 @@
 ## Start Here
 
 <div class="module-link-grid compact">
-  <a href="HOME/">Home</a>
-  <a href="Handbook-Index/">Handbook Index</a>
-  <a href="ROADMAP/">Roadmap</a>
-  <a href="CHANGELOG/">Changelog</a>
+  <a href="./HOME/">Home</a>
+  <a href="./Handbook-Index/">Handbook Index</a>
+  <a href="./ROADMAP/">Roadmap</a>
+  <a href="./CHANGELOG/">Changelog</a>
+</div>
+
 </div>
