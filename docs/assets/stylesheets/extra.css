@@ -434,7 +434,7 @@
 .portal-home .portal-section-grid,
 .portal-home .module-link-grid {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
   gap: 1rem;
   margin: 1rem 0 1.8rem;
 }
@@ -468,7 +468,7 @@
 }
 
 .portal-home .portal-action-grid {
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
 }
 
 .portal-home .portal-action-card,
@@ -487,7 +487,7 @@
 }
 
 .portal-home .portal-card-grid--featured {
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
 }
 
 .portal-home .portal-card strong {
@@ -594,7 +594,7 @@
 
 .portal-feature-row {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
   gap: 1rem;
   margin: 1rem 0 1.8rem;
 }
@@ -629,16 +629,15 @@
 }
 
 .portal-community-band {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(min(100%, 18rem), 0.55fr);
-  gap: 1rem;
-  align-items: center;
+  display: block;
   margin: 1rem 0 1.8rem;
 }
 
 .portal-community-links {
   display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
   gap: 0.55rem;
+  margin-top: 1rem;
 }
 
 .portal-community-links a {
@@ -659,7 +658,7 @@
 }
 
 .portal-home .module-link-grid.compact {
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
 }
 
 .portal-home .module-link-grid.compact a {
@@ -667,12 +666,6 @@
 }
 
 @media screen and (max-width: 44.9375em) {
-  .portal-home .portal-hero--split,
-  .portal-feature-row,
-  .portal-community-band {
-    grid-template-columns: 1fr;
-  }
-
   .portal-home .portal-hero,
   .module-hero {
     border-radius: 0.85rem;
@@ -680,36 +673,6 @@
 
   .portal-home .portal-actions {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-@media screen and (min-width: 45em) {
-  .portal-home .portal-card-grid,
-  .portal-home .portal-action-grid,
-  .portal-home .quick-grid,
-  .portal-home .status-grid,
-  .portal-home .portal-section-grid,
-  .portal-home .module-link-grid {
-    grid-template-columns: repeat(2, minmax(18.75rem, 1fr));
-  }
-
-  .portal-feature-row {
-    grid-template-columns: repeat(2, minmax(18.75rem, 1fr));
-  }
-}
-
-@media screen and (min-width: 72em) {
-  .portal-home .portal-card-grid,
-  .portal-home .portal-action-grid,
-  .portal-home .quick-grid,
-  .portal-home .status-grid,
-  .portal-home .portal-section-grid,
-  .portal-home .module-link-grid {
-    grid-template-columns: repeat(3, minmax(18.75rem, 1fr));
-  }
-
-  .portal-feature-row {
-    grid-template-columns: repeat(2, minmax(20rem, 1fr));
+    grid-template-columns: 1fr;
   }
 }
