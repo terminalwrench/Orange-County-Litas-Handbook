@@ -30,7 +30,7 @@
 
 ## Events Hosted
 
-- 2023-10-19: [OC Litas Meet & Greet 7pm](../../12-Events-Database/2023/2023-10-19-oc-litas-meet-and-greet-7pm.md)
+- 2023-10-19: [OC Litas Meet & Greet 7pm](../../10-Events-Database/2023/2023-10-19-oc-litas-meet-and-greet-7pm.md)
 
 ## Calendar History
 
@@ -50,5 +50,5 @@
 
 ## Related Files
 
-- [Events Database](../../12-Events-Database/README.md)
+- [Events Database](../../10-Events-Database/README.md)
 - [Venue Evaluation](../New-Venue-Evaluation.md)

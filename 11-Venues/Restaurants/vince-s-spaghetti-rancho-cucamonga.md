@@ -30,7 +30,7 @@
 
 ## Events Hosted
 
-- 2025-03-30: [March Ride: Vince's Spaghetti](../../12-Events-Database/2025/2025-03-30-march-ride-vince-s-spaghetti.md)
+- 2025-03-30: [March Ride: Vince's Spaghetti](../../10-Events-Database/2025/2025-03-30-march-ride-vince-s-spaghetti.md)
 
 ## Calendar History
 
@@ -50,5 +50,5 @@
 
 ## Related Files
 
-- [Events Database](../../12-Events-Database/README.md)
+- [Events Database](../../10-Events-Database/README.md)
 - [Venue Evaluation](../New-Venue-Evaluation.md)

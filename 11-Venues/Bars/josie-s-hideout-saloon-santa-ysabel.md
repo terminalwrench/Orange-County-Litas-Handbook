@@ -30,8 +30,8 @@
 
 ## Events Hosted
 
-- 2024-02-10: [Galetines ride - fast babes](../../12-Events-Database/2024/2024-02-10-galetines-ride-fast-babes.md)
-- 2025-02-15: [Ride to Galentine's Party](../../12-Events-Database/2025/2025-02-15-ride-to-galentine-s-party.md)
+- 2024-02-10: [Galetines ride - fast babes](../../10-Events-Database/2024/2024-02-10-galetines-ride-fast-babes.md)
+- 2025-02-15: [Ride to Galentine's Party](../../10-Events-Database/2025/2025-02-15-ride-to-galentine-s-party.md)
 
 ## Calendar History
 
@@ -52,5 +52,5 @@
 
 ## Related Files
 
-- [Events Database](../../12-Events-Database/README.md)
+- [Events Database](../../10-Events-Database/README.md)
 - [Venue Evaluation](../New-Venue-Evaluation.md)

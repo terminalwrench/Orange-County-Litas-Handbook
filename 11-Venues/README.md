@@ -1,10 +1,28 @@
 # Venues
 
+<section class="module-hero">
+  <span class="module-kicker">Places that work</span>
+  <h1>Venues</h1>
+  <p class="module-subtitle">A practical venue knowledge base for meetups, ride stops, food, coffee, beach days, and special events.</p>
+  <p class="module-intro">Use this module to find known venues, evaluate new ones, and preserve what leadership learns after each visit.</p>
+</section>
+
+## Start Here
+
+<div class="module-link-grid">
+  <a href="../Venue-Index/">Venue Index</a>
+  <a href="../Favorites/">Favorites</a>
+  <a href="../New-Venue-Evaluation/">New Venue Evaluation</a>
+  <a href="../Venue-Categories/">Venue Categories</a>
+  <a href="../Templates/Venue/">Venue Template</a>
+  <a href="../Breweries/">Breweries</a>
+</div>
+
 This module is the permanent venue knowledge base for Orange County Litas. It documents venues the chapter has hosted at, visited, ridden to, or recorded in calendar history for possible use.
 
 The venue database is intentionally factual. It starts with venues found in the Events Database and the original calendar export. Unknown operational details are left blank until leadership confirms them through direct experience, venue contact, or post-event review.
 
-Use this module with [../12-Events-Database](../12-Events-Database/), [../02-Events/Venue-Selection.md](../02-Events/Venue-Selection.md), [../02-Events/Meet-and-Greet-Planning.md](../02-Events/Meet-and-Greet-Planning.md), and [../05-Routes](../05-Routes/).
+Use this module with [../10-Events-Database](../10-Events-Database/), [../02-Events/Venue-Selection.md](../02-Events/Venue-Selection.md), [../02-Events/Meet-and-Greet-Planning.md](../02-Events/Meet-and-Greet-Planning.md), and [../05-Routes](../05-Routes/).
 
 ## Documents
 

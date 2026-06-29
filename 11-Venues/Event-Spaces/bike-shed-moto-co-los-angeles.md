@@ -30,7 +30,7 @@
 
 ## Events Hosted
 
-- 2025-01-18: [Ride to Bike Shed](../../12-Events-Database/2025/2025-01-18-ride-to-bike-shed.md)
+- 2025-01-18: [Ride to Bike Shed](../../10-Events-Database/2025/2025-01-18-ride-to-bike-shed.md)
 
 ## Calendar History
 
@@ -50,5 +50,5 @@
 
 ## Related Files
 
-- [Events Database](../../12-Events-Database/README.md)
+- [Events Database](../../10-Events-Database/README.md)
 - [Venue Evaluation](../New-Venue-Evaluation.md)

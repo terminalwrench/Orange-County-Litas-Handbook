@@ -1,5 +1,23 @@
 # OC Litas Chapter Manual
 
+<section class="module-hero">
+  <span class="module-kicker">Chapter operations</span>
+  <h1>Chapter Manual</h1>
+  <p class="module-subtitle">The local reference for how Orange County Litas shows up, welcomes riders, and keeps the chapter steady.</p>
+  <p class="module-intro">Start here when you need chapter identity, leadership expectations, rider onboarding, contacts, calendar rhythm, or local operating guidance.</p>
+</section>
+
+## Start Here
+
+<div class="module-link-grid">
+  <a href="../Leadership/">Leadership</a>
+  <a href="../How-We-Operate/">How We Operate</a>
+  <a href="../New-Rider-Guide/">New Rider Guide</a>
+  <a href="../Calendar/">Calendar</a>
+  <a href="../Contacts/">Contacts</a>
+  <a href="../OC-Chapter-Identity/">OC Chapter Identity</a>
+</div>
+
 This folder is the chapter-level operating manual for OC Litas, the Orange County chapter of The Litas. It explains how the chapter works locally: who does what, how events are planned, how new riders are welcomed, how chapter history is preserved, and how the Orange County community shows up in a consistent way.
 
 The global organization defines The Litas mission, values, brand, and overall structure. This manual does not replace or restate that foundation. It documents the local practices that help the Orange County chapter operate clearly, safely, and warmly.
@@ -37,9 +55,9 @@ This folder should be treated as the stable reference layer. Active planning and
 - Media assets, flyer briefs, and file standards: `../03-Media/`
 - Social planning and captions: `../04-Social/`
 - Routes and ride reference notes: `../05-Routes/`
-- Venues, sponsors, discounts, and partner contacts: `../06-Partnerships/`
-- Merch concepts and production workflow: `../07-Merch/`
-- Photography workflows: `../08-Photography/`
-- Completed records: `../09-Archive/`
+- Photography workflows: `../07-Photography/`
+- Completed records: `../08-Archive/`
+- Leadership planning and continuity: `../09-Leadership/`
+- Event records and venue knowledge: `../10-Events-Database/` and `../11-Venues/`
 
 When an operating practice becomes consistent enough to guide future leaders, it belongs here. When a file is specific to one event, vendor, flyer, campaign, or working draft, it belongs in the appropriate production folder.

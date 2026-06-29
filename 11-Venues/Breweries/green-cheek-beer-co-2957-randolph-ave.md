@@ -30,7 +30,7 @@
 
 ## Events Hosted
 
-- 2023-12-04: [South Moto OC](../../12-Events-Database/2023/2023-12-04-south-moto-oc.md)
+- 2023-12-04: [South Moto OC](../../10-Events-Database/2023/2023-12-04-south-moto-oc.md)
 
 ## Calendar History
 
@@ -50,5 +50,5 @@
 
 ## Related Files
 
-- [Events Database](../../12-Events-Database/README.md)
+- [Events Database](../../10-Events-Database/README.md)
 - [Venue Evaluation](../New-Venue-Evaluation.md)

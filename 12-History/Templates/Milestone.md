@@ -30,6 +30,6 @@
 
 ## Related Files
 
-- [Events Database](../../12-Events-Database/README.md)
+- [Events Database](../../10-Events-Database/README.md)
 - [Chapter Timeline](../Chapter-Timeline.md)
 - [Milestones](../Milestones.md)

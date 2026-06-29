@@ -6,15 +6,15 @@ Document management keeps the handbook useful as it grows.
 
 | Information Type | Location |
 | --- | --- |
-| Event records | [../12-Events-Database](../12-Events-Database/) |
+| Event records | [../10-Events-Database](../10-Events-Database/) |
 | Event planning standards | [../02-Events](../02-Events/) |
 | Route knowledge | [../05-Routes](../05-Routes/) |
-| Venue records | [../13-Venues](../13-Venues/) |
-| Partnerships | [../06-Partnerships](../06-Partnerships/) |
-| Community events | [../14-Community](../14-Community/) |
-| Chapter history | [../15-History](../15-History/) |
-| Reusable lessons and FAQs | [../16-Knowledge](../16-Knowledge/) |
-| Internal leadership planning | [../10-Leadership](../10-Leadership/) |
+| Venue records | [../11-Venues](../11-Venues/) |
+| Partnerships | [../11-Venues](../11-Venues/) |
+| Community events | [../10-Events-Database](../10-Events-Database/) |
+| Chapter history | [../12-History](../12-History/) |
+| Reusable lessons and FAQs | [../13-Knowledge](../13-Knowledge/) |
+| Internal leadership planning | [../09-Leadership](../09-Leadership/) |
 
 ## Naming
 

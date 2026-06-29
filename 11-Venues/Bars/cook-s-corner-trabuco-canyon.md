@@ -30,7 +30,7 @@
 
 ## Events Hosted
 
-- 2026-07-09: [OC Litas Monthly Meetup](../../12-Events-Database/2026/2026-07-09-oc-litas-monthly-meetup.md)
+- 2026-07-09: [OC Litas Monthly Meetup](../../10-Events-Database/2026/2026-07-09-oc-litas-monthly-meetup.md)
 
 ## Calendar History
 
@@ -50,5 +50,5 @@
 
 ## Related Files
 
-- [Events Database](../../12-Events-Database/README.md)
+- [Events Database](../../10-Events-Database/README.md)
 - [Venue Evaluation](../New-Venue-Evaluation.md)

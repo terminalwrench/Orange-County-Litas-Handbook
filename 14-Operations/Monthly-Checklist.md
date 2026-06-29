@@ -14,7 +14,7 @@ For a reusable copy, use [Templates/Monthly-Checklist.md](Templates/Monthly-Chec
 
 ## Events
 
-- [ ] Update completed event records in [../12-Events-Database](../12-Events-Database/).
+- [ ] Update completed event records in [../10-Events-Database](../10-Events-Database/).
 - [ ] Confirm upcoming event details before public posting.
 - [ ] Capture event lessons.
 - [ ] Archive final event materials.
@@ -30,7 +30,7 @@ For a reusable copy, use [Templates/Monthly-Checklist.md](Templates/Monthly-Chec
 
 - [ ] Review active partner or sponsor commitments.
 - [ ] Send thank-yous or follow-ups.
-- [ ] Update [../06-Partnerships](../06-Partnerships/) records when needed.
+- [ ] Update [../11-Venues](../11-Venues/) records when needed.
 
 ## Media and Assets
 
@@ -47,5 +47,5 @@ For a reusable copy, use [Templates/Monthly-Checklist.md](Templates/Monthly-Chec
 
 ## Knowledge
 
-- [ ] Add reusable lessons to [../16-Knowledge/Lessons-Learned.md](../16-Knowledge/Lessons-Learned.md).
+- [ ] Add reusable lessons to [../13-Knowledge/Lessons-Learned.md](../13-Knowledge/Lessons-Learned.md).
 - [ ] Update FAQs, common challenges, or resources if new patterns appeared.

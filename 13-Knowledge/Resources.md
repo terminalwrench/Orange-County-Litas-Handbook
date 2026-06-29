@@ -11,12 +11,12 @@ This file is a directory of useful references, tools, and external resources. Ke
 | Media and assets | [../03-Media](../03-Media/) |
 | Social workflow | [../04-Social](../04-Social/) |
 | Routes | [../05-Routes](../05-Routes/) |
-| Partnerships | [../06-Partnerships](../06-Partnerships/) |
-| Leadership workspace | [../10-Leadership](../10-Leadership/) |
-| Events Database | [../12-Events-Database](../12-Events-Database/) |
-| Venues | [../13-Venues](../13-Venues/) |
-| Community events | [../14-Community](../14-Community/) |
-| Chapter history | [../15-History](../15-History/) |
+| Partnerships | [../11-Venues](../11-Venues/) |
+| Leadership workspace | [../09-Leadership](../09-Leadership/) |
+| Events Database | [../10-Events-Database](../10-Events-Database/) |
+| Venues | [../11-Venues](../11-Venues/) |
+| Community events | [../10-Events-Database](../10-Events-Database/) |
+| Chapter history | [../12-History](../12-History/) |
 
 ## Planning Tools
 

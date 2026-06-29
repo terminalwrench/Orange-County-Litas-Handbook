@@ -1,10 +1,28 @@
 # Chapter History & Legacy
 
+<section class="module-hero">
+  <span class="module-kicker">Chapter memory</span>
+  <h1>History</h1>
+  <p class="module-subtitle">The long-term record of how Orange County Litas began, grew, changed, and built traditions.</p>
+  <p class="module-intro">Use this module to preserve confirmed milestones, leadership evolution, annual recaps, traditions, and stories worth carrying forward.</p>
+</section>
+
+## Start Here
+
+<div class="module-link-grid">
+  <a href="../Chapter-Timeline/">Chapter Timeline</a>
+  <a href="../Leadership-History/">Leadership History</a>
+  <a href="../Milestones/">Milestones</a>
+  <a href="../Annual-Recaps/">Annual Recaps</a>
+  <a href="../Traditions/">Traditions</a>
+  <a href="../Chapter-Growth/">Chapter Growth</a>
+</div>
+
 This module preserves the long-term history of Orange County Litas: how the chapter began, who helped lead it, which events shaped it, what traditions emerged, and what future leaders should understand about the community they are inheriting.
 
 History is institutional knowledge. It helps the chapter honor the people who built it, remember meaningful events, understand leadership transitions, and carry traditions forward without depending on memory alone.
 
-Use this module with the canonical [Events Database](../12-Events-Database/README.md), [Chapter History](../01-Chapter/Chapter-History.md), [Leadership](../01-Chapter/Leadership.md), [Community Events](../14-Community/README.md), and [Venues](../13-Venues/README.md).
+Use this module with the canonical [Events Database](../10-Events-Database/README.md), [Chapter History](../01-Chapter/Chapter-History.md), [Leadership](../01-Chapter/Leadership.md), [Venues](../11-Venues/README.md), and [Operations](../14-Operations/README.md).
 
 ## Historical Standard
 

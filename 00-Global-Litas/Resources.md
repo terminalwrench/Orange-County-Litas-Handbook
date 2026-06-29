@@ -15,7 +15,7 @@ Use this page to track global and local resources that support OC Litas operatio
 - Media operations: [../03-Media](../03-Media/)
 - Social workflow: [../04-Social](../04-Social/)
 - Routes: [../05-Routes](../05-Routes/)
-- Partnerships: [../06-Partnerships](../06-Partnerships/)
+- Partnerships: [../11-Venues](../11-Venues/)
 
 ## Maintenance
 

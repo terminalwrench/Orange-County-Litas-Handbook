@@ -1,6 +1,6 @@
 # Leadership Tips
 
-This file captures practical advice for future leadership teams. It does not replace role definitions in [../01-Chapter/Leadership.md](../01-Chapter/Leadership.md) or private planning in [../10-Leadership](../10-Leadership/).
+This file captures practical advice for future leadership teams. It does not replace role definitions in [../01-Chapter/Leadership.md](../01-Chapter/Leadership.md) or private planning in [../09-Leadership](../09-Leadership/).
 
 ## Protect the Rhythm
 
@@ -39,5 +39,5 @@ Before a leadership transition, review:
 
 Related files:
 
-- [../10-Leadership/Succession-Planning.md](../10-Leadership/Succession-Planning.md)
-- [../15-History/Leadership-History.md](../15-History/Leadership-History.md)
+- [../09-Leadership/Succession-Planning.md](../09-Leadership/Succession-Planning.md)
+- [../12-History/Leadership-History.md](../12-History/Leadership-History.md)

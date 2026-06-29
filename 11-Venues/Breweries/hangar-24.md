@@ -30,8 +30,8 @@
 
 ## Events Hosted
 
-- 2023-11-06: [South Moto OC bike night](../../12-Events-Database/2023/2023-11-06-south-moto-oc-bike-night.md)
-- 2024-04-24: [Meet and Greet 6:30pm](../../12-Events-Database/2024/2024-04-24-meet-and-greet-6-30pm.md)
+- 2023-11-06: [South Moto OC bike night](../../10-Events-Database/2023/2023-11-06-south-moto-oc-bike-night.md)
+- 2024-04-24: [Meet and Greet 6:30pm](../../10-Events-Database/2024/2024-04-24-meet-and-greet-6-30pm.md)
 
 ## Calendar History
 
@@ -52,5 +52,5 @@
 
 ## Related Files
 
-- [Events Database](../../12-Events-Database/README.md)
+- [Events Database](../../10-Events-Database/README.md)
 - [Venue Evaluation](../New-Venue-Evaluation.md)

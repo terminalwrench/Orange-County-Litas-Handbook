@@ -2,7 +2,7 @@
 
 This file is the internal contact reference structure for OC Litas. Keep sensitive personal information limited to what chapter leaders actually need for operations. Do not publish private contact details publicly without permission.
 
-For venue-specific notes, sponsor details, or event planning records, use `../06-Partnerships/` and `../02-Events/` when more detail is needed.
+For venue-specific notes, sponsor details, or event planning records, use `../11-Venues/` and `../02-Events/` when more detail is needed.
 
 ## Leadership
 

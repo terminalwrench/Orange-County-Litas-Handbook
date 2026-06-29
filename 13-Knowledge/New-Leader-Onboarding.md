@@ -16,11 +16,11 @@ Use this checklist when bringing a new person into chapter leadership. Adjust th
 - [ ] [../01-Chapter](../01-Chapter/) for chapter identity and public operating context.
 - [ ] [../02-Events](../02-Events/) for event planning.
 - [ ] [../05-Routes](../05-Routes/) for route standards.
-- [ ] [../12-Events-Database](../12-Events-Database/) for canonical event records.
-- [ ] [../13-Venues](../13-Venues/) for venue knowledge.
-- [ ] [../14-Community](../14-Community/) for outside events and collaborations.
-- [ ] [../15-History](../15-History/) for chapter legacy.
-- [ ] [../10-Leadership](../10-Leadership/) for private leadership workspace.
+- [ ] [../10-Events-Database](../10-Events-Database/) for canonical event records.
+- [ ] [../11-Venues](../11-Venues/) for venue knowledge.
+- [ ] [../10-Events-Database](../10-Events-Database/) for outside events and collaborations.
+- [ ] [../12-History](../12-History/) for chapter legacy.
+- [ ] [../09-Leadership](../09-Leadership/) for private leadership workspace.
 
 ## Practical Access and Context
 

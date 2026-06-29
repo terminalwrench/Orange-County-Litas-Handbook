@@ -9,7 +9,7 @@ Challenge: Everyone thinks someone else is confirming the final details.
 Suggested approach:
 
 - Assign one event owner.
-- Use [../10-Leadership/Event-Assignments.md](../10-Leadership/Event-Assignments.md) for internal ownership.
+- Use [../09-Leadership/Event-Assignments.md](../09-Leadership/Event-Assignments.md) for internal ownership.
 - Confirm who makes the final call before public posting.
 
 ## Venue Uncertainty
@@ -18,8 +18,8 @@ Challenge: A venue looks good online but may not work for motorcycles, parking, 
 
 Suggested approach:
 
-- Check [../13-Venues/Venue-Index.md](../13-Venues/Venue-Index.md).
-- Use [../13-Venues/New-Venue-Evaluation.md](../13-Venues/New-Venue-Evaluation.md).
+- Check [../11-Venues/Venue-Index.md](../11-Venues/Venue-Index.md).
+- Use [../11-Venues/New-Venue-Evaluation.md](../11-Venues/New-Venue-Evaluation.md).
 - Start with conservative group expectations until the venue is proven.
 
 ## Route Difficulty Mismatch

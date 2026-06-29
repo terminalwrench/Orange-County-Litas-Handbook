@@ -8,11 +8,11 @@ This is practical guidance, not legal or accounting advice.
 
 Keep:
 
-- Event records in [../12-Events-Database](../12-Events-Database/).
+- Event records in [../10-Events-Database](../10-Events-Database/).
 - Route records in [../05-Routes](../05-Routes/).
-- Venue records in [../13-Venues](../13-Venues/).
-- Partner records in [../06-Partnerships](../06-Partnerships/).
-- Chapter history in [../15-History](../15-History/).
+- Venue records in [../11-Venues](../11-Venues/).
+- Partner records in [../11-Venues](../11-Venues/).
+- Chapter history in [../12-History](../12-History/).
 - Final assets and archive links.
 - Lessons learned and reusable knowledge.
 

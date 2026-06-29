@@ -1,5 +1,23 @@
 # OC Litas Media Operations
 
+<section class="module-hero">
+  <span class="module-kicker">Creative operations</span>
+  <h1>Media</h1>
+  <p class="module-subtitle">The place for file standards, assets, sizing, naming, and archive workflows.</p>
+  <p class="module-intro">Use this module when creating event graphics, organizing media, preparing social assets, or finding reusable chapter files.</p>
+</section>
+
+## Start Here
+
+<div class="module-link-grid">
+  <a href="../File-Organization/">File Organization</a>
+  <a href="../Asset-Library/">Asset Library</a>
+  <a href="../Image-Sizes/">Image Sizes</a>
+  <a href="../Naming-Conventions/">Naming Conventions</a>
+  <a href="../Archive-Workflow/">Archive Workflow</a>
+  <a href="../Instagram-Guidelines/">Instagram Guidelines</a>
+</div>
+
 This module keeps OC Litas media assets organized, findable, and consistent across deliverables while leaving creative decisions to the designer. It standardizes where files live, how assets are requested, what technical details are needed, how final media is named, and how completed work is archived.
 
 This module does not define creative style. It does not choose colors, illustration direction, flyer aesthetics, typography, layout approach, or visual tone. Those decisions remain intentionally flexible so each event can have its own creative energy.
@@ -58,4 +76,3 @@ Every published or delivered asset should be:
 - Exported at the needed size
 - Linked to the related event or campaign
 - Archived when the work is complete
-

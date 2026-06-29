@@ -2,7 +2,7 @@
 
 Annual planning creates a predictable chapter rhythm without requiring every detail of the year to be settled in January.
 
-Use this with [../10-Leadership/Annual-Goals.md](../10-Leadership/Annual-Goals.md), [../10-Leadership/Quarterly-Planning.md](../10-Leadership/Quarterly-Planning.md), [../12-Events-Database/Statistics.md](../12-Events-Database/Statistics.md), and [../15-History/Annual-Recaps.md](../15-History/Annual-Recaps.md).
+Use this with [../09-Leadership/Annual-Goals.md](../09-Leadership/Annual-Goals.md), [../09-Leadership/Quarterly-Planning.md](../09-Leadership/Quarterly-Planning.md), [../10-Events-Database/Statistics.md](../10-Events-Database/Statistics.md), and [../12-History/Annual-Recaps.md](../12-History/Annual-Recaps.md).
 
 ## Annual Cycle
 
@@ -18,7 +18,7 @@ Use this with [../10-Leadership/Annual-Goals.md](../10-Leadership/Annual-Goals.m
 
 - Review the next three months of calendar needs.
 - Confirm event owners.
-- Check major community events in [../14-Community/Calendar-Planning.md](../14-Community/Calendar-Planning.md).
+- Check major recurring events and schedule context in [../10-Events-Database/Timeline.md](../10-Events-Database/Timeline.md).
 - Review open action items and partner commitments.
 - Decide what to postpone, simplify, or remove.
 

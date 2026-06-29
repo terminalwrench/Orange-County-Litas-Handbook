@@ -1,5 +1,23 @@
 # Leadership
 
+<section class="module-hero">
+  <span class="module-kicker">Leadership workspace</span>
+  <h1>Leadership</h1>
+  <p class="module-subtitle">Internal planning, decision tracking, assignments, and continuity for chapter leadership.</p>
+  <p class="module-intro">Use this module when leadership needs to coordinate work, record decisions, review goals, or keep handoffs clean.</p>
+</section>
+
+## Start Here
+
+<div class="module-link-grid">
+  <a href="../Leadership-Roles/">Leadership Roles</a>
+  <a href="../Meeting-Notes/">Meeting Notes</a>
+  <a href="../Decision-Log/">Decision Log</a>
+  <a href="../Event-Assignments/">Event Assignments</a>
+  <a href="../Action-Items/">Action Items</a>
+  <a href="../Succession-Planning/">Succession Planning</a>
+</div>
+
 This module is a private leadership workspace for OC Litas. It supports planning, accountability, continuity, and internal decision tracking without dictating chapter culture or replacing the public-facing chapter guidance in [../01-Chapter](../01-Chapter/).
 
 Use this section for leadership notes, internal planning, event assignments, feedback themes, action items, decision records, succession planning, and working ideas that are not ready for broader handbook use.
@@ -34,6 +52,6 @@ This section is intended for leadership use. Do not store sensitive personal det
 - Chapter operating guidance: [../01-Chapter](../01-Chapter/)
 - Event operating system: [../02-Events](../02-Events/)
 - Social workflow: [../04-Social](../04-Social/)
-- Partnerships: [../06-Partnerships](../06-Partnerships/)
-- Archive standards: [../09-Archive](../09-Archive/)
-
+- Route planning: [../05-Routes](../05-Routes/)
+- Archive standards: [../08-Archive](../08-Archive/)
+- Operations manual: [../14-Operations](../14-Operations/)

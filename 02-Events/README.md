@@ -1,5 +1,23 @@
 # OC Litas Event Operating System
 
+<section class="module-hero">
+  <span class="module-kicker">Event planning</span>
+  <h1>Events</h1>
+  <p class="module-subtitle">A practical system for turning ideas into clear, welcoming chapter events.</p>
+  <p class="module-intro">Use this module to plan meetups, rides, photo shoots, poker runs, special events, cancellations, recaps, and event templates.</p>
+</section>
+
+## Start Here
+
+<div class="module-link-grid">
+  <a href="../Event-Lifecycle/">Event Lifecycle</a>
+  <a href="../Ride-Planning/">Ride Planning</a>
+  <a href="../Meet-and-Greet-Planning/">Meet and Greet Planning</a>
+  <a href="../Beginner-Rides/">Beginner Rides</a>
+  <a href="../Venue-Selection/">Venue Selection</a>
+  <a href="../Event-Recap/">Event Recap</a>
+</div>
+
 This module is the operating handbook for OC Litas events. It explains how the chapter turns an idea into a safe, welcoming, well-communicated event and how each event is captured afterward so future leaders can improve the next one.
 
 Use this folder for repeatable systems: event planning, ride planning, venue decisions, weather calls, cancellation communication, recap standards, and reusable templates. One-time working files for a specific event should be created from the templates in [Templates](Templates/) and archived with the event record when the event is complete.
@@ -68,4 +86,3 @@ For ride events, leaders must also answer:
 - What is the weather and cancellation plan?
 
 Good event operations should feel calm from the outside. Members should see clear details, warm communication, and a well-hosted event. Behind the scenes, leaders should have enough structure to make confident decisions when timing, weather, venue traffic, or group size changes.
-

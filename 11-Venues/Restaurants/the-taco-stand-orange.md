@@ -30,7 +30,7 @@
 
 ## Events Hosted
 
-- 2024-05-22: [OC Meet and greet](../../12-Events-Database/2024/2024-05-22-oc-meet-and-greet.md)
+- 2024-05-22: [OC Meet and greet](../../10-Events-Database/2024/2024-05-22-oc-meet-and-greet.md)
 
 ## Calendar History
 
@@ -50,5 +50,5 @@
 
 ## Related Files
 
-- [Events Database](../../12-Events-Database/README.md)
+- [Events Database](../../10-Events-Database/README.md)
 - [Venue Evaluation](../New-Venue-Evaluation.md)

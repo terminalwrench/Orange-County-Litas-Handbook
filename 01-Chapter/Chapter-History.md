@@ -121,9 +121,9 @@ Update chapter history after major events, leadership transitions, annual milest
 When possible, link related files from:
 
 - `../02-Events/`
-- `../08-Photography/`
+- `../07-Photography/`
 - `../04-Social/`
 - `../03-Media/`
-- `../09-Archive/`
+- `../08-Archive/`
 
 The best time to preserve history is soon after the moment happens, while names, locations, and details are still fresh.

@@ -1,5 +1,23 @@
 # Events Database
 
+<section class="module-hero">
+  <span class="module-kicker">Canonical records</span>
+  <h1>Events Database</h1>
+  <p class="module-subtitle">The single source of truth for Orange County Litas events.</p>
+  <p class="module-intro">Use this module to look up past events, update records, review timeline context, and keep future planning grounded in real chapter history.</p>
+</section>
+
+## Start Here
+
+<div class="module-link-grid">
+  <a href="../Events-Index/">Events Index</a>
+  <a href="../Timeline/">Timeline</a>
+  <a href="../Statistics/">Statistics</a>
+  <a href="../Event-Categories/">Event Categories</a>
+  <a href="../Calendar-Import-Notes/">Calendar Import Notes</a>
+  <a href="../Templates/Event/">Event Template</a>
+</div>
+
 This module is the canonical event database for Orange County Litas. It is the single source of truth for chapter events imported from the initial Google Calendar export and for future event records added by leadership.
 
 The database preserves what is known, leaves unknown fields blank, and avoids inventing details that were not present in the calendar source or related chapter records.

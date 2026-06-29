@@ -33,7 +33,7 @@ At minimum, event planning should confirm:
 - Public announcement language
 - Internal owner for day-of communication
 
-Event-specific working files belong in `../02-Events/`. Route references belong in `../05-Routes/`, and venue or sponsor details belong in `../06-Partnerships/`.
+Event-specific working files belong in `../02-Events/`. Route references belong in `../05-Routes/`, and venue or sponsor details belong in `../11-Venues/`.
 
 ## Communicating Changes
 
@@ -76,7 +76,7 @@ Venue expectations:
 - Avoid blocking entrances, sidewalks, accessible spaces, loading zones, or neighboring businesses.
 - Encourage attendees to purchase from the host venue when appropriate.
 - Leave the space cleaner than it was found.
-- Thank staff and maintain contact notes in [Contacts.md](Contacts.md) or the venue records in `../06-Partnerships/Venues.md`.
+- Thank staff and maintain contact notes in [Contacts.md](Contacts.md) or the venue records in `../11-Venues/Venues.md`.
 
 If a venue is not a good fit, document why so future planners do not repeat the same issue.
 

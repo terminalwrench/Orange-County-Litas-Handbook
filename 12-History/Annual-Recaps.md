@@ -8,7 +8,7 @@ Use [Templates/Annual-Recap.md](Templates/Annual-Recap.md) for each future year.
 
 ### Events Hosted
 
-- See [Timeline/2023.md](Timeline/2023.md) and [Events Index](../12-Events-Database/Events-Index.md).
+- See [Timeline/2023.md](Timeline/2023.md) and [Events Index](../10-Events-Database/Events-Index.md).
 
 ### Community Impact
 
@@ -30,7 +30,7 @@ Use [Templates/Annual-Recap.md](Templates/Annual-Recap.md) for each future year.
 
 ### Events Hosted
 
-- See [Timeline/2024.md](Timeline/2024.md) and [Events Index](../12-Events-Database/Events-Index.md).
+- See [Timeline/2024.md](Timeline/2024.md) and [Events Index](../10-Events-Database/Events-Index.md).
 
 ### Community Impact
 
@@ -52,7 +52,7 @@ Use [Templates/Annual-Recap.md](Templates/Annual-Recap.md) for each future year.
 
 ### Events Hosted
 
-- See [Timeline/2025.md](Timeline/2025.md) and [Events Index](../12-Events-Database/Events-Index.md).
+- See [Timeline/2025.md](Timeline/2025.md) and [Events Index](../10-Events-Database/Events-Index.md).
 
 ### Community Impact
 
@@ -74,7 +74,7 @@ Use [Templates/Annual-Recap.md](Templates/Annual-Recap.md) for each future year.
 
 ### Events Hosted
 
-- See [Timeline/2026.md](Timeline/2026.md) and [Events Index](../12-Events-Database/Events-Index.md).
+- See [Timeline/2026.md](Timeline/2026.md) and [Events Index](../10-Events-Database/Events-Index.md).
 
 ### Community Impact
 

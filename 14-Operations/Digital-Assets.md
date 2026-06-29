@@ -2,7 +2,7 @@
 
 Digital assets include logos, flyers, captions, photos, videos, templates, partner graphics, and final event media.
 
-Use this with [../03-Media](../03-Media/), [../04-Social](../04-Social/), and [../09-Archive](../09-Archive/).
+Use this with [../03-Media](../03-Media/), [../04-Social](../04-Social/), and [../08-Archive](../08-Archive/).
 
 ## Asset Types
 

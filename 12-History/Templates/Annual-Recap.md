@@ -55,6 +55,6 @@
 
 ## Related Files
 
-- [Events Database](../../12-Events-Database/README.md)
+- [Events Database](../../10-Events-Database/README.md)
 - [Chapter Growth](../Chapter-Growth.md)
 - [Milestones](../Milestones.md)

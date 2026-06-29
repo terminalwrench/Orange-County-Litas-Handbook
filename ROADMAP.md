@@ -14,5 +14,4 @@ This roadmap tracks handbook improvements that should happen as the chapter uses
 - Review the handbook quarterly for stale links, outdated workflows, and missing lessons learned.
 - Move repeated event learnings into permanent operating documents.
 - Keep private contact information out of general handbook files.
-- Preserve completed work in [09-Archive](09-Archive/) using the archive standards.
-
+- Preserve completed work in [08-Archive](08-Archive/) using the archive standards.

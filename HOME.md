@@ -28,14 +28,13 @@ Use:
 
 - [02-Events/Ride-Planning.md](02-Events/Ride-Planning.md)
 - [02-Events/Beginner-Rides.md](02-Events/Beginner-Rides.md)
-- [05-Routes/Route-Checklist.md](05-Routes/Route-Checklist.md)
-- [05-Routes/Route-Template.md](05-Routes/Route-Template.md)
+- [05-Routes/Planning-Checklist.md](05-Routes/Planning-Checklist.md)
+- [05-Routes/Templates/Route-Template.md](05-Routes/Templates/Route-Template.md)
 
-## Working With Partners
+## Working With Venues
 
-Use [06-Partnerships/README.md](06-Partnerships/README.md) for sponsors, venues, discounts, contacts, and thank-you notes.
+Use [11-Venues/README.md](11-Venues/README.md) for venue records, favorites, categories, and new venue evaluation notes.
 
 ## Archiving Completed Work
 
-Use [09-Archive/README.md](09-Archive/README.md) for the long-term archive standard and module-specific archive workflows where available.
-
+Use [08-Archive/README.md](08-Archive/README.md) for the long-term archive standard and module-specific archive workflows where available.

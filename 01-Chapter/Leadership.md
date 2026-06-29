@@ -28,7 +28,7 @@ Core responsibilities:
 - Confirm event details before public announcements.
 - Track what worked, what changed, and what should be repeated.
 - Help convert ideas into executable plans.
-- Keep operational details organized in the relevant handbook module, especially `../02-Events/`, `../05-Routes/`, and `../06-Partnerships/`.
+- Keep operational details organized in the relevant handbook module, especially `../02-Events/`, `../05-Routes/`, and `../11-Venues/`.
 
 ### Events Lead
 

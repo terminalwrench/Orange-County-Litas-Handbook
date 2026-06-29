@@ -15,7 +15,7 @@ This file should stay high level. Link to the full operating module for detailed
 Related files:
 
 - [../02-Events/Event-Lifecycle.md](../02-Events/Event-Lifecycle.md)
-- [../12-Events-Database/Templates/Event.md](../12-Events-Database/Templates/Event.md)
+- [../10-Events-Database/Templates/Event.md](../10-Events-Database/Templates/Event.md)
 
 ## Rides
 
@@ -40,7 +40,7 @@ Related files:
 Related files:
 
 - [../02-Events/Meet-and-Greet-Planning.md](../02-Events/Meet-and-Greet-Planning.md)
-- [../13-Venues/Venue-Index.md](../13-Venues/Venue-Index.md)
+- [../11-Venues/Venue-Index.md](../11-Venues/Venue-Index.md)
 
 ## Communication
 
@@ -52,7 +52,7 @@ Related files:
 Related files:
 
 - [../04-Social/Event-Announcement-Workflow.md](../04-Social/Event-Announcement-Workflow.md)
-- [../10-Leadership/Decision-Log.md](../10-Leadership/Decision-Log.md)
+- [../09-Leadership/Decision-Log.md](../09-Leadership/Decision-Log.md)
 
 ## Knowledge Capture
 

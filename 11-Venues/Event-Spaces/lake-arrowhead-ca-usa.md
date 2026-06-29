@@ -30,7 +30,7 @@
 
 ## Events Hosted
 
-- 2026-09-26: [Orange County Litas Lake Arrowhead Trip](../../12-Events-Database/2026/2026-09-26-orange-county-litas-lake-arrowhead-trip.md)
+- 2026-09-26: [Orange County Litas Lake Arrowhead Trip](../../10-Events-Database/2026/2026-09-26-orange-county-litas-lake-arrowhead-trip.md)
 
 ## Calendar History
 
@@ -50,5 +50,5 @@
 
 ## Related Files
 
-- [Events Database](../../12-Events-Database/README.md)
+- [Events Database](../../10-Events-Database/README.md)
 - [Venue Evaluation](../New-Venue-Evaluation.md)

@@ -1,5 +1,23 @@
 # Routes
 
+<section class="module-hero">
+  <span class="module-kicker">Ride knowledge</span>
+  <h1>Routes</h1>
+  <p class="module-subtitle">Institutional route knowledge for rides the chapter has planned, tested, completed, and improved.</p>
+  <p class="module-intro">Use this module to evaluate route difficulty, plan fuel and regroup stops, record hazards, and preserve ride reports.</p>
+</section>
+
+## Start Here
+
+<div class="module-link-grid">
+  <a href="../Route-Planning-Standards/">Route Planning Standards</a>
+  <a href="../Planning-Checklist/">Planning Checklist</a>
+  <a href="../Route-Categories/">Route Categories</a>
+  <a href="../Fuel-Stops/">Fuel Stops</a>
+  <a href="../Hazard-Notes/">Hazard Notes</a>
+  <a href="../Ride-Reports/">Ride Reports</a>
+</div>
+
 This module is the Orange County Litas route knowledge base. It documents rides the chapter has planned, tested, completed, reviewed, and improved over time.
 
 This is not a GPS library. Route files should not replace current navigation, traffic review, weather review, or day-of judgment. They exist to preserve institutional knowledge so future leaders can plan safer, clearer, and more consistent rides.

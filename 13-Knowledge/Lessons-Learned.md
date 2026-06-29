@@ -1,6 +1,6 @@
 # Lessons Learned
 
-This file tracks reusable lessons that apply beyond one event. Event-specific debriefs should stay with the event record in [../12-Events-Database](../12-Events-Database/) or the event operations log in [../02-Events/Lessons-Learned.md](../02-Events/Lessons-Learned.md).
+This file tracks reusable lessons that apply beyond one event. Event-specific debriefs should stay with the event record in [../10-Events-Database](../10-Events-Database/) or the event operations log in [../02-Events/Lessons-Learned.md](../02-Events/Lessons-Learned.md).
 
 Use [Templates/Lesson-Learned.md](Templates/Lesson-Learned.md) when adding a new lesson.
 

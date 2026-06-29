@@ -28,11 +28,11 @@ For social events, arrive when you can. For rides, do not chase the group. Meet 
 
 ### Where do I start as a new leader?
 
-Start with [New-Leader-Onboarding.md](New-Leader-Onboarding.md), then review [../01-Chapter/Leadership.md](../01-Chapter/Leadership.md), [../10-Leadership/README.md](../10-Leadership/README.md), and the current Events Database.
+Start with [New-Leader-Onboarding.md](New-Leader-Onboarding.md), then review [../01-Chapter/Leadership.md](../01-Chapter/Leadership.md), [../09-Leadership/README.md](../09-Leadership/README.md), and the current Events Database.
 
 ### Where should I document an event?
 
-The canonical event record belongs in [../12-Events-Database](../12-Events-Database/). Use [../02-Events](../02-Events/) for planning workflow and this module for reusable lessons that apply beyond one event.
+The canonical event record belongs in [../10-Events-Database](../10-Events-Database/). Use [../02-Events](../02-Events/) for planning workflow and this module for reusable lessons that apply beyond one event.
 
 ### Where should I document a route?
 
@@ -40,7 +40,7 @@ Use [../05-Routes](../05-Routes/) only for tested, reviewed, or completed route 
 
 ### Where should private leadership notes go?
 
-Use [../10-Leadership](../10-Leadership/) for internal planning and decision tracking. Do not put sensitive personal details in broad handbook files.
+Use [../09-Leadership](../09-Leadership/) for internal planning and decision tracking. Do not put sensitive personal details in broad handbook files.
 
 ## Event Organizers
 
@@ -50,11 +50,11 @@ At minimum: date, time, location, host, event type, ride status, expected rider 
 
 ### How do I choose a venue?
 
-Review [../02-Events/Venue-Selection.md](../02-Events/Venue-Selection.md), [../13-Venues/Venue-Index.md](../13-Venues/Venue-Index.md), and [../13-Venues/New-Venue-Evaluation.md](../13-Venues/New-Venue-Evaluation.md).
+Review [../02-Events/Venue-Selection.md](../02-Events/Venue-Selection.md), [../11-Venues/Venue-Index.md](../11-Venues/Venue-Index.md), and [../11-Venues/New-Venue-Evaluation.md](../11-Venues/New-Venue-Evaluation.md).
 
 ### How do I capture lessons after an event?
 
-Use [Lessons-Learned.md](Lessons-Learned.md) for reusable lessons and update the event record in [../12-Events-Database](../12-Events-Database/) with event-specific notes.
+Use [Lessons-Learned.md](Lessons-Learned.md) for reusable lessons and update the event record in [../10-Events-Database](../10-Events-Database/) with event-specific notes.
 
 ## Future Questions
 

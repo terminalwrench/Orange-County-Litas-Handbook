@@ -42,8 +42,8 @@ For each transaction, record:
 
 ## Related Records
 
-- Link event-specific costs to [../12-Events-Database](../12-Events-Database/) records when appropriate.
-- Track sponsor or partner commitments in [../06-Partnerships](../06-Partnerships/).
+- Link event-specific costs to [../10-Events-Database](../10-Events-Database/) records when appropriate.
+- Track sponsor or partner commitments in [../11-Venues](../11-Venues/).
 - Store private financial detail only in the appropriate restricted leadership location.
 
 ## Review

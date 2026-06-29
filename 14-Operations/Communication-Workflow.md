@@ -7,9 +7,9 @@ Clear communication keeps operations from relying on memory, side chats, or assu
 | Layer | Purpose | Where to Document |
 | --- | --- | --- |
 | Public event information | What members and guests need to know. | Event posts, email, event records. |
-| Internal planning | Ownership, tasks, timing, and decisions. | [../10-Leadership](../10-Leadership/) |
-| Canonical event record | What happened and what should be remembered. | [../12-Events-Database](../12-Events-Database/) |
-| Reusable knowledge | Lessons that apply beyond one event. | [../16-Knowledge](../16-Knowledge/) |
+| Internal planning | Ownership, tasks, timing, and decisions. | [../09-Leadership](../09-Leadership/) |
+| Canonical event record | What happened and what should be remembered. | [../10-Events-Database](../10-Events-Database/) |
+| Reusable knowledge | Lessons that apply beyond one event. | [../13-Knowledge](../13-Knowledge/) |
 
 ## Internal Updates
 
@@ -44,4 +44,4 @@ Document decisions when they affect:
 - Leadership roles.
 - Public commitments.
 
-Use [../10-Leadership/Decision-Log.md](../10-Leadership/Decision-Log.md) for internal decision tracking.
+Use [../09-Leadership/Decision-Log.md](../09-Leadership/Decision-Log.md) for internal decision tracking.

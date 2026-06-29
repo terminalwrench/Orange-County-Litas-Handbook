@@ -30,7 +30,7 @@
 
 ## Events Hosted
 
-- 2024-07-20: [OC - meet and greet- and beach ride](../../12-Events-Database/2024/2024-07-20-oc-meet-and-greet-and-beach-ride.md)
+- 2024-07-20: [OC - meet and greet- and beach ride](../../10-Events-Database/2024/2024-07-20-oc-meet-and-greet-and-beach-ride.md)
 
 ## Calendar History
 
@@ -50,5 +50,5 @@
 
 ## Related Files
 
-- [Events Database](../../12-Events-Database/README.md)
+- [Events Database](../../10-Events-Database/README.md)
 - [Venue Evaluation](../New-Venue-Evaluation.md)

@@ -22,12 +22,15 @@
 - [02-Events/README.md](02-Events/README.md)
 - [03-Media/README.md](03-Media/README.md)
 - [04-Social/README.md](04-Social/README.md)
-- [08-Photography/README.md](08-Photography/README.md)
+- [07-Photography/README.md](07-Photography/README.md)
 
 ## Operations
 
 - [05-Routes/README.md](05-Routes/README.md)
-- [06-Partnerships/README.md](06-Partnerships/README.md)
-- [07-Merch/README.md](07-Merch/README.md)
-- [09-Archive/README.md](09-Archive/README.md)
-
+- [08-Archive/README.md](08-Archive/README.md)
+- [09-Leadership/README.md](09-Leadership/README.md)
+- [10-Events-Database/README.md](10-Events-Database/README.md)
+- [11-Venues/README.md](11-Venues/README.md)
+- [12-History/README.md](12-History/README.md)
+- [13-Knowledge/README.md](13-Knowledge/README.md)
+- [14-Operations/README.md](14-Operations/README.md)

@@ -45,7 +45,7 @@ Record:
 
 Do not store sensitive medical details, private conflict details, insurance information, or personal identifiers in broad handbook files.
 
-Leadership should keep sensitive records restricted and add only the reusable operational lesson to [../16-Knowledge/Lessons-Learned.md](../16-Knowledge/Lessons-Learned.md) when appropriate.
+Leadership should keep sensitive records restricted and add only the reusable operational lesson to [../13-Knowledge/Lessons-Learned.md](../13-Knowledge/Lessons-Learned.md) when appropriate.
 
 ## Aftercare
 

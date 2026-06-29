@@ -22,7 +22,7 @@ Chapter growth includes more than membership count. It includes leadership capac
 
 ## Event Frequency
 
-Use the [Events Database statistics](../12-Events-Database/Statistics.md) as the source for event counts.
+Use the [Events Database statistics](../10-Events-Database/Statistics.md) as the source for event counts.
 
 | Year | Events in Database | Notes |
 | --- | ---: | --- |
@@ -37,16 +37,16 @@ Track confirmed partnerships, collaborations, and community relationships.
 
 | Year | Partner or Chapter | Related Record |
 | --- | --- | --- |
-| 2024 | San Diego Litas and Temecula Litas | [SD & Temecula Litas Beach Day](../12-Events-Database/2024/2024-08-18-sd-and-temecula-litas-beach-day.md) |
-| 2025 | SGV Litas | [Meet & greet w SGV](../12-Events-Database/2025/2025-12-17-meet-and-greet-w-sgv.md) |
-| 2026 | Long Beach Litas | [OC/Long Beach Collab](../12-Events-Database/2026/2026-06-03-oc-long-beach-collab.md) |
+| 2024 | San Diego Litas and Temecula Litas | [SD & Temecula Litas Beach Day](../10-Events-Database/2024/2024-08-18-sd-and-temecula-litas-beach-day.md) |
+| 2025 | SGV Litas | [Meet & greet w SGV](../10-Events-Database/2025/2025-12-17-meet-and-greet-w-sgv.md) |
+| 2026 | Long Beach Litas | [OC/Long Beach Collab](../10-Events-Database/2026/2026-06-03-oc-long-beach-collab.md) |
 
 ## Community Involvement
 
 | Year | Involvement | Related Record |
 | --- | --- | --- |
-| 2024 | Charity ride participation documented. | [The Gentlemen's Ride Orange County](../12-Events-Database/2024/2024-05-19-the-gentlemen-s-ride-orange-county.md) |
-| 2025 | Charity ride participation documented. | [Distinguished Gentleman's Ride](../12-Events-Database/2025/2025-05-18-distinguished-gentleman-s-ride.md) |
+| 2024 | Charity ride participation documented. | [The Gentlemen's Ride Orange County](../10-Events-Database/2024/2024-05-19-the-gentlemen-s-ride-orange-county.md) |
+| 2025 | Charity ride participation documented. | [Distinguished Gentleman's Ride](../10-Events-Database/2025/2025-05-18-distinguished-gentleman-s-ride.md) |
 
 ## Future Tracking
 

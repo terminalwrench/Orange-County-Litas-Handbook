@@ -1,6 +1,6 @@
 # Event Lifecycle
 
-This operational lifecycle summarizes how an event moves through the chapter system. Detailed planning standards live in [../02-Events/Event-Lifecycle.md](../02-Events/Event-Lifecycle.md); the canonical event record lives in [../12-Events-Database](../12-Events-Database/).
+This operational lifecycle summarizes how an event moves through the chapter system. Detailed planning standards live in [../02-Events/Event-Lifecycle.md](../02-Events/Event-Lifecycle.md); the canonical event record lives in [../10-Events-Database](../10-Events-Database/).
 
 ## 1. Intake
 
@@ -15,7 +15,7 @@ This operational lifecycle summarizes how an event moves through the chapter sys
 - Confirm event type.
 - Confirm venue, route, destination, or partner needs.
 - Identify safety, budget, weather, and communication concerns.
-- Add internal assignment in [../10-Leadership/Event-Assignments.md](../10-Leadership/Event-Assignments.md) if needed.
+- Add internal assignment in [../09-Leadership/Event-Assignments.md](../09-Leadership/Event-Assignments.md) if needed.
 
 ## 3. Confirm
 
@@ -42,14 +42,14 @@ This operational lifecycle summarizes how an event moves through the chapter sys
 ## 6. Close Out
 
 - Record what happened.
-- Add or update the event record in [../12-Events-Database](../12-Events-Database/).
+- Add or update the event record in [../10-Events-Database](../10-Events-Database/).
 - Capture route, venue, partner, and lesson updates.
 - Archive final assets.
 - Send thank-yous when appropriate.
 
 ## 7. Preserve Knowledge
 
-- Add reusable lessons to [../16-Knowledge/Lessons-Learned.md](../16-Knowledge/Lessons-Learned.md).
-- Update venue records in [../13-Venues](../13-Venues/) if needed.
+- Add reusable lessons to [../13-Knowledge/Lessons-Learned.md](../13-Knowledge/Lessons-Learned.md).
+- Update venue records in [../11-Venues](../11-Venues/) if needed.
 - Update route records in [../05-Routes](../05-Routes/) if the route was tested or completed.
-- Update community event records in [../14-Community](../14-Community/) when relevant.
+- Update community event records in [../10-Events-Database](../10-Events-Database/) when relevant.

@@ -30,7 +30,7 @@
 
 ## Events Hosted
 
-- 2023-10-28: [Babes and brew beginners ride](../../12-Events-Database/2023/2023-10-28-babes-and-brew-beginners-ride.md)
+- 2023-10-28: [Babes and brew beginners ride](../../10-Events-Database/2023/2023-10-28-babes-and-brew-beginners-ride.md)
 
 ## Calendar History
 
@@ -50,5 +50,5 @@
 
 ## Related Files
 
-- [Events Database](../../12-Events-Database/README.md)
+- [Events Database](../../10-Events-Database/README.md)
 - [Venue Evaluation](../New-Venue-Evaluation.md)

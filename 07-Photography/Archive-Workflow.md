@@ -20,5 +20,5 @@ Avoid storing:
 - Sensitive incident images
 - Unreviewed duplicates with no future use
 
-Use [../09-Archive/README.md](../09-Archive/README.md) for long-term archive standards.
+Use [../08-Archive/README.md](../08-Archive/README.md) for long-term archive standards.
 

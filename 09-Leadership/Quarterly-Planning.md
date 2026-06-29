@@ -36,5 +36,5 @@ Use:
 - [../02-Events/Event-Lifecycle.md](../02-Events/Event-Lifecycle.md) for event planning
 - [../02-Events/Lessons-Learned.md](../02-Events/Lessons-Learned.md) for event improvements
 - [../05-Routes/README.md](../05-Routes/README.md) for route development
-- [../06-Partnerships/README.md](../06-Partnerships/README.md) for partner planning
+- [../11-Venues/README.md](../11-Venues/README.md) for partner planning
 

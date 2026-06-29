@@ -1,5 +1,23 @@
 # Social Operations
 
+<section class="module-hero">
+  <span class="module-kicker">Community voice</span>
+  <h1>Social</h1>
+  <p class="module-subtitle">A working guide for planning, publishing, engaging, and archiving chapter social content.</p>
+  <p class="module-intro">Use this module to keep social posts coordinated with events, media assets, collaboration needs, and community care.</p>
+</section>
+
+## Start Here
+
+<div class="module-link-grid">
+  <a href="../Posting-Workflow/">Posting Workflow</a>
+  <a href="../Monthly-Content-Calendar/">Monthly Content Calendar</a>
+  <a href="../Event-Announcement-Workflow/">Event Announcement Workflow</a>
+  <a href="../Event-Recap-Workflow/">Event Recap Workflow</a>
+  <a href="../Community-Management/">Community Management</a>
+  <a href="../Collaboration-Guidelines/">Collaboration Guidelines</a>
+</div>
+
 This module documents how OC Litas plans, publishes, manages, and archives social content. It supports consistent operations without dictating caption voice, creative style, or personality.
 
 Use this with [../02-Events](../02-Events/) for event details and [../03-Media](../03-Media/) for media assets, naming, sizes, and archive workflow.
@@ -27,4 +45,3 @@ Use this with [../02-Events](../02-Events/) for event details and [../03-Media](
 - [Templates/Reel-Template.md](Templates/Reel-Template.md)
 - [Templates/Sponsor-Thank-You.md](Templates/Sponsor-Thank-You.md)
 - [Templates/Collaboration-Post.md](Templates/Collaboration-Post.md)
-

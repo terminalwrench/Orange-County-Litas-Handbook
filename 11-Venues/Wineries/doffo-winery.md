@@ -30,8 +30,8 @@
 
 ## Events Hosted
 
-- 2024-04-13: [Doffo Moto Ride](../../12-Events-Database/2024/2024-04-13-doffo-moto-ride.md)
-- 2025-04-05: [Women wheels and wine Ride to Doffo](../../12-Events-Database/2025/2025-04-05-women-wheels-and-wine-ride-to-doffo.md)
+- 2024-04-13: [Doffo Moto Ride](../../10-Events-Database/2024/2024-04-13-doffo-moto-ride.md)
+- 2025-04-05: [Women wheels and wine Ride to Doffo](../../10-Events-Database/2025/2025-04-05-women-wheels-and-wine-ride-to-doffo.md)
 
 ## Calendar History
 
@@ -52,5 +52,5 @@
 
 ## Related Files
 
-- [Events Database](../../12-Events-Database/README.md)
+- [Events Database](../../10-Events-Database/README.md)
 - [Venue Evaluation](../New-Venue-Evaluation.md)

@@ -1,10 +1,28 @@
 # Knowledge Base
 
+<section class="module-hero">
+  <span class="module-kicker">Shared wisdom</span>
+  <h1>Knowledge</h1>
+  <p class="module-subtitle">Reusable lessons, answers, resources, and leadership tips that do not belong in a single event or route file.</p>
+  <p class="module-intro">Use this module when the chapter learns something worth saving for future leaders, volunteers, or event organizers.</p>
+</section>
+
+## Start Here
+
+<div class="module-link-grid">
+  <a href="../Frequently-Asked-Questions/">FAQ</a>
+  <a href="../Lessons-Learned/">Lessons Learned</a>
+  <a href="../Best-Practices/">Best Practices</a>
+  <a href="../Leadership-Tips/">Leadership Tips</a>
+  <a href="../New-Leader-Onboarding/">New Leader Onboarding</a>
+  <a href="../Glossary/">Glossary</a>
+</div>
+
 This module is the centralized knowledge base for information that does not belong cleanly in Events, Routes, Partnerships, Venues, Community, or History.
 
 Use it for reusable operating wisdom: frequently asked questions, lessons learned, leadership tips, onboarding notes, volunteer guidance, common challenges, resource links, and shared terminology.
 
-The Knowledge Base should complement the rest of the handbook, not duplicate it. If information is the official record of an event, put it in [../12-Events-Database](../12-Events-Database/). If it is route-specific, put it in [../05-Routes](../05-Routes/). If it is a partner or venue record, use [../06-Partnerships](../06-Partnerships/) or [../13-Venues](../13-Venues/). If it is chapter history, use [../15-History](../15-History/).
+The Knowledge Base should complement the rest of the handbook, not duplicate it. If information is the official record of an event, put it in [../10-Events-Database](../10-Events-Database/). If it is route-specific, put it in [../05-Routes](../05-Routes/). If it is a venue record, use [../11-Venues](../11-Venues/). If it is chapter history, use [../12-History](../12-History/).
 
 ## Documents
 

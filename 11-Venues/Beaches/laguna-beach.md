@@ -30,7 +30,7 @@
 
 ## Events Hosted
 
-- 2024-01-07: [Stop the bleed](../../12-Events-Database/2024/2024-01-07-stop-the-bleed.md)
+- 2024-01-07: [Stop the bleed](../../10-Events-Database/2024/2024-01-07-stop-the-bleed.md)
 
 ## Calendar History
 
@@ -50,5 +50,5 @@
 
 ## Related Files
 
-- [Events Database](../../12-Events-Database/README.md)
+- [Events Database](../../10-Events-Database/README.md)
 - [Venue Evaluation](../New-Venue-Evaluation.md)
