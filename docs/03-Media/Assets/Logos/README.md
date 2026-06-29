@@ -7,4 +7,3 @@ Reusable logo files approved for current or repeatable media production live her
 - [TheLitasOC-FullWhite.png](TheLitasOC-FullWhite.png)
 - [TheLitasOC-WhiteFill.png](TheLitasOC-WhiteFill.png)
 - [TheLitasOC-WhiteLitas.png](TheLitasOC-WhiteLitas.png)
-- [TheLitasOC.pdf](TheLitasOC.pdf)

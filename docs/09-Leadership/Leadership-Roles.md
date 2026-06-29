@@ -38,9 +38,8 @@ When responsibilities change:
 - Transfer current action items.
 - Share relevant contacts and notes.
 - Update event assignments where needed.
-- Capture transition details in [Succession-Planning.md](Succession-Planning.md).
+- Capture transition details in [../14-Operations/Leadership-Handoff.md](../14-Operations/Leadership-Handoff.md).
 
 ## Privacy
 
 Keep role documentation practical. Avoid storing private member issues or sensitive personal context in role descriptions.
-

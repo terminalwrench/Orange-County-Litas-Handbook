@@ -9,7 +9,7 @@ Challenge: Everyone thinks someone else is confirming the final details.
 Suggested approach:
 
 - Assign one event owner.
-- Use [../09-Leadership/Event-Assignments.md](../09-Leadership/Event-Assignments.md) for internal ownership.
+- Capture internal ownership in [../09-Leadership/Meeting-Notes.md](../09-Leadership/Meeting-Notes.md) or the [yearly planning board](../09-Leadership/Quarterly-Planning.md).
 - Confirm who makes the final call before public posting.
 
 ## Venue Uncertainty

@@ -58,4 +58,4 @@ Future event records should preserve:
 - Lessons learned after the event.
 - Future notes for repeating or improving the event.
 
-Use this module with [../01-Chapter/Calendar.md](../01-Chapter/Calendar.md), [../02-Events](../02-Events/README.md), [../05-Routes](../05-Routes/README.md), and [../04-Social](../04-Social/README.md) when planning, announcing, riding, recapping, or archiving events.
+Use this module with [../01-Chapter/Calendar.md](../01-Chapter/Calendar.md), [../02-Events](../02-Events/README.md), [../05-Routes](../05-Routes/README.md), and [../03-Media/Social-Media-Guidelines.md](../03-Media/Social-Media-Guidelines.md) when planning, announcing, riding, recapping, or archiving events.

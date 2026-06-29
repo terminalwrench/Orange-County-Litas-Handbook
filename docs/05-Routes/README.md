@@ -13,6 +13,7 @@
   <a href="Route-Planning-Standards/">Route Planning Standards</a>
   <a href="Planning-Checklist/">Planning Checklist</a>
   <a href="Route-Categories/">Ride Types</a>
+  <a href="Ride-Lead-Notes/">Ride Lead Notes</a>
   <a href="Fuel-Stops/">Fuel Stops</a>
   <a href="Seasonal-Riding/">Seasonal Riding</a>
   <a href="Routes/">Route Library</a>
@@ -48,6 +49,7 @@ Every route should be treated as a living document. Conditions change, construct
 | [Route-Planning-Standards.md](Route-Planning-Standards.md) | How to test, describe, staff, and adjust a chapter ride. |
 | [Planning-Checklist.md](Planning-Checklist.md) | The approval checklist before a ride is announced or added to the library. |
 | [Route-Categories.md](Route-Categories.md) | A practical ride-type guide for choosing the right format and difficulty. |
+| [Ride-Lead-Notes.md](Ride-Lead-Notes.md) | Practical notes for lead/sweep briefings, road concerns, regroups, and adjustments. |
 | [Fuel-Stops.md](Fuel-Stops.md) | How to record reliable fuel, restroom, and waiting-area stops. |
 | [Seasonal-Riding.md](Seasonal-Riding.md) | Heat, rain, wind, fire season, holiday traffic, and other timing concerns. |
 

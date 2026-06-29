@@ -1,12 +1,54 @@
-site_name: Orange County Litas Portal
+site_name: Orange County Litas Operations Center
 site_description: The operations center for Orange County Litas chapter leadership.
 docs_dir: docs
 site_dir: site
 use_directory_urls: true
+not_in_nav: |
+  00-Global-Litas/Logo-Guidelines.md
+  00-Global-Litas/Resources.md
+  01-Chapter/Calendar.md
+  01-Chapter/Chapter-History.md
+  01-Chapter/Contacts.md
+  01-Chapter/How-We-Operate.md
+  01-Chapter/Leadership.md
+  01-Chapter/OC-Chapter-Identity.md
+  02-Events/Cancellation-Policy.md
+  02-Events/Event-Recap.md
+  02-Events/Lessons-Learned.md
+  02-Events/Photo-Shoots.md
+  02-Events/Poker-Runs.md
+  02-Events/Special-Events.md
+  02-Events/Venue-Selection.md
+  02-Events/Templates/**
+  03-Media/Assets/**
+  05-Routes/Route-Planning-Standards.md
+  10-Events-Database/Calendar-Import-Notes.md
+  10-Events-Database/Event-Categories.md
+  10-Events-Database/2023/**
+  10-Events-Database/2024/**
+  10-Events-Database/2025/**
+  10-Events-Database/2026/**
+  10-Events-Database/Templates/**
+  11-Venues/Venue-Categories.md
+  11-Venues/Bars/*.md
+  11-Venues/Beaches/*.md
+  11-Venues/Breweries/*.md
+  11-Venues/Coffee/*.md
+  11-Venues/Misc/*.md
+  11-Venues/Restaurants/*.md
+  11-Venues/Templates/**
+  11-Venues/Wineries/*.md
+  13-Knowledge/Leadership-Tips.md
+  13-Knowledge/New-Leader-Onboarding.md
+  13-Knowledge/Resources.md
+  13-Knowledge/Volunteer-Guide.md
+  13-Knowledge/Templates/**
 
 theme:
   name: material
   language: en
+  logo: 03-Media/Assets/Logos/TheLitasOC-WhiteFill.png
+  favicon: 03-Media/Assets/Logos/TheLitasOC-WhiteFill.png
   palette:
     - scheme: default
       primary: black
@@ -35,284 +77,70 @@ plugins:
   - search
 
 nav:
-  - Portal Home: index.md
+  - Home: index.md
   - Operations Map: Handbook-Index.md
-  - Litas Reference:
-      - Overview: 00-Global-Litas/README.md
-      - Brand Standards: 00-Global-Litas/Brand-Standards.md
-      - Chapter Requirements: 00-Global-Litas/Chapter-Requirements.md
-      - Logo Guidelines: 00-Global-Litas/Logo-Guidelines.md
-      - Official Links: 00-Global-Litas/Official-Links.md
-      - Resources: 00-Global-Litas/Resources.md
-  - Chapter:
-      - Overview: 01-Chapter/README.md
-      - Calendar: 01-Chapter/Calendar.md
-      - Chapter History: 01-Chapter/Chapter-History.md
-      - Contacts: 01-Chapter/Contacts.md
-      - How We Operate: 01-Chapter/How-We-Operate.md
-      - Leadership: 01-Chapter/Leadership.md
-      - New Rider Guide: 01-Chapter/New-Rider-Guide.md
-      - OC Chapter Identity: 01-Chapter/OC-Chapter-Identity.md
   - Events:
-      - Overview: 02-Events/README.md
-      - Beginner Rides: 02-Events/Beginner-Rides.md
-      - Cancellation Policy: 02-Events/Cancellation-Policy.md
+      - Event Planning: 02-Events/README.md
       - Event Lifecycle: 02-Events/Event-Lifecycle.md
-      - Event Recap: 02-Events/Event-Recap.md
-      - Lessons Learned: 02-Events/Lessons-Learned.md
-      - Meet and Greet Planning: 02-Events/Meet-and-Greet-Planning.md
-      - Photo Shoots: 02-Events/Photo-Shoots.md
-      - Poker Runs: 02-Events/Poker-Runs.md
+      - Meet & Greet Planning: 02-Events/Meet-and-Greet-Planning.md
       - Ride Planning: 02-Events/Ride-Planning.md
-      - Special Events: 02-Events/Special-Events.md
-      - Venue Selection: 02-Events/Venue-Selection.md
-      - Weather Contingencies: 02-Events/Weather-Contingencies.md
-      - Templates:
-          - Overview: 02-Events/Templates/README.md
-          - Event Brief: 02-Events/Templates/Event-Brief.md
-          - Event Checklist: 02-Events/Templates/Event-Checklist.md
-          - Meet and Greet Template: 02-Events/Templates/Meet-and-Greet-Template.md
-          - Ride Template: 02-Events/Templates/Ride-Template.md
+      - Beginner Rides: 02-Events/Beginner-Rides.md
+      - Weather Calls: 02-Events/Weather-Contingencies.md
+  - Events Database:
+      - Overview: 10-Events-Database/README.md
+      - Events Index: 10-Events-Database/Events-Index.md
+      - Timeline: 10-Events-Database/Timeline.md
+      - Statistics: 10-Events-Database/Statistics.md
+  - Venues:
+      - Overview: 11-Venues/README.md
+      - Venue Index: 11-Venues/Venue-Index.md
+      - Favorites: 11-Venues/Favorites.md
+      - New Venue Evaluation: 11-Venues/New-Venue-Evaluation.md
+      - Breweries: 11-Venues/Breweries/README.md
+      - Coffee: 11-Venues/Coffee/README.md
+      - Restaurants: 11-Venues/Restaurants/README.md
+      - Bars: 11-Venues/Bars/README.md
+      - Beaches: 11-Venues/Beaches/README.md
+      - Wineries: 11-Venues/Wineries/README.md
+      - Miscellaneous: 11-Venues/Misc/README.md
+  - Ride Planner:
+      - Overview: 05-Routes/README.md
+      - Planning Checklist: 05-Routes/Planning-Checklist.md
+      - Ride Types: 05-Routes/Route-Categories.md
+      - Ride Lead Notes: 05-Routes/Ride-Lead-Notes.md
+      - Fuel & Restroom Stops: 05-Routes/Fuel-Stops.md
+      - Seasonal Riding: 05-Routes/Seasonal-Riding.md
+      - Route Library: 05-Routes/Routes/README.md
   - Media Center:
       - Overview: 03-Media/README.md
       - Asset Library: 03-Media/Asset-Library.md
-      - File Organization: 03-Media/File-Organization.md
-      - Image Sizes: 03-Media/Image-Sizes.md
-      - Instagram Guidelines: 03-Media/Instagram-Guidelines.md
-      - Logo Library: 03-Media/Logo-Library.md
-      - Assets:
-          - Assets README: 03-Media/Assets/README.md
-          - Logos: 03-Media/Assets/Logos/README.md
-          - Fonts: 03-Media/Assets/Fonts/README.md
-          - Icons: 03-Media/Assets/Icons/README.md
-      - Photo Tools:
-          - Shot List: 07-Photography/Shot-List.md
-          - Delivery Workflow: 07-Photography/Delivery-Workflow.md
-      - Templates:
-          - Overview: 03-Media/Templates/README.md
-          - Flyer Brief: 03-Media/Templates/Flyer-Brief.md
-          - Instagram Post Template: 03-Media/Templates/Instagram-Post-Template.md
-          - Instagram Reel Template: 03-Media/Templates/Instagram-Reel-Template.md
-          - Instagram Story Template: 03-Media/Templates/Instagram-Story-Template.md
-          - Event Email Template: 03-Media/Templates/Event-Email-Template.md
-          - Welcome Email Template: 03-Media/Templates/Welcome-Email-Template.md
-          - Meet and Greet Email Template: 03-Media/Templates/Meet-and-Greet-Email-Template.md
-          - Ride Announcement Email Template: 03-Media/Templates/Ride-Announcement-Email-Template.md
-          - Event Reminder Email Template: 03-Media/Templates/Event-Reminder-Email-Template.md
-          - Monthly Recap Email Template: 03-Media/Templates/Monthly-Recap-Email-Template.md
-          - Sponsor Thank You Email: 03-Media/Templates/Sponsor-Thank-You-Email.md
-          - General Chapter Email Template: 03-Media/Templates/General-Chapter-Email-Template.md
-          - General Social Media Checklist: 03-Media/Templates/General-Social-Media-Checklist.md
-  - Social & Email:
-      - Overview: 04-Social/README.md
-      - Email Center: 04-Social/Email-Center.md
-      - Community Management: 04-Social/Community-Management.md
-      - Engagement Guidelines: 04-Social/Engagement-Guidelines.md
-      - Event Recap Workflow: 04-Social/Event-Recap-Workflow.md
-      - Hashtag Library: 04-Social/Hashtag-Library.md
-      - Reel Best Practices: 04-Social/Reel-Best-Practices.md
-      - Story Best Practices: 04-Social/Story-Best-Practices.md
-  - Ride Planner:
-      - Overview: 05-Routes/README.md
-      - Ride Planning Standards: 05-Routes/Route-Planning-Standards.md
-      - Planning Checklist: 05-Routes/Planning-Checklist.md
-      - Ride Types: 05-Routes/Route-Categories.md
-      - Fuel and Restroom Stops: 05-Routes/Fuel-Stops.md
-      - Seasonal Riding: 05-Routes/Seasonal-Riding.md
-      - Route Library: 05-Routes/Routes/README.md
+      - Logos: 03-Media/Logo-Library.md
+      - Photography Tools: 03-Media/Photography-Tools.md
+      - Social Media Guidelines: 03-Media/Social-Media-Guidelines.md
   - Leadership:
       - Overview: 09-Leadership/README.md
-      - Action Items: 09-Leadership/Action-Items.md
-      - Annual Goals: 09-Leadership/Annual-Goals.md
-      - Ideas Parking Lot: 09-Leadership/Ideas-Parking-Lot.md
-      - Leadership Roles: 09-Leadership/Leadership-Roles.md
+      - Yearly Planning Board: 09-Leadership/Quarterly-Planning.md
       - Meeting Notes: 09-Leadership/Meeting-Notes.md
-      - Quarterly Planning: 09-Leadership/Quarterly-Planning.md
-      - Succession Planning: 09-Leadership/Succession-Planning.md
-      - Templates:
-          - Decision Record: 09-Leadership/Templates/Decision-Record.md
-          - Leadership Meeting: 09-Leadership/Templates/Leadership-Meeting.md
-          - Quarterly Review: 09-Leadership/Templates/Quarterly-Review.md
-  - Events Database:
-      - Overview: 10-Events-Database/README.md
-      - Calendar Import Notes: 10-Events-Database/Calendar-Import-Notes.md
-      - Event Categories: 10-Events-Database/Event-Categories.md
-      - Events Index: 10-Events-Database/Events-Index.md
-      - Statistics: 10-Events-Database/Statistics.md
-      - Timeline: 10-Events-Database/Timeline.md
-      - 2023:
-          - Overview: 10-Events-Database/2023/README.md
-          - OC Litas Meet and Greet 7PM: 10-Events-Database/2023/2023-10-19-oc-litas-meet-and-greet-7pm.md
-          - Oak Glen Ride: 10-Events-Database/2023/2023-10-21-oak-glen-ride.md
-          - Babes and Brew Beginners Ride: 10-Events-Database/2023/2023-10-28-babes-and-brew-beginners-ride.md
-          - South Moto OC Bike Night: 10-Events-Database/2023/2023-11-06-south-moto-oc-bike-night.md
-          - OC Litas Cooks Corner Meet and Greet: 10-Events-Database/2023/2023-11-19-oc-litas-cooks-corner-meet-and-greet.md
-          - Pizza Port Freeway Ride: 10-Events-Database/2023/2023-12-02-pizza-port-freeway-ride.md
-          - South Moto OC: 10-Events-Database/2023/2023-12-04-south-moto-oc.md
-          - OC Litas Holiday Meet and Greet: 10-Events-Database/2023/2023-12-14-oc-litas-holiday-meet-and-greet.md
-      - 2024:
-          - Overview: 10-Events-Database/2024/README.md
-          - Stop the Bleed: 10-Events-Database/2024/2024-01-07-stop-the-bleed.md
-          - Meet and Greet Orange County Litas: 10-Events-Database/2024/2024-01-11-meet-and-greet-orange-county-litas.md
-          - Ride to Hells Kitchen Litas OC: 10-Events-Database/2024/2024-01-21-ride-to-hells-kitchen-litas-oc.md
-          - February Meet and Greet: 10-Events-Database/2024/2024-02-08-meet-and-greet-orange-county-litas.md
-          - Galetines Ride Fast Babes: 10-Events-Database/2024/2024-02-10-galetines-ride-fast-babes.md
-          - Beginners Ride to Good Time: 10-Events-Database/2024/2024-03-09-beginners-ride-to-good-time.md
-          - March Meet and Greet: 10-Events-Database/2024/2024-03-14-meet-and-greet-orange-county-litas.md
-          - Doffo Moto Ride: 10-Events-Database/2024/2024-04-13-doffo-moto-ride.md
-          - April Meet and Greet: 10-Events-Database/2024/2024-04-24-meet-and-greet-6-30pm.md
-          - International Women's Ride Day: 10-Events-Database/2024/2024-05-04-international-women-s-ride-day.md
-          - The Gentlemen's Ride Orange County: 10-Events-Database/2024/2024-05-19-the-gentlemen-s-ride-orange-county.md
-          - May OC Meet and Greet: 10-Events-Database/2024/2024-05-22-oc-meet-and-greet.md
-          - June OC Meet and Greet: 10-Events-Database/2024/2024-06-14-oc-meet-and-greet.md
-          - OC Meet and Greet and Beach Ride: 10-Events-Database/2024/2024-07-20-oc-meet-and-greet-and-beach-ride.md
-          - Ride to Julian Intermediate: 10-Events-Database/2024/2024-07-27-ride-to-julian-intermediate.md
-          - Ride to Mt Baldy Lodge Restaurant: 10-Events-Database/2024/2024-08-10-ride-to-mt-baldy-lodge-restaurant.md
-          - August Meet and Greet: 10-Events-Database/2024/2024-08-15-meet-and-greet.md
-          - SD and Temecula Litas Beach Day: 10-Events-Database/2024/2024-08-18-sd-and-temecula-litas-beach-day.md
-          - September Meet and Greet: 10-Events-Database/2024/2024-09-06-meet-and-greet.md
-          - Anniversary Party: 10-Events-Database/2024/2024-10-12-anniversary-party.md
-          - October Meet and Greet: 10-Events-Database/2024/2024-10-24-meet-and-greet.md
-          - Group Ride: 10-Events-Database/2024/2024-11-09-group-ride.md
-          - Meet and Greet Taco Tuesday: 10-Events-Database/2024/2024-11-13-meet-and-greet-taco-tuesday.md
-          - December Meet and Greet: 10-Events-Database/2024/2024-12-13-meet-and-greet.md
-          - Jessica's Birthday Group Ride Lunch: 10-Events-Database/2024/2024-12-21-jessica-s-birthday-group-ride-lunch.md
-      - 2025:
-          - Overview: 10-Events-Database/2025/README.md
-          - January Meet and Greet: 10-Events-Database/2025/2025-01-10-meet-and-greet.md
-          - Ride to Bike Shed: 10-Events-Database/2025/2025-01-18-ride-to-bike-shed.md
-          - Ride to Galentine's Party: 10-Events-Database/2025/2025-02-15-ride-to-galentine-s-party.md
-          - February Meet and Greet: 10-Events-Database/2025/2025-02-20-meet-and-greet.md
-          - March Meet and Greet: 10-Events-Database/2025/2025-03-13-meet-and-greet.md
-          - March Ride Vince's Spaghetti: 10-Events-Database/2025/2025-03-30-march-ride-vince-s-spaghetti.md
-          - Women Wheels and Wine Ride to Doffo: 10-Events-Database/2025/2025-04-05-women-wheels-and-wine-ride-to-doffo.md
-          - Meet and Greet El Adobe SJC: 10-Events-Database/2025/2025-04-11-meet-and-greet-el-adobe-sjc.md
-          - Meet and Greet Mamas on 39: 10-Events-Database/2025/2025-05-15-meet-and-greet-mamas-on-39.md
-          - Distinguished Gentleman's Ride: 10-Events-Database/2025/2025-05-18-distinguished-gentleman-s-ride.md
-          - Pride Ride Weho: 10-Events-Database/2025/2025-06-01-pride-ride-weho.md
-          - June Meet and Greet: 10-Events-Database/2025/2025-06-19-meet-and-greet.md
-          - Orange County Meet and Greet: 10-Events-Database/2025/2025-07-10-orange-county-meet-and-greet.md
-          - OC Litas Ride Big Bear: 10-Events-Database/2025/2025-07-26-oc-litas-ride-big-bear.md
-          - August Orange County Meet and Greet: 10-Events-Database/2025/2025-08-14-orange-county-meet-and-greet.md
-          - So Cal Litas Beach Day: 10-Events-Database/2025/2025-08-24-so-cal-litas-beach-day.md
-          - September Meet and Greet: 10-Events-Database/2025/2025-09-04-meet-and-greet.md
-          - OC Litas Campout Fallbrook: 10-Events-Database/2025/2025-09-13-oc-litas-campout-fallbrook.md
-          - 2nd Anniversary Park Fun: 10-Events-Database/2025/2025-10-18-2nd-anniversary-park-fun.md
-          - Friendsgiving Potluck: 10-Events-Database/2025/2025-11-08-meet-and-greet-friendsgiving-potluck.md
-          - OC Litas Monthly Ride: 10-Events-Database/2025/2025-12-06-oc-litas-monthly-ride.md
-          - Meet and Greet with SGV: 10-Events-Database/2025/2025-12-17-meet-and-greet-w-sgv.md
-      - 2026:
-          - Overview: 10-Events-Database/2026/README.md
-          - OC Litas MandG: 10-Events-Database/2026/2026-01-14-oc-litas-mandg.md
-          - OC Litas Monthly Ride: 10-Events-Database/2026/2026-01-17-oc-litas-monthly-ride.md
-          - February OC Litas MandG: 10-Events-Database/2026/2026-02-06-oc-litas-mandg.md
-          - Superbowl Sunday: 10-Events-Database/2026/2026-02-08-superbowl-sunday.md
-          - Co-ed Valentines Ride: 10-Events-Database/2026/2026-02-14-co-ed-valentines-ride.md
-          - March OC Litas MandG: 10-Events-Database/2026/2026-03-07-oc-litas-mandg.md
-          - March OC Litas Monthly Ride: 10-Events-Database/2026/2026-03-28-oc-litas-monthly-ride.md
-          - April OC Litas Monthly Ride: 10-Events-Database/2026/2026-04-02-oc-litas-monthly-ride.md
-          - OC Monthly Meet and Greet: 10-Events-Database/2026/2026-05-06-oc-monthly-meet-and-greet.md
-          - May OC Litas Monthly Ride: 10-Events-Database/2026/2026-05-30-oc-litas-monthly-ride.md
-          - OC Long Beach Collab: 10-Events-Database/2026/2026-06-03-oc-long-beach-collab.md
-          - OC Litas Monthly Meetup: 10-Events-Database/2026/2026-07-09-oc-litas-monthly-meetup.md
-          - July OC Litas Monthly Ride: 10-Events-Database/2026/2026-07-25-oc-litas-monthly-ride.md
-          - August OC Litas Monthly Meetup: 10-Events-Database/2026/2026-08-05-oc-litas-monthly-meetup.md
-          - August OC Litas Monthly Ride: 10-Events-Database/2026/2026-08-09-oc-litas-monthly-ride.md
-          - Litas Beach Day: 10-Events-Database/2026/2026-08-15-litas-beach-day.md
-          - Ride to the Warehouse Bisbee: 10-Events-Database/2026/2026-09-11-ride-to-the-warehouse-bisbee.md
-          - Orange County Litas Lake Arrowhead Trip: 10-Events-Database/2026/2026-09-26-orange-county-litas-lake-arrowhead-trip.md
-      - Templates:
-          - Event: 10-Events-Database/Templates/Event.md
-  - Venues:
-      - Overview: 11-Venues/README.md
-      - Favorites: 11-Venues/Favorites.md
-      - New Venue Evaluation: 11-Venues/New-Venue-Evaluation.md
-      - Venue Categories: 11-Venues/Venue-Categories.md
-      - Venue Index: 11-Venues/Venue-Index.md
-      - Bars:
-          - Overview: 11-Venues/Bars/README.md
-          - Chihuahua Cerveza Taproom Newport Beach: 11-Venues/Bars/chihuahua-cerveza-taproom-newport-beach.md
-          - Cook's Corner Trabuco Canyon: 11-Venues/Bars/cook-s-corner-trabuco-canyon.md
-          - Josie's Hideout Saloon Santa Ysabel: 11-Venues/Bars/josie-s-hideout-saloon-santa-ysabel.md
-      - Beaches:
-          - Overview: 11-Venues/Beaches/README.md
-          - Huntington Beach: 11-Venues/Beaches/huntington-beach.md
-          - Laguna Beach: 11-Venues/Beaches/laguna-beach.md
-      - Breweries:
-          - Overview: 11-Venues/Breweries/README.md
-          - Ballast Point Brewing Long Beach: 11-Venues/Breweries/ballast-point-brewing-long-beach-long-beach.md
-          - Cerveza Cito Brewery Santa Ana: 11-Venues/Breweries/cerveza-cito-brewery-santa-ana.md
-          - Golden Road Brewing Anaheim: 11-Venues/Breweries/golden-road-brewing-anaheim-anaheim.md
-          - Golden Road Brewing Huntington Beach: 11-Venues/Breweries/golden-road-brewing-huntington-beach.md
-          - Green Cheek Beer Co Randolph Ave: 11-Venues/Breweries/green-cheek-beer-co-2957-randolph-ave.md
-          - Green Cheek Beer Co Orange: 11-Venues/Breweries/green-cheek-beer-co-orange.md
-          - Hangar 24: 11-Venues/Breweries/hangar-24.md
-      - Coffee:
-          - Overview: 11-Venues/Coffee/README.md
-          - Temecula Grind Coffee House Temecula: 11-Venues/Coffee/temecula-grind-coffee-house-temecula.md
-      - Event Spaces:
-          - Overview: 11-Venues/Event-Spaces/README.md
-          - 219 E Fourth St Santa Ana: 11-Venues/Event-Spaces/219-e-fourth-st-santa-ana.md
-          - 4th Street Market Santa Ana: 11-Venues/Event-Spaces/4th-street-market-santa-ana.md
-          - Ace Hotel: 11-Venues/Event-Spaces/ace-hotel.md
-          - Bike Shed Moto Co Los Angeles: 11-Venues/Event-Spaces/bike-shed-moto-co-los-angeles.md
-          - Costa Mesa: 11-Venues/Event-Spaces/costa-mesa.md
-          - Lake Arrowhead CA USA: 11-Venues/Event-Spaces/lake-arrowhead-ca-usa.md
-          - Landers Supply House: 11-Venues/Event-Spaces/landers-supply-house.md
-          - Miramar Food Hall: 11-Venues/Event-Spaces/miramar-food-hall.md
-          - Rodeo 39 Public Market Stanton: 11-Venues/Event-Spaces/rodeo-39-public-market-stanton.md
-      - Misc:
-          - Overview: 11-Venues/Misc/README.md
-          - 1418 S Azusa Ave City of Industry: 11-Venues/Misc/1418-s-azusa-ave-city-of-industry-ca-91748-usa-city-of-industry.md
-      - Restaurants:
-          - Overview: 11-Venues/Restaurants/README.md
-          - Fire Wings: 11-Venues/Restaurants/fire-wings.md
-          - Good Time: 11-Venues/Restaurants/good-time.md
-          - Mrs Knott's Chicken Dinner Restaurant: 11-Venues/Restaurants/mrs-knott-s-chicken-dinner-restaurant.md
-          - The Bowery Craft Beer and Pizza Fullerton: 11-Venues/Restaurants/the-bowery-craft-beer-and-pizza-fullerton.md
-          - The Taco Stand Orange: 11-Venues/Restaurants/the-taco-stand-orange.md
-          - Vince's Spaghetti Rancho Cucamonga: 11-Venues/Restaurants/vince-s-spaghetti-rancho-cucamonga.md
-      - Wineries:
-          - Overview: 11-Venues/Wineries/README.md
-          - Doffo Winery: 11-Venues/Wineries/doffo-winery.md
-      - Templates:
-          - Venue: 11-Venues/Templates/Venue.md
-  - History:
-      - Overview: 12-History/README.md
-      - Chapter Growth: 12-History/Chapter-Growth.md
-      - Major Events: 12-History/Chapter-Timeline.md
-      - Leadership History: 12-History/Leadership-History.md
-      - Milestones: 12-History/Milestones.md
-      - Traditions: 12-History/Traditions.md
-  - Knowledge Base:
-      - Overview: 13-Knowledge/README.md
-      - Best Practices: 13-Knowledge/Best-Practices.md
-      - Common Challenges: 13-Knowledge/Common-Challenges.md
-      - Frequently Asked Questions: 13-Knowledge/Frequently-Asked-Questions.md
-      - Glossary: 13-Knowledge/Glossary.md
-      - Leadership Tips: 13-Knowledge/Leadership-Tips.md
-      - Lessons Learned: 13-Knowledge/Lessons-Learned.md
-      - New Leader Onboarding: 13-Knowledge/New-Leader-Onboarding.md
-      - Resources: 13-Knowledge/Resources.md
-      - Volunteer Guide: 13-Knowledge/Volunteer-Guide.md
-      - Templates:
-          - FAQ: 13-Knowledge/Templates/FAQ.md
-          - Knowledge Entry: 13-Knowledge/Templates/Knowledge-Entry.md
-          - Lesson Learned: 13-Knowledge/Templates/Lesson-Learned.md
+      - Leadership Roles: 09-Leadership/Leadership-Roles.md
+      - Ideas: 09-Leadership/Ideas-Parking-Lot.md
   - Operations:
       - Overview: 14-Operations/README.md
-      - Annual Planning: 14-Operations/Annual-Planning.md
-      - Communication Workflow: 14-Operations/Communication-Workflow.md
-      - Digital Assets: 14-Operations/Digital-Assets.md
-      - Document Management: 14-Operations/Document-Management.md
-      - Event Lifecycle: 14-Operations/Event-Lifecycle.md
-      - Financial Tracking: 14-Operations/Financial-Tracking.md
-      - Incident Response: 14-Operations/Incident-Response.md
-      - Leadership Handoff: 14-Operations/Leadership-Handoff.md
       - Monthly Checklist: 14-Operations/Monthly-Checklist.md
-      - Record Retention: 14-Operations/Record-Retention.md
-      - Templates:
-          - Handoff Checklist: 14-Operations/Templates/Handoff-Checklist.md
-          - Incident Report: 14-Operations/Templates/Incident-Report.md
-          - Monthly Checklist: 14-Operations/Templates/Monthly-Checklist.md
-          - Operations Review: 14-Operations/Templates/Operations-Review.md
+      - Incident Response: 14-Operations/Incident-Response.md
+      - Financial Tracking: 14-Operations/Financial-Tracking.md
+      - Leadership Handoff: 14-Operations/Leadership-Handoff.md
+  - Knowledge Base:
+      - Overview: 13-Knowledge/README.md
+      - FAQs: 13-Knowledge/Frequently-Asked-Questions.md
+      - Lessons Learned: 13-Knowledge/Lessons-Learned.md
+      - Best Practices: 13-Knowledge/Best-Practices.md
+      - Common Challenges: 13-Knowledge/Common-Challenges.md
+      - Glossary: 13-Knowledge/Glossary.md
+  - Reference:
+      - Global Litas: 00-Global-Litas/README.md
+      - Brand Standards: 00-Global-Litas/Brand-Standards.md
+      - Chapter Requirements: 00-Global-Litas/Chapter-Requirements.md
+      - Official Links: 00-Global-Litas/Official-Links.md
+      - Chapter Basics: 01-Chapter/README.md
+      - New Rider Guide: 01-Chapter/New-Rider-Guide.md
+      - Site Maintenance: Site-README.md

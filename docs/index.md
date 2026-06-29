@@ -5,12 +5,12 @@
     <img class="portal-logo-mark" src="./03-Media/Assets/Logos/TheLitasOC-WhiteFill.png" alt="Orange County Litas logo">
     <div class="portal-eyebrow">Orange County Litas internal portal</div>
     <h1 id="portal-title">Orange County Litas Portal</h1>
-    <p class="portal-subtitle">Plan rides. Welcome members. Preserve the chapter.</p>
-    <p class="portal-intro">A central home base for the work behind the rides: events, routes, media, venues, leadership notes, history, and the shared knowledge that keeps Orange County Litas moving together.</p>
+    <p class="portal-subtitle">Plan rides. Run events. Keep the chapter moving.</p>
+    <p class="portal-intro">A central home base for the work behind the rides: events, routes, venues, media, leadership notes, and the shared knowledge that keeps Orange County Litas moving together.</p>
     <div class="portal-actions" aria-label="Primary portal actions">
       <a class="portal-button portal-button-primary" href="./02-Events/">Plan an Event</a>
       <a class="portal-button" href="./05-Routes/">Find Ride Resources</a>
-      <a class="portal-button" href="./04-Social/Email-Center/">Send an Update</a>
+      <a class="portal-button" href="./03-Media/Social-Media-Guidelines/">Prepare a Post</a>
       <a class="portal-button" href="./01-Chapter/New-Rider-Guide/">New Member Guide</a>
     </div>
   </div>
@@ -21,7 +21,7 @@
   <div class="portal-stat-list">
     <a href="./10-Events-Database/">Event records</a>
     <a href="./11-Venues/">Venue knowledge</a>
-    <a href="./12-History/">Chapter history</a>
+    <a href="./09-Leadership/Quarterly-Planning/">Planning board</a>
   </div>
 </section>
 
@@ -34,19 +34,19 @@
 <div class="portal-action-grid">
   <a class="portal-action-card portal-icon portal-icon--event" href="./02-Events/Event-Lifecycle/">
     <span>Plan an event</span>
-    <strong>Use the event lifecycle, planning guides, and templates.</strong>
+    <strong>Use the event lifecycle, planning guides, and weather checks.</strong>
   </a>
   <a class="portal-action-card portal-icon portal-icon--ride" href="./05-Routes/">
     <span>Find ride resources</span>
-    <strong>Review route standards, hazards, fuel stops, and ride reports.</strong>
+    <strong>Review ride types, lead notes, fuel stops, and seasonal conditions.</strong>
   </a>
-  <a class="portal-action-card portal-icon portal-icon--media" href="./03-Media/File-Organization/">
+  <a class="portal-action-card portal-icon portal-icon--media" href="./03-Media/Asset-Library/">
     <span>Find media</span>
-    <strong>Locate files, assets, sizes, and reusable creative templates.</strong>
+    <strong>Locate approved assets, logos, and photo handoff guidance.</strong>
   </a>
-  <a class="portal-action-card portal-icon portal-icon--email" href="./04-Social/Email-Center/">
-    <span>Send chapter email</span>
-    <strong>Use free reusable templates for ride, meetup, reminder, recap, and sponsor messages.</strong>
+  <a class="portal-action-card portal-icon portal-icon--email" href="./03-Media/Social-Media-Guidelines/">
+    <span>Prepare social post</span>
+    <strong>Check dates, location, tags, credits, hashtags, and accessibility before publishing.</strong>
   </a>
   <a class="portal-action-card portal-icon portal-icon--venue" href="./11-Venues/Venue-Index/">
     <span>Look up a venue</span>
@@ -67,7 +67,7 @@
     <span class="portal-card-kicker">Records</span>
     <h3>Update completed events</h3>
     <p>After a ride, meetup, or collaboration, update the event record with what happened, what worked, and what future leaders should know.</p>
-    <a href="./10-Events-Database/Templates/Event/">Use Event Template</a>
+    <a href="./10-Events-Database/Events-Index/">Open Event Records</a>
   </section>
 </div>
 
@@ -77,7 +77,7 @@
   <a class="portal-card portal-icon portal-icon--officer" href="./09-Leadership/">
     <span class="portal-card-kicker">Officer shortcut</span>
     <strong>Leadership Workspace</strong>
-    <span>Meeting notes, action items, quarterly planning, goals, and succession planning.</span>
+    <span>Meeting notes, yearly planning board, leadership roles, and ideas worth revisiting.</span>
   </a>
   <a class="portal-card portal-icon portal-icon--member" href="./01-Chapter/New-Rider-Guide/">
     <span class="portal-card-kicker">New member shortcut</span>
@@ -109,7 +109,7 @@
   </a>
   <a href="./05-Routes/">
     <span>Routes</span>
-    <strong>Route standards, hazards, ride reports, fuel stops, and seasonal notes.</strong>
+    <strong>Ride approval checks, lead notes, fuel stops, and seasonal planning.</strong>
   </a>
   <a href="./11-Venues/">
     <span>Venues</span>
@@ -117,15 +117,7 @@
   </a>
   <a href="./03-Media/">
     <span>Media Center</span>
-    <strong>Asset organization, image sizes, creative briefs, and publishing checklists.</strong>
-  </a>
-  <a href="./04-Social/">
-    <span>Social &amp; Email</span>
-    <strong>Community management, hashtags, recaps, social tools, and email templates.</strong>
-  </a>
-  <a href="./12-History/">
-    <span>History</span>
-    <strong>Milestones, leadership history, traditions, annual recaps, and chapter growth.</strong>
+    <strong>Asset library, logos, photography tools, and social publishing checks.</strong>
   </a>
   <a href="./13-Knowledge/">
     <span>Knowledge</span>
@@ -143,7 +135,7 @@
   </div>
   <div class="portal-community-links">
     <a href="./01-Chapter/OC-Chapter-Identity/">Chapter Identity</a>
-    <a href="./12-History/Chapter-Timeline/">Chapter Timeline</a>
+    <a href="./10-Events-Database/Timeline/">Event Timeline</a>
     <a href="./13-Knowledge/Frequently-Asked-Questions/">FAQ</a>
   </div>
 </div>
@@ -154,7 +146,7 @@
   <a href="./Handbook-Index/">Open Operations Map</a>
   <a href="./01-Chapter/Calendar/">Check Calendar</a>
   <a href="./10-Events-Database/Events-Index/">Find Past Event</a>
-  <a href="./04-Social/Email-Center/">Write Email</a>
+  <a href="./03-Media/Social-Media-Guidelines/">Prepare Social Post</a>
 </div>
 
 </div>

@@ -8,7 +8,7 @@ Use this page as a plain-language map of the Operations Center. Start with the j
 - [Plan an Event](02-Events/README.md)
 - [Plan a Ride](05-Routes/README.md)
 - [Find a Venue](11-Venues/Venue-Index.md)
-- [Write an Email](04-Social/Email-Center.md)
+- [Prepare Social Media](03-Media/Social-Media-Guidelines.md)
 - [Open Meeting Notes](09-Leadership/Meeting-Notes.md)
 
 ## Chapter Operations
@@ -28,12 +28,11 @@ Use this page as a plain-language map of the Operations Center. Start with the j
 ## Communications
 
 - [Media Center](03-Media/README.md)
-- [Social & Email](04-Social/README.md)
-- [Email Center](04-Social/Email-Center.md)
-- [Photo Shot List](07-Photography/Shot-List.md)
-- [Photo Delivery Workflow](07-Photography/Delivery-Workflow.md)
+- [Asset Library](03-Media/Asset-Library.md)
+- [Photography Tools](03-Media/Photography-Tools.md)
+- [Social Media Guidelines](03-Media/Social-Media-Guidelines.md)
 
 ## Records And Reference
 
 - [Global Litas Reference](00-Global-Litas/README.md)
-- [Chapter History](12-History/README.md)
+- [Events Timeline](10-Events-Database/Timeline.md)

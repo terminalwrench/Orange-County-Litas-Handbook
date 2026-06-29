@@ -26,10 +26,6 @@ Use for beaches, coastal access points, and beach-day locations. Review parking 
 
 Use for wineries and vineyard destinations. Review distance, reservations, parking surface, food availability, rider expectations, non-alcoholic options, and whether the ride should be destination-only for some attendees.
 
-## Event-Spaces
-
-Use for hotels, markets, food halls, motorcycle venues, art spaces, large gathering places, and flexible event locations. Review event rules, capacity, permits, vendor coordination, parking, and point of contact.
-
 ## Misc
 
 Use when a documented location does not fit another category or when the calendar source does not provide enough detail to classify the venue confidently. Update the category after leadership confirms more information.

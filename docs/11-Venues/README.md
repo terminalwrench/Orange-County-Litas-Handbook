@@ -13,9 +13,9 @@
   <a href="Venue-Index/">Venue Index</a>
   <a href="Favorites/">Favorites</a>
   <a href="New-Venue-Evaluation/">New Venue Evaluation</a>
-  <a href="Venue-Categories/">Venue Categories</a>
-  <a href="Templates/Venue/">Venue Template</a>
   <a href="Breweries/">Breweries</a>
+  <a href="Restaurants/">Restaurants</a>
+  <a href="Misc/">Miscellaneous</a>
 </div>
 
 This module is the permanent venue knowledge base for Orange County Litas. It documents venues the chapter has hosted at, visited, ridden to, or recorded in calendar history for possible use.
@@ -32,7 +32,6 @@ Use this module with [../10-Events-Database](../10-Events-Database/README.md), [
 | [Favorites.md](Favorites.md) | Leadership-curated favorites by use case. |
 | [New-Venue-Evaluation.md](New-Venue-Evaluation.md) | Checklist for reviewing a new venue before choosing it. |
 | [Venue-Categories.md](Venue-Categories.md) | Category definitions for venue records. |
-| [Templates/Venue.md](Templates/Venue.md) | Master template for future venue records. |
 
 ## Categories
 
@@ -42,7 +41,6 @@ Use this module with [../10-Events-Database](../10-Events-Database/README.md), [
 - [Bars](Bars/README.md)
 - [Beaches](Beaches/README.md)
 - [Wineries](Wineries/README.md)
-- [Event-Spaces](Event-Spaces/README.md)
 - [Misc](Misc/README.md)
 
 ## Maintenance Standard

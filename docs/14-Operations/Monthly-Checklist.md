@@ -2,8 +2,6 @@
 
 Use this checklist at the beginning or end of each month to keep chapter operations current.
 
-For a reusable copy, use [Templates/Monthly-Checklist.md](Templates/Monthly-Checklist.md).
-
 ## Calendar
 
 - [ ] Review upcoming 30 to 60 days.
@@ -18,7 +16,7 @@ For a reusable copy, use [Templates/Monthly-Checklist.md](Templates/Monthly-Chec
 - [ ] Confirm upcoming event details before public posting.
 - [ ] Capture event lessons.
 - [ ] Archive final event materials.
-- [ ] Add follow-up tasks to leadership action items.
+- [ ] Add follow-up tasks to meeting notes or the yearly planning board.
 
 ## Routes and Venues
 

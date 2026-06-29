@@ -39,5 +39,5 @@ Before a leadership transition, review:
 
 Related files:
 
-- [../09-Leadership/Succession-Planning.md](../09-Leadership/Succession-Planning.md)
-- [../12-History/Leadership-History.md](../12-History/Leadership-History.md)
+- [../09-Leadership/Leadership-Roles.md](../09-Leadership/Leadership-Roles.md)
+- [../14-Operations/Leadership-Handoff.md](../14-Operations/Leadership-Handoff.md)

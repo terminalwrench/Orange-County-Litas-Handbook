@@ -2,7 +2,7 @@
 
 The asset library stores reusable media files that support OC Litas production. Its purpose is organization and reliability: leaders, designers, photographers, and social contributors should know where to find approved source files without searching old messages.
 
-Use this with [File-Organization.md](File-Organization.md), [Logo-Library.md](Logo-Library.md), and [Archive-Workflow.md](Archive-Workflow.md).
+Use this with [Logo-Library.md](Logo-Library.md), [Photography-Tools.md](Photography-Tools.md), and [Social-Media-Guidelines.md](Social-Media-Guidelines.md).
 
 ## Library Scope
 
@@ -13,10 +13,9 @@ The library may include:
 - Partner or sponsor logos approved for current use
 - Fonts or font reference files, when available for use
 - Icons and recurring utility graphics
-- Reusable templates
 - Reference assets for event production
 
-The library should not become a dumping ground for every exported flyer, every camera roll, or every draft. Final event media belongs with the event archive.
+The library should not become a dumping ground for every exported flyer, camera roll, or draft. Final event media belongs with the related event record or leadership-approved storage location.
 
 ## Logos
 
@@ -52,18 +51,6 @@ Store reusable icon files in [Assets/Icons](Assets/Icons/README.md).
 
 Keep icons organized by purpose or set. If an icon is only part of one event's creative, archive it with that event rather than adding it to the reusable library.
 
-## Templates
-
-Reusable workflow templates live in [Templates](Templates/README.md). Design templates or editable creative source files may live in the relevant production area or a dedicated asset folder when they are intended for repeated use.
-
-Each reusable template should have:
-
-- Clear name
-- Intended use
-- Current version
-- Owner or maintainer when known
-- Notes on required logos, export sizes, or platform requirements
-
 ## Reference Assets
 
 Reference assets are files used to support production, such as venue images, event examples, partner materials, screenshots, or prior deliverables.
@@ -79,9 +66,6 @@ During review:
 - Remove duplicates from reusable folders.
 - Keep the highest-quality source version.
 - Retain final exports only when they are needed for reuse.
-- Update names to match [Naming-Conventions.md](Naming-Conventions.md).
-- Move completed event media to the archive.
 - Confirm partner or sponsor logos are still approved for use.
 
 When an asset is replaced, keep the old version only if it is needed for historical records or active files still reference it.
-

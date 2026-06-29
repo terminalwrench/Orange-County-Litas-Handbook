@@ -51,8 +51,8 @@ Related files:
 
 Related files:
 
-- [../04-Social/Event-Announcement-Workflow.md](../04-Social/Event-Announcement-Workflow.md)
-- [../09-Leadership/Decision-Log.md](../09-Leadership/Decision-Log.md)
+- [../03-Media/Social-Media-Guidelines.md](../03-Media/Social-Media-Guidelines.md)
+- [../09-Leadership/Meeting-Notes.md](../09-Leadership/Meeting-Notes.md)
 
 ## Knowledge Capture
 

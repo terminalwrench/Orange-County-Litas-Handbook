@@ -2,7 +2,7 @@
 
 The logo library keeps official, chapter, partner, and event logo files organized so media contributors can find the correct file type quickly. This document does not define brand rules from The Litas headquarters. It only documents local storage, version control, and file handling.
 
-Use this with [Asset-Library.md](Asset-Library.md), [File-Organization.md](File-Organization.md), and [Naming-Conventions.md](Naming-Conventions.md).
+Use this with [Asset-Library.md](Asset-Library.md).
 
 ## Approved Logo Locations
 
@@ -84,4 +84,3 @@ partner-venue-logo-transparent-2026-07.png
 ```
 
 When replacing a logo, update references in active briefs and note the change in the relevant event or campaign record.
-

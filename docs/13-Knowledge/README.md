@@ -18,11 +18,11 @@
   <a href="Glossary/">Glossary</a>
 </div>
 
-This module is the centralized knowledge base for information that does not belong cleanly in Events, Routes, Partnerships, Venues, Community, or History.
+This module is the centralized knowledge base for information that does not belong cleanly in Events, Routes, Venues, Media, Leadership, or Operations.
 
 Use it for reusable operating wisdom: frequently asked questions, lessons learned, leadership tips, onboarding notes, volunteer guidance, common challenges, resource links, and shared terminology.
 
-The Knowledge Base should complement the rest of the handbook, not duplicate it. If information is the official record of an event, put it in [../10-Events-Database](../10-Events-Database/README.md). If it is route-specific, put it in [../05-Routes](../05-Routes/README.md). If it is a venue record, use [../11-Venues](../11-Venues/README.md). If it is chapter history, use [../12-History](../12-History/README.md).
+The Knowledge Base should complement the rest of the portal, not duplicate it. If information is the official record of an event, put it in [../10-Events-Database](../10-Events-Database/README.md). If it is route-specific, put it in [../05-Routes](../05-Routes/README.md). If it is a venue record, use [../11-Venues](../11-Venues/README.md). If it is a recurring operating lesson, keep it here.
 
 ## Documents
 
@@ -37,12 +37,6 @@ The Knowledge Base should complement the rest of the handbook, not duplicate it.
 | [Common-Challenges.md](Common-Challenges.md) | Recurring issues and suggested approaches. |
 | [Resources.md](Resources.md) | Directory of useful references, tools, and external resources. |
 | [Glossary.md](Glossary.md) | Chapter terminology, acronyms, and common phrases. |
-
-## Templates
-
-- [Templates/Lesson-Learned.md](Templates/Lesson-Learned.md)
-- [Templates/FAQ.md](Templates/FAQ.md)
-- [Templates/Knowledge-Entry.md](Templates/Knowledge-Entry.md)
 
 ## Maintenance Standard
 

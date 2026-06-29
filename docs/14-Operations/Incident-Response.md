@@ -28,8 +28,6 @@ Document incidents such as:
 
 ## Documentation
 
-Use [Templates/Incident-Report.md](Templates/Incident-Report.md) for factual notes.
-
 Record:
 
 - Date and time.

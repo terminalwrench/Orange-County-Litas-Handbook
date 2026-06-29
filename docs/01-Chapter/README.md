@@ -53,10 +53,10 @@ This folder should be treated as the stable reference layer. Active planning and
 
 - Event plans and templates: `../02-Events/`
 - Media assets, flyer briefs, and file standards: `../03-Media/`
-- Social planning and captions: `../04-Social/`
+- Social publishing checks: `../03-Media/Social-Media-Guidelines.md`
 - Routes and ride reference notes: `../05-Routes/`
-- Photography workflows: `../07-Photography/`
-- Completed records: `../08-Archive/`
+- Photography tools: `../03-Media/Photography-Tools.md`
+- Completed records: `../10-Events-Database/`
 - Leadership planning and continuity: `../09-Leadership/`
 - Event records and venue knowledge: `../10-Events-Database/` and `../11-Venues/`
 

@@ -4,7 +4,7 @@ Favorites should be assigned by leadership after enough chapter experience exist
 
 ## Meet & Greets
 
-- [4th Street Market](Event-Spaces/4th-street-market-santa-ana.md)
+- [4th Street Market](Misc/4th-street-market-santa-ana.md)
 - [Ballast Point Brewing Long Beach](Breweries/ballast-point-brewing-long-beach-long-beach.md)
 - [Cerveza Cito Brewery](Breweries/cerveza-cito-brewery-santa-ana.md)
 - [Chihuahua Cerveza Taproom](Bars/chihuahua-cerveza-taproom-newport-beach.md)
@@ -13,7 +13,7 @@ Favorites should be assigned by leadership after enough chapter experience exist
 - [Golden Road Brewing Anaheim](Breweries/golden-road-brewing-anaheim-anaheim.md)
 - [Green Cheek Beer Co.](Breweries/green-cheek-beer-co-orange.md)
 - [Hangar 24](Breweries/hangar-24.md)
-- [Rodeo 39 Public Market](Event-Spaces/rodeo-39-public-market-stanton.md)
+- [Rodeo 39 Public Market](Misc/rodeo-39-public-market-stanton.md)
 - [The Bowery Craft Beer & Pizza](Restaurants/the-bowery-craft-beer-and-pizza-fullerton.md)
 - [The Taco Stand](Restaurants/the-taco-stand-orange.md)
 
@@ -23,20 +23,20 @@ Favorites should be assigned by leadership after enough chapter experience exist
 
 ## Lunch Stops
 
-- [219 E Fourth St. Santa Ana](Event-Spaces/219-e-fourth-st-santa-ana.md)
-- [4th Street Market](Event-Spaces/4th-street-market-santa-ana.md)
-- [Ace Hotel](Event-Spaces/ace-hotel.md)
-- [Bike Shed Moto Co](Event-Spaces/bike-shed-moto-co-los-angeles.md)
+- [219 E Fourth St. Santa Ana](Misc/219-e-fourth-st-santa-ana.md)
+- [4th Street Market](Misc/4th-street-market-santa-ana.md)
+- [Ace Hotel](Misc/ace-hotel.md)
+- [Bike Shed Moto Co](Misc/bike-shed-moto-co-los-angeles.md)
 - [Chihuahua Cerveza Taproom](Bars/chihuahua-cerveza-taproom-newport-beach.md)
-- [Costa Mesa](Event-Spaces/costa-mesa.md)
+- [Costa Mesa](Misc/costa-mesa.md)
 - [Fire Wings](Restaurants/fire-wings.md)
 - [Good Time](Restaurants/good-time.md)
 - [Josie's Hideout Saloon](Bars/josie-s-hideout-saloon-santa-ysabel.md)
-- [Lake Arrowhead, CA, USA](Event-Spaces/lake-arrowhead-ca-usa.md)
-- [Landers Supply House](Event-Spaces/landers-supply-house.md)
-- [Miramar Food Hall](Event-Spaces/miramar-food-hall.md)
+- [Lake Arrowhead, CA, USA](Misc/lake-arrowhead-ca-usa.md)
+- [Landers Supply House](Misc/landers-supply-house.md)
+- [Miramar Food Hall](Misc/miramar-food-hall.md)
 - [Mrs. Knott's Chicken Dinner Restaurant](Restaurants/mrs-knott-s-chicken-dinner-restaurant.md)
-- [Rodeo 39 Public Market](Event-Spaces/rodeo-39-public-market-stanton.md)
+- [Rodeo 39 Public Market](Misc/rodeo-39-public-market-stanton.md)
 - [The Taco Stand](Restaurants/the-taco-stand-orange.md)
 - [The Bowery Craft Beer & Pizza](Restaurants/the-bowery-craft-beer-and-pizza-fullerton.md)
 - [Vince's Spaghetti](Restaurants/vince-s-spaghetti-rancho-cucamonga.md)

@@ -2,7 +2,7 @@
 
 Leadership handoff protects continuity when someone joins, changes role, steps back, or transfers responsibility.
 
-Use this with [../09-Leadership/Succession-Planning.md](../09-Leadership/Succession-Planning.md), [../13-Knowledge/New-Leader-Onboarding.md](../13-Knowledge/New-Leader-Onboarding.md), and [../12-History/Leadership-History.md](../12-History/Leadership-History.md).
+Use this with [../09-Leadership/Leadership-Roles.md](../09-Leadership/Leadership-Roles.md), [../13-Knowledge/New-Leader-Onboarding.md](../13-Knowledge/New-Leader-Onboarding.md), and [../09-Leadership/Meeting-Notes.md](../09-Leadership/Meeting-Notes.md).
 
 ## When to Use a Handoff
 
@@ -39,6 +39,5 @@ Include:
 
 ## Documentation
 
-- Use [Templates/Handoff-Checklist.md](Templates/Handoff-Checklist.md).
 - Record private planning details in [../09-Leadership](../09-Leadership/README.md).
-- Record confirmed historical leadership changes in [../12-History/Leadership-History.md](../12-History/Leadership-History.md).
+- Record confirmed role changes in [../09-Leadership/Leadership-Roles.md](../09-Leadership/Leadership-Roles.md).

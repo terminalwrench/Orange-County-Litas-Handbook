@@ -19,7 +19,7 @@ Use this checklist when bringing a new person into chapter leadership. Adjust th
 - [ ] [../10-Events-Database](../10-Events-Database/README.md) for canonical event records.
 - [ ] [../11-Venues](../11-Venues/README.md) for venue knowledge.
 - [ ] [../10-Events-Database](../10-Events-Database/README.md) for outside events and collaborations.
-- [ ] [../12-History](../12-History/README.md) for chapter legacy.
+- [ ] [../10-Events-Database/Timeline.md](../10-Events-Database/Timeline.md) for chapter event history.
 - [ ] [../09-Leadership](../09-Leadership/README.md) for private leadership workspace.
 
 ## Practical Access and Context

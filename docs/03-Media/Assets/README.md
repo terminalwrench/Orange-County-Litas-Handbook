@@ -6,8 +6,8 @@ Use this folder with:
 
 - [../Asset-Library.md](../Asset-Library.md)
 - [../Logo-Library.md](../Logo-Library.md)
-- [../File-Organization.md](../File-Organization.md)
-- [../Naming-Conventions.md](../Naming-Conventions.md)
+- [../Asset-Library.md](../Asset-Library.md)
+- [../Logo-Library.md](../Logo-Library.md)
 
 ## Folders
 
@@ -21,7 +21,6 @@ Use this folder with:
 
 - Keep reusable source assets here.
 - Keep event-specific final deliverables with the event archive.
-- Name files according to [../Naming-Conventions.md](../Naming-Conventions.md).
+- Use clear file names that identify the event, asset type, date when relevant, and final/export status.
 - Preserve source files when they are useful.
 - Avoid storing private contact information, payment details, or sensitive event information in asset folders.
-
