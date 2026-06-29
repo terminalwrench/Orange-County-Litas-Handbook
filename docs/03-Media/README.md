@@ -10,6 +10,7 @@
 ## Start Here
 
 <div class="module-link-grid">
+  <a href="Assets/">Brand Assets</a>
   <a href="Asset-Library/">Asset Library</a>
   <a href="Assets/Logos/">Logos</a>
   <a href="Assets/Fonts/">Fonts</a>
@@ -17,19 +18,16 @@
   <a href="Social-Media-Guidelines/">Social Media Guidelines</a>
 </div>
 
-Media Center is the chapter's shared-drive surface inside the portal. It should help leaders find reusable assets quickly, not read workflow documentation.
-
-Use this with [Events](../02-Events/README.md) and [Operations](../14-Operations/README.md) when preparing event communications.
-
-## Media Access
+## Asset Access
 
 | Document | Purpose |
 | --- | --- |
-| [Asset-Library.md](Asset-Library.md) | Where approved reusable assets live. |
-| [Assets/Logos](Assets/Logos/README.md) | Current reusable chapter logo files and related graphics. |
-| [Assets/Fonts](Assets/Fonts/README.md) | Font files available in the repository. |
-| [Photography-Tools.md](Photography-Tools.md) | Event shot reminders and photo delivery checklist. |
-| [Social-Media-Guidelines.md](Social-Media-Guidelines.md) | Publishing checks, required event details, credits, tags, and hashtags. |
+| [Brand Assets](Assets/README.md) | Logo, font, and reusable graphic folders. |
+| [Logos](Assets/Logos/README.md) | Chapter logo files and reusable graphics. |
+| [Fonts](Assets/Fonts/README.md) | Font files available in the repository. |
+| [Asset Library](Asset-Library.md) | Storage rules for reusable media. |
+| [Photography Tools](Photography-Tools.md) | Event shot reminders and photo handoff checklist. |
+| [Social Media Guidelines](Social-Media-Guidelines.md) | Publishing details, tags, hashtags, and proofing checks. |
 
 ## Assets Folder
 
@@ -38,22 +36,11 @@ The [Assets](Assets/README.md) folder contains reusable source assets that suppo
 - [Assets/Logos](Assets/Logos/README.md)
 - [Assets/Fonts](Assets/Fonts/README.md)
 
-Final event deliverables should not be buried inside reusable asset folders. Store reusable source assets here and keep event-specific media with the related event record or leadership-approved storage location.
+Final event deliverables should stay with the related event record or leadership-approved storage location. Reusable source assets belong here.
 
 ## Operating Standard
 
-Every media request or publishing handoff should include:
-
-- Event or project name
-- Date and deadline
-- Required deliverables
-- Required logos or tags
-- Exact event details
-- Final file destination
-
-Every published or delivered asset should be:
-
-- Easy for the publishing owner to find
-- Exported at the needed size
-- Linked to the related event or campaign
-- Credited correctly
+- Confirm event name, date, location, and deadline.
+- Use approved logos and required partner tags.
+- Save or link final assets with the related event record.
+- Credit photographers, partners, venues, and sponsors correctly.

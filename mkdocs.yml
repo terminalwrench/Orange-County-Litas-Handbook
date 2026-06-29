@@ -20,8 +20,6 @@ not_in_nav: |
   02-Events/Special-Events.md
   02-Events/Venue-Selection.md
   02-Events/Templates/**
-  03-Media/Assets/README.md
-  03-Media/Assets/**
   09-Leadership/Ideas-Parking-Lot.md
   09-Leadership/Leadership-Roles.md
   09-Leadership/README.md
@@ -104,6 +102,7 @@ nav:
       - Ride Lead Notes: 05-Routes/Ride-Lead-Notes.md
   - Media Center:
       - Media Center: 03-Media/README.md
+      - Brand Assets: 03-Media/Assets/README.md
       - Asset Library: 03-Media/Asset-Library.md
       - Logos: 03-Media/Assets/Logos/README.md
       - Fonts: 03-Media/Assets/Fonts/README.md

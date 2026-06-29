@@ -1,23 +1,18 @@
-# Media Assets
+# Brand Assets
 
-This folder stores reusable media assets for OC Litas production. It supports consistent file access and organization without controlling creative direction.
+Reusable brand and production assets live here.
 
-Use this folder with:
+## Asset Folders
 
-- [../Asset-Library.md](../Asset-Library.md)
-- [Logos](Logos/README.md)
-
-## Folders
-
-| Folder | Use |
+| Folder | Contents |
 | --- | --- |
-| [Logos](Logos/README.md) | Official, chapter, partner, and sponsor logo files approved for current or repeatable use. |
-| [Fonts](Fonts/README.md) | Font files or font reference notes with license information when available. |
+| [Logos](Logos/README.md) | Chapter logo files, script marks, orange graphics, and reusable logo exports. |
+| [Fonts](Fonts/README.md) | Font files currently stored in the repository. |
 
-## Asset Rules
+## Use Notes
 
 - Keep reusable source assets here.
-- Keep event-specific final deliverables with the event archive.
+- Keep event-specific final deliverables with the related event record.
 - Use clear file names that identify the event, asset type, date when relevant, and final/export status.
 - Preserve source files when they are useful.
 - Avoid storing private contact information, payment details, or sensitive event information in asset folders.

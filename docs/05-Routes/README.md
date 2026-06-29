@@ -14,24 +14,18 @@
   <a href="Routes/">Route Library</a>
 </div>
 
-The Ride Planner is the Orange County Litas working space for chapter rides. It helps leadership evaluate difficulty, plan stops, assign lead and sweep, check seasonal conditions, and decide whether a route is ready to publish.
-
-This is not a GPS library. Route files should not replace current navigation, traffic review, weather review, or day-of judgment. They exist to preserve practical ride knowledge so future leaders can plan safer, clearer, and more consistent chapter rides.
-
-Use this module with [../02-Events/Ride-Planning.md](../02-Events/Ride-Planning.md), [../02-Events/Beginner-Rides.md](../02-Events/Beginner-Rides.md), and [../02-Events/Weather-Contingencies.md](../02-Events/Weather-Contingencies.md).
-
 ## Ride Readiness
 
 Before a ride is announced, leadership should be able to answer:
 
-- Who is the Ride Lead?
-- Who is the Sweep Rider?
-- What rider level is this ride for?
-- Is the route beginner, intermediate, or advanced?
-- Are freeway, canyon, mountain, night, heat, wind, or distance concerns clear?
-- Where are fuel, restroom, parking, and regroup options?
-- What happens if weather, traffic, road conditions, or group size changes?
-- Can riders meet directly at the destination?
+- [ ] Who is the Ride Lead?
+- [ ] Who is the Sweep Rider?
+- [ ] What rider level is this ride for?
+- [ ] Is the route beginner, intermediate, or advanced?
+- [ ] Are freeway, canyon, mountain, night, heat, wind, or distance concerns clear?
+- [ ] Where are fuel, restroom, parking, and regroup options?
+- [ ] What happens if weather, traffic, road conditions, or group size changes?
+- [ ] Can riders meet directly at the destination?
 
 ## Ride Types
 
@@ -74,13 +68,6 @@ Review seasonal conditions before final approval:
 Do not invent rides, fabricate routes, or add untested route details. A route belongs in this module only after it has been planned, checked, ridden, or reviewed by someone with direct knowledge of the route.
 
 Every route should be treated as a living document. Conditions change, construction appears, parking access shifts, and businesses close. Update files when the chapter learns something new.
-
-## Active Tools
-
-| Document | Purpose |
-| --- | --- |
-| [Ride-Lead-Notes.md](Ride-Lead-Notes.md) | Practical notes for lead/sweep briefings, road concerns, regroups, and adjustments. |
-| [Routes](Routes/README.md) | Route library for rides with direct chapter knowledge. |
 
 ## Route Library
 

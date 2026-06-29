@@ -71,7 +71,3 @@ Review [../02-Events/Venue-Selection.md](../02-Events/Venue-Selection.md), [../1
 ### How do I capture lessons after an event?
 
 Update the event record in the [Events Index](../10-Events-Database/Events-Index.md). If the lesson affects a venue, route, or recurring process, update the relevant venue record, route note, or operating page directly.
-
-## Future Questions
-
-- 
