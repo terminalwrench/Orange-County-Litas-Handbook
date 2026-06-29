@@ -15,6 +15,7 @@ theme:
       accent: orange
   features:
     - navigation.instant
+    - navigation.path
     - navigation.sections
     - navigation.tracking
     - navigation.top
@@ -24,6 +25,9 @@ theme:
 
 extra_css:
   - assets/stylesheets/extra.css
+
+extra_javascript:
+  - assets/javascripts/navigation-state.js
 
 markdown_extensions:
   - admonition
