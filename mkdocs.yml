@@ -74,6 +74,7 @@ nav:
       - Venue Selection: 02-Events/Venue-Selection.md
       - Weather Contingencies: 02-Events/Weather-Contingencies.md
       - Templates:
+          - Overview: 02-Events/Templates/README.md
           - Event Brief: 02-Events/Templates/Event-Brief.md
           - Event Checklist: 02-Events/Templates/Event-Checklist.md
           - Meet and Greet Template: 02-Events/Templates/Meet-and-Greet-Template.md
@@ -91,7 +92,11 @@ nav:
       - Video Standards: 03-Media/Video-Standards.md
       - Assets:
           - Assets README: 03-Media/Assets/README.md
+          - Logos: 03-Media/Assets/Logos/README.md
+          - Fonts: 03-Media/Assets/Fonts/README.md
+          - Icons: 03-Media/Assets/Icons/README.md
       - Templates:
+          - Overview: 03-Media/Templates/README.md
           - Asset Request: 03-Media/Templates/Asset-Request.md
           - Flyer Brief: 03-Media/Templates/Flyer-Brief.md
           - Instagram Post Checklist: 03-Media/Templates/Instagram-Post-Checklist.md
@@ -125,6 +130,7 @@ nav:
       - Route Categories: 05-Routes/Route-Categories.md
       - Route Planning Standards: 05-Routes/Route-Planning-Standards.md
       - Seasonal Riding: 05-Routes/Seasonal-Riding.md
+      - Route Library: 05-Routes/Routes/README.md
       - Templates:
           - Ride Report Template: 05-Routes/Templates/Ride-Report-Template.md
           - Route Template: 05-Routes/Templates/Route-Template.md
@@ -161,6 +167,7 @@ nav:
       - Statistics: 10-Events-Database/Statistics.md
       - Timeline: 10-Events-Database/Timeline.md
       - 2023:
+          - Overview: 10-Events-Database/2023/README.md
           - OC Litas Meet and Greet 7PM: 10-Events-Database/2023/2023-10-19-oc-litas-meet-and-greet-7pm.md
           - Oak Glen Ride: 10-Events-Database/2023/2023-10-21-oak-glen-ride.md
           - Babes and Brew Beginners Ride: 10-Events-Database/2023/2023-10-28-babes-and-brew-beginners-ride.md
@@ -170,6 +177,7 @@ nav:
           - South Moto OC: 10-Events-Database/2023/2023-12-04-south-moto-oc.md
           - OC Litas Holiday Meet and Greet: 10-Events-Database/2023/2023-12-14-oc-litas-holiday-meet-and-greet.md
       - 2024:
+          - Overview: 10-Events-Database/2024/README.md
           - Stop the Bleed: 10-Events-Database/2024/2024-01-07-stop-the-bleed.md
           - Meet and Greet Orange County Litas: 10-Events-Database/2024/2024-01-11-meet-and-greet-orange-county-litas.md
           - Ride to Hells Kitchen Litas OC: 10-Events-Database/2024/2024-01-21-ride-to-hells-kitchen-litas-oc.md
@@ -196,6 +204,7 @@ nav:
           - December Meet and Greet: 10-Events-Database/2024/2024-12-13-meet-and-greet.md
           - Jessica's Birthday Group Ride Lunch: 10-Events-Database/2024/2024-12-21-jessica-s-birthday-group-ride-lunch.md
       - 2025:
+          - Overview: 10-Events-Database/2025/README.md
           - January Meet and Greet: 10-Events-Database/2025/2025-01-10-meet-and-greet.md
           - Ride to Bike Shed: 10-Events-Database/2025/2025-01-18-ride-to-bike-shed.md
           - Ride to Galentine's Party: 10-Events-Database/2025/2025-02-15-ride-to-galentine-s-party.md
@@ -219,6 +228,7 @@ nav:
           - OC Litas Monthly Ride: 10-Events-Database/2025/2025-12-06-oc-litas-monthly-ride.md
           - Meet and Greet with SGV: 10-Events-Database/2025/2025-12-17-meet-and-greet-w-sgv.md
       - 2026:
+          - Overview: 10-Events-Database/2026/README.md
           - OC Litas MandG: 10-Events-Database/2026/2026-01-14-oc-litas-mandg.md
           - OC Litas Monthly Ride: 10-Events-Database/2026/2026-01-17-oc-litas-monthly-ride.md
           - February OC Litas MandG: 10-Events-Database/2026/2026-02-06-oc-litas-mandg.md
@@ -246,13 +256,16 @@ nav:
       - Venue Categories: 11-Venues/Venue-Categories.md
       - Venue Index: 11-Venues/Venue-Index.md
       - Bars:
+          - Overview: 11-Venues/Bars/README.md
           - Chihuahua Cerveza Taproom Newport Beach: 11-Venues/Bars/chihuahua-cerveza-taproom-newport-beach.md
           - Cook's Corner Trabuco Canyon: 11-Venues/Bars/cook-s-corner-trabuco-canyon.md
           - Josie's Hideout Saloon Santa Ysabel: 11-Venues/Bars/josie-s-hideout-saloon-santa-ysabel.md
       - Beaches:
+          - Overview: 11-Venues/Beaches/README.md
           - Huntington Beach: 11-Venues/Beaches/huntington-beach.md
           - Laguna Beach: 11-Venues/Beaches/laguna-beach.md
       - Breweries:
+          - Overview: 11-Venues/Breweries/README.md
           - Ballast Point Brewing Long Beach: 11-Venues/Breweries/ballast-point-brewing-long-beach-long-beach.md
           - Cerveza Cito Brewery Santa Ana: 11-Venues/Breweries/cerveza-cito-brewery-santa-ana.md
           - Golden Road Brewing Anaheim: 11-Venues/Breweries/golden-road-brewing-anaheim-anaheim.md
@@ -261,8 +274,10 @@ nav:
           - Green Cheek Beer Co Orange: 11-Venues/Breweries/green-cheek-beer-co-orange.md
           - Hangar 24: 11-Venues/Breweries/hangar-24.md
       - Coffee:
+          - Overview: 11-Venues/Coffee/README.md
           - Temecula Grind Coffee House Temecula: 11-Venues/Coffee/temecula-grind-coffee-house-temecula.md
       - Event Spaces:
+          - Overview: 11-Venues/Event-Spaces/README.md
           - 219 E Fourth St Santa Ana: 11-Venues/Event-Spaces/219-e-fourth-st-santa-ana.md
           - 4th Street Market Santa Ana: 11-Venues/Event-Spaces/4th-street-market-santa-ana.md
           - Ace Hotel: 11-Venues/Event-Spaces/ace-hotel.md
@@ -273,8 +288,10 @@ nav:
           - Miramar Food Hall: 11-Venues/Event-Spaces/miramar-food-hall.md
           - Rodeo 39 Public Market Stanton: 11-Venues/Event-Spaces/rodeo-39-public-market-stanton.md
       - Misc:
+          - Overview: 11-Venues/Misc/README.md
           - 1418 S Azusa Ave City of Industry: 11-Venues/Misc/1418-s-azusa-ave-city-of-industry-ca-91748-usa-city-of-industry.md
       - Restaurants:
+          - Overview: 11-Venues/Restaurants/README.md
           - Fire Wings: 11-Venues/Restaurants/fire-wings.md
           - Good Time: 11-Venues/Restaurants/good-time.md
           - Mrs Knott's Chicken Dinner Restaurant: 11-Venues/Restaurants/mrs-knott-s-chicken-dinner-restaurant.md
@@ -282,6 +299,7 @@ nav:
           - The Taco Stand Orange: 11-Venues/Restaurants/the-taco-stand-orange.md
           - Vince's Spaghetti Rancho Cucamonga: 11-Venues/Restaurants/vince-s-spaghetti-rancho-cucamonga.md
       - Wineries:
+          - Overview: 11-Venues/Wineries/README.md
           - Doffo Winery: 11-Venues/Wineries/doffo-winery.md
       - Templates:
           - Venue: 11-Venues/Templates/Venue.md

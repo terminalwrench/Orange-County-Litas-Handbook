@@ -1,0 +1,26 @@
+# 2025 Events
+
+Event records for 2025.
+
+- [Meet and Greet](2025-01-10-meet-and-greet.md)
+- [Ride to Bike Shed](2025-01-18-ride-to-bike-shed.md)
+- [Ride to Galentine's Party](2025-02-15-ride-to-galentine-s-party.md)
+- [Meet and Greet](2025-02-20-meet-and-greet.md)
+- [Meet and Greet](2025-03-13-meet-and-greet.md)
+- [March Ride: Vince's Spaghetti](2025-03-30-march-ride-vince-s-spaghetti.md)
+- [Women wheels and wine Ride to Doffo](2025-04-05-women-wheels-and-wine-ride-to-doffo.md)
+- [Meet & Greet - El Adobe SJC](2025-04-11-meet-and-greet-el-adobe-sjc.md)
+- [Meet & Greet - mamas on 39](2025-05-15-meet-and-greet-mamas-on-39.md)
+- [Distinguished Gentleman’s Ride](2025-05-18-distinguished-gentleman-s-ride.md)
+- [Pride ride weho](2025-06-01-pride-ride-weho.md)
+- [Meet & Greet](2025-06-19-meet-and-greet.md)
+- [Orange County Meet and Greet](2025-07-10-orange-county-meet-and-greet.md)
+- [OC Litas Ride Big Bear](2025-07-26-oc-litas-ride-big-bear.md)
+- [Orange County Meet and Greet](2025-08-14-orange-county-meet-and-greet.md)
+- [So cal Litas beach day](2025-08-24-so-cal-litas-beach-day.md)
+- [Meet and Greet](2025-09-04-meet-and-greet.md)
+- [OC Litas Campout -Fallbrook](2025-09-13-oc-litas-campout-fallbrook.md)
+- [2nd Anniversary Park Fun](2025-10-18-2nd-anniversary-park-fun.md)
+- [Meet & greet Friendsgiving PotLuck](2025-11-08-meet-and-greet-friendsgiving-potluck.md)
+- [OC Litas monthly ride](2025-12-06-oc-litas-monthly-ride.md)
+- [Meet & greet w SGV](2025-12-17-meet-and-greet-w-sgv.md)
