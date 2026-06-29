@@ -23,11 +23,11 @@ You will need to register and donate the minimum amount in order partake in this
 
 ## Lessons Learned
 
-
+<p class="placeholder-note">Add notes after this event is reviewed.</p>
 
 ## Future Notes
 
-
+<p class="placeholder-note">Needs review.</p>
 
 ## Related Files
 

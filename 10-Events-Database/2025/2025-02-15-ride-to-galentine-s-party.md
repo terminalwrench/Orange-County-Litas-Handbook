@@ -23,11 +23,11 @@ Galentine's Party is hosted by Fastbabes. We will organize a ride to the event. 
 
 ## Lessons Learned
 
-
+<p class="placeholder-note">Add notes after this event is reviewed.</p>
 
 ## Future Notes
 
-
+<p class="placeholder-note">Needs review.</p>
 
 ## Related Files
 

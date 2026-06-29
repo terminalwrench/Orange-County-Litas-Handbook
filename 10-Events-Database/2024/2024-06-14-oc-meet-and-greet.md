@@ -23,11 +23,11 @@ Meet and greet at 4th Street Market in Santa Ana at 6:30pm
 
 ## Lessons Learned
 
-
+<p class="placeholder-note">Add notes after this event is reviewed.</p>
 
 ## Future Notes
 
-
+<p class="placeholder-note">Needs review.</p>
 
 ## Related Files
 

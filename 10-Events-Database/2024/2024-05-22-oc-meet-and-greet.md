@@ -24,11 +24,11 @@ Time: 6:30pm-9:30pm-ish
 
 ## Lessons Learned
 
-
+<p class="placeholder-note">Add notes after this event is reviewed.</p>
 
 ## Future Notes
 
-
+<p class="placeholder-note">Needs review.</p>
 
 ## Related Files
 

@@ -24,11 +24,11 @@ Details coming soon
 
 ## Lessons Learned
 
-
+<p class="placeholder-note">Add notes after this event is reviewed.</p>
 
 ## Future Notes
 
-
+<p class="placeholder-note">Needs review.</p>
 
 ## Related Files
 

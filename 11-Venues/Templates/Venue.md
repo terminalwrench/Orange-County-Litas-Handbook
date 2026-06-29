@@ -22,31 +22,31 @@
 
 ## Pros
 
--
+<p class="placeholder-note">Needs review.</p>
 
 ## Cons
 
--
+<p class="placeholder-note">Needs review.</p>
 
 ## Events Hosted
 
--
+<p class="placeholder-note">No events recorded yet.</p>
 
 ## Calendar History
 
--
+<p class="placeholder-note">No calendar history recorded yet.</p>
 
 ## Photos
 
--
+<p class="placeholder-note">No photos recorded yet.</p>
 
 ## Contact Notes
 
--
+<p class="placeholder-note">Needs review.</p>
 
 ## Leadership Notes
 
--
+<p class="placeholder-note">Add notes after this venue is reviewed.</p>
 
 ## Related Files
 

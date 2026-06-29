@@ -23,11 +23,11 @@ Come join us for our first meet and greet at Golden Road brewery at 7 PM!
 
 ## Lessons Learned
 
-
+<p class="placeholder-note">Add notes after this event is reviewed.</p>
 
 ## Future Notes
 
-
+<p class="placeholder-note">Needs review.</p>
 
 ## Related Files
 
