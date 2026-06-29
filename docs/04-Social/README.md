@@ -3,19 +3,19 @@
 <section class="module-hero">
   <span class="module-kicker">Community voice</span>
   <h1>Social</h1>
-  <p class="module-subtitle">A working guide for planning, publishing, engaging, and archiving chapter social content.</p>
-  <p class="module-intro">Use this module to keep social posts coordinated with events, media assets, collaboration needs, and community care.</p>
+  <p class="module-subtitle">A working center for social publishing, member communication, hashtags, and free email templates.</p>
+  <p class="module-intro">Use this module when the chapter needs to announce an event, send an update, manage community replies, or prepare a clean post without hunting through old messages.</p>
 </section>
 
 ## Start Here
 
 <div class="module-link-grid">
-  <a href="Posting-Workflow/">Posting Workflow</a>
-  <a href="Monthly-Content-Calendar/">Monthly Content Calendar</a>
-  <a href="Event-Announcement-Workflow/">Event Announcement Workflow</a>
-  <a href="Event-Recap-Workflow/">Event Recap Workflow</a>
+  <a href="Email-Center/">Email Center</a>
+  <a href="../03-Media/Templates/General-Social-Media-Checklist/">Social Media Checklist</a>
+  <a href="Hashtag-Library/">Hashtag Library</a>
   <a href="Community-Management/">Community Management</a>
-  <a href="Collaboration-Guidelines/">Collaboration Guidelines</a>
+  <a href="Event-Recap-Workflow/">Event Recap Workflow</a>
+  <a href="Engagement-Guidelines/">Engagement Guidelines</a>
 </div>
 
 This module documents how OC Litas plans, publishes, manages, and archives social content. It supports consistent operations without dictating caption voice, creative style, or personality.
@@ -26,22 +26,23 @@ Use this with [../02-Events](../02-Events/README.md) for event details and [../0
 
 | Document | Purpose |
 | --- | --- |
-| [Posting-Workflow.md](Posting-Workflow.md) | Steps from content request to published post. |
-| [Monthly-Content-Calendar.md](Monthly-Content-Calendar.md) | Planning cadence for recurring content and event promotion. |
-| [Hashtag-Library.md](Hashtag-Library.md) | Reusable hashtag organization and review process. |
+| [Email-Center.md](Email-Center.md) | Free reusable chapter email templates and send checks. |
+| [Hashtag-Library.md](Hashtag-Library.md) | Categorized hashtags for quick copy-and-paste. |
 | [Engagement-Guidelines.md](Engagement-Guidelines.md) | How the chapter responds, shares, and interacts. |
 | [Community-Management.md](Community-Management.md) | Comment, DM, safety, and moderation standards. |
-| [Collaboration-Guidelines.md](Collaboration-Guidelines.md) | Partner, sponsor, chapter, and creator collaborations. |
-| [Event-Announcement-Workflow.md](Event-Announcement-Workflow.md) | How event announcements are prepared and posted. |
 | [Event-Recap-Workflow.md](Event-Recap-Workflow.md) | How event recap posts are gathered, credited, and archived. |
 | [Story-Best-Practices.md](Story-Best-Practices.md) | Operational story standards. |
 | [Reel-Best-Practices.md](Reel-Best-Practices.md) | Operational reel standards. |
 
-## Templates
+## Working Templates
 
-- [Templates/Event-Announcement.md](Templates/Event-Announcement.md)
-- [Templates/Event-Recap.md](Templates/Event-Recap.md)
-- [Templates/Story-Template.md](Templates/Story-Template.md)
-- [Templates/Reel-Template.md](Templates/Reel-Template.md)
-- [Templates/Sponsor-Thank-You.md](Templates/Sponsor-Thank-You.md)
-- [Templates/Collaboration-Post.md](Templates/Collaboration-Post.md)
+- [Instagram Post Template](../03-Media/Templates/Instagram-Post-Template.md)
+- [Instagram Reel Template](../03-Media/Templates/Instagram-Reel-Template.md)
+- [Instagram Story Template](../03-Media/Templates/Instagram-Story-Template.md)
+- [General Social Media Checklist](../03-Media/Templates/General-Social-Media-Checklist.md)
+- [Welcome Email Template](../03-Media/Templates/Welcome-Email-Template.md)
+- [Ride Announcement Email Template](../03-Media/Templates/Ride-Announcement-Email-Template.md)
+- [Meet and Greet Email Template](../03-Media/Templates/Meet-and-Greet-Email-Template.md)
+- [Event Reminder Email Template](../03-Media/Templates/Event-Reminder-Email-Template.md)
+- [Monthly Recap Email Template](../03-Media/Templates/Monthly-Recap-Email-Template.md)
+- [Sponsor Thank You Email](../03-Media/Templates/Sponsor-Thank-You-Email.md)

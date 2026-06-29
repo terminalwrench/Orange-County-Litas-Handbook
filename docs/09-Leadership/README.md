@@ -4,7 +4,7 @@
   <span class="module-kicker">Leadership workspace</span>
   <h1>Leadership</h1>
   <p class="module-subtitle">Internal planning, decision tracking, assignments, and continuity for chapter leadership.</p>
-  <p class="module-intro">Use this module when leadership needs to coordinate work, record decisions, review goals, or keep handoffs clean.</p>
+  <p class="module-intro">Use this module when leadership needs to open the calendar, run a meeting, assign follow-up, plan the next quarter, or keep handoffs clean.</p>
 </section>
 
 ## Start Here
@@ -12,15 +12,15 @@
 <div class="module-link-grid">
   <a href="Leadership-Roles/">Leadership Roles</a>
   <a href="Meeting-Notes/">Meeting Notes</a>
-  <a href="Decision-Log/">Decision Log</a>
-  <a href="Event-Assignments/">Event Assignments</a>
+  <a href="Quarterly-Planning/">Quarterly Planning</a>
   <a href="Action-Items/">Action Items</a>
+  <a href="../01-Chapter/Calendar/">Chapter Calendar</a>
   <a href="Succession-Planning/">Succession Planning</a>
 </div>
 
 This module is a private leadership workspace for OC Litas. It supports planning, accountability, continuity, and internal decision tracking without dictating chapter culture or replacing the public-facing chapter guidance in [../01-Chapter](../01-Chapter/README.md).
 
-Use this section for leadership notes, internal planning, event assignments, feedback themes, action items, decision records, succession planning, and working ideas that are not ready for broader handbook use.
+Use this section for leadership notes, internal planning, action items, quarterly priorities, succession planning, and working ideas that are not ready for broader handbook use.
 
 ## Privacy Standard
 
@@ -31,13 +31,10 @@ This section is intended for leadership use. Do not store sensitive personal det
 | Document | Purpose |
 | --- | --- |
 | [Leadership-Roles.md](Leadership-Roles.md) | Defines internal leadership responsibilities and how roles are documented. |
-| [Meeting-Notes.md](Meeting-Notes.md) | Explains how leadership meetings are captured and followed up. |
-| [Decision-Log.md](Decision-Log.md) | Tracks internal decisions and their rationale. |
+| [Meeting-Notes.md](Meeting-Notes.md) | A working notebook for agenda items, decisions, action items, and follow-up. |
 | [Annual-Goals.md](Annual-Goals.md) | Captures yearly priorities and progress. |
-| [Quarterly-Planning.md](Quarterly-Planning.md) | Supports focused planning by quarter. |
-| [Event-Assignments.md](Event-Assignments.md) | Tracks leadership ownership for upcoming events. |
+| [Quarterly-Planning.md](Quarterly-Planning.md) | Operational planning hub for the calendar, upcoming events, capacity, and quarterly focus. |
 | [Action-Items.md](Action-Items.md) | Tracks open leadership tasks and follow-through. |
-| [Member-Feedback.md](Member-Feedback.md) | Captures themes from member feedback without exposing private details. |
 | [Ideas-Parking-Lot.md](Ideas-Parking-Lot.md) | Holds ideas that may become future projects. |
 | [Succession-Planning.md](Succession-Planning.md) | Supports continuity when roles change. |
 

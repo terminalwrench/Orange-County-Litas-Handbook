@@ -16,7 +16,6 @@ theme:
   features:
     - navigation.instant
     - navigation.path
-    - navigation.sections
     - navigation.tracking
     - navigation.top
     - search.highlight
@@ -25,9 +24,6 @@ theme:
 
 extra_css:
   - assets/stylesheets/extra.css
-
-extra_javascript:
-  - assets/javascripts/navigation-state.js
 
 markdown_extensions:
   - admonition
@@ -47,14 +43,14 @@ nav:
       - Index: Handbook-Index.md
       - Roadmap: ROADMAP.md
       - Changelog: CHANGELOG.md
-  - 00-Global-Litas:
+  - Global Litas:
       - Overview: 00-Global-Litas/README.md
       - Brand Standards: 00-Global-Litas/Brand-Standards.md
       - Chapter Requirements: 00-Global-Litas/Chapter-Requirements.md
       - Logo Guidelines: 00-Global-Litas/Logo-Guidelines.md
       - Official Links: 00-Global-Litas/Official-Links.md
       - Resources: 00-Global-Litas/Resources.md
-  - 01-Chapter:
+  - Chapter:
       - Overview: 01-Chapter/README.md
       - Calendar: 01-Chapter/Calendar.md
       - Chapter History: 01-Chapter/Chapter-History.md
@@ -63,7 +59,7 @@ nav:
       - Leadership: 01-Chapter/Leadership.md
       - New Rider Guide: 01-Chapter/New-Rider-Guide.md
       - OC Chapter Identity: 01-Chapter/OC-Chapter-Identity.md
-  - 02-Events:
+  - Events:
       - Overview: 02-Events/README.md
       - Beginner Rides: 02-Events/Beginner-Rides.md
       - Cancellation Policy: 02-Events/Cancellation-Policy.md
@@ -83,17 +79,13 @@ nav:
           - Event Checklist: 02-Events/Templates/Event-Checklist.md
           - Meet and Greet Template: 02-Events/Templates/Meet-and-Greet-Template.md
           - Ride Template: 02-Events/Templates/Ride-Template.md
-  - 03-Media:
+  - Media Center:
       - Overview: 03-Media/README.md
-      - Archive Workflow: 03-Media/Archive-Workflow.md
       - Asset Library: 03-Media/Asset-Library.md
       - File Organization: 03-Media/File-Organization.md
       - Image Sizes: 03-Media/Image-Sizes.md
       - Instagram Guidelines: 03-Media/Instagram-Guidelines.md
       - Logo Library: 03-Media/Logo-Library.md
-      - Naming Conventions: 03-Media/Naming-Conventions.md
-      - Photography Standards: 03-Media/Photography-Standards.md
-      - Video Standards: 03-Media/Video-Standards.md
       - Assets:
           - Assets README: 03-Media/Assets/README.md
           - Logos: 03-Media/Assets/Logos/README.md
@@ -101,30 +93,29 @@ nav:
           - Icons: 03-Media/Assets/Icons/README.md
       - Templates:
           - Overview: 03-Media/Templates/README.md
-          - Asset Request: 03-Media/Templates/Asset-Request.md
           - Flyer Brief: 03-Media/Templates/Flyer-Brief.md
-          - Instagram Post Checklist: 03-Media/Templates/Instagram-Post-Checklist.md
-          - Reel Checklist: 03-Media/Templates/Reel-Checklist.md
-  - 04-Social:
+          - Instagram Post Template: 03-Media/Templates/Instagram-Post-Template.md
+          - Instagram Reel Template: 03-Media/Templates/Instagram-Reel-Template.md
+          - Instagram Story Template: 03-Media/Templates/Instagram-Story-Template.md
+          - Event Email Template: 03-Media/Templates/Event-Email-Template.md
+          - Welcome Email Template: 03-Media/Templates/Welcome-Email-Template.md
+          - Meet and Greet Email Template: 03-Media/Templates/Meet-and-Greet-Email-Template.md
+          - Ride Announcement Email Template: 03-Media/Templates/Ride-Announcement-Email-Template.md
+          - Event Reminder Email Template: 03-Media/Templates/Event-Reminder-Email-Template.md
+          - Monthly Recap Email Template: 03-Media/Templates/Monthly-Recap-Email-Template.md
+          - Sponsor Thank You Email: 03-Media/Templates/Sponsor-Thank-You-Email.md
+          - General Chapter Email Template: 03-Media/Templates/General-Chapter-Email-Template.md
+          - General Social Media Checklist: 03-Media/Templates/General-Social-Media-Checklist.md
+  - Social & Email:
       - Overview: 04-Social/README.md
-      - Collaboration Guidelines: 04-Social/Collaboration-Guidelines.md
+      - Email Center: 04-Social/Email-Center.md
       - Community Management: 04-Social/Community-Management.md
       - Engagement Guidelines: 04-Social/Engagement-Guidelines.md
-      - Event Announcement Workflow: 04-Social/Event-Announcement-Workflow.md
       - Event Recap Workflow: 04-Social/Event-Recap-Workflow.md
       - Hashtag Library: 04-Social/Hashtag-Library.md
-      - Monthly Content Calendar: 04-Social/Monthly-Content-Calendar.md
-      - Posting Workflow: 04-Social/Posting-Workflow.md
       - Reel Best Practices: 04-Social/Reel-Best-Practices.md
       - Story Best Practices: 04-Social/Story-Best-Practices.md
-      - Templates:
-          - Collaboration Post: 04-Social/Templates/Collaboration-Post.md
-          - Event Announcement: 04-Social/Templates/Event-Announcement.md
-          - Event Recap: 04-Social/Templates/Event-Recap.md
-          - Reel Template: 04-Social/Templates/Reel-Template.md
-          - Sponsor Thank You: 04-Social/Templates/Sponsor-Thank-You.md
-          - Story Template: 04-Social/Templates/Story-Template.md
-  - 05-Routes:
+  - Routes:
       - Overview: 05-Routes/README.md
       - Fuel Stops: 05-Routes/Fuel-Stops.md
       - Hazard Notes: 05-Routes/Hazard-Notes.md
@@ -138,32 +129,29 @@ nav:
       - Templates:
           - Ride Report Template: 05-Routes/Templates/Ride-Report-Template.md
           - Route Template: 05-Routes/Templates/Route-Template.md
-  - 07-Photography:
+  - Photography:
       - Overview: 07-Photography/README.md
       - Archive Workflow: 07-Photography/Archive-Workflow.md
       - Delivery Workflow: 07-Photography/Delivery-Workflow.md
       - Editing Workflow: 07-Photography/Editing-Workflow.md
       - Gallery Standards: 07-Photography/Gallery-Standards.md
       - Shot List: 07-Photography/Shot-List.md
-  - 08-Archive:
+  - Archive:
       - Overview: 08-Archive/README.md
-  - 09-Leadership:
+  - Leadership:
       - Overview: 09-Leadership/README.md
       - Action Items: 09-Leadership/Action-Items.md
       - Annual Goals: 09-Leadership/Annual-Goals.md
-      - Decision Log: 09-Leadership/Decision-Log.md
-      - Event Assignments: 09-Leadership/Event-Assignments.md
       - Ideas Parking Lot: 09-Leadership/Ideas-Parking-Lot.md
       - Leadership Roles: 09-Leadership/Leadership-Roles.md
       - Meeting Notes: 09-Leadership/Meeting-Notes.md
-      - Member Feedback: 09-Leadership/Member-Feedback.md
       - Quarterly Planning: 09-Leadership/Quarterly-Planning.md
       - Succession Planning: 09-Leadership/Succession-Planning.md
       - Templates:
           - Decision Record: 09-Leadership/Templates/Decision-Record.md
           - Leadership Meeting: 09-Leadership/Templates/Leadership-Meeting.md
           - Quarterly Review: 09-Leadership/Templates/Quarterly-Review.md
-  - 10-Events-Database:
+  - Events Database:
       - Overview: 10-Events-Database/README.md
       - Calendar Import Notes: 10-Events-Database/Calendar-Import-Notes.md
       - Event Categories: 10-Events-Database/Event-Categories.md
@@ -253,7 +241,7 @@ nav:
           - Orange County Litas Lake Arrowhead Trip: 10-Events-Database/2026/2026-09-26-orange-county-litas-lake-arrowhead-trip.md
       - Templates:
           - Event: 10-Events-Database/Templates/Event.md
-  - 11-Venues:
+  - Venues:
       - Overview: 11-Venues/README.md
       - Favorites: 11-Venues/Favorites.md
       - New Venue Evaluation: 11-Venues/New-Venue-Evaluation.md
@@ -307,7 +295,7 @@ nav:
           - Doffo Winery: 11-Venues/Wineries/doffo-winery.md
       - Templates:
           - Venue: 11-Venues/Templates/Venue.md
-  - 12-History:
+  - History:
       - Overview: 12-History/README.md
       - Annual Recaps: 12-History/Annual-Recaps.md
       - Chapter Growth: 12-History/Chapter-Growth.md
@@ -325,7 +313,7 @@ nav:
           - Annual Recap: 12-History/Templates/Annual-Recap.md
           - Historical Entry: 12-History/Templates/Historical-Entry.md
           - Milestone: 12-History/Templates/Milestone.md
-  - 13-Knowledge:
+  - Knowledge Base:
       - Overview: 13-Knowledge/README.md
       - Best Practices: 13-Knowledge/Best-Practices.md
       - Common Challenges: 13-Knowledge/Common-Challenges.md
@@ -340,7 +328,7 @@ nav:
           - FAQ: 13-Knowledge/Templates/FAQ.md
           - Knowledge Entry: 13-Knowledge/Templates/Knowledge-Entry.md
           - Lesson Learned: 13-Knowledge/Templates/Lesson-Learned.md
-  - 14-Operations:
+  - Operations:
       - Overview: 14-Operations/README.md
       - Annual Planning: 14-Operations/Annual-Planning.md
       - Communication Workflow: 14-Operations/Communication-Workflow.md
@@ -357,5 +345,3 @@ nav:
           - Incident Report: 14-Operations/Templates/Incident-Report.md
           - Monthly Checklist: 14-Operations/Templates/Monthly-Checklist.md
           - Operations Review: 14-Operations/Templates/Operations-Review.md
-  - Site Maintenance:
-      - Site README: Site-README.md

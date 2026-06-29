@@ -199,8 +199,26 @@
 }
 
 .md-sidebar--primary .md-nav__title {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
   color: var(--oc-ink);
   font-weight: 850;
+}
+
+.md-sidebar--primary .md-nav__title::before {
+  display: inline-flex;
+  flex: 0 0 auto;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.55rem;
+  background-color: var(--oc-black);
+  background-image: url("../../03-Media/Assets/Logos/TheLitasOC-WhiteFill.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 1.52rem auto;
+  box-shadow: 0 8px 18px rgba(23, 19, 16, 0.18);
+  content: "";
 }
 
 .md-sidebar--primary .md-nav--primary > .md-nav__list {
@@ -231,6 +249,12 @@
   color: var(--oc-orange-dark);
 }
 
+.md-sidebar--primary .md-nav--primary > .md-nav__list > .md-nav__item--nested > .md-nav__link,
+.md-sidebar--primary .md-nav--primary > .md-nav__list > .md-nav__item--active > .md-nav__link {
+  background: rgba(234, 216, 194, 0.22);
+  border: 1px solid rgba(35, 31, 28, 0.06);
+}
+
 .md-sidebar--primary .md-nav--primary .md-nav__item--nested > .md-nav__link {
   transition: background-color 140ms ease, color 140ms ease;
 }
@@ -246,6 +270,10 @@
 .md-sidebar--primary .md-nav--primary .md-nav__link--active {
   color: var(--oc-orange-dark);
   font-weight: 850;
+}
+
+.md-sidebar--primary .md-nav--primary .md-nav__item--active > .md-nav__link {
+  color: var(--oc-orange-dark);
 }
 
 .md-sidebar--primary .md-nav--primary > .md-nav__list > .md-nav__item > .md-nav__link--active {
@@ -374,6 +402,13 @@
   border-radius: 1.1rem;
   box-shadow: var(--oc-shadow);
   color: #fff8ef;
+}
+
+.portal-logo-mark {
+  display: block;
+  width: clamp(4.4rem, 13vw, 6.4rem);
+  height: auto;
+  margin: 0 0 1.05rem;
 }
 
 .portal-home .portal-hero::after,
@@ -662,6 +697,10 @@
   content: "MD";
 }
 
+.portal-icon--email::before {
+  content: "EM";
+}
+
 .portal-icon--venue::before {
   content: "VN";
 }
@@ -771,6 +810,25 @@
   min-height: 3.2rem;
 }
 
+.md-footer-meta__inner {
+  gap: 0.8rem;
+}
+
+.md-footer-meta__inner::before {
+  display: inline-block;
+  flex: 0 0 auto;
+  width: 2.15rem;
+  height: 2.15rem;
+  border-radius: 0.55rem;
+  background-color: rgba(255, 248, 239, 0.08);
+  background-image: url("../../03-Media/Assets/Logos/TheLitasOC-WhiteFill.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 1.65rem auto;
+  content: "";
+  opacity: 0.92;
+}
+
 @media screen and (max-width: 44.9375em) {
   .md-content__inner {
     margin-top: 0.65rem;
@@ -781,6 +839,11 @@
     margin-bottom: 1.1rem;
     padding: 1.25rem;
     border-radius: 0.85rem;
+  }
+
+  .portal-logo-mark {
+    width: 4.35rem;
+    margin-bottom: 0.85rem;
   }
 
   .portal-home .portal-actions {
@@ -820,19 +883,36 @@
 }
 
 @media screen and (max-width: 76.1875em) {
+  :root {
+    --oc-drawer-width: min(86vw, 20rem);
+  }
+
   .md-header__button {
     width: 2.6rem;
     height: 2.6rem;
   }
 
   .md-sidebar--primary {
-    width: min(86vw, 20rem);
+    width: var(--oc-drawer-width);
     background: rgba(23, 19, 16, 0.34);
     backdrop-filter: blur(6px);
   }
 
+  [dir="ltr"] .md-sidebar--primary {
+    left: calc(-1 * var(--oc-drawer-width));
+  }
+
+  [dir="rtl"] .md-sidebar--primary {
+    right: calc(-1 * var(--oc-drawer-width));
+  }
+
+  [data-md-toggle="drawer"]:checked ~ .md-container .md-sidebar--primary {
+    transform: translateX(var(--oc-drawer-width));
+  }
+
   .md-sidebar--primary .md-sidebar__scrollwrap {
     width: calc(100% - 1.1rem);
+    max-height: calc(100vh - 1.1rem);
     margin: 0.55rem;
     border: 1px solid rgba(35, 31, 28, 0.1);
     border-radius: 0.9rem;
@@ -842,13 +922,19 @@
 
   .md-sidebar--primary .md-nav__title {
     min-height: 3.1rem;
-    padding: 0.85rem 1rem;
+    padding: 0.72rem 0.9rem;
     border-bottom: 1px solid var(--oc-line);
     background: rgba(255, 248, 239, 0.96) !important;
     color: var(--oc-ink) !important;
     font-size: 0.78rem;
     letter-spacing: 0.01em;
     box-shadow: none;
+  }
+
+  .md-sidebar--primary .md-nav__title::before {
+    width: 2.15rem;
+    height: 2.15rem;
+    background-size: 1.62rem auto;
   }
 
   .md-sidebar--primary .md-nav__source {

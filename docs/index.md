@@ -2,6 +2,7 @@
 
 <section class="portal-hero" aria-labelledby="portal-title">
   <div class="portal-hero-copy">
+    <img class="portal-logo-mark" src="./03-Media/Assets/Logos/TheLitasOC-WhiteFill.png" alt="Orange County Litas logo">
     <div class="portal-eyebrow">Orange County Litas internal portal</div>
     <h1 id="portal-title">Orange County Litas Portal</h1>
     <p class="portal-subtitle">Plan rides. Welcome members. Preserve the chapter.</p>
@@ -9,8 +10,8 @@
     <div class="portal-actions" aria-label="Primary portal actions">
       <a class="portal-button portal-button-primary" href="./02-Events/">Plan an Event</a>
       <a class="portal-button" href="./05-Routes/">Find Ride Resources</a>
+      <a class="portal-button" href="./04-Social/Email-Center/">Send an Update</a>
       <a class="portal-button" href="./01-Chapter/New-Rider-Guide/">New Member Guide</a>
-      <a class="portal-button" href="./09-Leadership/">Officer Resources</a>
     </div>
   </div>
 </section>
@@ -41,7 +42,11 @@
   </a>
   <a class="portal-action-card portal-icon portal-icon--media" href="./03-Media/File-Organization/">
     <span>Find media</span>
-    <strong>Locate files, naming rules, sizes, and archive workflows.</strong>
+    <strong>Locate files, assets, sizes, and reusable creative templates.</strong>
+  </a>
+  <a class="portal-action-card portal-icon portal-icon--email" href="./04-Social/Email-Center/">
+    <span>Send chapter email</span>
+    <strong>Use free reusable templates for ride, meetup, reminder, recap, and sponsor messages.</strong>
   </a>
   <a class="portal-action-card portal-icon portal-icon--venue" href="./11-Venues/Venue-Index/">
     <span>Look up a venue</span>
@@ -72,7 +77,7 @@
   <a class="portal-card portal-icon portal-icon--officer" href="./09-Leadership/">
     <span class="portal-card-kicker">Officer shortcut</span>
     <strong>Leadership Workspace</strong>
-    <span>Meeting notes, decisions, goals, assignments, feedback themes, and succession planning.</span>
+    <span>Meeting notes, action items, quarterly planning, goals, and succession planning.</span>
   </a>
   <a class="portal-card portal-icon portal-icon--member" href="./01-Chapter/New-Rider-Guide/">
     <span class="portal-card-kicker">New member shortcut</span>
@@ -111,12 +116,12 @@
     <strong>Venue records, favorites, evaluation notes, and event history.</strong>
   </a>
   <a href="./03-Media/">
-    <span>Media</span>
-    <strong>Asset organization, image sizes, naming conventions, and archive workflow.</strong>
+    <span>Media Center</span>
+    <strong>Asset organization, image sizes, creative briefs, and publishing checklists.</strong>
   </a>
   <a href="./04-Social/">
-    <span>Social</span>
-    <strong>Posting workflow, community management, announcements, recaps, and templates.</strong>
+    <span>Social &amp; Email</span>
+    <strong>Community management, hashtags, recaps, social tools, and email templates.</strong>
   </a>
   <a href="./12-History/">
     <span>History</span>

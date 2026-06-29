@@ -3,8 +3,8 @@
 <section class="module-hero">
   <span class="module-kicker">Creative operations</span>
   <h1>Media</h1>
-  <p class="module-subtitle">The place for file standards, assets, sizing, naming, and archive workflows.</p>
-  <p class="module-intro">Use this module when creating event graphics, organizing media, preparing social assets, or finding reusable chapter files.</p>
+  <p class="module-subtitle">A working center for assets, flyer briefs, image sizes, and publishing-ready templates.</p>
+  <p class="module-intro">Use this module when creating event graphics, preparing social assets, finding chapter files, or checking what information is required before anything gets published.</p>
 </section>
 
 ## Start Here
@@ -13,8 +13,8 @@
   <a href="File-Organization/">File Organization</a>
   <a href="Asset-Library/">Asset Library</a>
   <a href="Image-Sizes/">Image Sizes</a>
-  <a href="Naming-Conventions/">Naming Conventions</a>
-  <a href="Archive-Workflow/">Archive Workflow</a>
+  <a href="Templates/Flyer-Brief/">Flyer Brief</a>
+  <a href="Templates/General-Social-Media-Checklist/">Social Media Checklist</a>
   <a href="Instagram-Guidelines/">Instagram Guidelines</a>
 </div>
 
@@ -32,20 +32,24 @@ Use this folder with the event operating system in [../02-Events](../02-Events/R
 | [Logo-Library.md](Logo-Library.md) | Where official, chapter, and approved logo files belong and how versions are handled. |
 | [Image-Sizes.md](Image-Sizes.md) | Recommended export sizes for social, event, and print deliverables. |
 | [Instagram-Guidelines.md](Instagram-Guidelines.md) | Operational posting requirements, tagging, accessibility, and publishing workflow. |
-| [Naming-Conventions.md](Naming-Conventions.md) | Standard file and folder names for media assets. |
 | [File-Organization.md](File-Organization.md) | Where every media-related asset belongs in the repository. |
-| [Archive-Workflow.md](Archive-Workflow.md) | How completed media is archived after events. |
-| [Photography-Standards.md](Photography-Standards.md) | Operational standards for storing and organizing photography. |
-| [Video-Standards.md](Video-Standards.md) | Operational standards for reels, clips, edits, exports, and final delivery. |
 
 ## Templates
 
 Use the templates in [Templates](Templates/README.md) whenever media work is requested or prepared for publishing:
 
 - [Flyer-Brief.md](Templates/Flyer-Brief.md)
-- [Instagram-Post-Checklist.md](Templates/Instagram-Post-Checklist.md)
-- [Reel-Checklist.md](Templates/Reel-Checklist.md)
-- [Asset-Request.md](Templates/Asset-Request.md)
+- [Instagram-Post-Template.md](Templates/Instagram-Post-Template.md)
+- [Instagram-Reel-Template.md](Templates/Instagram-Reel-Template.md)
+- [Instagram-Story-Template.md](Templates/Instagram-Story-Template.md)
+- [General-Social-Media-Checklist.md](Templates/General-Social-Media-Checklist.md)
+- [Welcome-Email-Template.md](Templates/Welcome-Email-Template.md)
+- [Ride-Announcement-Email-Template.md](Templates/Ride-Announcement-Email-Template.md)
+- [Meet-and-Greet-Email-Template.md](Templates/Meet-and-Greet-Email-Template.md)
+- [Event-Reminder-Email-Template.md](Templates/Event-Reminder-Email-Template.md)
+- [Monthly-Recap-Email-Template.md](Templates/Monthly-Recap-Email-Template.md)
+- [Sponsor-Thank-You-Email.md](Templates/Sponsor-Thank-You-Email.md)
+- [General-Chapter-Email-Template.md](Templates/General-Chapter-Email-Template.md)
 
 ## Assets Folder
 
