@@ -1,0 +1,36 @@
+:root {
+  --md-primary-fg-color: #c45a1a;
+  --md-primary-fg-color--light: #e07a2f;
+  --md-primary-fg-color--dark: #80340d;
+  --md-accent-fg-color: #e07a2f;
+}
+
+body {
+  background-color: #fff8ef;
+}
+
+[data-md-color-scheme="default"] {
+  --md-default-bg-color: #fff8ef;
+  --md-default-fg-color: #201b18;
+  --md-typeset-a-color: #a94812;
+}
+
+.md-header,
+.md-tabs {
+  background-color: #171310;
+}
+
+.md-typeset h1,
+.md-typeset h2 {
+  color: #201b18;
+}
+
+.md-typeset .admonition,
+.md-typeset details {
+  border-color: #e07a2f;
+}
+
+.md-typeset .admonition-title,
+.md-typeset summary {
+  background-color: rgba(224, 122, 47, 0.12);
+}

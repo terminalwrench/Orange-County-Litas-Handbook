@@ -1,13 +1,16 @@
-# GitHub Pages Site
+# MkDocs Site Source
 
-This folder contains a lightweight static portal for the Orange County Litas Portal.
+This folder contains the MkDocs website source for the Orange County Litas Portal.
 
-It uses plain HTML and CSS only:
+The handbook Markdown files remain in their original repository folders. MkDocs reads them through lightweight links in this folder so the website can render the handbook without moving the source content.
 
-- `index.html`
-- `styles.css`
+Key files:
 
-No React, build tools, package manager, or app framework is required.
+- `index.md`
+- `assets/stylesheets/extra.css`
+- linked handbook modules such as `00-Global-Litas`, `01-Chapter`, and `10-Events-Database`
+
+No React or frontend build tools are required.
 
 ## Purpose
 
@@ -15,6 +18,11 @@ The portal gives cofounders and chapter leaders a friendly way to browse the han
 
 ## GitHub Pages
 
-To publish this page with GitHub Pages, configure Pages to serve from the `docs/` folder on the repository branch you use for publishing.
+To preview locally, install the Python requirements from the repository root and run:
 
-The portal links back to the existing Markdown files. It does not rename, move, or replace handbook content.
+```bash
+pip install -r requirements.txt
+mkdocs serve
+```
+
+To publish with GitHub Pages, build and deploy the MkDocs site from `mkdocs.yml`. The generated site output goes to `site/`; the source handbook content stays where it is.
