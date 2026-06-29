@@ -1,4 +1,4 @@
-<div class="portal-home" markdown="1">
+<div class="portal-home">
 
 <section class="portal-hero portal-hero--split" aria-labelledby="portal-title">
   <div class="portal-hero-copy">
@@ -27,7 +27,7 @@
   You do not need to know GitHub to use this portal. Click a section, find what you need, and send updates to chapter leadership.
 </section>
 
-## Quick Actions
+<h2 id="quick-actions">Quick Actions</h2>
 
 <div class="portal-action-grid">
   <a class="portal-action-card portal-icon portal-icon--event" href="./02-Events/Event-Lifecycle/">
@@ -48,7 +48,7 @@
   </a>
 </div>
 
-## Upcoming Events
+<h2 id="upcoming-events">Upcoming Events</h2>
 
 <div class="portal-feature-row">
   <section class="portal-feature-card portal-feature-card--accent">
@@ -65,7 +65,7 @@
   </section>
 </div>
 
-## Featured Resources
+<h2 id="featured-resources">Featured Resources</h2>
 
 <div class="portal-card-grid portal-card-grid--featured">
   <a class="portal-card portal-icon portal-icon--officer" href="./09-Leadership/">
@@ -90,7 +90,7 @@
   </a>
 </div>
 
-## Portal Sections
+<h2 id="portal-sections">Portal Sections</h2>
 
 <div class="portal-section-grid">
   <a href="./02-Events/">
@@ -127,7 +127,7 @@
   </a>
 </div>
 
-## Community & Chapter
+<h2 id="community-chapter">Community &amp; Chapter</h2>
 
 <div class="portal-community-band">
   <div>
@@ -142,7 +142,7 @@
   </div>
 </div>
 
-## Start Here
+<h2 id="start-here">Start Here</h2>
 
 <div class="module-link-grid compact">
   <a href="./HOME/">Home</a>
