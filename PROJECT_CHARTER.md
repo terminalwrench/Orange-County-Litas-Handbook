@@ -31,13 +31,13 @@ This is not just a GitHub repo. The website is the user-facing product.
 - GitHub repository: `terminalwrench/Orange-County-Litas-Handbook`
 - Public repo
 - Site name: **Orange County Litas Portal**
-- Site engine: **MkDocs Material**
+- App engine: **Vite + React + TypeScript**
 - Deployment: **GitHub Actions**
 - GitHub Pages should use: **Source = GitHub Actions**
-- `mkdocs.yml` is the source for navigation.
-- `docs/` is the MkDocs documentation directory.
-- `docs/index.md` is the portal homepage.
-- Custom styling lives in `docs/assets/stylesheets/extra.css`.
+- `index.html` and `src/main.tsx` are the React app entrypoints.
+- `src/` contains the application shell, modules, shared components, data, and services.
+- `docs/` is retained as source/reference handbook content only.
+- `vite build` creates the deployable app in `dist/`.
 
 ## Current Modules
 
@@ -100,7 +100,7 @@ Visual direction:
 - Deep third-level pages can feel messy.
 - Some generated event and venue records have empty placeholder sections.
 - Empty sections should be compact and intentional, not huge blank areas.
-- MkDocs homepage/theme needs stabilization before heavy redesign.
+- React homepage/theme needs stabilization before heavy redesign.
 - Links should be checked after every navigation or structure change.
 - Git can show divergent branch warnings; prefer `git pull --rebase`.
 

@@ -1,7 +1,7 @@
 import type { EventRecord, StatusItem } from "../types";
 import { toDateValue } from "../utils/date";
 
-const DEFAULT_CALENDAR_URL = "/calendar.ics";
+const DEFAULT_CALENDAR_URL = `${import.meta.env.BASE_URL}calendar.ics`;
 
 interface IcsProperty {
   name: string;

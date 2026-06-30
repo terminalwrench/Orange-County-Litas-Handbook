@@ -1,28 +1,23 @@
-# MkDocs Site Source
+# Reference Content Source
 
-This folder contains the MkDocs website source for the Orange County Litas Portal.
+This folder contains legacy handbook and reference Markdown for the Orange County Litas Operations Center.
 
-The handbook Markdown files live directly in this folder using the standard MkDocs layout. MkDocs reads this folder as the canonical documentation source.
+The deployed application is the React/Vite app in the repository root and `src/`. This `docs/` folder is retained as source/reference content only.
 
 Key files:
 
 - `index.md`
-- `assets/stylesheets/extra.css`
 - handbook modules such as `00-Global-Litas`, `01-Chapter`, and `10-Events-Database`
-
-No React or frontend build tools are required.
 
 ## Purpose
 
-The portal gives cofounders and chapter leaders a friendly way to browse the handbook without needing to understand the GitHub repository structure first.
+These files preserve older handbook content that can be reused or migrated into React modules over time.
 
 ## GitHub Pages
 
-To preview locally, install the Python requirements from the repository root and run:
+GitHub Pages is deployed from the Vite build output in `dist/`.
 
 ```bash
-pip install -r requirements.txt
-mkdocs serve
+pnpm install
+pnpm build
 ```
-
-To publish with GitHub Pages, build and deploy the MkDocs site from `mkdocs.yml`. The generated site output goes to `site/`; the source handbook content stays in `docs/`.
