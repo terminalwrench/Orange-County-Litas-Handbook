@@ -1,4 +1,3 @@
-import { eventRecords } from "../data/appData";
 import { PageContainer } from "../components/layout/PageContainer";
 import { Button } from "../components/ui/Button";
 import { DashboardCard } from "../components/ui/DashboardCard";
@@ -6,8 +5,13 @@ import { FormField } from "../components/ui/FormField";
 import { SectionHeader } from "../components/ui/SectionHeader";
 import { StatusChip } from "../components/ui/StatusChip";
 import { DateInput, SelectInput, Textarea, TextInput, TimeInput } from "../components/ui/inputs";
+import type { EventRecord } from "../types";
 
-export function Events() {
+interface EventsProps {
+  eventRecords: EventRecord[];
+}
+
+export function Events({ eventRecords }: EventsProps) {
   const currentEvent = eventRecords[0];
 
   return (
@@ -34,14 +38,14 @@ export function Events() {
         <DashboardCard>
           <SectionHeader title="Event Detail" />
           <div className="detail-card">
-            <h2>{currentEvent.title}</h2>
-            <p>{currentEvent.date} at {currentEvent.time}</p>
-            <p>{currentEvent.location}</p>
+            <h2>{currentEvent?.title ?? "No events loaded"}</h2>
+            <p>{currentEvent ? `${currentEvent.startDate} at ${currentEvent.time}` : "Add a calendar file or use fallback events."}</p>
+            <p>{currentEvent?.location ?? "No location"}</p>
             <div className="status-row">
-              <StatusChip label={currentEvent.type} tone="accent" />
-              <StatusChip label={`Flyer: ${currentEvent.flyerStatus}`} tone="neutral" />
+              <StatusChip label={currentEvent?.type ?? "Calendar"} tone="accent" />
+              <StatusChip label={`Source: ${currentEvent?.source ?? "none"}`} tone="neutral" />
             </div>
-            <p>{currentEvent.notes}</p>
+            <p>{currentEvent?.notes ?? ""}</p>
           </div>
         </DashboardCard>
         <DashboardCard className="span-all">

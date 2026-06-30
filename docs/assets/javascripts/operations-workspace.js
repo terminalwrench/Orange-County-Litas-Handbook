@@ -76,49 +76,37 @@
    */
 
   const homeDashboardData = {
-    referenceDate: "2026-07-07",
-    sidebarCountdown: {
-      iconLabel: "Calendar",
-      days: 2,
-      label: "until the Chapter Ride"
-    },
-    nextEvent: {
-      title: "Old World Meet & Greet",
-      month: "Jul",
-      day: "9",
-      weekday: "Wed",
-      time: "6:30 PM",
-      dateLine: "Wednesday, Jul 9",
-      venue: "Old World Biergarten",
-      location: "Huntington Beach, CA",
-      startsInDays: 2,
-      checklist: ["Venue Confirmed", "Route Complete", "Flyer Posted", "Email Sent"]
-    },
-    upcomingEvents: [
+    eventRecords: [
       {
-        title: "Chapter Ride",
-        month: "Jul",
-        day: "25",
-        time: "TBD",
+        title: "Old World Meet & Greet",
+        date: "2026-07-09",
+        time: "6:30 PM",
+        venue: "Old World Biergarten",
+        location: "Huntington Beach, CA",
+        checklist: ["Venue Confirmed", "Route Complete", "Flyer Posted", "Email Sent"],
         href: "10-Events-Database/Events-Index/"
       },
       {
-        title: "Meet & Greet",
-        month: "Aug",
-        day: "5",
+        title: "OC Litas Monthly Ride",
+        date: "2026-07-25",
         time: "TBD",
+        venue: "TBD",
+        location: "Orange County, CA",
+        checklist: ["Venue Needed", "Route Needed", "Flyer Needed", "Email Needed"],
         href: "10-Events-Database/Events-Index/"
       },
       {
         title: "Litas Beach Day",
-        month: "Aug",
-        day: "15",
+        date: "2026-08-15",
         time: "All Day",
+        venue: "Beach location TBD",
+        location: "Orange County, CA",
+        checklist: ["Venue Needed", "Route TBD", "Flyer Needed", "Email Needed"],
         href: "10-Events-Database/Events-Index/"
       }
     ],
     deadlines: [
-      { title: "Email reminder", due: "Tomorrow", date: "2026-07-08" },
+      { title: "Email reminder", due: "Jul 8", date: "2026-07-08" },
       { title: "Confirm reservation", due: "Jul 8", date: "2026-07-08" },
       { title: "Finalize route", due: "Jul 10", date: "2026-07-10" },
       { title: "Order patches", due: "Jul 11", date: "2026-07-11" }
@@ -549,8 +537,89 @@
   }
 
   function parseLocalDate(value) {
-    const [year, month, day] = String(value).split("-").map(Number);
+    const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(value));
+    if (!match) throw new Error(`Invalid date value: ${value}`);
+    const year = Number(match[1]);
+    const month = Number(match[2]);
+    const day = Number(match[3]);
     return new Date(year, month - 1, day);
+  }
+
+  function toDateValue(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  }
+
+  function daysBetweenDates(fromDate, toDate) {
+    const start = Date.UTC(fromDate.getFullYear(), fromDate.getMonth(), fromDate.getDate());
+    const end = Date.UTC(toDate.getFullYear(), toDate.getMonth(), toDate.getDate());
+    return Math.round((end - start) / 86400000);
+  }
+
+  function getUpcomingEventRecords(events, referenceValue) {
+    const reference = parseLocalDate(referenceValue);
+    return [...events]
+      .filter((event) => daysBetweenDates(reference, parseLocalDate(event.date)) >= 0)
+      .sort((a, b) => parseLocalDate(a.date).getTime() - parseLocalDate(b.date).getTime());
+  }
+
+  function getNextEvent(events, referenceValue) {
+    return getUpcomingEventRecords(events, referenceValue)[0] || null;
+  }
+
+  function getCountdownLabel(eventDate, referenceValue) {
+    const remaining = daysBetweenDates(parseLocalDate(referenceValue), parseLocalDate(eventDate));
+    if (remaining === 0) return "Today";
+    if (remaining === 1) return "Tomorrow";
+    return `${remaining} days`;
+  }
+
+  function getCountdownDisplay(eventDate, referenceValue) {
+    const remaining = daysBetweenDates(parseLocalDate(referenceValue), parseLocalDate(eventDate));
+    const label = getCountdownLabel(eventDate, referenceValue);
+    if (remaining === 0 || remaining === 1) {
+      return { label, value: label, unit: "", ariaLabel: `Event is ${label.toLowerCase()}` };
+    }
+    return { label, value: String(remaining), unit: "Days", ariaLabel: `Event is in ${remaining} days` };
+  }
+
+  function formatMonth(dateValue) {
+    return new Intl.DateTimeFormat("en-US", { month: "short" }).format(parseLocalDate(dateValue));
+  }
+
+  function formatDateLine(dateValue) {
+    return new Intl.DateTimeFormat("en-US", { weekday: "long", month: "short", day: "numeric" }).format(parseLocalDate(dateValue));
+  }
+
+  function formatWeekday(dateValue) {
+    return new Intl.DateTimeFormat("en-US", { weekday: "short" }).format(parseLocalDate(dateValue));
+  }
+
+  function toDashboardEvent(event, referenceValue) {
+    return {
+      ...event,
+      month: formatMonth(event.date),
+      day: String(parseLocalDate(event.date).getDate()),
+      weekday: formatWeekday(event.date),
+      dateLine: formatDateLine(event.date),
+      countdown: getCountdownDisplay(event.date, referenceValue)
+    };
+  }
+
+  function toUpcomingEvent(event) {
+    return {
+      ...event,
+      month: formatMonth(event.date),
+      day: String(parseLocalDate(event.date).getDate())
+    };
+  }
+
+  function getSidebarCountdown(event, referenceValue) {
+    if (!event) return { eventTitle: "", label: "No upcoming events", ariaLabel: "No upcoming events", hasEvent: false };
+    const label = getCountdownLabel(event.date, referenceValue);
+    return { eventTitle: event.title, label, ariaLabel: `${event.title}: ${label}`, hasEvent: true };
   }
 
   function isSameOperationalWeek(dateValue, referenceValue) {
@@ -581,6 +650,14 @@
   }
 
   function renderNextEvent(root, event) {
+    if (!event) {
+      root.innerHTML = `
+        <div class="oc-panel-title">Next Event</div>
+        <div class="oc-empty-state"><strong>No upcoming events</strong></div>
+      `;
+      return;
+    }
+
     root.innerHTML = `
       <div class="oc-panel-title">Next Event</div>
       <div class="oc-next-event-layout">
@@ -594,10 +671,10 @@
           <p>${clockIcon()}<span>${escapeHtml(`${event.time}, ${event.dateLine}`)}</span></p>
           <p>${pinIcon()}<span>${escapeHtml(event.venue)}<br><em>${escapeHtml(event.location)}</em></span></p>
         </div>
-        <div class="oc-starts-in" aria-label="${escapeHtml(`Starts in ${event.startsInDays} days`)}">
+        <div class="oc-starts-in" aria-label="${escapeHtml(event.countdown.ariaLabel)}">
           <span>Starts in</span>
-          <strong>${escapeHtml(event.startsInDays)}</strong>
-          <em>Days</em>
+          <strong>${escapeHtml(event.countdown.value)}</strong>
+          ${event.countdown.unit ? `<em>${escapeHtml(event.countdown.unit)}</em>` : ""}
         </div>
       </div>
       <div class="oc-checklist-row" aria-label="Event checklist">
@@ -703,17 +780,21 @@
     if (!root || root.dataset.ocReady === "true") return;
     root.dataset.ocReady = "true";
 
-    renderNextEvent(root.querySelector("[data-next-event]"), homeDashboardData.nextEvent);
-    renderUpcomingEvents(root.querySelector("[data-upcoming-events]"), homeDashboardData.upcomingEvents);
+    const referenceDate = toDateValue(new Date());
+    const upcomingEvents = getUpcomingEventRecords(homeDashboardData.eventRecords, referenceDate);
+    const nextEvent = getNextEvent(homeDashboardData.eventRecords, referenceDate);
+
+    renderNextEvent(root.querySelector("[data-next-event]"), nextEvent ? toDashboardEvent(nextEvent, referenceDate) : null);
+    renderUpcomingEvents(root.querySelector("[data-upcoming-events]"), upcomingEvents.slice(1, 4).map(toUpcomingEvent));
     renderDeadlines(
       root.querySelector("[data-upcoming-deadlines]"),
-      upcomingDeadlinesWithinFiveDays(homeDashboardData.deadlines, homeDashboardData.referenceDate)
+      upcomingDeadlinesWithinFiveDays(homeDashboardData.deadlines, referenceDate)
     );
     renderBirthdays(root.querySelector("[data-upcoming-birthdays]"), homeDashboardData.birthdays);
     renderRideWeather(
       root.querySelector("[data-ride-weather]"),
       homeDashboardData.rideWeather,
-      homeDashboardData.referenceDate
+      referenceDate
     );
     renderChapterNotes(root.querySelector("[data-chapter-notes]"));
   }
@@ -721,13 +802,14 @@
   function setupSidebarCountdown() {
     const nav = document.querySelector(".md-sidebar--primary .md-nav--primary");
     if (!nav || nav.querySelector(".oc-sidebar-countdown")) return;
-    const countdown = homeDashboardData.sidebarCountdown;
+    const referenceDate = toDateValue(new Date());
+    const countdown = getSidebarCountdown(getNextEvent(homeDashboardData.eventRecords, referenceDate), referenceDate);
     const element = document.createElement("aside");
     element.className = "oc-sidebar-countdown";
-    element.setAttribute("aria-label", `${countdown.days} days ${countdown.label}`);
+    element.setAttribute("aria-label", countdown.ariaLabel);
     element.innerHTML = `
       <span class="oc-row-icon">${calendarIcon()}</span>
-      <span><strong>${escapeHtml(countdown.days)} days</strong><em>${escapeHtml(countdown.label)}</em></span>
+      <span><em>Next Event</em>${countdown.hasEvent ? `<strong>${escapeHtml(countdown.eventTitle)}</strong>` : ""}<b>${escapeHtml(countdown.label)}</b></span>
     `;
     nav.appendChild(element);
   }

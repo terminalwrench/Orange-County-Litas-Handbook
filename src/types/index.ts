@@ -114,9 +114,13 @@ export interface EventRecord {
   id: string;
   title: string;
   date: string;
+  startDate: string;
+  endDate: string;
   time: string;
   location: string;
   city: string;
+  description: string;
+  source: "fallback" | "ics";
   type: string;
   status: string;
   flyerStatus: string;

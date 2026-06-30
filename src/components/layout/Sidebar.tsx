@@ -1,6 +1,6 @@
 import type { ModuleId, NavItem } from "../../types";
 import { assets } from "../../data/assets";
-import { sidebarCountdown } from "../../data/appData";
+import type { CountdownStatus } from "../../types";
 import { SidebarCountdown } from "./SidebarCountdown";
 import { SidebarNavItem } from "./SidebarNavItem";
 
@@ -9,9 +9,10 @@ interface SidebarProps {
   activeModule: ModuleId;
   onSelect: (moduleId: ModuleId) => void;
   isOpen: boolean;
+  countdown: CountdownStatus;
 }
 
-export function Sidebar({ navItems, activeModule, onSelect, isOpen }: SidebarProps) {
+export function Sidebar({ navItems, activeModule, onSelect, isOpen, countdown }: SidebarProps) {
   return (
     <aside className={`sidebar ${isOpen ? "is-open" : ""}`} aria-label="Primary">
       <div className="sidebar__brand">
@@ -24,7 +25,7 @@ export function Sidebar({ navItems, activeModule, onSelect, isOpen }: SidebarPro
           ))}
         </ul>
       </nav>
-      <SidebarCountdown countdown={sidebarCountdown} />
+      <SidebarCountdown countdown={countdown} />
     </aside>
   );
 }

@@ -1,5 +1,13 @@
 export function parseDate(value: string): Date {
-  const [year, month, day] = value.split("-").map(Number);
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
+
+  if (!match) {
+    throw new Error(`Invalid date value: ${value}`);
+  }
+
+  const year = Number(match[1]);
+  const month = Number(match[2]);
+  const day = Number(match[3]);
   return new Date(year, month - 1, day);
 }
 
@@ -11,11 +19,9 @@ export function toDateValue(date: Date): string {
 }
 
 export function daysBetweenDates(from: Date, to: Date): number {
-  const start = new Date(from);
-  const end = new Date(to);
-  start.setHours(0, 0, 0, 0);
-  end.setHours(0, 0, 0, 0);
-  return Math.round((end.getTime() - start.getTime()) / 86_400_000);
+  const start = Date.UTC(from.getFullYear(), from.getMonth(), from.getDate());
+  const end = Date.UTC(to.getFullYear(), to.getMonth(), to.getDate());
+  return Math.round((end - start) / 86_400_000);
 }
 
 export function isWithinCurrentWeek(dateValue: string, referenceValue: string): boolean {

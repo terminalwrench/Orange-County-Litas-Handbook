@@ -1,6 +1,7 @@
 import type {
   Birthday,
   ChecklistGroup,
+  CountdownStatus,
   DashboardEvent,
   Deadline,
   EventRecord,
@@ -12,7 +13,7 @@ import type {
   UpcomingEvent,
   VenueReference
 } from "../types";
-import { getCountdownDisplay, getSidebarCountdown, getUpcomingEventRecords } from "../utils/countdown";
+import { getCountdownDisplay, getNextEvent, getSidebarCountdown, getUpcomingEvents } from "../utils/countdown";
 import { parseDate } from "../utils/date";
 
 export const navItems: NavItem[] = [
@@ -25,7 +26,7 @@ export const navItems: NavItem[] = [
 ];
 
 export const upcomingDeadlines: Deadline[] = [
-  { id: "email-reminder", title: "Email reminder", date: "2026-07-08", dueLabel: "Tomorrow" },
+  { id: "email-reminder", title: "Email reminder", date: "2026-07-08", dueLabel: "Jul 8" },
   { id: "reservation", title: "Confirm reservation", date: "2026-07-08", dueLabel: "Jul 8" },
   { id: "route", title: "Finalize route", date: "2026-07-10", dueLabel: "Jul 10" },
   { id: "patches", title: "Order patches", date: "2026-07-11", dueLabel: "Jul 11" }
@@ -74,14 +75,18 @@ export const venueReferences: VenueReference[] = [
   { name: "4th Street Market", category: "Food", lastVisited: "2024-06-14", note: "Flexible food-hall style stop." }
 ];
 
-export const eventRecords: EventRecord[] = [
+export const fallbackEventRecords: EventRecord[] = [
   {
     id: "2026-07-09",
     title: "Old World Meet & Greet",
     date: "2026-07-09",
+    startDate: "2026-07-09",
+    endDate: "2026-07-09",
     time: "6:30 PM",
     location: "Old World Biergarten",
     city: "Huntington Beach, CA",
+    description: "Venue, email, and flyer are prepared.",
+    source: "fallback",
     type: "Meet & Greet",
     status: "Ready",
     flyerStatus: "Posted",
@@ -97,9 +102,13 @@ export const eventRecords: EventRecord[] = [
     id: "2026-07-25",
     title: "OC Litas Monthly Ride",
     date: "2026-07-25",
+    startDate: "2026-07-25",
+    endDate: "2026-07-25",
     time: "TBD",
     location: "TBD",
     city: "Orange County, CA",
+    description: "Confirm route, meetup location, and lead/sweep plan.",
+    source: "fallback",
     type: "Ride",
     status: "Planning",
     flyerStatus: "Needed",
@@ -115,9 +124,13 @@ export const eventRecords: EventRecord[] = [
     id: "2026-08-15",
     title: "Litas Beach Day",
     date: "2026-08-15",
+    startDate: "2026-08-15",
+    endDate: "2026-08-15",
     time: "All Day",
     location: "Beach location TBD",
     city: "Orange County, CA",
+    description: "Coordinate partner tags, parking details, and arrival window.",
+    source: "fallback",
     type: "Community",
     status: "Planning",
     flyerStatus: "Needed",
@@ -146,6 +159,8 @@ const dateLineFormatter = new Intl.DateTimeFormat("en-US", {
   day: "numeric"
 });
 
+export const eventRecords = fallbackEventRecords;
+
 function getMonth(date: string) {
   return shortDateFormatter.format(parseDate(date)).split(" ")[0];
 }
@@ -154,19 +169,19 @@ function getDay(date: string) {
   return String(parseDate(date).getDate());
 }
 
-function toDashboardEvent(event: EventRecord): DashboardEvent {
+function toDashboardEvent(event: EventRecord, today = new Date()): DashboardEvent {
   return {
     id: event.id,
     title: event.title,
-    date: event.date,
-    month: getMonth(event.date),
-    day: getDay(event.date),
-    weekday: weekdayFormatter.format(parseDate(event.date)),
+    date: event.startDate,
+    month: getMonth(event.startDate),
+    day: getDay(event.startDate),
+    weekday: weekdayFormatter.format(parseDate(event.startDate)),
     time: event.time,
-    dateLine: dateLineFormatter.format(parseDate(event.date)),
+    dateLine: dateLineFormatter.format(parseDate(event.startDate)),
     venue: event.location,
     city: event.city,
-    countdown: getCountdownDisplay(event.date),
+    countdown: getCountdownDisplay(event.startDate, today),
     checklist: event.checklist,
     category: event.type
   };
@@ -176,23 +191,43 @@ function toUpcomingEvent(event: EventRecord): UpcomingEvent {
   return {
     id: event.id,
     title: event.title,
-    date: event.date,
-    month: getMonth(event.date),
-    day: getDay(event.date),
+    date: event.startDate,
+    month: getMonth(event.startDate),
+    day: getDay(event.startDate),
     time: event.time,
     type: event.type
   };
 }
 
-const upcomingEventRecords = getUpcomingEventRecords(eventRecords);
+export interface CalendarDashboardData {
+  eventRecords: EventRecord[];
+  nextEvent: DashboardEvent | null;
+  upcomingEvents: UpcomingEvent[];
+  sidebarCountdown: CountdownStatus;
+}
 
-export const nextEvent: DashboardEvent | null = upcomingEventRecords[0]
-  ? toDashboardEvent(upcomingEventRecords[0])
-  : null;
+export function buildCalendarDashboardData(
+  records: EventRecord[],
+  today = new Date()
+): CalendarDashboardData {
+  const upcomingEventRecords = getUpcomingEvents(records, today);
+  const nextEventRecord = getNextEvent(records, today);
 
-export const upcomingEvents: UpcomingEvent[] = upcomingEventRecords.slice(1, 4).map(toUpcomingEvent);
+  return {
+    eventRecords: records,
+    nextEvent: nextEventRecord ? toDashboardEvent(nextEventRecord, today) : null,
+    upcomingEvents: upcomingEventRecords.slice(1, 4).map(toUpcomingEvent),
+    sidebarCountdown: getSidebarCountdown(nextEventRecord, today)
+  };
+}
 
-export const sidebarCountdown = getSidebarCountdown(eventRecords);
+const fallbackCalendarDashboard = buildCalendarDashboardData(fallbackEventRecords);
+
+export const nextEvent = fallbackCalendarDashboard.nextEvent;
+
+export const upcomingEvents = fallbackCalendarDashboard.upcomingEvents;
+
+export const sidebarCountdown = fallbackCalendarDashboard.sidebarCountdown;
 
 export const rideRecords: RideRecord[] = [
   {
