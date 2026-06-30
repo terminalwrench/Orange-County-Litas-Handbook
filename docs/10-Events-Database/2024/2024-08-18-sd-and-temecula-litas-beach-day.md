@@ -34,4 +34,4 @@ This beach day is hosted by SD & Temecula Litas, we will plan a ride out to Ocea
 - [Event-Lifecycle.md](../../02-Events/Event-Lifecycle.md)
 - [Ride-Planning.md](../../02-Events/Ride-Planning.md)
 - [README.md](../../05-Routes/README.md)
-- [Social-Media-Guidelines.md](../../03-Media/Social-Media-Guidelines.md)
+- [Social Media Guidelines](../../13-Knowledge/Social-Media-Guidelines.md)

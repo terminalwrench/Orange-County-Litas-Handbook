@@ -63,6 +63,9 @@ theme:
 extra_css:
   - assets/stylesheets/extra.css
 
+extra_javascript:
+  - assets/javascripts/operations-workspace.js
+
 markdown_extensions:
   - admonition
   - attr_list
@@ -89,31 +92,27 @@ nav:
   - Events:
       - Event Workspace: 02-Events/README.md
       - Event Records: 10-Events-Database/Events-Index.md
-      - Timeline: 10-Events-Database/Timeline.md
       - Statistics: 10-Events-Database/Statistics.md
-      - Categories: 10-Events-Database/Event-Categories.md
-      - Event Lifecycle: 02-Events/Event-Lifecycle.md
-      - Meet & Greet Planning: 02-Events/Meet-and-Greet-Planning.md
+      - Planning Workflow: 02-Events/Event-Lifecycle.md
       - Ride Planning: 02-Events/Ride-Planning.md
-      - Weather Calls: 02-Events/Weather-Contingencies.md
   - Ride Planner:
       - Ride Planner: 05-Routes/README.md
       - Route Library: 05-Routes/Routes/README.md
-      - Ride Lead Notes: 05-Routes/Ride-Lead-Notes.md
+      - Weather Calls: 02-Events/Weather-Contingencies.md
   - Media Center:
       - Media Center: 03-Media/README.md
       - Brand Assets: 03-Media/Assets/README.md
-      - Asset Library: 03-Media/Asset-Library.md
       - Logos: 03-Media/Assets/Logos/README.md
       - Fonts: 03-Media/Assets/Fonts/README.md
       - Photography Tools: 03-Media/Photography-Tools.md
-      - Social Media Guidelines: 03-Media/Social-Media-Guidelines.md
   - Reference:
       - Global Litas: 00-Global-Litas/README.md
       - Brand Standards: 00-Global-Litas/Brand-Standards.md
       - Chapter Requirements: 00-Global-Litas/Chapter-Requirements.md
       - Official Links: 00-Global-Litas/Official-Links.md
       - Chapter Basics: 01-Chapter/README.md
+      - Social Media Guidelines: 13-Knowledge/Social-Media-Guidelines.md
+      - Credentials: 13-Knowledge/Credentials.md
       - New Rider Guide: 01-Chapter/New-Rider-Guide.md
       - FAQs: 13-Knowledge/Frequently-Asked-Questions.md
       - Resources: 13-Knowledge/Resources.md

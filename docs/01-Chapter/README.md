@@ -1,13 +1,13 @@
-# OC Litas Chapter Manual
+# Chapter Basics
 
 <section class="module-hero">
-  <span class="module-kicker">Chapter operations</span>
-  <h1>Chapter Manual</h1>
-  <p class="module-subtitle">The local reference for how Orange County Litas shows up, welcomes riders, and keeps the chapter steady.</p>
-  <p class="module-intro">Start here when you need chapter identity, leadership expectations, rider onboarding, contacts, calendar rhythm, or local operating guidance.</p>
+  <span class="module-kicker">Reference</span>
+  <h1>Chapter Basics</h1>
+  <p class="module-subtitle">The local operating reference for Orange County Litas leadership.</p>
+  <p class="module-intro">Use this page when you need the stable chapter context behind events, riders, leadership, calendar rhythm, and local identity.</p>
 </section>
 
-## Start Here
+## Quick Access
 
 <div class="module-link-grid">
   <a href="Leadership/">Leadership</a>
@@ -18,46 +18,26 @@
   <a href="OC-Chapter-Identity/">OC Chapter Identity</a>
 </div>
 
-This folder is the chapter-level operating manual for OC Litas, the Orange County chapter of The Litas. It explains how the chapter works locally: who does what, how events are planned, how new riders are welcomed, how chapter history is preserved, and how the Orange County community shows up in a consistent way.
+## Use This For
 
-The global organization defines The Litas mission, values, brand, and overall structure. This manual does not replace or restate that foundation. It documents the local practices that help the Orange County chapter operate clearly, safely, and warmly.
-
-## Scope
-
-Use this folder for guidance that applies across the chapter. More detailed working files live in the handbook modules for events, media, social, routes, partnerships, merch, photography, and archives.
-
-This manual focuses on:
-
-- Local chapter leadership and responsibilities
-- Ride and event operating standards
-- New rider onboarding
-- Calendar and planning cadence
-- Contact reference structure
-- Chapter culture, identity, and history
-
-## Documents
-
-| Document | Purpose |
+| Need | Open |
 | --- | --- |
-| [Leadership.md](Leadership.md) | Defines local leadership roles, decision making, ride lead expectations, sweep responsibilities, communication standards, and succession practices. |
-| [OC-Chapter-Identity.md](OC-Chapter-Identity.md) | Describes the Orange County chapter's local culture, creative style, event philosophy, and community tone without redefining The Litas globally. |
-| [How-We-Operate.md](How-We-Operate.md) | Captures the chapter's day-to-day operating philosophy for events, rides, safety, communication, venues, and representation. |
-| [New-Rider-Guide.md](New-Rider-Guide.md) | Gives first-time attendees a clear, welcoming view of what to expect at an OC Litas event or ride. |
-| [Contacts.md](Contacts.md) | Provides a structured internal reference for leadership, venues, emergency contacts, sponsors, photography, and vendors. |
-| [Calendar.md](Calendar.md) | Explains how recurring meetups, rides, seasonal events, and event planning cycles are managed. |
-| [Chapter-History.md](Chapter-History.md) | Establishes how the chapter records origins, milestones, memorable rides, major events, leadership changes, and future timeline notes. |
+| Understand local leadership expectations | [Leadership](Leadership.md) |
+| Explain the chapter to a new rider | [New Rider Guide](New-Rider-Guide.md) |
+| Check recurring event rhythm | [Calendar](Calendar.md) |
+| Find contact structure | [Contacts](Contacts.md) |
+| Review local chapter tone | [OC Chapter Identity](OC-Chapter-Identity.md) |
+| Confirm operating norms | [How We Operate](How-We-Operate.md) |
 
-## Relationship To The Handbook
+## Operating Context
 
-This folder should be treated as the stable reference layer. Active planning and production materials may live elsewhere in the project:
+The global organization defines The Litas mission, values, brand, and overall structure. Chapter Basics documents local Orange County practices that help leadership operate clearly, safely, and warmly.
 
-- Event plans and templates: `../02-Events/`
-- Media assets, flyer briefs, and file standards: `../03-Media/`
-- Social publishing checks: `../03-Media/Social-Media-Guidelines.md`
-- Routes and ride reference notes: `../05-Routes/`
-- Photography tools: `../03-Media/Photography-Tools.md`
-- Completed records: `../10-Events-Database/`
-- Leadership planning and continuity: `../09-Leadership/`
-- Event records and venue knowledge: `../10-Events-Database/` and `../11-Venues/`
+Active working modules live elsewhere:
 
-When an operating practice becomes consistent enough to guide future leaders, it belongs here. When a file is specific to one event, vendor, flyer, campaign, or working draft, it belongs in the appropriate production folder.
+- [Operations](../14-Operations/README.md)
+- [Events](../02-Events/README.md)
+- [Ride Planner](../05-Routes/README.md)
+- [Media Center](../03-Media/README.md)
+- [Event Records](../10-Events-Database/Events-Index.md)
+- [Venue Index](../11-Venues/Venue-Index.md)

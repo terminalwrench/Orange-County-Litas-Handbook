@@ -1,8 +1,8 @@
-# Event Lifecycle
+# Planning Workflow
 
-This lifecycle is the standard workflow for OC Litas events. Use it for rides, meet and greets, photo shoots, poker runs, beach days, collaborations, workshops, holiday events, and destination gatherings.
+Use this workflow for rides, meet and greets, photo shoots, poker runs, beach days, collaborations, workshops, holiday events, and destination gatherings.
 
-For event-specific planning, start with [Templates/Event-Brief.md](Templates/Event-Brief.md) and the relevant planning guide.
+Start here before announcing an event. Keep the plan practical, confirm what riders need to know, and update the event record after the event is complete.
 
 ## 1. Idea
 
@@ -38,7 +38,7 @@ Confirm:
 - Social media and email timing
 - Ride details if applicable
 
-If the event includes a group ride, use [Ride-Planning.md](Ride-Planning.md). If it is beginner-focused, use [Beginner-Rides.md](Beginner-Rides.md). If it is primarily social, use [Meet-and-Greet-Planning.md](Meet-and-Greet-Planning.md).
+If the event includes a group ride, use [Ride-Planning.md](Ride-Planning.md). If it is beginner-focused, use [Beginner-Rides.md](Beginner-Rides.md). If it is primarily social, use the meet and greet checks below.
 
 ## 3. Venue Confirmation
 
@@ -54,7 +54,26 @@ Confirm:
 - Food, drink, or purchase expectations
 - Any rules affecting motorcycles, photography, minors, pets, outside food, or vendors
 
-Use [Venue-Selection.md](Venue-Selection.md) before committing to a new venue. If the venue is recurring, check whether prior recaps mention parking, staff, capacity, noise, or timing issues.
+Use [Venue-Selection.md](Venue-Selection.md) before committing to a new venue. If the venue is recurring, check whether prior records mention parking, staff, capacity, noise, or timing issues.
+
+## Meet And Greet Checks
+
+Meet and greets are the chapter's most accessible entry point. They should be easy to understand, easy to attend, and welcoming to riders who are new, returning, curious, or not riding that night.
+
+Before publishing, confirm:
+
+- Motorcycle-friendly parking.
+- Food or drink options.
+- Clear entry and gathering area.
+- Restrooms.
+- Reasonable noise level for conversation.
+- Staff openness to groups.
+- Whether motorcycles are required or optional.
+- Whether there is a ride.
+- Where first-timers should go when they arrive.
+- Whether attendees should RSVP.
+
+If parking is tricky, explain it in the event copy before people arrive.
 
 ## 4. Flyer Request
 

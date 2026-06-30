@@ -1,27 +1,21 @@
 # Favorites
 
-Favorites should be assigned by leadership after enough chapter experience exists to recommend a venue confidently. The initial import does not mark any venue as a favorite, so these sections are organized for curation and include source-based candidates where useful.
+Favorites should be curated by leadership after enough chapter experience exists to recommend a venue confidently.
 
-## Meet & Greets
+## Beginner Friendly
 
-- [4th Street Market](Misc/4th-street-market-santa-ana.md)
-- [Ballast Point Brewing Long Beach](Breweries/ballast-point-brewing-long-beach-long-beach.md)
-- [Cerveza Cito Brewery](Breweries/cerveza-cito-brewery-santa-ana.md)
-- [Chihuahua Cerveza Taproom](Bars/chihuahua-cerveza-taproom-newport-beach.md)
-- [Fire Wings](Restaurants/fire-wings.md)
-- [Golden Road Brewing](Breweries/golden-road-brewing-huntington-beach.md)
-- [Golden Road Brewing Anaheim](Breweries/golden-road-brewing-anaheim-anaheim.md)
-- [Green Cheek Beer Co.](Breweries/green-cheek-beer-co-orange.md)
-- [Hangar 24](Breweries/hangar-24.md)
-- [Rodeo 39 Public Market](Misc/rodeo-39-public-market-stanton.md)
-- [The Bowery Craft Beer & Pizza](Restaurants/the-bowery-craft-beer-and-pizza-fullerton.md)
-- [The Taco Stand](Restaurants/the-taco-stand-orange.md)
+- No favorite designated yet.
 
-## Coffee Stops
+## Large Groups
 
-- [Temecula Grind Coffee House](Coffee/temecula-grind-coffee-house-temecula.md)
+- No favorite designated yet.
 
-## Lunch Stops
+## Scenic
+
+- [Huntington Beach](Beaches/huntington-beach.md)
+- [Laguna Beach](Beaches/laguna-beach.md)
+
+## Food
 
 - [219 E Fourth St. Santa Ana](Misc/219-e-fourth-st-santa-ana.md)
 - [4th Street Market](Misc/4th-street-market-santa-ana.md)
@@ -41,19 +35,11 @@ Favorites should be assigned by leadership after enough chapter experience exist
 - [The Bowery Craft Beer & Pizza](Restaurants/the-bowery-craft-beer-and-pizza-fullerton.md)
 - [Vince's Spaghetti](Restaurants/vince-s-spaghetti-rancho-cucamonga.md)
 
-## Beginner Friendly
+## Breweries
 
-- No favorite designated yet.
-
-## Large Groups
-
-- No favorite designated yet.
-
-## Beach Access
-
-- [Huntington Beach](Beaches/huntington-beach.md)
-- [Laguna Beach](Beaches/laguna-beach.md)
-
-## Scenic
-
-- No favorite designated yet.
+- [Ballast Point Brewing Long Beach](Breweries/ballast-point-brewing-long-beach-long-beach.md)
+- [Cerveza Cito Brewery](Breweries/cerveza-cito-brewery-santa-ana.md)
+- [Golden Road Brewing](Breweries/golden-road-brewing-huntington-beach.md)
+- [Golden Road Brewing Anaheim](Breweries/golden-road-brewing-anaheim-anaheim.md)
+- [Green Cheek Beer Co.](Breweries/green-cheek-beer-co-orange.md)
+- [Hangar 24](Breweries/hangar-24.md)

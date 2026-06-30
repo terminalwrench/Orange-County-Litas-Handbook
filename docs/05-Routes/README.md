@@ -10,8 +10,8 @@
 ## Start Here
 
 <div class="module-link-grid">
-  <a href="Ride-Lead-Notes/">Ride Lead Notes</a>
   <a href="Routes/">Route Library</a>
+  <a href="../02-Events/Weather-Contingencies/">Weather Calls</a>
 </div>
 
 ## Ride Readiness

@@ -10,7 +10,7 @@
     <div class="portal-actions" aria-label="Primary portal actions">
       <a class="portal-button portal-button-primary" href="./02-Events/">Plan an Event</a>
       <a class="portal-button" href="./05-Routes/">Find Ride Resources</a>
-      <a class="portal-button" href="./03-Media/Social-Media-Guidelines/">Prepare a Post</a>
+      <a class="portal-button" href="./13-Knowledge/Social-Media-Guidelines/">Prepare a Post</a>
       <a class="portal-button" href="./01-Chapter/New-Rider-Guide/">New Member Guide</a>
     </div>
   </div>
@@ -40,11 +40,11 @@
     <span>Find ride resources</span>
     <strong>Review ride types, lead notes, fuel stops, and seasonal conditions.</strong>
   </a>
-  <a class="portal-action-card portal-icon portal-icon--media" href="./03-Media/Asset-Library/">
+  <a class="portal-action-card portal-icon portal-icon--media" href="./03-Media/Assets/">
     <span>Find media</span>
     <strong>Locate approved assets, logos, and photo handoff guidance.</strong>
   </a>
-  <a class="portal-action-card portal-icon portal-icon--email" href="./03-Media/Social-Media-Guidelines/">
+  <a class="portal-action-card portal-icon portal-icon--email" href="./13-Knowledge/Social-Media-Guidelines/">
     <span>Prepare social post</span>
     <strong>Check dates, location, tags, credits, hashtags, and accessibility before publishing.</strong>
   </a>
@@ -117,11 +117,11 @@
   </a>
   <a href="./03-Media/">
     <span>Media Center</span>
-    <strong>Asset library, logos, photography tools, and social publishing checks.</strong>
+    <strong>Brand assets, logos, fonts, and photography tools.</strong>
   </a>
-  <a href="./13-Knowledge/">
-    <span>Knowledge</span>
-    <strong>FAQs, lessons learned, best practices, onboarding, resources, and glossary.</strong>
+  <a href="./13-Knowledge/Frequently-Asked-Questions/">
+    <span>Reference</span>
+    <strong>FAQs, best practices, resources, credentials, and operating guidance.</strong>
   </a>
 </div>
 
@@ -135,7 +135,7 @@
   </div>
   <div class="portal-community-links">
     <a href="./01-Chapter/OC-Chapter-Identity/">Chapter Identity</a>
-    <a href="./10-Events-Database/Timeline/">Event Timeline</a>
+    <a href="./10-Events-Database/Events-Index/">Event Records</a>
     <a href="./13-Knowledge/Frequently-Asked-Questions/">FAQ</a>
   </div>
 </div>
@@ -146,7 +146,7 @@
   <a href="./14-Operations/">Open Operations</a>
   <a href="./01-Chapter/Calendar/">Check Calendar</a>
   <a href="./10-Events-Database/Events-Index/">Find Past Event</a>
-  <a href="./03-Media/Social-Media-Guidelines/">Prepare Social Post</a>
+  <a href="./13-Knowledge/Social-Media-Guidelines/">Prepare Social Post</a>
 </div>
 
 </div>

@@ -2,6 +2,25 @@
 
 Alphabetical index of documented venues and calendar locations.
 
+<div class="tool-panel table-filter-panel" data-venue-controls>
+  <div class="form-grid">
+    <label>
+      Category
+      <select data-filter-category>
+        <option value="">All categories</option>
+      </select>
+    </label>
+    <label>
+      Last Visited
+      <select data-sort-venue>
+        <option value="name-asc">Venue A-Z</option>
+        <option value="visited-desc">Newest first</option>
+        <option value="visited-asc">Oldest first</option>
+      </select>
+    </label>
+  </div>
+</div>
+
 | Venue | Category | Address | Last Visited |
 | --- | --- | --- | --- |
 | [1418 S Azusa Ave, City of Industry, CA 91748, USA](Misc/1418-s-azusa-ave-city-of-industry-ca-91748-usa-city-of-industry.md) | Misc | 1418 S Azusa Ave, City of Industry, CA 91748, USA | 2023-10-17 |

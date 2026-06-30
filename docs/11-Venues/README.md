@@ -22,7 +22,7 @@ This module is the permanent venue knowledge base for Orange County Litas. It do
 
 The venue database is intentionally factual. It starts with venues found in the Events Database and the original calendar export. Unknown operational details are left blank until leadership confirms them through direct experience, venue contact, or post-event review.
 
-Use this module with [../10-Events-Database](../10-Events-Database/README.md), [../02-Events/Venue-Selection.md](../02-Events/Venue-Selection.md), [../02-Events/Meet-and-Greet-Planning.md](../02-Events/Meet-and-Greet-Planning.md), and [../05-Routes](../05-Routes/README.md).
+Use this module with [../10-Events-Database](../10-Events-Database/README.md), [../02-Events/Venue-Selection.md](../02-Events/Venue-Selection.md), [../02-Events/Event-Lifecycle.md](../02-Events/Event-Lifecycle.md), and [../05-Routes](../05-Routes/README.md).
 
 ## Documents
 

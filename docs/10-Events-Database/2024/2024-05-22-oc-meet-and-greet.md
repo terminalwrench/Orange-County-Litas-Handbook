@@ -33,4 +33,4 @@ Time: 6:30pm-9:30pm-ish
 ## Related Files
 
 - [Event-Lifecycle.md](../../02-Events/Event-Lifecycle.md)
-- [Meet-and-Greet-Planning.md](../../02-Events/Meet-and-Greet-Planning.md)
+- [Event-Lifecycle.md](../../02-Events/Event-Lifecycle.md)

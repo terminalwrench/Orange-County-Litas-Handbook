@@ -39,7 +39,7 @@ Related files:
 
 Related files:
 
-- [../02-Events/Meet-and-Greet-Planning.md](../02-Events/Meet-and-Greet-Planning.md)
+- [../02-Events/Event-Lifecycle.md](../02-Events/Event-Lifecycle.md)
 - [../11-Venues/Venue-Index.md](../11-Venues/Venue-Index.md)
 
 ## Communication
@@ -51,7 +51,7 @@ Related files:
 
 Related files:
 
-- [../03-Media/Social-Media-Guidelines.md](../03-Media/Social-Media-Guidelines.md)
+- [Social Media Guidelines](Social-Media-Guidelines.md)
 - [../09-Leadership/Meeting-Notes.md](../09-Leadership/Meeting-Notes.md)
 
 ## Leadership Rhythm

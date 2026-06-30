@@ -13,7 +13,7 @@ Use this page to track global and local resources that support OC Litas operatio
 - Chapter operations: [../01-Chapter](../01-Chapter/README.md)
 - Event operating system: [../02-Events](../02-Events/README.md)
 - Media operations: [../03-Media](../03-Media/README.md)
-- Social publishing checks: [../03-Media/Social-Media-Guidelines.md](../03-Media/Social-Media-Guidelines.md)
+- Social publishing checks: [Social Media Guidelines](../13-Knowledge/Social-Media-Guidelines.md)
 - Routes: [../05-Routes](../05-Routes/README.md)
 - Partnerships: [../11-Venues](../11-Venues/README.md)
 

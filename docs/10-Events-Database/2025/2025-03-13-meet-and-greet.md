@@ -32,4 +32,4 @@ Meet & Greet in Fullerton
 ## Related Files
 
 - [Event-Lifecycle.md](../../02-Events/Event-Lifecycle.md)
-- [Meet-and-Greet-Planning.md](../../02-Events/Meet-and-Greet-Planning.md)
+- [Event-Lifecycle.md](../../02-Events/Event-Lifecycle.md)

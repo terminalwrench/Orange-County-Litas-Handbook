@@ -1,27 +1,43 @@
 # Operations Checklist
 
-Use this page as the lightweight administrative checklist for keeping the chapter current. It is intentionally short: the goal is to prevent missed messages, stale event details, and loose handoffs.
+Use this page to keep chapter operations current during active weeks and monthly leadership review.
 
-## Daily Or Active-Week Checks
+<div class="checklist-board">
+  <section class="tool-panel">
+    <h2>Daily</h2>
+    <ul class="task-list">
+      <li class="task-list-item"><input type="checkbox"> Check chapter email or inquiry inbox.</li>
+      <li class="task-list-item"><input type="checkbox"> Check Instagram messages, comments, and tags.</li>
+      <li class="task-list-item"><input type="checkbox"> Respond to member questions or route them to the right leader.</li>
+      <li class="task-list-item"><input type="checkbox"> Review upcoming events for date, time, location, and owner accuracy.</li>
+      <li class="task-list-item"><input type="checkbox"> Confirm urgent venue, ride, weather, or partner updates.</li>
+    </ul>
+  </section>
 
-- [ ] Check chapter email or inquiry inbox.
-- [ ] Check Instagram messages, comments, and tags.
-- [ ] Respond to member questions or route them to the right leader.
-- [ ] Review upcoming events for date, time, location, and owner accuracy.
-- [ ] Confirm urgent venue, ride, weather, or partner updates.
-- [ ] Add decisions or follow-ups to [Meeting Notes](../09-Leadership/Meeting-Notes.md).
+  <section class="tool-panel">
+    <h2>Monthly</h2>
+    <ul class="task-list">
+      <li class="task-list-item"><input type="checkbox"> Review the next 30 to 60 days on the chapter calendar.</li>
+      <li class="task-list-item"><input type="checkbox"> Confirm event owners and planning status.</li>
+      <li class="task-list-item"><input type="checkbox"> Confirm venues for upcoming meetups or rides.</li>
+      <li class="task-list-item"><input type="checkbox"> Review ride schedule, route readiness, and lead/sweep needs.</li>
+      <li class="task-list-item"><input type="checkbox"> Update completed event records.</li>
+      <li class="task-list-item"><input type="checkbox"> Update venue notes after events.</li>
+      <li class="task-list-item"><input type="checkbox"> Archive or link completed media in the related event record.</li>
+      <li class="task-list-item"><input type="checkbox"> Review leadership assignments on the yearly planning board.</li>
+    </ul>
+  </section>
+</div>
 
-## Monthly Checks
+## Working Links
 
-- [ ] Review the next 30 to 60 days on the chapter calendar.
-- [ ] Confirm event owners and planning status.
-- [ ] Confirm venues for upcoming meetups or rides.
-- [ ] Review the ride schedule, route readiness, and lead/sweep needs.
-- [ ] Update completed event records in the [Events Index](../10-Events-Database/Events-Index.md).
-- [ ] Update venue notes after events in the [Venue Database](../11-Venues/Venue-Index.md).
-- [ ] Archive or link completed media in the related event record.
-- [ ] Review leadership assignments on the [Yearly Planning Board](../09-Leadership/Quarterly-Planning.md).
-- [ ] Note recurring issues in [Common Challenges](../13-Knowledge/Common-Challenges.md).
+<div class="module-link-grid">
+  <a href="../../09-Leadership/Meeting-Notes/">Meeting Notes</a>
+  <a href="../../09-Leadership/Quarterly-Planning/">Yearly Planning Board</a>
+  <a href="../../10-Events-Database/Events-Index/">Event Records</a>
+  <a href="../../11-Venues/Venue-Index/">Venue Index</a>
+  <a href="../../13-Knowledge/Common-Challenges/">Common Challenges</a>
+</div>
 
 ## When Something Changes
 

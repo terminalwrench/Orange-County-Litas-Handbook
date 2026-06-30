@@ -1095,3 +1095,177 @@
     background-size: contain;
   }
 }
+
+.tool-panel {
+  margin: 1rem 0 1.35rem;
+  padding: 1rem;
+  border: 1px solid var(--oc-line);
+  border-radius: 0.75rem;
+  background: rgba(255, 251, 245, 0.82);
+  box-shadow: 0 10px 24px rgba(35, 31, 28, 0.05);
+}
+
+.tool-panel h2 {
+  margin-top: 0;
+}
+
+.checklist-board {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 1rem 0 1.35rem;
+}
+
+.entry-form {
+  margin: 0 0 1rem;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.form-grid label {
+  display: grid;
+  gap: 0.28rem;
+  color: var(--oc-muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.form-grid-wide {
+  grid-column: 1 / -1;
+}
+
+.form-grid input,
+.form-grid select,
+.form-grid textarea {
+  width: 100%;
+  min-height: 2.35rem;
+  padding: 0.55rem 0.62rem;
+  border: 1px solid rgba(35, 31, 28, 0.16);
+  border-radius: 0.55rem;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--oc-ink);
+  font: inherit;
+  letter-spacing: 0;
+}
+
+.form-grid textarea {
+  min-height: 5rem;
+  resize: vertical;
+}
+
+.form-grid input:focus,
+.form-grid select:focus,
+.form-grid textarea:focus {
+  outline: 2px solid rgba(214, 111, 36, 0.28);
+  border-color: rgba(214, 111, 36, 0.62);
+}
+
+.form-actions,
+.table-tools,
+.metric-strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.form-actions {
+  margin-top: 0.85rem;
+}
+
+.form-actions button,
+.table-tools button,
+.inline-action {
+  min-height: 2.1rem;
+  padding: 0.42rem 0.72rem;
+  border: 1px solid rgba(35, 31, 28, 0.16);
+  border-radius: 0.5rem;
+  background: var(--oc-ink);
+  color: #fff8ef;
+  font: inherit;
+  font-size: 0.76rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.form-actions button[data-clear-form],
+.table-tools button,
+.inline-action {
+  background: transparent;
+  color: var(--oc-ink);
+}
+
+.form-actions button:hover,
+.table-tools button:hover,
+.inline-action:hover {
+  border-color: rgba(214, 111, 36, 0.68);
+  color: var(--oc-orange);
+}
+
+.data-table {
+  display: table;
+  width: 100%;
+  margin-top: 0.8rem;
+  table-layout: auto;
+  font-size: 0.78rem;
+}
+
+.data-table th {
+  white-space: nowrap;
+}
+
+.data-table td {
+  vertical-align: top;
+}
+
+.metric-strip {
+  margin: 0.85rem 0 0.25rem;
+}
+
+.metric-strip span {
+  padding: 0.36rem 0.58rem;
+  border: 1px solid var(--oc-line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--oc-muted);
+  font-size: 0.75rem;
+}
+
+.table-filter-panel {
+  padding: 0.85rem;
+}
+
+.task-list {
+  margin-bottom: 0;
+}
+
+.task-list-item {
+  margin: 0.45rem 0;
+}
+
+.task-list-item input {
+  margin-right: 0.45rem;
+}
+
+@media screen and (max-width: 54em) {
+  .checklist-board,
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .tool-panel {
+    padding: 0.85rem;
+  }
+
+  .data-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}

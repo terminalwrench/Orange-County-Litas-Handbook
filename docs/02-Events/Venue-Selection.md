@@ -2,7 +2,7 @@
 
 Venue selection affects safety, attendance, first impressions, and whether the chapter is invited back. A strong venue does not have to be fancy. It needs to fit the event and treat the group well.
 
-Use this with [Meet-and-Greet-Planning.md](Meet-and-Greet-Planning.md), [Ride-Planning.md](Ride-Planning.md), and [Special-Events.md](Special-Events.md).
+Use this with [Event-Lifecycle.md](Event-Lifecycle.md), [Ride-Planning.md](Ride-Planning.md), and [Special-Events.md](Special-Events.md).
 
 ## Parking
 

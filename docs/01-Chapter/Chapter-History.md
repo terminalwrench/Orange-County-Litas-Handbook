@@ -122,7 +122,7 @@ When possible, link related files from:
 
 - `../02-Events/`
 - `../03-Media/Photography-Tools.md`
-- `../03-Media/Social-Media-Guidelines.md`
+- `../13-Knowledge/Social-Media-Guidelines.md`
 - `../03-Media/`
 - `../10-Events-Database/`
 
