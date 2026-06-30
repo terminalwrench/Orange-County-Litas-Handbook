@@ -15,7 +15,7 @@ export function UpcomingEventsCard({ events }: UpcomingEventsCardProps) {
       <div className="event-list">
         {events.map((event) => (
           <article className="event-list__row" key={event.id}>
-            <DateBadge month={event.month} day={event.day} compact />
+            <DateBadge month={event.month} day={event.day} dateTime={event.date} compact />
             <span>
               <strong>{event.title}</strong>
               <em>{event.time}</em>

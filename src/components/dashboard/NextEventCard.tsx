@@ -27,7 +27,7 @@ export function NextEventCard({ event }: NextEventCardProps) {
     <DashboardCard className="next-event-card" ariaLabel="Next event">
       <h2>Next Event</h2>
       <div className="next-event-card__main">
-        <DateBadge month={event.month} day={event.day} weekday={event.weekday} />
+        <DateBadge month={event.month} day={event.day} weekday={event.weekday} dateTime={event.date} />
         <div className="next-event-card__details">
           <h3>{event.title}</h3>
           <p>

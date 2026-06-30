@@ -251,6 +251,7 @@ a {
 }
 
 .dashboard-card {
+  padding: 1.15rem 1.4rem;
   border: var(--border-subtle);
   border-radius: var(--radius-lg);
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.035), transparent 54%), rgba(12, 14, 16, 0.9);
@@ -451,6 +452,7 @@ a {
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
+  min-height: 1.6rem;
 }
 
 .event-list,
@@ -471,6 +473,13 @@ a {
   gap: 0.85rem;
   border-bottom: var(--border-subtle);
   color: var(--color-white);
+}
+
+.event-list__row:last-child,
+.deadline-list__row:last-child,
+.birthday-list__row:last-child,
+.record-row:last-child {
+  border-bottom: 0;
 }
 
 .event-list__row {
@@ -661,6 +670,9 @@ a {
 .data-table-wrap {
   margin-top: 1rem;
   overflow-x: auto;
+  border: var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.022);
 }
 
 .data-table {
@@ -671,21 +683,37 @@ a {
 
 .data-table th,
 .data-table td {
-  padding: 0.85rem 0.75rem;
+  padding: 0.9rem 0.85rem;
   border-bottom: var(--border-subtle);
   text-align: left;
+  vertical-align: top;
 }
 
 .data-table th {
   color: var(--color-muted);
   font-size: 0.72rem;
+  font-weight: 760;
   letter-spacing: 0.04em;
   text-transform: uppercase;
+}
+
+.data-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.data-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.026);
 }
 
 .record-row {
   grid-template-columns: minmax(0, 1fr) auto;
   padding: 0.8rem 0;
+}
+
+.record-row:has(.date-badge--compact) {
+  grid-template-columns: 3.35rem minmax(0, 1fr) auto;
+  min-height: 4.1rem;
+  padding: 0.72rem 0;
 }
 
 .detail-card {
@@ -695,8 +723,14 @@ a {
 .detail-card h2 {
   margin: 0;
   color: var(--color-white);
-  font-size: 1.25rem;
-  font-weight: 500;
+  font-size: 1.28rem;
+  font-weight: 480;
+  line-height: 1.15;
+}
+
+.detail-card p {
+  margin: 0.65rem 0 0;
+  line-height: 1.55;
 }
 
 .form-grid {
@@ -728,6 +762,11 @@ a {
   color: var(--color-white);
   font-size: 0.86rem;
   transition: border-color var(--motion-fast), background var(--motion-fast), box-shadow var(--motion-fast);
+}
+
+.form-control:hover:not(:disabled) {
+  border-color: var(--color-line-strong);
+  background: rgba(255, 255, 255, 0.06);
 }
 
 .form-control:focus {
@@ -765,12 +804,18 @@ a {
   border-radius: var(--radius-md);
   color: var(--color-white);
   font-weight: 700;
+  transition: background var(--motion-fast), border-color var(--motion-fast), color var(--motion-fast), transform var(--motion-fast);
+}
+
+.button:hover {
+  border-color: var(--color-line-strong);
+  transform: translateY(-1px);
 }
 
 .button--primary {
-  border-color: rgba(255, 107, 0, 0.45);
-  background: var(--color-orange);
-  color: #160b03;
+  border-color: rgba(255, 107, 0, 0.38);
+  background: rgba(255, 107, 0, 0.92);
+  color: #130a04;
 }
 
 .button--secondary {
@@ -786,9 +831,10 @@ a {
   display: grid;
   gap: 0.3rem;
   margin-top: 1rem;
-  padding: 1rem;
+  padding: 1rem 1.05rem;
   border: 1px dashed var(--color-line-strong);
   border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.022);
   color: var(--color-muted);
 }
 
@@ -813,6 +859,14 @@ a {
   border: var(--border-subtle);
   border-radius: var(--radius-md);
   background: rgba(255, 255, 255, 0.032);
+  transition: background var(--motion-fast), border-color var(--motion-fast);
+}
+
+.media-card:hover,
+.reference-links article:hover,
+.reference-grid > article:hover {
+  border-color: var(--color-line-strong);
+  background: rgba(255, 255, 255, 0.048);
 }
 
 .media-card svg,

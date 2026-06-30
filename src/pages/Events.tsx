@@ -1,6 +1,7 @@
 import { PageContainer } from "../components/layout/PageContainer";
 import { Button } from "../components/ui/Button";
 import { DashboardCard } from "../components/ui/DashboardCard";
+import { DateBadge } from "../components/ui/DateBadge";
 import { FormField } from "../components/ui/FormField";
 import { SectionHeader } from "../components/ui/SectionHeader";
 import { StatusChip } from "../components/ui/StatusChip";
@@ -9,6 +10,13 @@ import type { EventRecord } from "../types";
 
 interface EventsProps {
   eventRecords: EventRecord[];
+}
+
+const monthFormatter = new Intl.DateTimeFormat("en-US", { month: "short" });
+
+function parseEventDate(value: string) {
+  const [year, month, day] = value.split("-").map(Number);
+  return new Date(year, month - 1, day);
 }
 
 export function Events({ eventRecords }: EventsProps) {
@@ -26,9 +34,15 @@ export function Events({ eventRecords }: EventsProps) {
           <div className="record-list">
             {eventRecords.map((event) => (
               <article className="record-row" key={event.id}>
+                <DateBadge
+                  month={monthFormatter.format(parseEventDate(event.startDate))}
+                  day={String(parseEventDate(event.startDate).getDate())}
+                  dateTime={event.startDate}
+                  compact
+                />
                 <span>
                   <strong>{event.title}</strong>
-                  <em>{event.date} · {event.location}</em>
+                  <em>{event.time} · {event.location}</em>
                 </span>
                 <StatusChip label={event.status} tone={event.status === "Ready" ? "success" : "warning"} />
               </article>
