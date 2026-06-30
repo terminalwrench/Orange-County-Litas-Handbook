@@ -1,9 +1,5 @@
-import {
-  rideWeather,
-  upcomingBirthdays,
-  upcomingDeadlines
-} from "../data/appData";
-import type { DashboardEvent, UpcomingEvent } from "../types";
+import { upcomingBirthdays, upcomingDeadlines } from "../data/appData";
+import type { DashboardEvent, RideWeather, UpcomingEvent } from "../types";
 import { filterDeadlinesWithinDays, toDateValue } from "../utils/date";
 import { BirthdaysCard } from "../components/dashboard/BirthdaysCard";
 import { ChapterNotesPlaceholder } from "../components/dashboard/ChapterNotesPlaceholder";
@@ -18,9 +14,10 @@ const referenceDate = toDateValue(new Date());
 interface HomeProps {
   nextEvent: DashboardEvent | null;
   upcomingEvents: UpcomingEvent[];
+  rideWeather: RideWeather | null;
 }
 
-export function Home({ nextEvent, upcomingEvents }: HomeProps) {
+export function Home({ nextEvent, upcomingEvents, rideWeather }: HomeProps) {
   return (
     <PageContainer className="home-page">
       <h1 className="sr-only">Orange County Litas Operations Center</h1>

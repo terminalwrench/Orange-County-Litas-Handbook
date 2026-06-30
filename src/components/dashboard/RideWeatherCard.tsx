@@ -4,11 +4,12 @@ import { DashboardCard } from "../ui/DashboardCard";
 import { Icon } from "../ui/Icon";
 
 interface RideWeatherCardProps {
-  weather: RideWeather;
+  weather: RideWeather | null;
   referenceDate: string;
 }
 
 export function RideWeatherCard({ weather, referenceDate }: RideWeatherCardProps) {
+  if (!weather) return null;
   if (!isWithinCurrentWeek(weather.eventDate, referenceDate)) return null;
 
   return (

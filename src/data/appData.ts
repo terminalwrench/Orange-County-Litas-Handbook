@@ -15,6 +15,7 @@ import type {
 } from "../types";
 import { getCountdownDisplay, getNextEvent, getSidebarCountdown, getUpcomingEvents } from "../utils/countdown";
 import { parseDate } from "../utils/date";
+import { eventRecords as staticEventRecords } from "./events";
 
 export const navItems: NavItem[] = [
   { id: "home", label: "Home", icon: "home" },
@@ -38,9 +39,7 @@ export const upcomingBirthdays: Birthday[] = [
   { id: "stephanie", name: "Stephanie", initials: "ST", dateLabel: "Jul 13" }
 ];
 
-export const rideWeather: RideWeather = {
-  eventDate: "2026-07-12",
-  label: "Ride Weather (Sat, Jul 12)",
+const rideWeatherForecast = {
   temperature: "72°",
   condition: "Sunny",
   rain: "0%",
@@ -75,75 +74,6 @@ export const venueReferences: VenueReference[] = [
   { name: "4th Street Market", category: "Food", lastVisited: "2024-06-14", note: "Flexible food-hall style stop." }
 ];
 
-export const fallbackEventRecords: EventRecord[] = [
-  {
-    id: "2026-07-09",
-    title: "Cooks Corner",
-    date: "2026-07-09",
-    startDate: "2026-07-09",
-    endDate: "2026-07-09",
-    time: "6:30 PM",
-    location: "Cooks Corner",
-    city: "Silverado Canyon, CA",
-    description: "Venue, email, and flyer are prepared.",
-    source: "fallback",
-    type: "Meet & Greet",
-    status: "Ready",
-    flyerStatus: "Posted",
-    notes: "Venue, email, and flyer are prepared.",
-    checklist: [
-      { label: "Venue Confirmed", tone: "success" },
-      { label: "Route Complete", tone: "success" },
-      { label: "Flyer Posted", tone: "success" },
-      { label: "Email Sent", tone: "success" }
-    ]
-  },
-  {
-    id: "2026-07-25",
-    title: "OC Litas Monthly Ride",
-    date: "2026-07-25",
-    startDate: "2026-07-25",
-    endDate: "2026-07-25",
-    time: "TBD",
-    location: "TBD",
-    city: "Orange County, CA",
-    description: "Confirm route, meetup location, and lead/sweep plan.",
-    source: "fallback",
-    type: "Ride",
-    status: "Planning",
-    flyerStatus: "Needed",
-    notes: "Confirm route, meetup location, and lead/sweep plan.",
-    checklist: [
-      { label: "Venue Needed", tone: "warning" },
-      { label: "Route Needed", tone: "warning" },
-      { label: "Flyer Needed", tone: "warning" },
-      { label: "Email Needed", tone: "warning" }
-    ]
-  },
-  {
-    id: "2026-08-15",
-    title: "Litas Beach Day",
-    date: "2026-08-15",
-    startDate: "2026-08-15",
-    endDate: "2026-08-15",
-    time: "All Day",
-    location: "Beach location TBD",
-    city: "Orange County, CA",
-    description: "Coordinate partner tags, parking details, and arrival window.",
-    source: "fallback",
-    type: "Community",
-    status: "Planning",
-    flyerStatus: "Needed",
-    notes: "Coordinate partner tags, parking details, and arrival window.",
-    checklist: [
-      { label: "Venue Needed", tone: "warning" },
-      { label: "Route TBD", tone: "neutral" },
-      { label: "Flyer Needed", tone: "warning" },
-      { label: "Email Needed", tone: "warning" }
-    ]
-  }
-];
-
 const shortDateFormatter = new Intl.DateTimeFormat("en-US", {
   month: "short",
   day: "numeric"
@@ -158,8 +88,6 @@ const dateLineFormatter = new Intl.DateTimeFormat("en-US", {
   month: "short",
   day: "numeric"
 });
-
-export const eventRecords = fallbackEventRecords;
 
 function getMonth(date: string) {
   return shortDateFormatter.format(parseDate(date)).split(" ")[0];
@@ -199,17 +127,28 @@ function toUpcomingEvent(event: EventRecord): UpcomingEvent {
   };
 }
 
-export interface CalendarDashboardData {
+function toRideWeather(event: EventRecord | null): RideWeather | null {
+  if (!event) return null;
+
+  return {
+    eventDate: event.startDate,
+    label: `Ride Weather (${dateLineFormatter.format(parseDate(event.startDate))})`,
+    ...rideWeatherForecast
+  };
+}
+
+export interface EventDashboardData {
   eventRecords: EventRecord[];
   nextEvent: DashboardEvent | null;
   upcomingEvents: UpcomingEvent[];
   sidebarCountdown: CountdownStatus;
+  rideWeather: RideWeather | null;
 }
 
-export function buildCalendarDashboardData(
+export function buildEventDashboardData(
   records: EventRecord[],
   today = new Date()
-): CalendarDashboardData {
+): EventDashboardData {
   const upcomingEventRecords = getUpcomingEvents(records, today);
   const nextEventRecord = getNextEvent(records, today);
 
@@ -217,17 +156,18 @@ export function buildCalendarDashboardData(
     eventRecords: records,
     nextEvent: nextEventRecord ? toDashboardEvent(nextEventRecord, today) : null,
     upcomingEvents: upcomingEventRecords.slice(1, 4).map(toUpcomingEvent),
-    sidebarCountdown: getSidebarCountdown(nextEventRecord, today)
+    sidebarCountdown: getSidebarCountdown(nextEventRecord, today),
+    rideWeather: toRideWeather(nextEventRecord)
   };
 }
 
-const fallbackCalendarDashboard = buildCalendarDashboardData(fallbackEventRecords);
+const fallbackEventDashboard = buildEventDashboardData(staticEventRecords);
 
-export const nextEvent = fallbackCalendarDashboard.nextEvent;
+export const nextEvent = fallbackEventDashboard.nextEvent;
 
-export const upcomingEvents = fallbackCalendarDashboard.upcomingEvents;
+export const upcomingEvents = fallbackEventDashboard.upcomingEvents;
 
-export const sidebarCountdown = fallbackCalendarDashboard.sidebarCountdown;
+export const sidebarCountdown = fallbackEventDashboard.sidebarCountdown;
 
 export const rideRecords: RideRecord[] = [
   {

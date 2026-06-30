@@ -1,10 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { AppShell } from "./components/layout/AppShell";
-import {
-  buildCalendarDashboardData,
-  fallbackEventRecords,
-  navItems
-} from "./data/appData";
+import { buildEventDashboardData, navItems } from "./data/appData";
+import { eventRecords as staticEventRecords } from "./data/events";
 import type { EventRecord, ModuleId } from "./types";
 import { Events } from "./pages/Events";
 import { Home } from "./pages/Home";
@@ -12,19 +9,19 @@ import { MediaCenter } from "./pages/MediaCenter";
 import { Operations } from "./pages/Operations";
 import { Reference } from "./pages/Reference";
 import { RidePlanner } from "./pages/RidePlanner";
-import { loadCalendarEvents } from "./services/calendarService";
+import { loadEventRecords } from "./services/eventService";
 
 export function App() {
   const [activeModule, setActiveModule] = useState<ModuleId>("home");
-  const [calendarEvents, setCalendarEvents] = useState<EventRecord[]>(fallbackEventRecords);
-  const calendarDashboard = useMemo(() => buildCalendarDashboardData(calendarEvents), [calendarEvents]);
+  const [eventRecords, setEventRecords] = useState<EventRecord[]>(staticEventRecords);
+  const eventDashboard = useMemo(() => buildEventDashboardData(eventRecords), [eventRecords]);
 
   useEffect(() => {
     let cancelled = false;
 
-    loadCalendarEvents(fallbackEventRecords).then((result) => {
+    loadEventRecords().then((result) => {
       if (!cancelled) {
-        setCalendarEvents(result.events);
+        setEventRecords(result.events);
       }
     });
 
@@ -36,9 +33,15 @@ export function App() {
   function renderActivePage() {
     switch (activeModule) {
       case "home":
-        return <Home nextEvent={calendarDashboard.nextEvent} upcomingEvents={calendarDashboard.upcomingEvents} />;
+        return (
+          <Home
+            nextEvent={eventDashboard.nextEvent}
+            upcomingEvents={eventDashboard.upcomingEvents}
+            rideWeather={eventDashboard.rideWeather}
+          />
+        );
       case "events":
-        return <Events eventRecords={calendarDashboard.eventRecords} />;
+        return <Events eventRecords={eventDashboard.eventRecords} />;
       case "operations":
         return <Operations />;
       case "ride-planner":
@@ -55,7 +58,7 @@ export function App() {
       navItems={navItems}
       activeModule={activeModule}
       onSelectModule={setActiveModule}
-      sidebarCountdown={calendarDashboard.sidebarCountdown}
+      sidebarCountdown={eventDashboard.sidebarCountdown}
     >
       {renderActivePage()}
     </AppShell>
