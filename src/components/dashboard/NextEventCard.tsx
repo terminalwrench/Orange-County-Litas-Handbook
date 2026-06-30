@@ -5,10 +5,24 @@ import { Icon } from "../ui/Icon";
 import { StatusChip } from "../ui/StatusChip";
 
 interface NextEventCardProps {
-  event: DashboardEvent;
+  event: DashboardEvent | null;
 }
 
 export function NextEventCard({ event }: NextEventCardProps) {
+  if (!event) {
+    return (
+      <DashboardCard className="next-event-card" ariaLabel="Next event">
+        <h2>Next Event</h2>
+        <div className="empty-state" role="status">
+          <strong>No upcoming events</strong>
+          <span>Add the next event record when planning begins.</span>
+        </div>
+      </DashboardCard>
+    );
+  }
+
+  const countdownIsWord = event.countdown.unit === "";
+
   return (
     <DashboardCard className="next-event-card" ariaLabel="Next event">
       <h2>Next Event</h2>
@@ -30,10 +44,10 @@ export function NextEventCard({ event }: NextEventCardProps) {
             </span>
           </p>
         </div>
-        <div className="starts-in" aria-label={`Starts in ${event.startsInDays} days`}>
+        <div className="starts-in" aria-label={event.countdown.ariaLabel}>
           <span>Starts in</span>
-          <strong>{event.startsInDays}</strong>
-          <em>Days</em>
+          <strong className={countdownIsWord ? "starts-in__word" : undefined}>{event.countdown.value}</strong>
+          {event.countdown.unit ? <em>{event.countdown.unit}</em> : null}
         </div>
       </div>
       <div className="status-row" aria-label="Event status">

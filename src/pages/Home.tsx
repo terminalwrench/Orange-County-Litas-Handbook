@@ -5,7 +5,7 @@ import {
   upcomingDeadlines,
   upcomingEvents
 } from "../data/appData";
-import { filterDeadlinesWithinDays } from "../utils/date";
+import { filterDeadlinesWithinDays, toDateValue } from "../utils/date";
 import { BirthdaysCard } from "../components/dashboard/BirthdaysCard";
 import { ChapterNotesPlaceholder } from "../components/dashboard/ChapterNotesPlaceholder";
 import { DeadlinesCard } from "../components/dashboard/DeadlinesCard";
@@ -14,7 +14,7 @@ import { RideWeatherCard } from "../components/dashboard/RideWeatherCard";
 import { UpcomingEventsCard } from "../components/dashboard/UpcomingEventsCard";
 import { PageContainer } from "../components/layout/PageContainer";
 
-const referenceDate = "2026-07-07";
+const referenceDate = toDateValue(new Date());
 
 export function Home() {
   return (

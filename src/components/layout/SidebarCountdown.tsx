@@ -7,11 +7,12 @@ interface SidebarCountdownProps {
 
 export function SidebarCountdown({ countdown }: SidebarCountdownProps) {
   return (
-    <aside className="sidebar-countdown" aria-label={`${countdown.days} days ${countdown.label}`}>
+    <aside className="sidebar-countdown" aria-label={countdown.ariaLabel}>
       <Icon name="calendar" />
       <span>
-        <strong>{countdown.days} Days</strong>
-        <em>{countdown.label}</em>
+        <em>Next Event</em>
+        {countdown.hasEvent ? <strong>{countdown.eventTitle}</strong> : null}
+        <b>{countdown.label}</b>
       </span>
     </aside>
   );

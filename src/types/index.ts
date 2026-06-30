@@ -27,8 +27,18 @@ export interface NavItem {
 }
 
 export interface CountdownStatus {
-  days: number;
+  eventTitle: string;
   label: string;
+  ariaLabel: string;
+  hasEvent: boolean;
+}
+
+export interface CountdownDisplay {
+  daysRemaining: number | null;
+  label: string;
+  value: string;
+  unit: string;
+  ariaLabel: string;
 }
 
 export type StatusTone = "success" | "warning" | "neutral" | "accent";
@@ -41,6 +51,7 @@ export interface StatusItem {
 export interface DashboardEvent {
   id: string;
   title: string;
+  date: string;
   month: string;
   day: string;
   weekday: string;
@@ -48,7 +59,7 @@ export interface DashboardEvent {
   dateLine: string;
   venue: string;
   city: string;
-  startsInDays: number;
+  countdown: CountdownDisplay;
   checklist: StatusItem[];
   category: string;
 }
@@ -56,6 +67,7 @@ export interface DashboardEvent {
 export interface UpcomingEvent {
   id: string;
   title: string;
+  date: string;
   month: string;
   day: string;
   time: string;
@@ -104,10 +116,12 @@ export interface EventRecord {
   date: string;
   time: string;
   location: string;
+  city: string;
   type: string;
   status: string;
   flyerStatus: string;
   notes: string;
+  checklist: StatusItem[];
 }
 
 export interface RideRecord {

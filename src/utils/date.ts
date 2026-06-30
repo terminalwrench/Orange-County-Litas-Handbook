@@ -3,6 +3,21 @@ export function parseDate(value: string): Date {
   return new Date(year, month - 1, day);
 }
 
+export function toDateValue(date: Date): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+export function daysBetweenDates(from: Date, to: Date): number {
+  const start = new Date(from);
+  const end = new Date(to);
+  start.setHours(0, 0, 0, 0);
+  end.setHours(0, 0, 0, 0);
+  return Math.round((end.getTime() - start.getTime()) / 86_400_000);
+}
+
 export function isWithinCurrentWeek(dateValue: string, referenceValue: string): boolean {
   const date = parseDate(dateValue);
   const reference = parseDate(referenceValue);

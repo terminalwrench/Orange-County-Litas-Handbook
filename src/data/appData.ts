@@ -1,7 +1,6 @@
 import type {
   Birthday,
   ChecklistGroup,
-  CountdownStatus,
   DashboardEvent,
   Deadline,
   EventRecord,
@@ -13,6 +12,8 @@ import type {
   UpcomingEvent,
   VenueReference
 } from "../types";
+import { getCountdownDisplay, getSidebarCountdown, getUpcomingEventRecords } from "../utils/countdown";
+import { parseDate } from "../utils/date";
 
 export const navItems: NavItem[] = [
   { id: "home", label: "Home", icon: "home" },
@@ -21,37 +22,6 @@ export const navItems: NavItem[] = [
   { id: "ride-planner", label: "Ride Planner", icon: "route" },
   { id: "media", label: "Media Center", icon: "image" },
   { id: "reference", label: "Reference", icon: "book" }
-];
-
-export const sidebarCountdown: CountdownStatus = {
-  days: 2,
-  label: "until Chapter Ride"
-};
-
-export const nextEvent: DashboardEvent = {
-  id: "2026-07-09-meetup",
-  title: "Old World Meet & Greet",
-  month: "Jul",
-  day: "9",
-  weekday: "Wed",
-  time: "6:30 PM",
-  dateLine: "Wednesday, Jul 9",
-  venue: "Old World Biergarten",
-  city: "Huntington Beach, CA",
-  startsInDays: 2,
-  category: "Meet & Greet",
-  checklist: [
-    { label: "Venue Confirmed", tone: "success" },
-    { label: "Route Complete", tone: "success" },
-    { label: "Flyer Posted", tone: "success" },
-    { label: "Email Sent", tone: "success" }
-  ]
-};
-
-export const upcomingEvents: UpcomingEvent[] = [
-  { id: "ride-jul-25", title: "Chapter Ride", month: "Jul", day: "25", time: "TBD", type: "Ride" },
-  { id: "mng-aug-5", title: "Meet & Greet", month: "Aug", day: "5", time: "TBD", type: "Meet & Greet" },
-  { id: "beach-aug-15", title: "Litas Beach Day", month: "Aug", day: "15", time: "All Day", type: "Community" }
 ];
 
 export const upcomingDeadlines: Deadline[] = [
@@ -107,14 +77,21 @@ export const venueReferences: VenueReference[] = [
 export const eventRecords: EventRecord[] = [
   {
     id: "2026-07-09",
-    title: "OC Litas Monthly Meetup",
+    title: "Old World Meet & Greet",
     date: "2026-07-09",
     time: "6:30 PM",
     location: "Old World Biergarten",
+    city: "Huntington Beach, CA",
     type: "Meet & Greet",
     status: "Ready",
     flyerStatus: "Posted",
-    notes: "Venue, email, and flyer are prepared."
+    notes: "Venue, email, and flyer are prepared.",
+    checklist: [
+      { label: "Venue Confirmed", tone: "success" },
+      { label: "Route Complete", tone: "success" },
+      { label: "Flyer Posted", tone: "success" },
+      { label: "Email Sent", tone: "success" }
+    ]
   },
   {
     id: "2026-07-25",
@@ -122,10 +99,17 @@ export const eventRecords: EventRecord[] = [
     date: "2026-07-25",
     time: "TBD",
     location: "TBD",
+    city: "Orange County, CA",
     type: "Ride",
     status: "Planning",
     flyerStatus: "Needed",
-    notes: "Confirm route, meetup location, and lead/sweep plan."
+    notes: "Confirm route, meetup location, and lead/sweep plan.",
+    checklist: [
+      { label: "Venue Needed", tone: "warning" },
+      { label: "Route Needed", tone: "warning" },
+      { label: "Flyer Needed", tone: "warning" },
+      { label: "Email Needed", tone: "warning" }
+    ]
   },
   {
     id: "2026-08-15",
@@ -133,12 +117,82 @@ export const eventRecords: EventRecord[] = [
     date: "2026-08-15",
     time: "All Day",
     location: "Beach location TBD",
+    city: "Orange County, CA",
     type: "Community",
     status: "Planning",
     flyerStatus: "Needed",
-    notes: "Coordinate partner tags, parking details, and arrival window."
+    notes: "Coordinate partner tags, parking details, and arrival window.",
+    checklist: [
+      { label: "Venue Needed", tone: "warning" },
+      { label: "Route TBD", tone: "neutral" },
+      { label: "Flyer Needed", tone: "warning" },
+      { label: "Email Needed", tone: "warning" }
+    ]
   }
 ];
+
+const shortDateFormatter = new Intl.DateTimeFormat("en-US", {
+  month: "short",
+  day: "numeric"
+});
+
+const weekdayFormatter = new Intl.DateTimeFormat("en-US", {
+  weekday: "short"
+});
+
+const dateLineFormatter = new Intl.DateTimeFormat("en-US", {
+  weekday: "long",
+  month: "short",
+  day: "numeric"
+});
+
+function getMonth(date: string) {
+  return shortDateFormatter.format(parseDate(date)).split(" ")[0];
+}
+
+function getDay(date: string) {
+  return String(parseDate(date).getDate());
+}
+
+function toDashboardEvent(event: EventRecord): DashboardEvent {
+  return {
+    id: event.id,
+    title: event.title,
+    date: event.date,
+    month: getMonth(event.date),
+    day: getDay(event.date),
+    weekday: weekdayFormatter.format(parseDate(event.date)),
+    time: event.time,
+    dateLine: dateLineFormatter.format(parseDate(event.date)),
+    venue: event.location,
+    city: event.city,
+    countdown: getCountdownDisplay(event.date),
+    checklist: event.checklist,
+    category: event.type
+  };
+}
+
+function toUpcomingEvent(event: EventRecord): UpcomingEvent {
+  return {
+    id: event.id,
+    title: event.title,
+    date: event.date,
+    month: getMonth(event.date),
+    day: getDay(event.date),
+    time: event.time,
+    type: event.type
+  };
+}
+
+const upcomingEventRecords = getUpcomingEventRecords(eventRecords);
+
+export const nextEvent: DashboardEvent | null = upcomingEventRecords[0]
+  ? toDashboardEvent(upcomingEventRecords[0])
+  : null;
+
+export const upcomingEvents: UpcomingEvent[] = upcomingEventRecords.slice(1, 4).map(toUpcomingEvent);
+
+export const sidebarCountdown = getSidebarCountdown(eventRecords);
 
 export const rideRecords: RideRecord[] = [
   {
