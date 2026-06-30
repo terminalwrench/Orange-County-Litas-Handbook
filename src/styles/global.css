@@ -62,6 +62,9 @@ a {
 
 .app-shell__body {
   min-width: 0;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.018), transparent 16rem),
+    var(--color-black);
 }
 
 .sidebar {
@@ -72,10 +75,12 @@ a {
   height: 100vh;
   padding: 1.25rem 1rem 1.25rem;
   border-right: var(--border-subtle);
-  background: rgba(5, 6, 7, 0.99);
+  background: linear-gradient(180deg, rgba(12, 14, 16, 0.98), rgba(5, 6, 7, 0.99));
+  overflow: hidden;
 }
 
 .sidebar__brand {
+  flex: 0 0 auto;
   display: flex;
   align-items: center;
   min-height: 4.25rem;
@@ -89,7 +94,11 @@ a {
 
 .sidebar__nav {
   flex: 1 1 auto;
+  min-height: 0;
   margin-top: 1.65rem;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
 }
 
 .sidebar__nav ul {
@@ -120,6 +129,15 @@ a {
 .sidebar-nav-item svg {
   width: 1.2rem;
   height: 1.2rem;
+  color: currentColor;
+}
+
+.sidebar-nav-item span {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .sidebar-nav-item:hover {
@@ -139,6 +157,7 @@ a {
 }
 
 .sidebar-countdown {
+  flex: 0 0 auto;
   display: flex;
   align-items: flex-start;
   gap: 0.75rem;
@@ -188,9 +207,9 @@ a {
   justify-content: flex-end;
   align-items: center;
   height: var(--topbar-height);
-  padding: 0 1.6rem;
+  padding: 0 max(1.5rem, calc((100vw - var(--sidebar-width) - 74rem) / 2 + 1.5rem));
   border-bottom: var(--border-subtle);
-  background: rgba(5, 6, 7, 0.86);
+  background: linear-gradient(180deg, rgba(8, 10, 11, 0.96), rgba(8, 10, 11, 0.82));
   backdrop-filter: blur(14px);
 }
 
@@ -223,11 +242,13 @@ a {
 .page-container {
   width: min(100%, 74rem);
   margin: 0 auto;
-  padding: 1.2rem 1.5rem 2rem;
+  padding: 1.35rem 1.5rem 2.25rem;
 }
 
 .page-title {
-  margin-bottom: 1.1rem;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: var(--border-subtle);
 }
 
 .page-title span {
@@ -241,8 +262,8 @@ a {
 .page-title h1 {
   margin: 0.25rem 0 0;
   color: var(--color-white);
-  font-size: clamp(1.8rem, 3vw, 2.6rem);
-  font-weight: 440;
+  font-size: clamp(1.45rem, 2.2vw, 2rem);
+  font-weight: 460;
   line-height: 1.05;
 }
 

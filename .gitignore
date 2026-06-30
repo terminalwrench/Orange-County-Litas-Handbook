@@ -2,3 +2,6 @@ site/
 dist/
 node_modules/
 .pnpm-store/
+.venv/
+__MACOSX/
+.DS_Store
