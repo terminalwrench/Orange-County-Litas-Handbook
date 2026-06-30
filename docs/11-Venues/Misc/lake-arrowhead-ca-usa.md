@@ -7,7 +7,7 @@
 | Name | Lake Arrowhead, CA, USA |
 | Address | Lake Arrowhead, CA, USA |
 | Website |  |
-| Category | Event Spaces |
+| Category | Misc |
 | Parking |  |
 | Motorcycle Friendly |  |
 | Capacity |  |

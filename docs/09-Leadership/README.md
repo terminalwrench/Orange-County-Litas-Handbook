@@ -39,4 +39,4 @@ This section is intended for leadership use. Do not store sensitive personal det
 - Chapter operating guidance: [../01-Chapter](../01-Chapter/README.md)
 - Event operating system: [../02-Events](../02-Events/README.md)
 - Route planning: [../05-Routes](../05-Routes/README.md)
-- Operations manual: [../14-Operations](../14-Operations/README.md)
+- Operations manual: [Operations](../14-Operations/Operations-Checklist.md)

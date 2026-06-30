@@ -7,7 +7,7 @@
 | Name | Ace Hotel |
 | Address | 701 E Palm Canyon Dr |
 | Website |  |
-| Category | Event Spaces |
+| Category | Misc |
 | Parking |  |
 | Motorcycle Friendly |  |
 | Capacity |  |

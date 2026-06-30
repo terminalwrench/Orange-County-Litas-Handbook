@@ -7,7 +7,7 @@
 | Name | Landers Supply House |
 | Address | 2139 Harbor Blvd |
 | Website |  |
-| Category | Event Spaces |
+| Category | Misc |
 | Parking |  |
 | Motorcycle Friendly |  |
 | Capacity |  |

@@ -2,6 +2,14 @@
 
 These statistics are generated from the event records in this database. Counts reflect the initial calendar import and should be regenerated when new event records are added.
 
+<section class="tool-panel" data-attendance-summary>
+  <div class="metric-strip">
+    <span><strong data-event-count>0</strong> editable records</span>
+    <span><strong data-attendance-total>0</strong> recorded attendees</span>
+    <span><strong data-attendance-average>0</strong> average attendance</span>
+  </div>
+</section>
+
 ## Events by Year
 
 | Year | Events |

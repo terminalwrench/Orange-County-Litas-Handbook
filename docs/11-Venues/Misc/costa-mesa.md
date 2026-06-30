@@ -7,7 +7,7 @@
 | Name | Costa Mesa |
 | Address | Costa Mesa, CA |
 | Website |  |
-| Category | Event Spaces |
+| Category | Misc |
 | Parking |  |
 | Motorcycle Friendly |  |
 | Capacity |  |

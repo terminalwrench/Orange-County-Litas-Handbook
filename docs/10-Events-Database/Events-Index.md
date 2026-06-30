@@ -1,6 +1,6 @@
 # Event Records
 
-This workspace combines the event index and timeline into one source of truth. Use the entry form for new working records, then keep the imported historical records below sorted newest to oldest.
+Use this workspace for new working records and imported historical records.
 
 <section class="tool-panel" data-oc-app="event-records">
   <form class="entry-form" data-entry-form>
@@ -71,10 +71,6 @@ This workspace combines the event index and timeline into one source of truth. U
     <tbody data-entry-rows></tbody>
   </table>
 </section>
-
-## Categories Used
-
-Meet & Greet, Ride, Beginner Ride, Intermediate Ride, Photo Event, Charity, Collaboration, Travel, Community, Training, and Special Event are the active event categories. Use the most specific category that describes the event's primary purpose.
 
 ## Imported Historical Records
 

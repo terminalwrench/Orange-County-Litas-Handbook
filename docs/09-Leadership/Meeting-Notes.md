@@ -1,6 +1,6 @@
 # Meeting Notes
 
-Use this notebook during leadership check-ins. Notes are saved in this browser so leaders can capture decisions quickly without opening another app.
+Use this during leadership check-ins. Notes are saved in this browser.
 
 <section class="tool-panel" data-oc-app="meeting-notes">
   <form class="entry-form" data-entry-form>
@@ -10,12 +10,12 @@ Use this notebook during leadership check-ins. Notes are saved in this browser s
         <input name="date" type="date" required>
       </label>
       <label>
-        Title
+        Meeting Title
         <input name="title" type="text" placeholder="Leadership check-in" required>
       </label>
       <label class="form-grid-wide">
         Notes
-        <textarea name="notes" rows="5" placeholder="Decisions, action items, follow-ups, and useful context." required></textarea>
+        <textarea class="note-editor" name="notes" rows="12" placeholder="Notes, decisions, action items, follow-ups, ideas, and future reference." required></textarea>
       </label>
     </div>
     <div class="form-actions">
@@ -30,19 +30,5 @@ Use this notebook during leadership check-ins. Notes are saved in this browser s
     <button type="button" data-sort-records="date-asc">Oldest First</button>
   </div>
 
-  <table class="data-table">
-    <thead>
-      <tr>
-        <th>Date</th>
-        <th>Title</th>
-        <th>Notes</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody data-entry-rows></tbody>
-  </table>
+  <div class="note-list" data-entry-list></div>
 </section>
-
-## Privacy
-
-Summarize sensitive topics as operational themes. Do not store private conflict details, personal disclosures, or incident specifics in general meeting notes.

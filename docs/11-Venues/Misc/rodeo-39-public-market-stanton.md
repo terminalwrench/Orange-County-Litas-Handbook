@@ -7,7 +7,7 @@
 | Name | Rodeo 39 Public Market |
 | Address | 12885 Beach Blvd, Stanton, CA 90680, USA |
 | Website |  |
-| Category | Event Spaces |
+| Category | Misc |
 | Parking |  |
 | Motorcycle Friendly |  |
 | Capacity |  |

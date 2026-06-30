@@ -1,6 +1,6 @@
 # Route Library
 
-Use this compendium for previous rides and future ride ideas. Entries are saved in this browser so ride leads can collect useful context before a route becomes a permanent record.
+Use this compendium for completed rides and future ride ideas. Entries are saved in this browser so ride leads can keep route context, notes, flyers, and photos together.
 
 <section class="tool-panel" data-oc-app="ride-compendium">
   <form class="entry-form" data-entry-form>
@@ -12,13 +12,18 @@ Use this compendium for previous rides and future ride ideas. Entries are saved 
       <label>
         Status
         <select name="status">
-          <option>Previous Ride</option>
+          <option>Completed Ride</option>
           <option>Future Ride Idea</option>
         </select>
       </label>
       <label>
+        Route
+        <input name="route" type="text" placeholder="Roads, destination, or map link">
+      </label>
+      <label>
         Difficulty
         <select name="difficulty">
+          <option></option>
           <option>Beginner</option>
           <option>Intermediate</option>
           <option>Advanced</option>
@@ -29,28 +34,17 @@ Use this compendium for previous rides and future ride ideas. Entries are saved 
         Distance
         <input name="distance" type="text" placeholder="Approx. miles">
       </label>
-      <label>
-        Duration
-        <input name="duration" type="text" placeholder="Approx. ride time">
-      </label>
-      <label>
-        Scenic Rating
-        <select name="scenic">
-          <option>Not Rated</option>
-          <option>1</option>
-          <option>2</option>
-          <option>3</option>
-          <option>4</option>
-          <option>5</option>
-        </select>
-      </label>
-      <label class="form-grid-wide">
-        Favorite Stops
-        <input name="stops" type="text" placeholder="Fuel, food, photo, regroup, or destination stops">
-      </label>
       <label class="form-grid-wide">
         Notes
-        <textarea name="notes" rows="4" placeholder="Ride notes, lessons, road conditions, parking, weather, flyer, or event image links."></textarea>
+        <textarea name="notes" rows="4" placeholder="Ride lead notes, lessons, road conditions, parking, weather, favorite stops, or rider suitability."></textarea>
+      </label>
+      <label>
+        Flyer
+        <input name="flyer" type="url" placeholder="https://">
+      </label>
+      <label class="form-grid-wide">
+        Photos
+        <input name="photos" type="url" placeholder="Gallery or folder link">
       </label>
     </div>
     <div class="form-actions">
@@ -64,12 +58,12 @@ Use this compendium for previous rides and future ride ideas. Entries are saved 
       <tr>
         <th>Ride</th>
         <th>Status</th>
+        <th>Route</th>
         <th>Difficulty</th>
         <th>Distance</th>
-        <th>Duration</th>
-        <th>Scenic</th>
-        <th>Favorite Stops</th>
         <th>Notes</th>
+        <th>Flyer</th>
+        <th>Photos</th>
         <th></th>
       </tr>
     </thead>
@@ -77,16 +71,4 @@ Use this compendium for previous rides and future ride ideas. Entries are saved 
   </table>
 </section>
 
-## Permanent Route Folders
-
-Route files are organized by primary ride category. Add only routes that have been planned, tested, completed, or reviewed with direct chapter knowledge.
-
-- Beginner
-- Intermediate
-- Advanced
-- Coffee
-- Beach
-- Scenic
-- Mountains
-- Food
-- Destination
+Ride Lead Notes belong in the matching ride or event record so future leaders can see route, flyer, photos, attendance, lessons, and ride context in one place.

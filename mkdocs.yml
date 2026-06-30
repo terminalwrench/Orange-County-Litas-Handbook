@@ -80,31 +80,29 @@ plugins:
 nav:
   - Home: index.md
   - Operations:
-      - Operations Hub: 14-Operations/README.md
       - Operations Checklist: 14-Operations/Operations-Checklist.md
       - Meeting Notes: 09-Leadership/Meeting-Notes.md
       - Yearly Planning Board: 09-Leadership/Quarterly-Planning.md
       - Venue Index: 11-Venues/Venue-Index.md
       - Favorites: 11-Venues/Favorites.md
       - New Venue Evaluation: 11-Venues/New-Venue-Evaluation.md
+      - Planning Workflow: 02-Events/Event-Lifecycle.md
+      - Ride Planning: 02-Events/Ride-Planning.md
+      - Weather Calls: 02-Events/Weather-Contingencies.md
       - Incident Response: 14-Operations/Incident-Response.md
       - Leadership Handoff: 14-Operations/Leadership-Handoff.md
   - Events:
       - Event Workspace: 02-Events/README.md
       - Event Records: 10-Events-Database/Events-Index.md
       - Statistics: 10-Events-Database/Statistics.md
-      - Planning Workflow: 02-Events/Event-Lifecycle.md
-      - Ride Planning: 02-Events/Ride-Planning.md
   - Ride Planner:
       - Ride Planner: 05-Routes/README.md
       - Route Library: 05-Routes/Routes/README.md
-      - Weather Calls: 02-Events/Weather-Contingencies.md
   - Media Center:
       - Media Center: 03-Media/README.md
-      - Brand Assets: 03-Media/Assets/README.md
+      - Official Litas Branding: 03-Media/Assets/README.md
       - Logos: 03-Media/Assets/Logos/README.md
       - Fonts: 03-Media/Assets/Fonts/README.md
-      - Photography Tools: 03-Media/Photography-Tools.md
   - Reference:
       - Global Litas: 00-Global-Litas/README.md
       - Brand Standards: 00-Global-Litas/Brand-Standards.md

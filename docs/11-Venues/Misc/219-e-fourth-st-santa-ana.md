@@ -7,7 +7,7 @@
 | Name | 219 E Fourth St. Santa Ana |
 | Address | 219 E Fourth St. Santa Ana |
 | Website |  |
-| Category | Event Spaces |
+| Category | Misc |
 | Parking |  |
 | Motorcycle Friendly |  |
 | Capacity |  |

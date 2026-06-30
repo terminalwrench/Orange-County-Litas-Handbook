@@ -28,7 +28,7 @@ For social events, arrive when you can. For rides, do not chase the group. Meet 
 
 ### Where do I start as a new leader?
 
-Start with the current leadership team, then review [../01-Chapter/Leadership.md](../01-Chapter/Leadership.md), [Operations](../14-Operations/README.md), [Events](../02-Events/README.md), the [Events Index](../10-Events-Database/Events-Index.md), and the [Venue Database](../11-Venues/Venue-Index.md).
+Start with the current leadership team, then review [../01-Chapter/Leadership.md](../01-Chapter/Leadership.md), [Operations](../14-Operations/Operations-Checklist.md), [Events](../02-Events/README.md), the [Events Index](../10-Events-Database/Events-Index.md), and the [Venue Database](../11-Venues/Venue-Index.md).
 
 New leader orientation should cover:
 

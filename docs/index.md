@@ -38,11 +38,11 @@
   </a>
   <a class="portal-action-card portal-icon portal-icon--ride" href="./05-Routes/">
     <span>Find ride resources</span>
-    <strong>Review ride types, lead notes, fuel stops, and seasonal conditions.</strong>
+    <strong>Open the ride repository, route notes, and planning checks.</strong>
   </a>
   <a class="portal-action-card portal-icon portal-icon--media" href="./03-Media/Assets/">
     <span>Find media</span>
-    <strong>Locate approved assets, logos, and photo handoff guidance.</strong>
+    <strong>Locate official branding, logos, graphics, and font files.</strong>
   </a>
   <a class="portal-action-card portal-icon portal-icon--email" href="./13-Knowledge/Social-Media-Guidelines/">
     <span>Prepare social post</span>
@@ -61,7 +61,7 @@
     <span class="portal-card-kicker">Calendar placeholder</span>
     <h3>Upcoming chapter work</h3>
     <p>No upcoming event has been pinned on the homepage yet. Use Events and the current leadership calendar to confirm what is next.</p>
-    <a href="./10-Events-Database/Events-Index/">Open Events Index</a>
+    <a href="./10-Events-Database/Events-Index/">Open Event Records</a>
   </section>
   <section class="portal-feature-card">
     <span class="portal-card-kicker">Records</span>
@@ -117,7 +117,7 @@
   </a>
   <a href="./03-Media/">
     <span>Media Center</span>
-    <strong>Brand assets, logos, fonts, and photography tools.</strong>
+    <strong>Official branding, logos, graphics, and fonts.</strong>
   </a>
   <a href="./13-Knowledge/Frequently-Asked-Questions/">
     <span>Reference</span>
@@ -143,7 +143,7 @@
 <h2 id="operations-map">Operations</h2>
 
 <div class="module-link-grid compact">
-  <a href="./14-Operations/">Open Operations</a>
+  <a href="./14-Operations/Operations-Checklist/">Open Operations</a>
   <a href="./01-Chapter/Calendar/">Check Calendar</a>
   <a href="./10-Events-Database/Events-Index/">Find Past Event</a>
   <a href="./13-Knowledge/Social-Media-Guidelines/">Prepare Social Post</a>

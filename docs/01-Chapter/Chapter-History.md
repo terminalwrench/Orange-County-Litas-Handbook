@@ -121,7 +121,7 @@ Update chapter history after major events, leadership transitions, annual milest
 When possible, link related files from:
 
 - `../02-Events/`
-- `../03-Media/Photography-Tools.md`
+- `../03-Media/README.md`
 - `../13-Knowledge/Social-Media-Guidelines.md`
 - `../03-Media/`
 - `../10-Events-Database/`

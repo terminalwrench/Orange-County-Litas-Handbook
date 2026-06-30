@@ -7,7 +7,7 @@
 | Name | Bike Shed Moto Co |
 | Address | 1580 Industrial St, Los Angeles, CA 90021, USA |
 | Website |  |
-| Category | Event Spaces |
+| Category | Misc |
 | Parking |  |
 | Motorcycle Friendly |  |
 | Capacity |  |

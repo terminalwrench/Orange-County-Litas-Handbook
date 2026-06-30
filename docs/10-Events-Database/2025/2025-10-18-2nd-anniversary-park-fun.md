@@ -32,4 +32,4 @@
 ## Related Files
 
 - [Event-Lifecycle.md](../../02-Events/Event-Lifecycle.md)
-- [Photography-Tools.md](../../03-Media/Photography-Tools.md)
+- [Media Center](../../03-Media/README.md)

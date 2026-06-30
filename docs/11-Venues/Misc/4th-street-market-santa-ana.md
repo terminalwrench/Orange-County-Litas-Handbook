@@ -7,7 +7,7 @@
 | Name | 4th Street Market |
 | Address | 201 E 4th St, Santa Ana, CA 92701, USA |
 | Website |  |
-| Category | Event Spaces |
+| Category | Misc |
 | Parking |  |
 | Motorcycle Friendly |  |
 | Capacity |  |

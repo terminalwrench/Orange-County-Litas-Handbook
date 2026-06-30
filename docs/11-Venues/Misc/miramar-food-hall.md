@@ -7,7 +7,7 @@
 | Name | Miramar Food Hall |
 | Address | San Clemente, CA |
 | Website |  |
-| Category | Event Spaces |
+| Category | Misc |
 | Parking |  |
 | Motorcycle Friendly |  |
 | Capacity |  |
