@@ -71,7 +71,7 @@ export function Events({ eventRecords }: EventsProps) {
     <PageContainer>
       <div className="page-title">
         <span>Events</span>
-        <h1>Manage chapter events</h1>
+        <h1>Manage branch events</h1>
       </div>
       <div className="module-grid module-grid--wide-left">
         <DashboardCard>

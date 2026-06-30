@@ -477,7 +477,6 @@ a {
 }
 
 .event-list,
-.deadline-list,
 .birthday-list,
 .record-list {
   display: grid;
@@ -485,7 +484,6 @@ a {
 }
 
 .event-list__row,
-.deadline-list__row,
 .birthday-list__row,
 .record-row {
   display: grid;
@@ -497,7 +495,6 @@ a {
 }
 
 .event-list__row:last-child,
-.deadline-list__row:last-child,
 .birthday-list__row:last-child,
 .record-row:last-child {
   border-bottom: 0;
@@ -508,22 +505,11 @@ a {
   min-height: 4.1rem;
 }
 
-.deadline-list__row {
-  grid-template-columns: 1.25rem minmax(0, 1fr) auto;
-}
-
-.deadline-list__row svg {
-  width: 1.05rem;
-  height: 1.05rem;
-  color: var(--color-muted);
-}
-
 .birthday-list__row {
   grid-template-columns: 2.35rem minmax(0, 1fr);
 }
 
 .event-list strong,
-.deadline-list strong,
 .birthday-list strong,
 .record-row strong {
   display: block;
@@ -533,7 +519,6 @@ a {
 }
 
 .event-list em,
-.deadline-list em,
 .birthday-list em,
 .record-row em {
   display: block;
@@ -541,11 +526,6 @@ a {
   color: var(--color-muted);
   font-size: 0.74rem;
   font-style: normal;
-}
-
-.deadline-list__row em {
-  margin-top: 0;
-  text-align: right;
 }
 
 .card-note {
@@ -974,6 +954,70 @@ a {
   margin-top: 0.15rem;
 }
 
+.source-list,
+.useful-links-grid {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.useful-links-grid {
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+}
+
+.source-card,
+.useful-link-card {
+  display: grid;
+  grid-template-columns: 1.2rem minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: start;
+  padding: 1rem;
+  border: var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.032);
+  transition: background var(--motion-fast), border-color var(--motion-fast);
+}
+
+.source-card:hover,
+.useful-link-card:hover {
+  border-color: var(--color-line-strong);
+  background: rgba(255, 255, 255, 0.048);
+}
+
+.source-card svg,
+.useful-link-card svg {
+  width: 1.2rem;
+  height: 1.2rem;
+  color: var(--color-orange);
+}
+
+.source-card span,
+.useful-link-card span {
+  min-width: 0;
+}
+
+.source-card strong,
+.useful-link-card strong {
+  display: block;
+  color: var(--color-white);
+}
+
+.source-card em,
+.useful-link-card em {
+  display: block;
+  margin-top: 0.2rem;
+  color: var(--color-muted);
+  font-size: 0.78rem;
+  font-style: normal;
+  line-height: 1.4;
+}
+
+.source-card .button,
+.useful-link-card .button {
+  grid-column: 2;
+  justify-self: start;
+}
+
 .reference-links {
   display: grid;
   gap: 0.75rem;
@@ -994,6 +1038,18 @@ a {
 .reference-item[open] {
   border-color: var(--color-line-strong);
   background: rgba(255, 255, 255, 0.048);
+}
+
+.reference-item--disabled {
+  grid-template-columns: 1.2rem minmax(0, 1fr);
+  color: var(--color-muted);
+  opacity: 0.68;
+}
+
+.reference-item--disabled svg {
+  width: 1.2rem;
+  height: 1.2rem;
+  color: var(--color-muted);
 }
 
 .reference-item summary {

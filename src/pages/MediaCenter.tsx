@@ -1,4 +1,5 @@
 import { mediaItems } from "../data/appData";
+import { mediaSources } from "../data/settings";
 import { PageContainer } from "../components/layout/PageContainer";
 import { Button } from "../components/ui/Button";
 import { DashboardCard } from "../components/ui/DashboardCard";
@@ -23,15 +24,27 @@ function getRelatedEvent(item: MediaItem, events: EventRecord[]) {
   return events.find((event) => event.id === item.relatedEventId) ?? null;
 }
 
+function getAssetActionLabel(type: string) {
+  if (type === "logo") return "Preview Asset";
+  if (type === "flyer") return "Open Flyer";
+  if (type === "photo album") return "Open Album";
+  if (type === "template") return "Open Template";
+  return "Open Asset";
+}
+
+function handleSourceTarget(targetId: string) {
+  document.getElementById(targetId)?.scrollIntoView({ block: "start", behavior: "smooth" });
+}
+
 export function MediaCenter({ eventRecords }: MediaCenterProps) {
   return (
     <PageContainer>
       <div className="page-title">
         <span>Media Center</span>
-        <h1>Flyers, photos, and chapter media</h1>
+        <h1>Flyers, photos, and branch media</h1>
       </div>
       <div className="module-grid module-grid--wide-left">
-        <DashboardCard className="span-all">
+        <DashboardCard className="span-all" id="asset-library">
           <SectionHeader title="Asset Library" />
           {mediaItems.length > 0 ? (
             <div className="media-grid">
@@ -58,8 +71,8 @@ export function MediaCenter({ eventRecords }: MediaCenterProps) {
                     </dl>
                     <StatusChip label={item.status} tone={getMediaStatusTone(item.status)} />
                     {item.url ? (
-                      <a className="button button--secondary media-card__action" href={item.url} download>
-                        Download
+                      <a className="button button--secondary media-card__action" href={item.url} target="_blank" rel="noreferrer">
+                        {getAssetActionLabel(item.type)}
                       </a>
                     ) : (
                       <Button
@@ -69,7 +82,7 @@ export function MediaCenter({ eventRecords }: MediaCenterProps) {
                         className="media-card__action"
                         title="No media file or link has been added yet."
                       >
-                        Not linked yet
+                        Not Linked Yet
                       </Button>
                     )}
                   </article>
@@ -84,11 +97,31 @@ export function MediaCenter({ eventRecords }: MediaCenterProps) {
           )}
         </DashboardCard>
         <DashboardCard>
-          <SectionHeader title="Media Storage" />
-          <EmptyState
-            title="No shared storage connected"
-            message="When Drive, Canva, or album links are ready, add them to the Asset Library source data."
-          />
+          <SectionHeader title="Media Sources" />
+          <div className="source-list">
+            {mediaSources.map((source) => (
+              <article className="source-card" key={source.id}>
+                <Icon name={source.icon} />
+                <span>
+                  <strong>{source.title}</strong>
+                  <em>{source.description}</em>
+                </span>
+                {source.url ? (
+                  <a className="button button--secondary" href={source.url} target="_blank" rel="noreferrer">
+                    Open
+                  </a>
+                ) : source.targetId ? (
+                  <Button type="button" variant="secondary" onClick={() => handleSourceTarget(source.targetId!)}>
+                    View
+                  </Button>
+                ) : (
+                  <Button type="button" variant="secondary" disabled title="This source link has not been configured yet.">
+                    Not Configured
+                  </Button>
+                )}
+              </article>
+            ))}
+          </div>
         </DashboardCard>
         <DashboardCard className="span-all">
           <SectionHeader title="Media Operating Notes" />
@@ -103,7 +136,7 @@ export function MediaCenter({ eventRecords }: MediaCenterProps) {
             </article>
             <article>
               <strong>Branding</strong>
-              <p>Use official source assets only. Do not recreate chapter logos.</p>
+              <p>Use official source assets only. Do not recreate branch logos.</p>
             </article>
           </div>
         </DashboardCard>

@@ -3,7 +3,6 @@ import type {
   ChecklistGroup,
   CountdownStatus,
   DashboardEvent,
-  Deadline,
   EventRecord,
   MediaItem,
   NavItem,
@@ -27,13 +26,6 @@ export const navItems: NavItem[] = [
   { id: "reference", label: "Reference", icon: "book" }
 ];
 
-export const upcomingDeadlines: Deadline[] = [
-  { id: "email-reminder", title: "Email reminder", date: "2026-07-08", dueLabel: "Jul 8" },
-  { id: "reservation", title: "Confirm reservation", date: "2026-07-08", dueLabel: "Jul 8" },
-  { id: "route", title: "Finalize route", date: "2026-07-10", dueLabel: "Jul 10" },
-  { id: "patches", title: "Order patches", date: "2026-07-11", dueLabel: "Jul 11" }
-];
-
 export const upcomingBirthdays: Birthday[] = [
   { id: "emily", name: "Emily", initials: "EM", dateLabel: "Jul 4" },
   { id: "veronica", name: "Rachel", initials: "RA", dateLabel: "Jul 8" },
@@ -52,7 +44,7 @@ export const operationsChecklist: ChecklistGroup[] = [
   {
     title: "Daily",
     items: [
-      "Check chapter email or inquiry inbox.",
+      "Check branch email or inquiry inbox.",
       "Review Instagram messages, comments, and tags.",
       "Respond to member questions or route them to the right leader.",
       "Confirm urgent venue, ride, weather, or partner updates."
@@ -61,7 +53,7 @@ export const operationsChecklist: ChecklistGroup[] = [
   {
     title: "Monthly",
     items: [
-      "Review the next 30 to 60 days on the chapter calendar.",
+      "Review the next 30 to 60 days on the branch calendar.",
       "Confirm event owners, venues, and planning status.",
       "Review ride readiness and lead/sweep needs.",
       "Update completed event, venue, ride, and media records."
@@ -70,7 +62,7 @@ export const operationsChecklist: ChecklistGroup[] = [
 ];
 
 export const venueReferences: VenueReference[] = [
-  { name: "Cooks Corner", category: "Meet & Greet", lastVisited: "2026-07-09", note: "Known chapter meetup venue." },
+  { name: "Cooks Corner", category: "Meet & Greet", lastVisited: "2026-07-09", note: "Known branch meetup venue." },
   { name: "Cook's Corner", category: "Ride Stop", lastVisited: "2026-07-09", note: "Useful for ride destination planning." },
   { name: "4th Street Market", category: "Food", lastVisited: "2024-06-14", note: "Flexible food-hall style stop." }
 ];
@@ -243,9 +235,9 @@ export const mediaItems: MediaItem[] = [
 
 export const referenceSections: ReferenceSection[] = [
   {
-    id: "chapter-basics",
-    title: "Chapter Basics",
-    description: "Local operating context, rider expectations, and current chapter references.",
+    id: "branch-basics",
+    title: "Branch Basics",
+    description: "Local operating context, rider expectations, and current branch references.",
     items: [
       {
         id: "new-rider-guide",
@@ -258,12 +250,12 @@ export const referenceSections: ReferenceSection[] = [
         ]
       },
       {
-        id: "chapter-requirements",
-        label: "Chapter Requirements",
+        id: "branch-requirements",
+        label: "Branch Requirements",
         detail: "Global and local requirements to keep visible.",
         content: [
           "Keep local operating decisions aligned with The Litas requirements.",
-          "Use official chapter assets and current event records when communicating publicly.",
+          "Use official branch assets and current event records when communicating publicly.",
           "Escalate unclear policy questions to leadership before publishing or announcing."
         ]
       }
@@ -272,7 +264,7 @@ export const referenceSections: ReferenceSection[] = [
   {
     id: "event-planning",
     title: "Event Planning",
-    description: "Quick operating reminders for building and checking chapter events.",
+    description: "Quick operating reminders for building and checking branch events.",
     items: [
       {
         id: "event-check",
@@ -314,7 +306,7 @@ export const referenceSections: ReferenceSection[] = [
   },
   {
     id: "media-flyers",
-    title: "Media / Flyer Guidelines",
+    title: "Media & Flyer Guidelines",
     description: "Concise reminders for public-facing media and event assets.",
     items: [
       {
@@ -333,51 +325,40 @@ export const referenceSections: ReferenceSection[] = [
         detail: "Use official logo files and avoid recreating brand assets.",
         content: [
           "Use official source assets from the Media Center.",
-          "Do not redraw, recolor, or recreate chapter logo files.",
+          "Do not redraw, recolor, or recreate branch logo files.",
           "Keep final exported assets organized with the related event or media record."
         ]
       }
     ]
   },
   {
-    id: "useful-links",
-    title: "Useful Links",
-    description: "A future home for verified external resources.",
+    id: "templates",
+    title: "Templates",
+    description: "Reusable lightweight prompts for repeat branch work.",
     items: [
       {
-        id: "future-links",
-        label: "Future Link List",
-        detail: "External links are intentionally not connected until verified.",
+        id: "event-template",
+        label: "Event Planning Template",
+        detail: "Use this structure when drafting a new event.",
         content: [
-          "Add only verified official links or chapter-approved resources here.",
-          "Keep temporary or unverified links out of the app until leadership approves them."
+          "Confirm date, time, venue, address, event type, flyer status, and communication status.",
+          "Add route or parking notes when they affect attendance.",
+          "Keep final notes with the event record."
         ]
       }
     ]
   },
   {
-    id: "operations-reference",
-    title: "Operations Reference",
-    description: "Helpful but non-daily guidance kept out of the main workflows.",
+    id: "archive",
+    title: "Archive (future)",
+    description: "A future home for archive practices once the branch archive source is configured.",
     items: [
       {
-        id: "credentials",
-        label: "Credentials",
-        detail: "Service usernames and secure password-manager notes.",
-        content: [
-          "Do not store passwords in the repository.",
-          "Record service names, usernames, ownership notes, and last-updated dates only.",
-          "Use a secure password manager or future encrypted vault for secrets."
-        ]
-      },
-      {
-        id: "common-challenges",
-        label: "Common Challenges",
-        detail: "Known operational issues and suggested approaches.",
-        content: [
-          "Capture recurring issues after events or planning cycles.",
-          "Move event-specific lessons into the relevant event, ride, or venue record when possible."
-        ]
+        id: "archive-source",
+        label: "Archive Source",
+        detail: "Not configured yet.",
+        content: [],
+        disabled: true
       }
     ]
   }

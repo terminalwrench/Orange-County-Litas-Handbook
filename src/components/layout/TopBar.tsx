@@ -12,7 +12,7 @@ export function TopBar({ onToggleSidebar, onOpenCalendar }: TopBarProps) {
         <span />
         <span />
       </button>
-      <IconButton icon="calendar" label="Open chapter calendar" onClick={onOpenCalendar} />
+      <IconButton icon="calendar" label="Open Events" onClick={onOpenCalendar} />
     </header>
   );
 }

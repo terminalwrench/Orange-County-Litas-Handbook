@@ -26,6 +26,17 @@ export interface NavItem {
   icon: IconName;
 }
 
+export interface ExternalResource {
+  id: string;
+  title: string;
+  description: string;
+  icon: IconName;
+  url?: string;
+  targetId?: string;
+}
+
+export interface MediaSource extends ExternalResource {}
+
 export interface CountdownStatus {
   eventTitle: string;
   label: string;
@@ -72,13 +83,6 @@ export interface UpcomingEvent {
   day: string;
   time: string;
   type: string;
-}
-
-export interface Deadline {
-  id: string;
-  title: string;
-  date: string;
-  dueLabel: string;
 }
 
 export interface Birthday {
@@ -160,5 +164,6 @@ export interface ReferenceSection {
     label: string;
     detail: string;
     content: string[];
+    disabled?: boolean;
   }>;
 }

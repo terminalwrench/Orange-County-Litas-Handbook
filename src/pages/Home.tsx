@@ -2,7 +2,7 @@ import { upcomingBirthdays } from "../data/appData";
 import type { DashboardEvent, RideWeather, UpcomingEvent } from "../types";
 import { toDateValue } from "../utils/date";
 import { BirthdaysCard } from "../components/dashboard/BirthdaysCard";
-import { ChapterNotesPlaceholder } from "../components/dashboard/ChapterNotesPlaceholder";
+import { BranchNotesPlaceholder } from "../components/dashboard/BranchNotesPlaceholder";
 import { NextEventCard } from "../components/dashboard/NextEventCard";
 import { RideWeatherCard } from "../components/dashboard/RideWeatherCard";
 import { UpcomingEventsCard } from "../components/dashboard/UpcomingEventsCard";
@@ -28,7 +28,7 @@ export function Home({ nextEvent, upcomingEvents, rideWeather }: HomeProps) {
           <RideWeatherCard weather={rideWeather} referenceDate={referenceDate} />
         </div>
       </div>
-      <ChapterNotesPlaceholder />
+      <BranchNotesPlaceholder />
     </PageContainer>
   );
 }

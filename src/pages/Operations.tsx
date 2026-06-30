@@ -11,11 +11,11 @@ export function Operations() {
     <PageContainer>
       <div className="page-title">
         <span>Operations</span>
-        <h1>Chapter operations overview</h1>
+        <h1>Branch operations overview</h1>
       </div>
       <div className="module-grid module-grid--wide-left">
         <DashboardCard>
-          <SectionHeader title="Chapter Checklist" />
+          <SectionHeader title="Branch Checklist" />
           <div className="checklist-groups">
             {operationsChecklist.map((group) => (
               <section key={group.title}>
@@ -70,7 +70,7 @@ export function Operations() {
         </DashboardCard>
         <DashboardCard>
           <SectionHeader title="Supplies & Prep" />
-          <EmptyState title="No supply tracker yet" message="Keep this lightweight until the chapter decides what needs recurring inventory." />
+          <EmptyState title="No supply tracker yet" message="Keep this lightweight until the branch decides what needs recurring inventory." />
         </DashboardCard>
       </div>
     </PageContainer>

@@ -35,7 +35,7 @@ export function RideWeatherCard({ weather, referenceDate }: RideWeatherCardProps
           </span>
         </div>
       ) : (
-        <p className="weather-card__placeholder">Ride forecast available closer to event week.</p>
+        <p className="weather-card__placeholder">Ride forecast will automatically appear during event week.</p>
       )}
     </DashboardCard>
   );

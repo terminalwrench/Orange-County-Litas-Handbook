@@ -37,19 +37,3 @@ export function isWithinCurrentWeek(dateValue: string, referenceValue: string): 
   end.setHours(23, 59, 59, 999);
   return date >= start && date <= end;
 }
-
-export function filterDeadlinesWithinDays<T extends { date: string }>(
-  deadlines: T[],
-  referenceValue: string,
-  days: number
-): T[] {
-  const reference = parseDate(referenceValue);
-  reference.setHours(0, 0, 0, 0);
-  const end = new Date(reference);
-  end.setDate(reference.getDate() + days);
-  end.setHours(23, 59, 59, 999);
-  return deadlines.filter((deadline) => {
-    const date = parseDate(deadline.date);
-    return date >= reference && date <= end;
-  });
-}
