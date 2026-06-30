@@ -91,6 +91,7 @@ export interface Birthday {
 export interface RideWeather {
   eventDate: string;
   label: string;
+  isForecastAvailable: boolean;
   temperature: string;
   condition: string;
   rain: string;
@@ -145,7 +146,9 @@ export interface MediaItem {
   title: string;
   type: string;
   status: string;
-  location: string;
+  relatedEventId?: string;
+  date?: string;
+  url?: string;
 }
 
 export interface ReferenceSection {

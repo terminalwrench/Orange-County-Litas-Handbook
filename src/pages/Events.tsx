@@ -2,11 +2,13 @@ import { PageContainer } from "../components/layout/PageContainer";
 import { Button } from "../components/ui/Button";
 import { DashboardCard } from "../components/ui/DashboardCard";
 import { DateBadge } from "../components/ui/DateBadge";
+import { EmptyState } from "../components/ui/EmptyState";
 import { FormField } from "../components/ui/FormField";
 import { SectionHeader } from "../components/ui/SectionHeader";
 import { StatusChip } from "../components/ui/StatusChip";
 import { DateInput, SelectInput, Textarea, TextInput, TimeInput } from "../components/ui/inputs";
 import type { EventRecord } from "../types";
+import { daysBetweenDates } from "../utils/date";
 
 interface EventsProps {
   eventRecords: EventRecord[];
@@ -19,8 +21,51 @@ function parseEventDate(value: string) {
   return new Date(year, month - 1, day);
 }
 
+function getStatusTone(status: string) {
+  if (status === "Ready" || status === "Scheduled") return "success";
+  if (status === "Planning") return "warning";
+  return "neutral";
+}
+
+function sortAscendingByStartDate(events: EventRecord[]) {
+  return [...events].sort((a, b) => parseEventDate(a.startDate).getTime() - parseEventDate(b.startDate).getTime());
+}
+
+function sortDescendingByStartDate(events: EventRecord[]) {
+  return [...events].sort((a, b) => parseEventDate(b.startDate).getTime() - parseEventDate(a.startDate).getTime());
+}
+
+function EventRows({ events }: { events: EventRecord[] }) {
+  return (
+    <div className="record-list">
+      {events.map((event) => (
+        <article className="record-row" key={event.id}>
+          <DateBadge
+            month={monthFormatter.format(parseEventDate(event.startDate))}
+            day={String(parseEventDate(event.startDate).getDate())}
+            dateTime={event.startDate}
+            compact
+          />
+          <span>
+            <strong>{event.title}</strong>
+            <em>{event.time} · {event.location}</em>
+          </span>
+          <StatusChip label={event.status} tone={getStatusTone(event.status)} />
+        </article>
+      ))}
+    </div>
+  );
+}
+
 export function Events({ eventRecords }: EventsProps) {
-  const currentEvent = eventRecords[0];
+  const today = new Date();
+  const upcomingEvents = sortAscendingByStartDate(
+    eventRecords.filter((event) => daysBetweenDates(today, parseEventDate(event.startDate)) >= 0)
+  );
+  const pastEvents = sortDescendingByStartDate(
+    eventRecords.filter((event) => daysBetweenDates(today, parseEventDate(event.startDate)) < 0)
+  );
+  const currentEvent = upcomingEvents[0] ?? pastEvents[0];
 
   return (
     <PageContainer>
@@ -30,24 +75,12 @@ export function Events({ eventRecords }: EventsProps) {
       </div>
       <div className="module-grid module-grid--wide-left">
         <DashboardCard>
-          <SectionHeader title="Event List" />
-          <div className="record-list">
-            {eventRecords.map((event) => (
-              <article className="record-row" key={event.id}>
-                <DateBadge
-                  month={monthFormatter.format(parseEventDate(event.startDate))}
-                  day={String(parseEventDate(event.startDate).getDate())}
-                  dateTime={event.startDate}
-                  compact
-                />
-                <span>
-                  <strong>{event.title}</strong>
-                  <em>{event.time} · {event.location}</em>
-                </span>
-                <StatusChip label={event.status} tone={event.status === "Ready" ? "success" : "warning"} />
-              </article>
-            ))}
-          </div>
+          <SectionHeader title="Upcoming Events" />
+          {upcomingEvents.length > 0 ? (
+            <EventRows events={upcomingEvents} />
+          ) : (
+            <EmptyState title="No upcoming events" message="Future events will appear here when they are added to the shared event source." />
+          )}
         </DashboardCard>
         <DashboardCard>
           <SectionHeader title="Event Detail" />
@@ -61,6 +94,14 @@ export function Events({ eventRecords }: EventsProps) {
             </div>
             <p>{currentEvent?.notes ?? ""}</p>
           </div>
+        </DashboardCard>
+        <DashboardCard className="span-all">
+          <SectionHeader title="Past / History" />
+          {pastEvents.length > 0 ? (
+            <EventRows events={pastEvents} />
+          ) : (
+            <EmptyState title="No archived events yet" message="Past events will appear here automatically after their event dates pass." />
+          )}
         </DashboardCard>
         <DashboardCard className="span-all">
           <SectionHeader title="Create / Edit Event" />

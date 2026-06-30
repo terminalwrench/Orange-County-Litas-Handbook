@@ -45,9 +45,9 @@ export function App() {
       case "operations":
         return <Operations />;
       case "ride-planner":
-        return <RidePlanner />;
+        return <RidePlanner eventRecords={eventDashboard.eventRecords} />;
       case "media":
-        return <MediaCenter />;
+        return <MediaCenter eventRecords={eventDashboard.eventRecords} />;
       case "reference":
         return <Reference />;
     }

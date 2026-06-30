@@ -14,7 +14,8 @@ import type {
   VenueReference
 } from "../types";
 import { getCountdownDisplay, getNextEvent, getSidebarCountdown, getUpcomingEvents } from "../utils/countdown";
-import { parseDate } from "../utils/date";
+import { isWithinCurrentWeek, parseDate, toDateValue } from "../utils/date";
+import { assets } from "./assets";
 import { eventRecords as staticEventRecords } from "./events";
 
 export const navItems: NavItem[] = [
@@ -127,12 +128,17 @@ function toUpcomingEvent(event: EventRecord): UpcomingEvent {
   };
 }
 
-function toRideWeather(event: EventRecord | null): RideWeather | null {
+function isRideEvent(event: EventRecord) {
+  return `${event.title} ${event.type}`.toLowerCase().includes("ride");
+}
+
+function toRideWeather(event: EventRecord | null, today = new Date()): RideWeather | null {
   if (!event) return null;
 
   return {
     eventDate: event.startDate,
     label: `Ride Weather (${dateLineFormatter.format(parseDate(event.startDate))})`,
+    isForecastAvailable: isWithinCurrentWeek(event.startDate, toDateValue(today)),
     ...rideWeatherForecast
   };
 }
@@ -151,13 +157,14 @@ export function buildEventDashboardData(
 ): EventDashboardData {
   const upcomingEventRecords = getUpcomingEvents(records, today);
   const nextEventRecord = getNextEvent(records, today);
+  const nextRideRecord = upcomingEventRecords.find(isRideEvent) ?? null;
 
   return {
     eventRecords: records,
     nextEvent: nextEventRecord ? toDashboardEvent(nextEventRecord, today) : null,
     upcomingEvents: upcomingEventRecords.slice(1, 4).map(toUpcomingEvent),
     sidebarCountdown: getSidebarCountdown(nextEventRecord, today),
-    rideWeather: toRideWeather(nextEventRecord)
+    rideWeather: toRideWeather(nextRideRecord, today)
   };
 }
 
@@ -171,8 +178,8 @@ export const sidebarCountdown = fallbackEventDashboard.sidebarCountdown;
 
 export const rideRecords: RideRecord[] = [
   {
-    id: "chapter-ride-jul",
-    title: "Chapter Ride",
+    id: "branch-ride-jul",
+    title: "Branch Ride",
     date: "2026-07-25",
     meetup: "TBD",
     destination: "TBD",
@@ -195,9 +202,43 @@ export const rideRecords: RideRecord[] = [
 ];
 
 export const mediaItems: MediaItem[] = [
-  { id: "official-branding", title: "Official OC Litas Logo", type: "Brand Asset", status: "Available", location: "Media assets" },
-  { id: "july-meetup-flyer", title: "July Meet & Greet Flyer", type: "Flyer", status: "Posted", location: "Event record" },
-  { id: "chapter-ride-assets", title: "Chapter Ride Media", type: "Flyer / Photos", status: "Needs prep", location: "Future event folder" }
+  {
+    id: "official-branding-full-white",
+    title: "Official OC Litas Full White Logo",
+    type: "logo",
+    status: "Available",
+    url: assets.logos.fullWhite
+  },
+  {
+    id: "official-branding-white-fill",
+    title: "Official OC Litas White Fill Logo",
+    type: "logo",
+    status: "Available",
+    url: assets.logos.whiteFill
+  },
+  {
+    id: "official-branding-script",
+    title: "Official Litas Script Logo",
+    type: "logo",
+    status: "Available",
+    url: assets.logos.scriptWhite
+  },
+  {
+    id: "july-meetup-flyer",
+    title: "July Meet & Greet Flyer",
+    type: "flyer",
+    relatedEventId: "2026-07-09",
+    date: "2026-07-09",
+    status: "Posted"
+  },
+  {
+    id: "branch-ride-assets",
+    title: "Branch Ride Media",
+    type: "photo album",
+    relatedEventId: "2026-07-25",
+    date: "2026-07-25",
+    status: "Needs prep"
+  }
 ];
 
 export const referenceSections: ReferenceSection[] = [

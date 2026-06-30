@@ -1,9 +1,8 @@
-import { upcomingBirthdays, upcomingDeadlines } from "../data/appData";
+import { upcomingBirthdays } from "../data/appData";
 import type { DashboardEvent, RideWeather, UpcomingEvent } from "../types";
-import { filterDeadlinesWithinDays, toDateValue } from "../utils/date";
+import { toDateValue } from "../utils/date";
 import { BirthdaysCard } from "../components/dashboard/BirthdaysCard";
 import { ChapterNotesPlaceholder } from "../components/dashboard/ChapterNotesPlaceholder";
-import { DeadlinesCard } from "../components/dashboard/DeadlinesCard";
 import { NextEventCard } from "../components/dashboard/NextEventCard";
 import { RideWeatherCard } from "../components/dashboard/RideWeatherCard";
 import { UpcomingEventsCard } from "../components/dashboard/UpcomingEventsCard";
@@ -24,7 +23,6 @@ export function Home({ nextEvent, upcomingEvents, rideWeather }: HomeProps) {
       <NextEventCard event={nextEvent} />
       <div className="home-grid">
         <UpcomingEventsCard events={upcomingEvents} />
-        <DeadlinesCard deadlines={filterDeadlinesWithinDays(upcomingDeadlines, referenceDate, 5)} />
         <div className="home-grid__stack">
           <BirthdaysCard birthdays={upcomingBirthdays} />
           <RideWeatherCard weather={rideWeather} referenceDate={referenceDate} />

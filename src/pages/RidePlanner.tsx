@@ -2,12 +2,34 @@ import { rideRecords } from "../data/appData";
 import { PageContainer } from "../components/layout/PageContainer";
 import { Button } from "../components/ui/Button";
 import { DashboardCard } from "../components/ui/DashboardCard";
+import { EmptyState } from "../components/ui/EmptyState";
 import { FormField } from "../components/ui/FormField";
 import { SectionHeader } from "../components/ui/SectionHeader";
 import { StatusChip } from "../components/ui/StatusChip";
 import { DateInput, SelectInput, Textarea, TextInput, TimeInput } from "../components/ui/inputs";
+import type { EventRecord } from "../types";
+import { daysBetweenDates, parseDate } from "../utils/date";
 
-export function RidePlanner() {
+interface RidePlannerProps {
+  eventRecords: EventRecord[];
+}
+
+function isRideEvent(event: EventRecord) {
+  return `${event.title} ${event.type}`.toLowerCase().includes("ride");
+}
+
+function getUpcomingRideEvents(events: EventRecord[]) {
+  const today = new Date();
+
+  return [...events]
+    .filter((event) => isRideEvent(event) && daysBetweenDates(today, parseDate(event.startDate)) >= 0)
+    .sort((a, b) => parseDate(a.startDate).getTime() - parseDate(b.startDate).getTime());
+}
+
+export function RidePlanner({ eventRecords }: RidePlannerProps) {
+  const upcomingRideEvents = getUpcomingRideEvents(eventRecords);
+  const nextRide = upcomingRideEvents[0] ?? null;
+
   return (
     <PageContainer>
       <div className="page-title">
@@ -18,26 +40,40 @@ export function RidePlanner() {
         <DashboardCard>
           <SectionHeader title="Ride List" />
           <div className="record-list">
-            {rideRecords.map((ride) => (
-              <article className="record-row" key={ride.id}>
-                <span>
-                  <strong>{ride.title}</strong>
-                  <em>{ride.date} · {ride.destination}</em>
-                </span>
-                <StatusChip label={ride.difficulty} tone="accent" />
-              </article>
-            ))}
+            {upcomingRideEvents.length > 0
+              ? upcomingRideEvents.map((ride) => (
+                  <article className="record-row" key={ride.id}>
+                    <span>
+                      <strong>{ride.title}</strong>
+                      <em>{ride.startDate} · {ride.location}</em>
+                    </span>
+                    <StatusChip label={ride.status} tone={ride.status === "Planning" ? "warning" : "success"} />
+                  </article>
+                ))
+              : rideRecords.map((ride) => (
+                  <article className="record-row" key={ride.id}>
+                    <span>
+                      <strong>{ride.title}</strong>
+                      <em>{ride.date} · {ride.destination}</em>
+                    </span>
+                    <StatusChip label={ride.difficulty} tone="accent" />
+                  </article>
+                ))}
           </div>
         </DashboardCard>
         <DashboardCard>
           <SectionHeader title="Upcoming Ride" />
-          <div className="detail-card">
-            <h2>{rideRecords[0].title}</h2>
-            <p>Meetup: {rideRecords[0].meetup}</p>
-            <p>Destination: {rideRecords[0].destination}</p>
-            <p>{rideRecords[0].mileage} · {rideRecords[0].duration}</p>
-            <p>{rideRecords[0].notes}</p>
-          </div>
+          {nextRide ? (
+            <div className="detail-card">
+              <h2>{nextRide.title}</h2>
+              <p>Meetup: {nextRide.location}</p>
+              <p>Date: {nextRide.startDate} at {nextRide.time}</p>
+              <p>Status: {nextRide.status}</p>
+              <p>{nextRide.notes}</p>
+            </div>
+          ) : (
+            <EmptyState title="No upcoming branch ride" message="Ride events will appear here when they are added to the shared event source." />
+          )}
         </DashboardCard>
         <DashboardCard className="span-all">
           <SectionHeader title="Ride Details" />
