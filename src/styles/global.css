@@ -548,6 +548,13 @@ a {
   text-align: right;
 }
 
+.card-note {
+  margin: 1rem 0 0;
+  color: var(--color-muted);
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+
 .text-link,
 .inline-link {
   display: inline-flex;
@@ -833,6 +840,17 @@ a {
   transform: translateY(-1px);
 }
 
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  transform: none;
+}
+
+.button:disabled:hover {
+  border-color: var(--color-line);
+  transform: none;
+}
+
 .button--primary {
   border-color: rgba(255, 107, 0, 0.38);
   background: rgba(255, 107, 0, 0.92);
@@ -846,6 +864,11 @@ a {
 .button--ghost {
   background: transparent;
   color: var(--color-muted);
+}
+
+.form-note {
+  color: var(--color-muted);
+  font-size: 0.78rem;
 }
 
 .empty-state {
@@ -917,8 +940,36 @@ a {
   margin-top: 1rem;
 }
 
-.reference-links article {
+.reference-links article,
+.reference-item {
   grid-template-columns: 1.2rem minmax(0, 1fr);
+}
+
+.reference-item {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.reference-item summary {
+  display: grid;
+  grid-template-columns: 1.2rem minmax(0, 1fr);
+  gap: 0.7rem;
+  cursor: pointer;
+  list-style: none;
+}
+
+.reference-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.reference-item ul {
+  display: grid;
+  gap: 0.45rem;
+  margin: 0;
+  padding-left: 1.9rem;
+  color: var(--color-muted);
+  font-size: 0.84rem;
+  line-height: 1.5;
 }
 
 .loading-skeleton {

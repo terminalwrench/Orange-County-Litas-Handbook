@@ -13,18 +13,25 @@ export function Reference() {
       </div>
       <div className="reference-grid">
         {referenceSections.map((section) => (
-          <DashboardCard key={section.title}>
+          <DashboardCard key={section.id} id={section.id}>
             <SectionHeader title={section.title} />
             <p className="muted-copy">{section.description}</p>
             <div className="reference-links">
-              {section.links.map((link) => (
-                <article key={link.label}>
-                  <Icon name="link" />
-                  <span>
-                    <strong>{link.label}</strong>
-                    <em>{link.detail}</em>
-                  </span>
-                </article>
+              {section.items.map((item) => (
+                <details className="reference-item" key={item.id} id={item.id}>
+                  <summary>
+                    <Icon name="link" />
+                    <span>
+                      <strong>{item.label}</strong>
+                      <em>{item.detail}</em>
+                    </span>
+                  </summary>
+                  <ul>
+                    {item.content.map((line) => (
+                      <li key={line}>{line}</li>
+                    ))}
+                  </ul>
+                </details>
               ))}
             </div>
           </DashboardCard>

@@ -1,7 +1,6 @@
 import type { UpcomingEvent } from "../../types";
 import { DashboardCard } from "../ui/DashboardCard";
 import { DateBadge } from "../ui/DateBadge";
-import { Icon } from "../ui/Icon";
 import { SectionHeader } from "../ui/SectionHeader";
 
 interface UpcomingEventsCardProps {
@@ -23,10 +22,7 @@ export function UpcomingEventsCard({ events }: UpcomingEventsCardProps) {
           </article>
         ))}
       </div>
-      <button className="text-link" type="button">
-        View all events
-        <Icon name="arrow" />
-      </button>
+      <p className="card-note">Open the Events module for the complete event list.</p>
     </DashboardCard>
   );
 }

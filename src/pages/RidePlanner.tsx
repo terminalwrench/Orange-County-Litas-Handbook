@@ -74,8 +74,11 @@ export function RidePlanner() {
               <Textarea id="ride-notes" placeholder="Fuel, regroup, weather, parking, lead/sweep, or direct-arrival notes." />
             </FormField>
             <div className="form-actions">
-              <Button type="button" variant="primary">Save ride</Button>
-              <Button type="button" variant="ghost">Clear</Button>
+              <Button type="button" variant="primary" disabled title="Ride editing is not connected yet.">
+                Save ride
+              </Button>
+              <Button type="reset" variant="ghost">Clear</Button>
+              <span className="form-note">Ride saving is disabled until persistence is connected.</span>
             </div>
           </form>
         </DashboardCard>

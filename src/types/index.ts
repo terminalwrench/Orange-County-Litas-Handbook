@@ -149,7 +149,13 @@ export interface MediaItem {
 }
 
 export interface ReferenceSection {
+  id: string;
   title: string;
   description: string;
-  links: Array<{ label: string; detail: string }>;
+  items: Array<{
+    id: string;
+    label: string;
+    detail: string;
+    content: string[];
+  }>;
 }

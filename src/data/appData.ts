@@ -202,27 +202,142 @@ export const mediaItems: MediaItem[] = [
 
 export const referenceSections: ReferenceSection[] = [
   {
+    id: "chapter-basics",
     title: "Chapter Basics",
     description: "Local operating context, rider expectations, and current chapter references.",
-    links: [
-      { label: "New Rider Guide", detail: "What riders should know before joining an event." },
-      { label: "Chapter Requirements", detail: "Global and local requirements to keep visible." }
+    items: [
+      {
+        id: "new-rider-guide",
+        label: "New Rider Guide",
+        detail: "What riders should know before joining an event.",
+        content: [
+          "Review event requirements before attending rides or meetups.",
+          "Ask leadership about ride difficulty, timing, and required gear before joining a new route.",
+          "Use the Events and Ride Planner modules for current event-specific details."
+        ]
+      },
+      {
+        id: "chapter-requirements",
+        label: "Chapter Requirements",
+        detail: "Global and local requirements to keep visible.",
+        content: [
+          "Keep local operating decisions aligned with The Litas requirements.",
+          "Use official chapter assets and current event records when communicating publicly.",
+          "Escalate unclear policy questions to leadership before publishing or announcing."
+        ]
+      }
     ]
   },
   {
-    title: "Social & Media",
-    description: "Concise reminders for public posts and partner tagging.",
-    links: [
-      { label: "Social Media Guidelines", detail: "Post dimensions, tags, credits, and proofing checklist." },
-      { label: "Brand Standards", detail: "Use official logo files and avoid recreating brand assets." }
+    id: "event-planning",
+    title: "Event Planning",
+    description: "Quick operating reminders for building and checking chapter events.",
+    items: [
+      {
+        id: "event-check",
+        label: "Before Announcing",
+        detail: "Confirm the core event facts before posting.",
+        content: [
+          "Verify date, time, venue, address, and attendance expectations.",
+          "Confirm flyer status, email status, and any partner tags.",
+          "Use the Events module as the working source for event records."
+        ]
+      },
+      {
+        id: "venue-check",
+        label: "Venue Readiness",
+        detail: "Check the practical details leadership usually needs.",
+        content: [
+          "Confirm parking, capacity, restrooms, food or drink availability, and reservation needs.",
+          "Use Operations for venue/contact references and recurring prep notes."
+        ]
+      }
     ]
   },
   {
+    id: "ride-planning",
+    title: "Ride Planning",
+    description: "Ride lead reminders for practical planning without adding map complexity.",
+    items: [
+      {
+        id: "route-check",
+        label: "Route Readiness",
+        detail: "Confirm the ride can be safely communicated.",
+        content: [
+          "Check meetup location, destination, difficulty, mileage, timing, fuel, and regroup needs.",
+          "Confirm weather and direct-arrival options before public reminders.",
+          "Use Ride Planner for current ride details."
+        ]
+      }
+    ]
+  },
+  {
+    id: "media-flyers",
+    title: "Media / Flyer Guidelines",
+    description: "Concise reminders for public-facing media and event assets.",
+    items: [
+      {
+        id: "social-media-guidelines",
+        label: "Posting Checklist",
+        detail: "Proofing reminders before posting public content.",
+        content: [
+          "Verify date, location, rider requirements, photographer credit, partner tags, and hashtags.",
+          "Check readability and accessibility before publishing.",
+          "Keep final flyers and photos tied to their event record."
+        ]
+      },
+      {
+        id: "brand-standards",
+        label: "Brand Standards",
+        detail: "Use official logo files and avoid recreating brand assets.",
+        content: [
+          "Use official source assets from the Media Center.",
+          "Do not redraw, recolor, or recreate chapter logo files.",
+          "Keep final exported assets organized with the related event or media record."
+        ]
+      }
+    ]
+  },
+  {
+    id: "useful-links",
+    title: "Useful Links",
+    description: "A future home for verified external resources.",
+    items: [
+      {
+        id: "future-links",
+        label: "Future Link List",
+        detail: "External links are intentionally not connected until verified.",
+        content: [
+          "Add only verified official links or chapter-approved resources here.",
+          "Keep temporary or unverified links out of the app until leadership approves them."
+        ]
+      }
+    ]
+  },
+  {
+    id: "operations-reference",
     title: "Operations Reference",
     description: "Helpful but non-daily guidance kept out of the main workflows.",
-    links: [
-      { label: "Credentials", detail: "Service usernames and secure password-manager notes." },
-      { label: "Common Challenges", detail: "Known operational issues and suggested approaches." }
+    items: [
+      {
+        id: "credentials",
+        label: "Credentials",
+        detail: "Service usernames and secure password-manager notes.",
+        content: [
+          "Do not store passwords in the repository.",
+          "Record service names, usernames, ownership notes, and last-updated dates only.",
+          "Use a secure password manager or future encrypted vault for secrets."
+        ]
+      },
+      {
+        id: "common-challenges",
+        label: "Common Challenges",
+        detail: "Known operational issues and suggested approaches.",
+        content: [
+          "Capture recurring issues after events or planning cycles.",
+          "Move event-specific lessons into the relevant event, ride, or venue record when possible."
+        ]
+      }
     ]
   }
 ];

@@ -20,10 +20,7 @@ export function DeadlinesCard({ deadlines }: DeadlinesCardProps) {
           </article>
         ))}
       </div>
-      <button className="text-link" type="button">
-        View all deadlines
-        <Icon name="arrow" />
-      </button>
+      <p className="card-note">Detailed milestone views are not connected yet.</p>
     </DashboardCard>
   );
 }

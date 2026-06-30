@@ -2,7 +2,7 @@ import { featureFlags } from "../../data/featureFlags";
 import { DashboardCard } from "../ui/DashboardCard";
 
 export function ChapterNotesPlaceholder() {
-  // TODO: Revisit Chapter Notes after evaluating long-term note synchronization options.
+  // Revisit Chapter Notes after evaluating long-term note synchronization options.
   if (!featureFlags.chapterNotes) {
     return null;
   }

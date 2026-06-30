@@ -96,8 +96,11 @@ export function Events({ eventRecords }: EventsProps) {
               <Textarea id="event-notes" placeholder="Planning notes, route, attendance, flyer links, or follow-ups." />
             </FormField>
             <div className="form-actions">
-              <Button type="button" variant="primary">Save event</Button>
-              <Button type="button" variant="ghost">Clear</Button>
+              <Button type="button" variant="primary" disabled title="Event editing is not connected yet.">
+                Save event
+              </Button>
+              <Button type="reset" variant="ghost">Clear</Button>
+              <span className="form-note">Editing is a visual workflow only until persistence is connected.</span>
             </div>
           </form>
         </DashboardCard>

@@ -31,10 +31,12 @@ export function MediaCenter() {
           </div>
         </DashboardCard>
         <DashboardCard>
-          <SectionHeader title="Upload Placeholder" />
+          <SectionHeader title="Media Storage" />
           <EmptyState title="Uploads are not connected yet" message="Use this space later for Drive, Canva, or event-media links when the storage workflow is decided." />
           <div className="form-actions">
-            <Button type="button" variant="secondary">Add media link</Button>
+            <Button type="button" variant="secondary" disabled title="Media link storage is not connected yet.">
+              Add media link
+            </Button>
           </div>
         </DashboardCard>
         <DashboardCard className="span-all">

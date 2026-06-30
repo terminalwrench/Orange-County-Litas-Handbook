@@ -9,7 +9,7 @@ interface BirthdaysCardProps {
 export function BirthdaysCard({ birthdays }: BirthdaysCardProps) {
   return (
     <DashboardCard className="birthday-card" ariaLabel="Upcoming birthdays">
-      <SectionHeader title="Upcoming Birthdays" action={<button className="inline-link" type="button">View all</button>} />
+      <SectionHeader title="Upcoming Birthdays" />
       <div className="birthday-list">
         {birthdays.map((birthday) => (
           <article className="birthday-list__row" key={birthday.id}>
@@ -21,6 +21,7 @@ export function BirthdaysCard({ birthdays }: BirthdaysCardProps) {
           </article>
         ))}
       </div>
+      <p className="card-note">Birthday source is static until member records are connected.</p>
     </DashboardCard>
   );
 }
