@@ -34,7 +34,7 @@ export const upcomingDeadlines: Deadline[] = [
 
 export const upcomingBirthdays: Birthday[] = [
   { id: "emily", name: "Emily", initials: "EM", dateLabel: "Jul 4" },
-  { id: "rachel", name: "Rachel", initials: "RA", dateLabel: "Jul 8" },
+  { id: "veronica", name: "Rachel", initials: "RA", dateLabel: "Jul 8" },
   { id: "stephanie", name: "Stephanie", initials: "ST", dateLabel: "Jul 13" }
 ];
 
@@ -70,7 +70,7 @@ export const operationsChecklist: ChecklistGroup[] = [
 ];
 
 export const venueReferences: VenueReference[] = [
-  { name: "Old World Biergarten", category: "Meet & Greet", lastVisited: "2026-07-09", note: "Known chapter meetup venue." },
+  { name: "Cooks Corner", category: "Meet & Greet", lastVisited: "2026-07-09", note: "Known chapter meetup venue." },
   { name: "Cook's Corner", category: "Ride Stop", lastVisited: "2026-07-09", note: "Useful for ride destination planning." },
   { name: "4th Street Market", category: "Food", lastVisited: "2024-06-14", note: "Flexible food-hall style stop." }
 ];
@@ -78,13 +78,13 @@ export const venueReferences: VenueReference[] = [
 export const fallbackEventRecords: EventRecord[] = [
   {
     id: "2026-07-09",
-    title: "Old World Meet & Greet",
+    title: "Cooks Corner",
     date: "2026-07-09",
     startDate: "2026-07-09",
     endDate: "2026-07-09",
     time: "6:30 PM",
-    location: "Old World Biergarten",
-    city: "Huntington Beach, CA",
+    location: "Cooks Corner",
+    city: "Silverado Canyon, CA",
     description: "Venue, email, and flyer are prepared.",
     source: "fallback",
     type: "Meet & Greet",
