@@ -1,4 +1,3 @@
-import { rideRecords } from "../data/appData";
 import { PageContainer } from "../components/layout/PageContainer";
 import { Button } from "../components/ui/Button";
 import { DashboardCard } from "../components/ui/DashboardCard";
@@ -8,26 +7,15 @@ import { SectionHeader } from "../components/ui/SectionHeader";
 import { StatusChip } from "../components/ui/StatusChip";
 import { DateInput, SelectInput, Textarea, TextInput, TimeInput } from "../components/ui/inputs";
 import type { EventRecord } from "../types";
-import { daysBetweenDates, parseDate } from "../utils/date";
+import { getRides, getUpcomingRides } from "../services/ridesService";
 
 interface RidePlannerProps {
   eventRecords: EventRecord[];
 }
 
-function isRideEvent(event: EventRecord) {
-  return `${event.title} ${event.type}`.toLowerCase().includes("ride");
-}
-
-function getUpcomingRideEvents(events: EventRecord[]) {
-  const today = new Date();
-
-  return [...events]
-    .filter((event) => isRideEvent(event) && daysBetweenDates(today, parseDate(event.startDate)) >= 0)
-    .sort((a, b) => parseDate(a.startDate).getTime() - parseDate(b.startDate).getTime());
-}
-
 export function RidePlanner({ eventRecords }: RidePlannerProps) {
-  const upcomingRideEvents = getUpcomingRideEvents(eventRecords);
+  const rideRecords = getRides();
+  const upcomingRideEvents = getUpcomingRides(eventRecords);
   const nextRide = upcomingRideEvents[0] ?? null;
 
   return (

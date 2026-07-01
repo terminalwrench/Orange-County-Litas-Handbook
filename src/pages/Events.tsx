@@ -8,7 +8,7 @@ import { SectionHeader } from "../components/ui/SectionHeader";
 import { StatusChip } from "../components/ui/StatusChip";
 import { DateInput, SelectInput, Textarea, TextInput, TimeInput } from "../components/ui/inputs";
 import type { EventRecord } from "../types";
-import { daysBetweenDates } from "../utils/date";
+import { getPastEvents, getUpcomingEvents } from "../services/eventsService";
 
 interface EventsProps {
   eventRecords: EventRecord[];
@@ -59,12 +59,8 @@ function EventRows({ events }: { events: EventRecord[] }) {
 
 export function Events({ eventRecords }: EventsProps) {
   const today = new Date();
-  const upcomingEvents = sortAscendingByStartDate(
-    eventRecords.filter((event) => daysBetweenDates(today, parseEventDate(event.startDate)) >= 0)
-  );
-  const pastEvents = sortDescendingByStartDate(
-    eventRecords.filter((event) => daysBetweenDates(today, parseEventDate(event.startDate)) < 0)
-  );
+  const upcomingEvents = sortAscendingByStartDate(getUpcomingEvents(eventRecords, today));
+  const pastEvents = sortDescendingByStartDate(getPastEvents(eventRecords, today));
   const currentEvent = upcomingEvents[0] ?? pastEvents[0];
 
   return (

@@ -1,5 +1,3 @@
-import { mediaItems } from "../data/appData";
-import { mediaSources } from "../data/settings";
 import { PageContainer } from "../components/layout/PageContainer";
 import { Button } from "../components/ui/Button";
 import { DashboardCard } from "../components/ui/DashboardCard";
@@ -8,6 +6,7 @@ import { Icon } from "../components/ui/Icon";
 import { SectionHeader } from "../components/ui/SectionHeader";
 import { StatusChip } from "../components/ui/StatusChip";
 import type { EventRecord, MediaItem } from "../types";
+import { getAssetLibraryItems, getMediaSources } from "../services/mediaService";
 
 interface MediaCenterProps {
   eventRecords: EventRecord[];
@@ -37,6 +36,9 @@ function handleSourceTarget(targetId: string) {
 }
 
 export function MediaCenter({ eventRecords }: MediaCenterProps) {
+  const mediaItems = getAssetLibraryItems();
+  const mediaSources = getMediaSources();
+
   return (
     <PageContainer>
       <div className="page-title">

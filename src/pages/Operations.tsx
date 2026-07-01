@@ -1,12 +1,15 @@
-import { operationsChecklist, venueReferences } from "../data/appData";
 import { PageContainer } from "../components/layout/PageContainer";
 import { DashboardCard } from "../components/ui/DashboardCard";
 import { EmptyState } from "../components/ui/EmptyState";
 import { Icon } from "../components/ui/Icon";
 import { SectionHeader } from "../components/ui/SectionHeader";
 import { StatusChip } from "../components/ui/StatusChip";
+import { getOperationsChecklist, getVenueReferences } from "../services/settingsService";
 
 export function Operations() {
+  const operationsChecklist = getOperationsChecklist();
+  const venueReferences = getVenueReferences();
+
   return (
     <PageContainer>
       <div className="page-title">

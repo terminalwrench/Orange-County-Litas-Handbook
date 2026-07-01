@@ -1,63 +1,185 @@
-import type { ExternalResource, MediaSource } from "../types";
+import type {
+  AppSettings,
+  BranchSettings,
+  ChecklistGroup,
+  NavItem,
+  ReferenceSection,
+  VenueReference
+} from "../types";
 
-export const externalResources: ExternalResource[] = [
+export const appSettings: AppSettings = {
+  name: "Orange County Litas Operations Center",
+  title: "Orange County Litas Operations Center"
+};
+
+export const branchSettings: BranchSettings = {
+  name: "Orange County Litas",
+  timezone: "America/Los_Angeles"
+};
+
+export const navItems: NavItem[] = [
+  { id: "home", label: "Home", icon: "home" },
+  { id: "operations", label: "Operations", icon: "settings" },
+  { id: "events", label: "Events", icon: "calendar" },
+  { id: "ride-planner", label: "Ride Planner", icon: "route" },
+  { id: "media", label: "Media Center", icon: "image" },
+  { id: "reference", label: "Reference", icon: "book" }
+];
+
+export const operationsChecklist: ChecklistGroup[] = [
   {
-    id: "instagram",
-    title: "Instagram",
-    description: "Branch social profile for public posts, tags, and event visibility.",
-    icon: "image"
+    title: "Daily",
+    items: [
+      "Check branch email or inquiry inbox.",
+      "Review Instagram messages, comments, and tags.",
+      "Respond to member questions or route them to the right leader.",
+      "Confirm urgent venue, ride, weather, or partner updates."
+    ]
   },
   {
-    id: "shared-google-calendar",
-    title: "Shared Google Calendar",
-    description: "Shared branch calendar for events, rides, and planning dates.",
-    icon: "calendar"
-  },
-  {
-    id: "google-keep",
-    title: "Google Keep",
-    description: "Shared notes space for quick branch reminders and planning notes.",
-    icon: "file"
-  },
-  {
-    id: "shared-icloud-album",
-    title: "Shared iCloud Album",
-    description: "Shared photo album for event images and branch media collection.",
-    icon: "image"
-  },
-  {
-    id: "litas-global",
-    title: "Litas Global",
-    description: "Official Litas global site for national context and public information.",
-    icon: "link",
-    url: "https://thelitas.co"
+    title: "Monthly",
+    items: [
+      "Review the next 30 to 60 days on the branch calendar.",
+      "Confirm event owners, venues, and planning status.",
+      "Review ride readiness and lead/sweep needs.",
+      "Update completed event, venue, ride, and media records."
+    ]
   }
 ];
 
-export const mediaSources: MediaSource[] = [
+export const venueReferences: VenueReference[] = [
+  { name: "Cooks Corner", category: "Meet & Greet", lastVisited: "2026-07-09", note: "Known branch meetup venue." },
+  { name: "Cook's Corner", category: "Ride Stop", lastVisited: "2026-07-09", note: "Useful for ride destination planning." },
+  { name: "4th Street Market", category: "Food", lastVisited: "2024-06-14", note: "Flexible food-hall style stop." }
+];
+
+export const referenceSections: ReferenceSection[] = [
   {
-    id: "shared-icloud-album",
-    title: "Shared iCloud Album",
-    description: "Primary shared photo album once the branch album link is configured.",
-    icon: "image"
+    id: "branch-basics",
+    title: "Branch Basics",
+    description: "Local operating context, rider expectations, and current branch references.",
+    items: [
+      {
+        id: "new-rider-guide",
+        label: "New Rider Guide",
+        detail: "What riders should know before joining an event.",
+        content: [
+          "Review event requirements before attending rides or meetups.",
+          "Ask leadership about ride difficulty, timing, and required gear before joining a new route.",
+          "Use the Events and Ride Planner modules for current event-specific details."
+        ]
+      },
+      {
+        id: "branch-requirements",
+        label: "Branch Requirements",
+        detail: "Global and local requirements to keep visible.",
+        content: [
+          "Keep local operating decisions aligned with The Litas requirements.",
+          "Use official branch assets and current event records when communicating publicly.",
+          "Escalate unclear policy questions to leadership before publishing or announcing."
+        ]
+      }
+    ]
   },
   {
-    id: "canva-workspace",
-    title: "Canva Workspace",
-    description: "Design workspace for event flyers and branch graphics.",
-    icon: "image"
+    id: "event-planning",
+    title: "Event Planning",
+    description: "Quick operating reminders for building and checking branch events.",
+    items: [
+      {
+        id: "event-check",
+        label: "Before Announcing",
+        detail: "Confirm the core event facts before posting.",
+        content: [
+          "Verify date, time, venue, address, and attendance expectations.",
+          "Confirm flyer status, email status, and any partner tags.",
+          "Use the Events module as the working source for event records."
+        ]
+      },
+      {
+        id: "venue-check",
+        label: "Venue Readiness",
+        detail: "Check the practical details leadership usually needs.",
+        content: [
+          "Confirm parking, capacity, restrooms, food or drink availability, and reservation needs.",
+          "Use Operations for venue/contact references and recurring prep notes."
+        ]
+      }
+    ]
   },
   {
-    id: "official-branch-logos",
-    title: "Official Branch Logos",
-    description: "Current logo assets already available in the Asset Library.",
-    icon: "box",
-    targetId: "asset-library"
+    id: "ride-planning",
+    title: "Ride Planning",
+    description: "Ride lead reminders for practical planning without adding map complexity.",
+    items: [
+      {
+        id: "route-check",
+        label: "Route Readiness",
+        detail: "Confirm the ride can be safely communicated.",
+        content: [
+          "Check meetup location, destination, difficulty, mileage, timing, fuel, and regroup needs.",
+          "Confirm weather and direct-arrival options before public reminders.",
+          "Use Ride Planner for current ride details."
+        ]
+      }
+    ]
   },
   {
-    id: "flyer-archive",
-    title: "Flyer Archive",
-    description: "Archive location for final event flyers once a link is configured.",
-    icon: "file"
+    id: "media-flyers",
+    title: "Media & Flyer Guidelines",
+    description: "Concise reminders for public-facing media and event assets.",
+    items: [
+      {
+        id: "social-media-guidelines",
+        label: "Posting Checklist",
+        detail: "Proofing reminders before posting public content.",
+        content: [
+          "Verify date, location, rider requirements, photographer credit, partner tags, and hashtags.",
+          "Check readability and accessibility before publishing.",
+          "Keep final flyers and photos tied to their event record."
+        ]
+      },
+      {
+        id: "brand-standards",
+        label: "Brand Standards",
+        detail: "Use official logo files and avoid recreating brand assets.",
+        content: [
+          "Use official source assets from the Media Center.",
+          "Do not redraw, recolor, or recreate branch logo files.",
+          "Keep final exported assets organized with the related event or media record."
+        ]
+      }
+    ]
+  },
+  {
+    id: "templates",
+    title: "Templates",
+    description: "Reusable lightweight prompts for repeat branch work.",
+    items: [
+      {
+        id: "event-template",
+        label: "Event Planning Template",
+        detail: "Use this structure when drafting a new event.",
+        content: [
+          "Confirm date, time, venue, address, event type, flyer status, and communication status.",
+          "Add route or parking notes when they affect attendance.",
+          "Keep final notes with the event record."
+        ]
+      }
+    ]
+  },
+  {
+    id: "archive",
+    title: "Archive (future)",
+    description: "A future home for archive practices once the branch archive source is configured.",
+    items: [
+      {
+        id: "archive-source",
+        label: "Archive Source",
+        detail: "Not configured yet.",
+        content: [],
+        disabled: true
+      }
+    ]
   }
 ];

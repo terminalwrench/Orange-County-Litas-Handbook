@@ -1,7 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
 import { AppShell } from "./components/layout/AppShell";
-import { buildEventDashboardData, navItems } from "./data/appData";
-import { eventRecords as staticEventRecords } from "./data/events";
 import type { EventRecord, ModuleId } from "./types";
 import { Events } from "./pages/Events";
 import { Home } from "./pages/Home";
@@ -9,12 +7,14 @@ import { MediaCenter } from "./pages/MediaCenter";
 import { Operations } from "./pages/Operations";
 import { Reference } from "./pages/Reference";
 import { RidePlanner } from "./pages/RidePlanner";
-import { loadEventRecords } from "./services/eventService";
+import { buildEventDashboardData, getEvents, loadEventRecords } from "./services/eventsService";
+import { getNavItems } from "./services/settingsService";
 
 export function App() {
   const [activeModule, setActiveModule] = useState<ModuleId>("home");
-  const [eventRecords, setEventRecords] = useState<EventRecord[]>(staticEventRecords);
+  const [eventRecords, setEventRecords] = useState<EventRecord[]>(getEvents());
   const eventDashboard = useMemo(() => buildEventDashboardData(eventRecords), [eventRecords]);
+  const navItems = getNavItems();
 
   useEffect(() => {
     let cancelled = false;

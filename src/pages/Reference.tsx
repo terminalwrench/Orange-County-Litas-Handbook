@@ -1,12 +1,15 @@
-import { referenceSections } from "../data/appData";
-import { externalResources } from "../data/settings";
 import { PageContainer } from "../components/layout/PageContainer";
 import { Button } from "../components/ui/Button";
 import { DashboardCard } from "../components/ui/DashboardCard";
 import { Icon } from "../components/ui/Icon";
 import { SectionHeader } from "../components/ui/SectionHeader";
+import { getUsefulLinks } from "../services/linksService";
+import { getReferenceSections } from "../services/settingsService";
 
 export function Reference() {
+  const externalResources = getUsefulLinks();
+  const referenceSections = getReferenceSections();
+
   return (
     <PageContainer>
       <div className="page-title">

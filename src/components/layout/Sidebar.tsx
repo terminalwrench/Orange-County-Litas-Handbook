@@ -1,8 +1,8 @@
 import type { ModuleId, NavItem } from "../../types";
-import { assets } from "../../data/assets";
 import type { CountdownStatus } from "../../types";
 import { SidebarCountdown } from "./SidebarCountdown";
 import { SidebarNavItem } from "./SidebarNavItem";
+import { getSidebarLogo } from "../../services/settingsService";
 
 interface SidebarProps {
   navItems: NavItem[];
@@ -16,7 +16,7 @@ export function Sidebar({ navItems, activeModule, onSelect, isOpen, countdown }:
   return (
     <aside className={`sidebar ${isOpen ? "is-open" : ""}`} aria-label="Primary">
       <div className="sidebar__brand">
-        <img src={assets.sidebarLogo} alt="Orange County Litas" />
+        <img src={getSidebarLogo()} alt="Orange County Litas" />
       </div>
       <nav className="sidebar__nav" aria-label="Application modules">
         <ul>

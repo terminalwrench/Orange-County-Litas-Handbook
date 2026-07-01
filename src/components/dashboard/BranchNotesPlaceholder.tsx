@@ -1,9 +1,9 @@
-import { featureFlags } from "../../data/featureFlags";
 import { DashboardCard } from "../ui/DashboardCard";
+import { getFeatureFlags } from "../../services/settingsService";
 
 export function BranchNotesPlaceholder() {
   // Revisit Branch Notes after evaluating long-term note synchronization options.
-  if (!featureFlags.branchNotes) {
+  if (!getFeatureFlags().branchNotes) {
     return null;
   }
 

@@ -1,169 +1,25 @@
-export type ModuleId = "home" | "operations" | "events" | "ride-planner" | "media" | "reference";
-
-export type IconName =
-  | "home"
-  | "settings"
-  | "calendar"
-  | "route"
-  | "image"
-  | "book"
-  | "clock"
-  | "pin"
-  | "check"
-  | "arrow"
-  | "sun"
-  | "plus"
-  | "file"
-  | "bike"
-  | "map"
-  | "mail"
-  | "link"
-  | "box";
-
-export interface NavItem {
-  id: ModuleId;
-  label: string;
-  icon: IconName;
-}
-
-export interface ExternalResource {
-  id: string;
-  title: string;
-  description: string;
-  icon: IconName;
-  url?: string;
-  targetId?: string;
-}
-
-export interface MediaSource extends ExternalResource {}
-
-export interface CountdownStatus {
-  eventTitle: string;
-  label: string;
-  ariaLabel: string;
-  hasEvent: boolean;
-}
-
-export interface CountdownDisplay {
-  daysRemaining: number | null;
-  label: string;
-  value: string;
-  unit: string;
-  ariaLabel: string;
-}
-
-export type StatusTone = "success" | "warning" | "neutral" | "accent";
-
-export interface StatusItem {
-  label: string;
-  tone: StatusTone;
-}
-
-export interface DashboardEvent {
-  id: string;
-  title: string;
-  date: string;
-  month: string;
-  day: string;
-  weekday: string;
-  time: string;
-  dateLine: string;
-  venue: string;
-  city: string;
-  countdown: CountdownDisplay;
-  checklist: StatusItem[];
-  category: string;
-}
-
-export interface UpcomingEvent {
-  id: string;
-  title: string;
-  date: string;
-  month: string;
-  day: string;
-  time: string;
-  type: string;
-}
-
-export interface Birthday {
-  id: string;
-  name: string;
-  initials: string;
-  dateLabel: string;
-}
-
-export interface RideWeather {
-  eventDate: string;
-  label: string;
-  isForecastAvailable: boolean;
-  temperature: string;
-  condition: string;
-  rain: string;
-  wind: string;
-  humidity: string;
-}
-
-export interface ChecklistGroup {
-  title: string;
-  items: string[];
-}
-
-export interface VenueReference {
-  name: string;
-  category: string;
-  lastVisited: string;
-  note: string;
-}
-
-export interface EventRecord {
-  id: string;
-  title: string;
-  date: string;
-  startDate: string;
-  endDate: string;
-  time: string;
-  location: string;
-  city: string;
-  description: string;
-  source: "fallback" | "ics";
-  type: string;
-  status: string;
-  flyerStatus: string;
-  notes: string;
-  checklist: StatusItem[];
-}
-
-export interface RideRecord {
-  id: string;
-  title: string;
-  date: string;
-  meetup: string;
-  destination: string;
-  mileage: string;
-  duration: string;
-  difficulty: string;
-  notes: string;
-}
-
-export interface MediaItem {
-  id: string;
-  title: string;
-  type: string;
-  status: string;
-  relatedEventId?: string;
-  date?: string;
-  url?: string;
-}
-
-export interface ReferenceSection {
-  id: string;
-  title: string;
-  description: string;
-  items: Array<{
-    id: string;
-    label: string;
-    detail: string;
-    content: string[];
-    disabled?: boolean;
-  }>;
-}
+export type { Birthday } from "./birthday";
+export type { Deadline } from "./deadline";
+export type {
+  CountdownDisplay,
+  CountdownStatus,
+  DashboardEvent,
+  EventRecord,
+  RideWeather,
+  StatusItem,
+  StatusTone,
+  UpcomingEvent
+} from "./event";
+export type { ExternalResource } from "./link";
+export type { MediaItem, MediaSource } from "./media";
+export type { RideRecord } from "./ride";
+export type {
+  AppSettings,
+  BranchSettings,
+  ChecklistGroup,
+  IconName,
+  ModuleId,
+  NavItem,
+  ReferenceSection,
+  VenueReference
+} from "./settings";

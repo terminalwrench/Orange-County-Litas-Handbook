@@ -1,4 +1,3 @@
-import { upcomingBirthdays } from "../data/appData";
 import type { DashboardEvent, RideWeather, UpcomingEvent } from "../types";
 import { toDateValue } from "../utils/date";
 import { BirthdaysCard } from "../components/dashboard/BirthdaysCard";
@@ -7,8 +6,10 @@ import { NextEventCard } from "../components/dashboard/NextEventCard";
 import { RideWeatherCard } from "../components/dashboard/RideWeatherCard";
 import { UpcomingEventsCard } from "../components/dashboard/UpcomingEventsCard";
 import { PageContainer } from "../components/layout/PageContainer";
+import { getUpcomingBirthdays } from "../services/birthdaysService";
 
 const referenceDate = toDateValue(new Date());
+const upcomingBirthdays = getUpcomingBirthdays();
 
 interface HomeProps {
   nextEvent: DashboardEvent | null;
