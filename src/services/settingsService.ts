@@ -2,19 +2,15 @@ import {
   appSettings,
   branchSettings,
   navItems,
-  operationsChecklist,
-  referenceSections,
-  venueReferences
+  referenceSections
 } from "../data/settings";
 import { assets } from "../data/assets";
 import { featureFlags } from "../data/featureFlags";
 import type {
   AppSettings,
   BranchSettings,
-  ChecklistGroup,
   NavItem,
-  ReferenceSection,
-  VenueReference
+  ReferenceSection
 } from "../types";
 
 export function getAppSettings(): AppSettings {
@@ -27,14 +23,6 @@ export function getBranchSettings(): BranchSettings {
 
 export function getNavItems(): NavItem[] {
   return navItems;
-}
-
-export function getOperationsChecklist(): ChecklistGroup[] {
-  return operationsChecklist;
-}
-
-export function getVenueReferences(): VenueReference[] {
-  return venueReferences;
 }
 
 export function getReferenceSections(): ReferenceSection[] {

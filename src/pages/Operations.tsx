@@ -1,14 +1,33 @@
 import { PageContainer } from "../components/layout/PageContainer";
 import { DashboardCard } from "../components/ui/DashboardCard";
 import { EmptyState } from "../components/ui/EmptyState";
-import { Icon } from "../components/ui/Icon";
 import { SectionHeader } from "../components/ui/SectionHeader";
 import { StatusChip } from "../components/ui/StatusChip";
-import { getOperationsChecklist, getVenueReferences } from "../services/settingsService";
+import { getEvents, getPastEvents, getUpcomingEvents } from "../services/eventsService";
+import { getAssetLibraryItems } from "../services/mediaService";
+import { getUpcomingRides } from "../services/ridesService";
+
+const dateFormatter = new Intl.DateTimeFormat("en-US", {
+  month: "short",
+  day: "numeric"
+});
 
 export function Operations() {
-  const operationsChecklist = getOperationsChecklist();
-  const venueReferences = getVenueReferences();
+  const eventRecords = getEvents();
+  const upcomingEvents = getUpcomingEvents(eventRecords);
+  const completedEvents = getPastEvents(eventRecords);
+  const currentYear = new Date().getFullYear();
+  const completedThisYear = completedEvents.filter(
+    (event) => new Date(`${event.startDate}T00:00:00`).getFullYear() === currentYear
+  );
+  const upcomingRides = getUpcomingRides(eventRecords);
+  const mediaItems = getAssetLibraryItems();
+  const metrics = [
+    { label: "Upcoming events", value: upcomingEvents.length },
+    { label: "Completed events this year", value: completedThisYear.length },
+    { label: "Total media assets", value: mediaItems.length },
+    { label: "Upcoming rides", value: upcomingRides.length }
+  ];
 
   return (
     <PageContainer>
@@ -16,64 +35,56 @@ export function Operations() {
         <span>Operations</span>
         <h1>Branch operations overview</h1>
       </div>
-      <div className="module-grid module-grid--wide-left">
+      <div className="module-grid">
         <DashboardCard>
-          <SectionHeader title="Branch Checklist" />
-          <div className="checklist-groups">
-            {operationsChecklist.map((group) => (
-              <section key={group.title}>
-                <h3>{group.title}</h3>
-                <ul className="checklist">
-                  {group.items.map((item) => (
-                    <li key={item}>
-                      <Icon name="check" />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </section>
+          <SectionHeader title="Venue Status" />
+          {upcomingEvents.length > 0 ? (
+            <div className="venue-status-list">
+              {upcomingEvents.slice(0, 4).map((event) => (
+                <article className="venue-status-row" key={event.id}>
+                  <span>
+                    <strong>{event.location}</strong>
+                    <em>{event.title} · {dateFormatter.format(new Date(`${event.startDate}T00:00:00`))}</em>
+                  </span>
+                  <StatusChip
+                    label={event.location.toLowerCase().includes("tbd") ? "Needs venue" : "Confirmed"}
+                    tone={event.location.toLowerCase().includes("tbd") ? "warning" : "success"}
+                  />
+                </article>
+              ))}
+            </div>
+          ) : (
+            <EmptyState title="No upcoming venue confirmations" message="Upcoming venue status appears here when events are scheduled." />
+          )}
+        </DashboardCard>
+        <DashboardCard>
+          <SectionHeader title="Branch Metrics" />
+          <div className="metrics-grid">
+            {metrics.map((metric) => (
+              <article className="metric-tile" key={metric.label}>
+                <strong>{metric.value}</strong>
+                <span>{metric.label}</span>
+              </article>
             ))}
           </div>
         </DashboardCard>
-        <DashboardCard>
-          <SectionHeader title="Internal Reminders" />
-          <div className="reminder-list">
-            <StatusChip label="Calendar review" tone="accent" />
-            <p>Confirm the next 30 to 60 days before announcing public plans.</p>
-            <StatusChip label="Venue readiness" tone="neutral" />
-            <p>Check parking, capacity, food, restrooms, and reservation needs.</p>
-            <StatusChip label="Media archive" tone="neutral" />
-            <p>Link final flyers and photos back to the related event record.</p>
-          </div>
-        </DashboardCard>
         <DashboardCard className="span-all">
-          <SectionHeader title="Venue & Contact References" />
-          <div className="data-table-wrap">
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th>Venue</th>
-                  <th>Category</th>
-                  <th>Last visited</th>
-                  <th>Note</th>
-                </tr>
-              </thead>
-              <tbody>
-                {venueReferences.map((venue) => (
-                  <tr key={venue.name}>
-                    <td>{venue.name}</td>
-                    <td>{venue.category}</td>
-                    <td>{venue.lastVisited}</td>
-                    <td>{venue.note}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </DashboardCard>
-        <DashboardCard>
-          <SectionHeader title="Supplies & Prep" />
-          <EmptyState title="No supply tracker yet" message="Keep this lightweight until the branch decides what needs recurring inventory." />
+          <SectionHeader title="Recently Completed" />
+          {completedEvents.length > 0 ? (
+            <div className="record-list">
+              {completedEvents.slice(0, 4).map((event) => (
+                <article className="record-row" key={event.id}>
+                  <span>
+                    <strong>{event.title}</strong>
+                    <em>{dateFormatter.format(new Date(`${event.startDate}T00:00:00`))} · {event.type}</em>
+                  </span>
+                  <StatusChip label="Completed" tone="success" />
+                </article>
+              ))}
+            </div>
+          ) : (
+            <EmptyState title="No completed events in the current source" message="Completed events appear here automatically when the shared event source includes past records." />
+          )}
         </DashboardCard>
       </div>
     </PageContainer>

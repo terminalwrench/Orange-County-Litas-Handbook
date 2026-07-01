@@ -40,40 +40,29 @@ export function Reference() {
             ))}
           </div>
         </DashboardCard>
-        {referenceSections.map((section) => (
-          <DashboardCard key={section.id} id={section.id}>
-            <SectionHeader title={section.title} />
-            <p className="muted-copy">{section.description}</p>
-            <div className="reference-links">
-              {section.items.map((item) =>
-                item.disabled ? (
-                  <div className="reference-item reference-item--disabled" key={item.id} id={item.id} aria-disabled="true">
-                    <Icon name="link" />
-                    <span>
-                      <strong>{item.label}</strong>
-                      <em>{item.detail}</em>
-                    </span>
+        <DashboardCard className="span-all">
+          <SectionHeader title="Operations Playbook" />
+          <div className="playbook">
+            {referenceSections.map((section) => (
+              <section className="playbook-section" key={section.id} id={section.id}>
+                <h2>{section.title}</h2>
+                {section.items.map((item) => (
+                  <div className={item.disabled ? "playbook-block playbook-block--disabled" : "playbook-block"} key={item.id} id={item.id}>
+                    <h3>{item.label}</h3>
+                    <p>{item.disabled ? `${item.detail} This area will be configured later.` : item.detail}</p>
+                    {item.content.length > 0 ? (
+                      <ul>
+                        {item.content.map((line) => (
+                          <li key={line}>{line}</li>
+                        ))}
+                      </ul>
+                    ) : null}
                   </div>
-                ) : (
-                  <details className="reference-item" key={item.id} id={item.id}>
-                    <summary>
-                      <Icon name="link" />
-                      <span>
-                        <strong>{item.label}</strong>
-                        <em>{item.detail}</em>
-                      </span>
-                    </summary>
-                    <ul>
-                      {item.content.map((line) => (
-                        <li key={line}>{line}</li>
-                      ))}
-                    </ul>
-                  </details>
-                )
-              )}
-            </div>
-          </DashboardCard>
-        ))}
+                ))}
+              </section>
+            ))}
+          </div>
+        </DashboardCard>
       </div>
     </PageContainer>
   );

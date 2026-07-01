@@ -5,7 +5,8 @@ export const usefulLinks: ExternalResource[] = [
     id: "instagram",
     title: "Instagram",
     description: "Branch social profile for public posts, tags, and event visibility.",
-    icon: "image"
+    icon: "image",
+    url: "https://www.instagram.com/thelitasorangecounty/"
   },
   {
     id: "shared-google-calendar",

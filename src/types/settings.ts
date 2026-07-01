@@ -26,18 +26,6 @@ export interface NavItem {
   icon: IconName;
 }
 
-export interface ChecklistGroup {
-  title: string;
-  items: string[];
-}
-
-export interface VenueReference {
-  name: string;
-  category: string;
-  lastVisited: string;
-  note: string;
-}
-
 export interface ReferenceSection {
   id: string;
   title: string;

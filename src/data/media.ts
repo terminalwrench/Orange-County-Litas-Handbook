@@ -7,21 +7,24 @@ export const mediaItems: MediaItem[] = [
     title: "Official OC Litas Full White Logo",
     type: "logo",
     status: "Available",
-    url: assets.logos.fullWhite
+    url: assets.logos.fullWhite,
+    previewSurface: "dark"
   },
   {
     id: "official-branding-white-fill",
     title: "Official OC Litas White Fill Logo",
     type: "logo",
     status: "Available",
-    url: assets.logos.whiteFill
+    url: assets.logos.whiteFill,
+    previewSurface: "dark"
   },
   {
     id: "official-branding-script",
     title: "Official Litas Script Logo",
     type: "logo",
     status: "Available",
-    url: assets.logos.scriptWhite
+    url: assets.logos.scriptWhite,
+    previewSurface: "dark"
   },
   {
     id: "july-meetup-flyer",

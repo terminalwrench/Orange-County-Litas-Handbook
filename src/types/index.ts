@@ -16,10 +16,8 @@ export type { RideRecord } from "./ride";
 export type {
   AppSettings,
   BranchSettings,
-  ChecklistGroup,
   IconName,
   ModuleId,
   NavItem,
-  ReferenceSection,
-  VenueReference
+  ReferenceSection
 } from "./settings";

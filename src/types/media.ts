@@ -8,6 +8,7 @@ export interface MediaItem {
   relatedEventId?: string;
   date?: string;
   url?: string;
+  previewSurface?: "dark" | "light";
 }
 
 export interface MediaSource {

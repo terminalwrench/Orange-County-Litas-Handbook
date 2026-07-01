@@ -1,10 +1,8 @@
 import type {
   AppSettings,
   BranchSettings,
-  ChecklistGroup,
   NavItem,
-  ReferenceSection,
-  VenueReference
+  ReferenceSection
 } from "../types";
 
 export const appSettings: AppSettings = {
@@ -24,33 +22,6 @@ export const navItems: NavItem[] = [
   { id: "ride-planner", label: "Ride Planner", icon: "route" },
   { id: "media", label: "Media Center", icon: "image" },
   { id: "reference", label: "Reference", icon: "book" }
-];
-
-export const operationsChecklist: ChecklistGroup[] = [
-  {
-    title: "Daily",
-    items: [
-      "Check branch email or inquiry inbox.",
-      "Review Instagram messages, comments, and tags.",
-      "Respond to member questions or route them to the right leader.",
-      "Confirm urgent venue, ride, weather, or partner updates."
-    ]
-  },
-  {
-    title: "Monthly",
-    items: [
-      "Review the next 30 to 60 days on the branch calendar.",
-      "Confirm event owners, venues, and planning status.",
-      "Review ride readiness and lead/sweep needs.",
-      "Update completed event, venue, ride, and media records."
-    ]
-  }
-];
-
-export const venueReferences: VenueReference[] = [
-  { name: "Cooks Corner", category: "Meet & Greet", lastVisited: "2026-07-09", note: "Known branch meetup venue." },
-  { name: "Cook's Corner", category: "Ride Stop", lastVisited: "2026-07-09", note: "Useful for ride destination planning." },
-  { name: "4th Street Market", category: "Food", lastVisited: "2024-06-14", note: "Flexible food-hall style stop." }
 ];
 
 export const referenceSections: ReferenceSection[] = [
