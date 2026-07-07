@@ -87,18 +87,20 @@ function EventRows({
   return (
     <div className="record-list">
       {events.map((event) => (
-        <article className={event.id === selectedId ? "record-row record-row--selected" : "record-row"} key={event.id}>
+        <article className={event.id === selectedId ? "event-record-row record-row--selected" : "event-record-row"} key={event.id}>
           <DateBadge
             month={monthFormatter.format(parseEventDate(event.startDate))}
             day={String(parseEventDate(event.startDate).getDate())}
             dateTime={event.startDate}
             compact
           />
-          <span>
+          <span className="event-record-row__details">
             <strong>{event.title}</strong>
             <em>{event.time} · {event.location}</em>
           </span>
-          <StatusChip label={event.status} tone={getStatusTone(event.status)} />
+          <span className="event-record-row__status">
+            <StatusChip label={event.status} tone={getStatusTone(event.status)} />
+          </span>
           <div className="record-row__actions">
             <Button type="button" variant="ghost" onClick={() => onView(event)}>View</Button>
             <Button type="button" variant="ghost" onClick={() => onEdit(event)}>Edit</Button>
@@ -279,7 +281,7 @@ export function Events({
               onDelete={handleDeleteEvent}
             />
           ) : (
-            <EmptyState title="No upcoming events" message="Events will appear here when they are added to Supabase." />
+            <EmptyState title="No upcoming events." message="Events will appear here when they are added to Supabase." />
           )}
           {saveMessage ? <p className="form-status form-status--success">{saveMessage}</p> : null}
           {saveError ? <p className="form-status form-status--error">{saveError}</p> : null}
@@ -356,7 +358,7 @@ export function Events({
               onDelete={handleDeleteEvent}
             />
           ) : (
-            <EmptyState title="No archived events yet" message="Past events will appear here automatically after their event dates pass." />
+            <EmptyState title="No archived events yet." message="Past events will appear here automatically after their event dates pass." />
           )}
         </DashboardCard>
       </div>
