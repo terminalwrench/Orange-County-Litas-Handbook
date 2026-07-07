@@ -68,6 +68,20 @@ create table if not exists public.reference_links (
   updated_at timestamptz default now()
 );
 
+create table if not exists public.operation_items (
+  id uuid primary key default gen_random_uuid(),
+  title text not null,
+  category text not null,
+  status text not null,
+  priority text,
+  due_date date,
+  owner text,
+  notes text,
+  related_event_id uuid references public.events(id) on delete set null,
+  created_at timestamptz default now(),
+  updated_at timestamptz default now()
+);
+
 create or replace function public.set_updated_at()
 returns trigger as $$
 begin
@@ -96,9 +110,15 @@ create trigger set_reference_links_updated_at
 before update on public.reference_links
 for each row execute function public.set_updated_at();
 
+drop trigger if exists set_operation_items_updated_at on public.operation_items;
+create trigger set_operation_items_updated_at
+before update on public.operation_items
+for each row execute function public.set_updated_at();
+
 -- RLS should be enabled when authentication is added.
 -- Example future step:
 -- alter table public.events enable row level security;
 -- alter table public.rides enable row level security;
 -- alter table public.media_assets enable row level security;
 -- alter table public.reference_links enable row level security;
+-- alter table public.operation_items enable row level security;

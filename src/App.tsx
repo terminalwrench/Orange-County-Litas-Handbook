@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { AppShell } from "./components/layout/AppShell";
-import type { EventRecord, ModuleId, RideRecord } from "./types";
+import type { EventRecord, ModuleId, OperationItem, OperationStatus, RideRecord } from "./types";
 import { Events } from "./pages/Events";
 import { Home } from "./pages/Home";
 import { MediaCenter } from "./pages/MediaCenter";
@@ -8,6 +8,7 @@ import { Operations } from "./pages/Operations";
 import { Reference } from "./pages/Reference";
 import { RidePlanner } from "./pages/RidePlanner";
 import { buildEventDashboardData, getEvents, loadEventRecords, saveEventRecord, type EventSaveInput } from "./services/eventsService";
+import { getOperationItems, loadOperationItems, updateOperationItemStatus } from "./services/operationsService";
 import { getPersistenceStatus } from "./services/persistence";
 import { getRides, loadRideRecords, saveRideRecord, type RideSaveInput } from "./services/ridesService";
 import { getNavItems } from "./services/settingsService";
@@ -16,6 +17,7 @@ export function App() {
   const [activeModule, setActiveModule] = useState<ModuleId>("home");
   const [eventRecords, setEventRecords] = useState<EventRecord[]>(getEvents());
   const [rideRecords, setRideRecords] = useState<RideRecord[]>(getRides());
+  const [operationItems, setOperationItems] = useState<OperationItem[]>(getOperationItems());
   const [isLoadingRecords, setIsLoadingRecords] = useState(true);
   const eventDashboard = useMemo(() => buildEventDashboardData(eventRecords), [eventRecords]);
   const navItems = getNavItems();
@@ -24,10 +26,11 @@ export function App() {
   useEffect(() => {
     let cancelled = false;
 
-    Promise.all([loadEventRecords(), loadRideRecords()]).then(([eventResult, rideResult]) => {
+    Promise.all([loadEventRecords(), loadRideRecords(), loadOperationItems()]).then(([eventResult, rideResult, operationResult]) => {
       if (!cancelled) {
         setEventRecords(eventResult.events);
         setRideRecords(rideResult.rides);
+        setOperationItems(operationResult.items);
         setIsLoadingRecords(false);
       }
     }).catch((error) => {
@@ -52,6 +55,12 @@ export function App() {
     return result;
   }
 
+  async function handleUpdateOperationStatus(item: OperationItem, status: OperationStatus) {
+    const result = await updateOperationItemStatus(item, status);
+    setOperationItems((current) => upsertById(current, result.data, item.id));
+    return result;
+  }
+
   function renderActivePage() {
     switch (activeModule) {
       case "home":
@@ -72,7 +81,16 @@ export function App() {
           />
         );
       case "operations":
-        return <Operations eventRecords={eventDashboard.eventRecords} rideRecords={rideRecords} />;
+        return (
+          <Operations
+            eventRecords={eventDashboard.eventRecords}
+            rideRecords={rideRecords}
+            operationItems={operationItems}
+            isLoading={isLoadingRecords}
+            isPersistenceConfigured={persistenceStatus.isConfigured}
+            onUpdateOperationStatus={handleUpdateOperationStatus}
+          />
+        );
       case "ride-planner":
         return (
           <RidePlanner

@@ -12,6 +12,7 @@ export type {
 } from "./event";
 export type { ExternalResource } from "./link";
 export type { MediaItem, MediaSource } from "./media";
+export type { OperationCategory, OperationItem, OperationStatus } from "./operation";
 export type { RideRecord } from "./ride";
 export type {
   AppSettings,
