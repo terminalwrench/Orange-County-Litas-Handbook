@@ -7,9 +7,17 @@ import { MediaCenter } from "./pages/MediaCenter";
 import { Operations } from "./pages/Operations";
 import { Reference } from "./pages/Reference";
 import { RidePlanner } from "./pages/RidePlanner";
-import { buildEventDashboardData, getEvents, loadEventRecords } from "./services/eventsService";
+import {
+  buildEventDashboardData,
+  deleteEventRecord,
+  getEvents,
+  loadEventRecords,
+  saveEventRecord,
+  type EventSaveInput
+} from "./services/eventsService";
 import {
   createOperationItem,
+  deleteOperationItem,
   getOperationItems,
   loadOperationItems,
   updateOperationItem,
@@ -78,22 +86,53 @@ export function App() {
 
   async function handleCreateOperationItem(input: OperationItemInput) {
     const result = await createOperationItem(input);
-    setOperationItems((current) => upsertById(current, result.data));
+    if (result.source === "supabase" || !persistenceStatus.isConfigured) {
+      setOperationItems((current) => upsertById(current, result.data));
+    }
     if (result.source === "supabase") setOperationItemsSource("supabase");
+    return result;
+  }
+
+  async function handleSaveEvent(input: EventSaveInput) {
+    const result = await saveEventRecord(input);
+    if (result.source === "supabase" || !persistenceStatus.isConfigured) {
+      setEventRecords((current) => upsertById(current, result.data, input.id));
+    }
+    if (result.source === "supabase") setEventRecordsSource("supabase");
+    return result;
+  }
+
+  async function handleDeleteEvent(event: EventRecord) {
+    const result = await deleteEventRecord(event);
+    if (result.source === "supabase" || !persistenceStatus.isConfigured) {
+      setEventRecords((current) => current.filter((record) => record.id !== event.id));
+    }
     return result;
   }
 
   async function handleUpdateOperationItem(input: OperationItemInput) {
     const result = await updateOperationItem(input);
-    setOperationItems((current) => upsertById(current, result.data, input.id));
+    if (result.source === "supabase" || !persistenceStatus.isConfigured) {
+      setOperationItems((current) => upsertById(current, result.data, input.id));
+    }
     if (result.source === "supabase") setOperationItemsSource("supabase");
     return result;
   }
 
   async function handleUpdateOperationStatus(item: OperationItem, status: OperationStatus) {
     const result = await updateOperationItemStatus(item, status);
-    setOperationItems((current) => upsertById(current, result.data, item.id));
+    if (result.source === "supabase" || !persistenceStatus.isConfigured) {
+      setOperationItems((current) => upsertById(current, result.data, item.id));
+    }
     if (result.source === "supabase") setOperationItemsSource("supabase");
+    return result;
+  }
+
+  async function handleDeleteOperationItem(item: OperationItem) {
+    const result = await deleteOperationItem(item);
+    if (result.source === "supabase" || !persistenceStatus.isConfigured) {
+      setOperationItems((current) => current.filter((record) => record.id !== item.id));
+    }
     return result;
   }
 
@@ -114,6 +153,8 @@ export function App() {
             eventRecordsSource={eventRecordsSource}
             isLoading={isLoadingRecords}
             isPersistenceConfigured={persistenceStatus.isConfigured}
+            onSaveEvent={handleSaveEvent}
+            onDeleteEvent={handleDeleteEvent}
           />
         );
       case "operations":
@@ -129,6 +170,7 @@ export function App() {
             onCreateOperationItem={handleCreateOperationItem}
             onUpdateOperationItem={handleUpdateOperationItem}
             onUpdateOperationStatus={handleUpdateOperationStatus}
+            onDeleteOperationItem={handleDeleteOperationItem}
           />
         );
       case "ride-planner":

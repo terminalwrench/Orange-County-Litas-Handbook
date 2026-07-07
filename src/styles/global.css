@@ -694,7 +694,7 @@ a {
 
 .operation-row__actions {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: minmax(7rem, 1fr) auto auto;
   gap: 0.55rem;
   align-items: center;
 }
@@ -840,6 +840,18 @@ a {
   grid-template-columns: 3.35rem minmax(0, 1fr) auto auto;
   min-height: 4.1rem;
   padding: 0.72rem 0;
+}
+
+.record-row__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.45rem;
+}
+
+.record-row__actions .button {
+  min-height: 2.45rem;
+  padding-inline: 0.75rem;
 }
 
 .record-row--selected {
@@ -1364,6 +1376,10 @@ a {
 
   .operation-row__actions {
     grid-template-columns: 1fr;
+  }
+
+  .record-row__actions {
+    justify-content: flex-start;
   }
 
   .weather-card__content {

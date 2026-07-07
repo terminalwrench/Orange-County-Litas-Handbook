@@ -4,7 +4,7 @@ import type { DashboardEvent, EventRecord, RideWeather, UpcomingEvent, Countdown
 import { getCountdownDisplay, getCountdownLabel as getCountdownLabelValue, getSidebarCountdown } from "../utils/countdown";
 import { isWithinCurrentWeek, parseDate, toDateValue } from "../utils/date";
 import { loadCalendarEvents } from "./calendarService";
-import { getPersistenceClient, warnAndUseFallback } from "./persistence";
+import { getPersistenceClient, warnAndUseFallback, type PersistenceResult } from "./persistence";
 
 interface SupabaseEventRow {
   id: string;
@@ -50,6 +50,21 @@ export interface EventLoadResult {
   source: "static" | "ics" | "supabase" | "fallback";
 }
 
+export interface EventSaveInput {
+  id?: string;
+  title: string;
+  type: string;
+  startDate: string;
+  endDate?: string;
+  time?: string;
+  location?: string;
+  city?: string;
+  description?: string;
+  status?: string;
+  flyerStatus?: string;
+  notes?: string;
+}
+
 export interface EventDashboardData {
   eventRecords: EventRecord[];
   nextEvent: DashboardEvent | null;
@@ -60,6 +75,66 @@ export interface EventDashboardData {
 
 export function getEvents(): EventRecord[] {
   return staticEventRecords;
+}
+
+export async function saveEventRecord(input: EventSaveInput): Promise<PersistenceResult<EventRecord>> {
+  const supabase = getPersistenceClient();
+
+  if (!supabase) {
+    return {
+      data: toLocalEventRecord(input),
+      source: "fallback"
+    };
+  }
+
+  const payload = toSupabaseEventPayload(input);
+  const query = input.id && isUuid(input.id)
+    ? supabase.from("events").update(payload).eq("id", input.id).select().single()
+    : supabase.from("events").insert(payload).select().single();
+
+  const { data, error } = await query;
+
+  if (error || !data) {
+    warnAndUseFallback("Unable to save event to Supabase. Using local UI state instead.", error);
+    return {
+      data: toLocalEventRecord(input),
+      source: "fallback"
+    };
+  }
+
+  return {
+    data: fromSupabaseEvent(data as SupabaseEventRow),
+    source: "supabase"
+  };
+}
+
+export async function deleteEventRecord(event: EventRecord): Promise<PersistenceResult<EventRecord>> {
+  const supabase = getPersistenceClient();
+
+  if (!supabase || !isUuid(event.id)) {
+    return {
+      data: event,
+      source: "fallback"
+    };
+  }
+
+  const { error } = await supabase
+    .from("events")
+    .delete()
+    .eq("id", event.id);
+
+  if (error) {
+    warnAndUseFallback("Unable to delete event from Supabase. Keeping local UI state stable.", error);
+    return {
+      data: event,
+      source: "fallback"
+    };
+  }
+
+  return {
+    data: event,
+    source: "supabase"
+  };
 }
 
 export async function loadEventRecords(
@@ -232,6 +307,46 @@ function fromSupabaseEvent(row: SupabaseEventRow): EventRecord {
   };
 }
 
+function toSupabaseEventPayload(input: EventSaveInput) {
+  return {
+    title: input.title,
+    type: input.type,
+    start_date: input.startDate,
+    end_date: input.endDate || input.startDate,
+    time: input.time ?? "",
+    location: input.location ?? "",
+    city: input.city ?? "",
+    description: input.description ?? input.notes ?? "",
+    status: input.status ?? "Planning",
+    flyer_status: input.flyerStatus ?? "Needed",
+    notes: input.notes ?? "",
+    source: "supabase"
+  };
+}
+
+function toLocalEventRecord(input: EventSaveInput): EventRecord {
+  const startDate = input.startDate || toDateValue(new Date());
+  const flyerStatus = input.flyerStatus ?? "Needed";
+
+  return {
+    id: input.id ?? createLocalId("event"),
+    title: input.title,
+    date: startDate,
+    startDate,
+    endDate: input.endDate || startDate,
+    time: input.time ?? "TBD",
+    location: input.location ?? "TBD",
+    city: input.city ?? "",
+    description: input.description ?? input.notes ?? "",
+    source: "fallback",
+    type: input.type,
+    status: input.status ?? "Planning",
+    flyerStatus,
+    notes: input.notes ?? input.description ?? "",
+    checklist: buildChecklist(input.location, input.type, flyerStatus)
+  };
+}
+
 function buildChecklist(location = "", type = "", flyerStatus = "Needed") {
   const hasVenue = location.trim() !== "" && !location.toLowerCase().includes("tbd");
   const isRide = type.toLowerCase().includes("ride");
@@ -243,4 +358,16 @@ function buildChecklist(location = "", type = "", flyerStatus = "Needed") {
     { label: flyerPosted ? "Flyer Posted" : "Flyer Needed", tone: flyerPosted ? "success" : "warning" },
     { label: "Email Needed", tone: "warning" }
   ] as EventRecord["checklist"];
+}
+
+function isUuid(value: string) {
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{12}$/i.test(value);
+}
+
+function createLocalId(prefix: string) {
+  if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
+    return `${prefix}-${crypto.randomUUID()}`;
+  }
+
+  return `${prefix}-${Date.now()}`;
 }

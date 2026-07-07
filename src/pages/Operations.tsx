@@ -8,7 +8,7 @@ import { SectionHeader } from "../components/ui/SectionHeader";
 import { StatusChip } from "../components/ui/StatusChip";
 import { DateInput, SelectInput, Textarea, TextInput } from "../components/ui/inputs";
 import type { EventRecord, MediaItem, OperationCategory, OperationItem, OperationStatus, RideRecord } from "../types";
-import { getPastEvents, getUpcomingEvents } from "../services/eventsService";
+import { getPastEvents, getUpcomingEvents, isRideEvent } from "../services/eventsService";
 import type { OperationItemInput } from "../services/operationsService";
 import type { PersistenceResult } from "../services/persistence";
 
@@ -34,6 +34,7 @@ interface OperationsProps {
     item: OperationItem,
     status: OperationStatus
   ) => Promise<PersistenceResult<OperationItem>>;
+  onDeleteOperationItem: (item: OperationItem) => Promise<PersistenceResult<OperationItem>>;
 }
 
 interface OperationFormState {
@@ -67,7 +68,8 @@ export function Operations({
   isPersistenceConfigured,
   onCreateOperationItem,
   onUpdateOperationItem,
-  onUpdateOperationStatus
+  onUpdateOperationStatus,
+  onDeleteOperationItem
 }: OperationsProps) {
   const upcomingEvents = getUpcomingEvents(eventRecords);
   const completedEvents = getPastEvents(eventRecords);
@@ -75,6 +77,7 @@ export function Operations({
   const completedThisYear = completedEvents.filter(
     (event) => new Date(`${event.startDate}T00:00:00`).getFullYear() === currentYear
   );
+  const upcomingRideEvents = upcomingEvents.filter(isRideEvent);
   const upcomingRides = rideRecords.filter((ride) => new Date(`${ride.date}T00:00:00`) >= new Date(new Date().toDateString()));
   const activeOperationItems = operationItems.filter((item) => item.status !== "complete");
   const [formState, setFormState] = useState<OperationFormState>(emptyOperationForm);
@@ -87,7 +90,7 @@ export function Operations({
     { label: "Upcoming events", value: upcomingEvents.length },
     { label: "Completed events this year", value: completedThisYear.length },
     { label: "Total media assets", value: mediaItems.length },
-    { label: "Upcoming rides", value: upcomingRides.length },
+    { label: "Upcoming rides", value: upcomingRideEvents.length || upcomingRides.length },
     { label: "Open operation items", value: activeOperationItems.length }
   ];
 
@@ -174,6 +177,29 @@ export function Operations({
     }
   }
 
+  async function handleDeleteItem(item: OperationItem) {
+    if (!window.confirm("Delete this operation item? This action cannot be undone.")) return;
+
+    setSavingItemId(item.id);
+    setSaveError("");
+    setSaveMessage("");
+
+    try {
+      const result = await onDeleteOperationItem(item);
+      if (result.source === "fallback" && isPersistenceConfigured) {
+        setSaveError("Operation item could not be deleted from Supabase.");
+      } else {
+        setSaveMessage(result.source === "supabase" ? "Operation item deleted." : "Operation item deleted locally for this session.");
+        if (formState.id === item.id) closeEditor();
+      }
+    } catch (error) {
+      console.warn("[operations] Unable to delete operation item.", error);
+      setSaveError("Operation item could not be deleted. Try again in a moment.");
+    } finally {
+      setSavingItemId(null);
+    }
+  }
+
   return (
     <PageContainer>
       <div className="page-title">
@@ -208,12 +234,15 @@ export function Operations({
                       ))}
                     </SelectInput>
                     <Button type="button" variant="ghost" onClick={() => openEditForm(item)}>Edit</Button>
+                    <Button type="button" variant="ghost" onClick={() => handleDeleteItem(item)} disabled={savingItemId === item.id}>
+                      Delete
+                    </Button>
                   </div>
                 </article>
               ))}
             </div>
           ) : (
-            <EmptyState title="No operation items" message="Operational items will appear here when they are added to Supabase." />
+            <EmptyState title="No operation items yet." message="Operational items will appear here when they are added to Supabase." />
           )}
           <p className="form-note">
             {getSourceNote(operationItemsSource, isPersistenceConfigured)}

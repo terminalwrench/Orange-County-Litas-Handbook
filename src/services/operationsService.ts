@@ -79,6 +79,35 @@ export async function updateOperationItemStatus(
   return saveOperationItem({ ...item, status });
 }
 
+export async function deleteOperationItem(item: OperationItem): Promise<PersistenceResult<OperationItem>> {
+  const supabase = getPersistenceClient();
+
+  if (!supabase || !isUuid(item.id)) {
+    return {
+      data: item,
+      source: "fallback"
+    };
+  }
+
+  const { error } = await supabase
+    .from("operation_items")
+    .delete()
+    .eq("id", item.id);
+
+  if (error) {
+    warnAndUseFallback("Unable to delete operation item from Supabase. Keeping local UI state stable.", error);
+    return {
+      data: item,
+      source: "fallback"
+    };
+  }
+
+  return {
+    data: item,
+    source: "supabase"
+  };
+}
+
 function fromSupabaseOperationItem(row: SupabaseOperationItemRow): OperationItem {
   return {
     id: row.id,
