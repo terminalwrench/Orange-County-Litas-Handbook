@@ -100,6 +100,7 @@ create table if not exists public.operation_items (
   title text not null,
   category text not null,
   status text not null,
+  checklist jsonb default '[]'::jsonb,
   priority text,
   due_date date,
   owner text,

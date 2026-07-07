@@ -13,7 +13,7 @@ export type {
   UpcomingEvent
 } from "./event";
 export type { ExternalResource } from "./link";
-export type { OperationCategory, OperationItem, OperationStatus } from "./operation";
+export type { OperationCategory, OperationChecklistItem, OperationItem, OperationStatus } from "./operation";
 export type { RideRecord, RideStop } from "./ride";
 export type {
   AppSettings,

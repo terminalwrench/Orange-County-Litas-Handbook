@@ -7,9 +7,9 @@ import { FormField } from "../components/ui/FormField";
 import { SectionHeader } from "../components/ui/SectionHeader";
 import { StatusChip } from "../components/ui/StatusChip";
 import { DateInput, SelectInput, Textarea, TextInput } from "../components/ui/inputs";
-import type { EventRecord, OperationCategory, OperationItem, OperationStatus } from "../types";
+import type { EventRecord, OperationCategory, OperationChecklistItem, OperationItem, OperationStatus } from "../types";
 import { getPastEvents } from "../services/eventsService";
-import type { OperationItemInput } from "../services/operationsService";
+import { getDefaultOperationChecklist, type OperationItemInput } from "../services/operationsService";
 import type { PersistenceResult } from "../services/persistence";
 
 const dateFormatter = new Intl.DateTimeFormat("en-US", {
@@ -17,8 +17,8 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", {
   day: "numeric"
 });
 
-const operationCategories: OperationCategory[] = ["deadline", "birthday", "flyer", "planning", "reference", "general"];
-const operationStatuses: OperationStatus[] = ["pending", "planning", "confirmed", "completed"];
+const operationCategories: OperationCategory[] = ["ride", "meet-greet", "collaboration", "major-event"];
+const operationStatuses: OperationStatus[] = ["pending", "confirmed", "completed"];
 
 interface OperationsProps {
   eventRecords: EventRecord[];
@@ -40,6 +40,7 @@ interface OperationFormState {
   title: string;
   category: OperationCategory;
   status: OperationStatus;
+  checklist: OperationChecklistItem[];
   priority: string;
   dueDate: string;
   owner: string;
@@ -48,8 +49,9 @@ interface OperationFormState {
 
 const emptyOperationForm: OperationFormState = {
   title: "",
-  category: "general",
+  category: "ride",
   status: "pending",
+  checklist: getDefaultOperationChecklist("ride"),
   priority: "",
   dueDate: "",
   owner: "",
@@ -71,8 +73,8 @@ export function Operations({
   const activeOperationItems = operationItems.filter((item) => item.status !== "completed");
   const meetAndGreetsHosted = completedEvents.filter((event) => event.type.toLowerCase().includes("meet")).length;
   const ridesHosted = completedEvents.filter((event) => `${event.title} ${event.type}`.toLowerCase().includes("ride")).length;
-  const planningOperationItems = activeOperationItems.filter((item) => item.category === "planning" || item.status === "planning");
   const upcomingDeadlineItems = operationItems.filter(isUpcomingDeadline);
+  const confirmedOperationItems = operationItems.filter((item) => item.status === "confirmed");
   const [formState, setFormState] = useState<OperationFormState>(emptyOperationForm);
   const [editorOpen, setEditorOpen] = useState(false);
   const [savingItemId, setSavingItemId] = useState<string | null>(null);
@@ -82,10 +84,10 @@ export function Operations({
   const editingOperationItem = formState.id ? operationItems.find((item) => item.id === formState.id) : undefined;
   const metrics = [
     { label: "Open operation items", value: activeOperationItems.length },
-    { label: "Planning items", value: planningOperationItems.length },
+    { label: "Confirmed items", value: confirmedOperationItems.length },
     { label: "Meet & Greets hosted", value: meetAndGreetsHosted },
     { label: "Rides hosted", value: ridesHosted },
-    { label: "Upcoming deadlines", value: upcomingDeadlineItems.length }
+    { label: "Upcoming due dates", value: upcomingDeadlineItems.length }
   ];
 
   function openNewItemForm() {
@@ -111,6 +113,21 @@ export function Operations({
 
   function updateForm(field: keyof OperationFormState, value: string) {
     setFormState((current) => ({ ...current, [field]: value }));
+  }
+
+  function updateEventType(category: OperationCategory) {
+    setFormState((current) => ({
+      ...current,
+      category,
+      checklist: getDefaultOperationChecklist(category)
+    }));
+  }
+
+  function toggleChecklistItem(itemId: string) {
+    setFormState((current) => ({
+      ...current,
+      checklist: current.checklist.map((item) => item.id === itemId ? { ...item, complete: !item.complete } : item)
+    }));
   }
 
   async function handleStatusChange(item: OperationItem, status: OperationStatus) {
@@ -233,7 +250,7 @@ export function Operations({
             </div>
           ) : (
             <div className="empty-action">
-              <EmptyState title="No active operation items." message="Pending, planning, confirmed, and deadline items will appear here." />
+              <EmptyState title="No active operation items." message="Ride, Meet & Greet, Collaboration, and Major Event workflows will appear here." />
               <Button type="button" variant="secondary" onClick={openNewItemForm}>Add First Item</Button>
             </div>
           )}
@@ -267,11 +284,11 @@ export function Operations({
                   required
                 />
               </FormField>
-              <FormField label="Category" htmlFor="operation-category">
+              <FormField label="Event Type" htmlFor="operation-category">
                 <SelectInput
                   id="operation-category"
                   value={formState.category}
-                  onChange={(event) => updateForm("category", event.target.value as OperationCategory)}
+                  onChange={(event) => updateEventType(event.target.value as OperationCategory)}
                 >
                   {operationCategories.map((category) => (
                     <option key={category} value={category}>{formatCategory(category)}</option>
@@ -312,7 +329,7 @@ export function Operations({
                   placeholder="Leadership, media, ride lead"
                 />
               </FormField>
-              <FormField label="Notes" htmlFor="operation-notes">
+              <FormField label="Description" htmlFor="operation-notes">
                 <Textarea
                   id="operation-notes"
                   value={formState.notes}
@@ -320,6 +337,23 @@ export function Operations({
                   placeholder="Context, follow-up, or details the team should remember."
                 />
               </FormField>
+              <div className="form-field operation-checklist-field">
+                <span>Checklist</span>
+                <ul className="checklist operation-checklist">
+                  {formState.checklist.map((item) => (
+                    <li key={item.id}>
+                      <label className="checklist-toggle">
+                        <input
+                          type="checkbox"
+                          checked={item.complete}
+                          onChange={() => toggleChecklistItem(item.id)}
+                        />
+                        <span>{item.label}</span>
+                      </label>
+                    </li>
+                  ))}
+                </ul>
+              </div>
               <div className="form-actions">
                 <Button type="submit" variant="primary" disabled={savingItemId === formState.id || savingItemId === "new"}>
                   {savingItemId === formState.id || savingItemId === "new" ? "Saving..." : "Save item"}
@@ -366,6 +400,7 @@ function toOperationFormState(item: OperationItem): OperationFormState {
     title: item.title,
     category: item.category,
     status: item.status,
+    checklist: item.checklist,
     priority: item.priority ?? "",
     dueDate: item.dueDate ?? "",
     owner: item.owner ?? "",
@@ -379,6 +414,7 @@ function toOperationInput(form: OperationFormState): OperationItemInput {
     title: form.title.trim(),
     category: form.category,
     status: form.status,
+    checklist: form.checklist,
     priority: form.priority.trim() || undefined,
     dueDate: form.dueDate || undefined,
     owner: form.owner.trim() || undefined,
@@ -389,6 +425,7 @@ function toOperationInput(form: OperationFormState): OperationItemInput {
 function getOperationMeta(item: OperationItem) {
   const parts = [
     formatCategory(item.category),
+    getChecklistMeta(item),
     item.dueDate ? dateFormatter.format(new Date(`${item.dueDate}T00:00:00`)) : "",
     item.owner ?? "",
     item.priority ? `${item.priority} priority` : ""
@@ -398,7 +435,7 @@ function getOperationMeta(item: OperationItem) {
 }
 
 function isUpcomingDeadline(item: OperationItem) {
-  if (item.category !== "deadline" || !item.dueDate) return false;
+  if (!item.dueDate || item.status === "completed") return false;
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -408,7 +445,14 @@ function isUpcomingDeadline(item: OperationItem) {
 }
 
 function formatCategory(category: string) {
-  return category.replace(/-/g, " ").replace(/\b\w/g, (letter) => letter.toUpperCase());
+  const labels: Record<string, string> = {
+    ride: "Ride",
+    "meet-greet": "Meet & Greet",
+    collaboration: "Collaboration",
+    "major-event": "Major Event"
+  };
+
+  return labels[category] ?? category.replace(/-/g, " ").replace(/\b\w/g, (letter) => letter.toUpperCase());
 }
 
 function formatStatus(status: OperationStatus) {
@@ -419,4 +463,9 @@ function getSourceNote(source: "static" | "supabase" | "fallback", isPersistence
   if (source === "supabase") return "Live Supabase operations source is active.";
   if (isPersistenceConfigured) return "Showing fallback/demo operation items because the Supabase read failed.";
   return "Fallback mode: using static demo operation items.";
+}
+
+function getChecklistMeta(item: OperationItem) {
+  const completed = item.checklist.filter((checklistItem) => checklistItem.complete).length;
+  return `${completed}/${item.checklist.length} complete`;
 }

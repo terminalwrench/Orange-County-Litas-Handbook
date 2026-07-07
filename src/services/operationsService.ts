@@ -1,5 +1,5 @@
 import { operationItems } from "../data/operationItems";
-import type { OperationCategory, OperationItem, OperationStatus } from "../types";
+import type { OperationCategory, OperationChecklistItem, OperationItem, OperationStatus } from "../types";
 import { getPersistenceClient, warnAndUseFallback, type PersistenceResult } from "./persistence";
 
 interface SupabaseOperationItemRow {
@@ -7,6 +7,7 @@ interface SupabaseOperationItemRow {
   title: string;
   category: string;
   status: string;
+  checklist: OperationChecklistItem[] | null;
   priority: string | null;
   due_date: string | null;
   owner: string | null;
@@ -19,6 +20,7 @@ export interface OperationItemInput {
   title: string;
   category: OperationCategory;
   status: OperationStatus;
+  checklist?: OperationChecklistItem[];
   priority?: string;
   dueDate?: string;
   owner?: string;
@@ -122,6 +124,7 @@ function fromSupabaseOperationItem(row: SupabaseOperationItemRow): OperationItem
     title: row.title,
     category: toOperationCategory(row.category),
     status: toOperationStatus(row.status),
+    checklist: toOperationChecklist(row.checklist, toOperationCategory(row.category)),
     priority: row.priority ?? undefined,
     dueDate: row.due_date ?? undefined,
     owner: row.owner ?? undefined,
@@ -166,6 +169,7 @@ function toSupabaseOperationPayload(input: OperationItemInput) {
     title: input.title,
     category: input.category,
     status: input.status,
+    checklist: input.checklist ?? getDefaultOperationChecklist(input.category),
     priority: input.priority ?? null,
     due_date: input.dueDate || null,
     owner: input.owner ?? null,
@@ -180,6 +184,7 @@ function toLocalOperationItem(input: OperationItemInput): OperationItem {
     title: input.title,
     category: input.category,
     status: input.status,
+    checklist: input.checklist ?? getDefaultOperationChecklist(input.category),
     priority: input.priority,
     dueDate: input.dueDate,
     owner: input.owner,
@@ -189,17 +194,62 @@ function toLocalOperationItem(input: OperationItemInput): OperationItem {
 }
 
 function toOperationCategory(value: string): OperationCategory {
-  const categories: OperationCategory[] = ["deadline", "birthday", "flyer", "planning", "reference", "general"];
-  return categories.includes(value as OperationCategory) ? value as OperationCategory : "general";
+  const categories: OperationCategory[] = ["ride", "meet-greet", "collaboration", "major-event"];
+  if (categories.includes(value as OperationCategory)) return value as OperationCategory;
+  if (value === "flyer") return "meet-greet";
+  if (value === "planning" || value === "deadline" || value === "general") return "ride";
+  if (value === "reference" || value === "birthday") return "major-event";
+  return "ride";
 }
 
 function toOperationStatus(value: string): OperationStatus {
-  if (value === "planned") return "planning";
+  if (value === "planned" || value === "planning") return "pending";
   if (value === "complete") return "completed";
   if (value === "blocked") return "pending";
 
-  const statuses: OperationStatus[] = ["pending", "planning", "confirmed", "completed"];
+  const statuses: OperationStatus[] = ["pending", "confirmed", "completed"];
   return statuses.includes(value as OperationStatus) ? value as OperationStatus : "pending";
+}
+
+export function getDefaultOperationChecklist(category: OperationCategory): OperationChecklistItem[] {
+  const items: Record<OperationCategory, string[]> = {
+    ride: ["Venue Confirmed", "Route Complete", "Instagram Post", "Collective Post"],
+    "meet-greet": ["Venue Confirmed", "Flyer Posted"],
+    collaboration: ["Reservation Confirmed", "Branches Contacted", "Flyer Posted"],
+    "major-event": ["Registration Complete", "Hosted Ride Planned", "Flyer Posted"]
+  };
+
+  return items[category].map((label) => ({
+    id: slugify(label),
+    label,
+    complete: false
+  }));
+}
+
+function toOperationChecklist(value: unknown, category: OperationCategory): OperationChecklistItem[] {
+  if (!Array.isArray(value)) return getDefaultOperationChecklist(category);
+
+  const checklist = value
+    .filter((item): item is Partial<OperationChecklistItem> => typeof item === "object" && item !== null)
+    .map((item) => {
+      const label = typeof item.label === "string" ? item.label : "";
+
+      return {
+        id: typeof item.id === "string" ? item.id : slugify(label),
+        label,
+        complete: Boolean(item.complete)
+      };
+    })
+    .filter((item) => item.label);
+
+  return checklist.length > 0 ? checklist : getDefaultOperationChecklist(category);
+}
+
+function slugify(value: string) {
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
 }
 
 function isUuid(value: string) {
