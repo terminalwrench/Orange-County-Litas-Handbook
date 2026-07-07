@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { AppShell } from "./components/layout/AppShell";
-import type { EventRecord, ExternalResource, MediaItem, ModuleId, OperationItem, RideRecord } from "./types";
+import type { EventRecord, ExternalResource, MediaItem, ModuleId, OperationItem, OperationStatus, RideRecord } from "./types";
 import { Events } from "./pages/Events";
 import { Home } from "./pages/Home";
 import { MediaCenter } from "./pages/MediaCenter";
@@ -8,7 +8,14 @@ import { Operations } from "./pages/Operations";
 import { Reference } from "./pages/Reference";
 import { RidePlanner } from "./pages/RidePlanner";
 import { buildEventDashboardData, getEvents, loadEventRecords } from "./services/eventsService";
-import { getOperationItems, loadOperationItems } from "./services/operationsService";
+import {
+  createOperationItem,
+  getOperationItems,
+  loadOperationItems,
+  updateOperationItem,
+  updateOperationItemStatus,
+  type OperationItemInput
+} from "./services/operationsService";
 import { getMediaItems, loadMediaItems } from "./services/mediaService";
 import { getPersistenceStatus } from "./services/persistence";
 import { getRides, loadRideRecords } from "./services/ridesService";
@@ -20,6 +27,7 @@ export function App() {
   const [eventRecords, setEventRecords] = useState<EventRecord[]>(getEvents());
   const [rideRecords, setRideRecords] = useState<RideRecord[]>(getRides());
   const [operationItems, setOperationItems] = useState<OperationItem[]>(getOperationItems());
+  const [operationItemsSource, setOperationItemsSource] = useState<"static" | "supabase" | "fallback">("static");
   const [mediaItems, setMediaItems] = useState<MediaItem[]>(getMediaItems());
   const [usefulLinks, setUsefulLinks] = useState<ExternalResource[]>(getUsefulLinks());
   const [isLoadingRecords, setIsLoadingRecords] = useState(true);
@@ -41,6 +49,7 @@ export function App() {
         setEventRecords(eventResult.events);
         setRideRecords(rideResult.rides);
         setOperationItems(operationResult.items);
+        setOperationItemsSource(operationResult.source);
         setMediaItems(mediaResult.media);
         setUsefulLinks(linksResult.links);
         setIsLoadingRecords(false);
@@ -54,6 +63,27 @@ export function App() {
       cancelled = true;
     };
   }, []);
+
+  async function handleCreateOperationItem(input: OperationItemInput) {
+    const result = await createOperationItem(input);
+    setOperationItems((current) => upsertById(current, result.data));
+    if (result.source === "supabase") setOperationItemsSource("supabase");
+    return result;
+  }
+
+  async function handleUpdateOperationItem(input: OperationItemInput) {
+    const result = await updateOperationItem(input);
+    setOperationItems((current) => upsertById(current, result.data, input.id));
+    if (result.source === "supabase") setOperationItemsSource("supabase");
+    return result;
+  }
+
+  async function handleUpdateOperationStatus(item: OperationItem, status: OperationStatus) {
+    const result = await updateOperationItemStatus(item, status);
+    setOperationItems((current) => upsertById(current, result.data, item.id));
+    if (result.source === "supabase") setOperationItemsSource("supabase");
+    return result;
+  }
 
   function renderActivePage() {
     switch (activeModule) {
@@ -79,9 +109,13 @@ export function App() {
             eventRecords={eventDashboard.eventRecords}
             rideRecords={rideRecords}
             operationItems={operationItems}
+            operationItemsSource={operationItemsSource}
             mediaItems={mediaItems}
             isLoading={isLoadingRecords}
             isPersistenceConfigured={persistenceStatus.isConfigured}
+            onCreateOperationItem={handleCreateOperationItem}
+            onUpdateOperationItem={handleUpdateOperationItem}
+            onUpdateOperationStatus={handleUpdateOperationStatus}
           />
         );
       case "ride-planner":
@@ -110,4 +144,11 @@ export function App() {
       {renderActivePage()}
     </AppShell>
   );
+}
+
+function upsertById<T extends { id: string }>(records: T[], saved: T, previousId?: string) {
+  const index = records.findIndex((record) => record.id === saved.id || record.id === previousId);
+  if (index === -1) return [...records, saved];
+
+  return records.map((record, recordIndex) => recordIndex === index ? saved : record);
 }

@@ -2,6 +2,11 @@ import { getSupabaseClient, isSupabaseConfigured } from "../lib/supabaseClient";
 
 const warningKeys = new Set<string>();
 
+export interface PersistenceResult<T> {
+  data: T;
+  source: "supabase" | "fallback";
+}
+
 export function getPersistenceStatus() {
   return {
     isConfigured: isSupabaseConfigured()
