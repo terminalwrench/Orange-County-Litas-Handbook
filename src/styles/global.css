@@ -788,10 +788,19 @@ a {
   padding: 0.8rem 0;
 }
 
+.record-row:has(.button) {
+  grid-template-columns: minmax(0, 1fr) auto auto;
+}
+
 .record-row:has(.date-badge--compact) {
-  grid-template-columns: 3.35rem minmax(0, 1fr) auto;
+  grid-template-columns: 3.35rem minmax(0, 1fr) auto auto;
   min-height: 4.1rem;
   padding: 0.72rem 0;
+}
+
+.record-row--selected {
+  border-color: rgba(255, 107, 0, 0.34);
+  background: rgba(255, 107, 0, 0.055);
 }
 
 .detail-card {
@@ -870,6 +879,7 @@ a {
 
 .form-actions {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 0.7rem;
   grid-column: 1 / -1;
@@ -923,6 +933,20 @@ a {
 .form-note {
   color: var(--color-muted);
   font-size: 0.78rem;
+}
+
+.form-status {
+  grid-column: 1 / -1;
+  margin: -0.25rem 0 0;
+  font-size: 0.8rem;
+}
+
+.form-status--success {
+  color: #80d68f;
+}
+
+.form-status--error {
+  color: #ff9b9b;
 }
 
 .empty-state {

@@ -3,24 +3,28 @@ import { DashboardCard } from "../components/ui/DashboardCard";
 import { EmptyState } from "../components/ui/EmptyState";
 import { SectionHeader } from "../components/ui/SectionHeader";
 import { StatusChip } from "../components/ui/StatusChip";
-import { getEvents, getPastEvents, getUpcomingEvents } from "../services/eventsService";
+import type { EventRecord, RideRecord } from "../types";
+import { getPastEvents, getUpcomingEvents } from "../services/eventsService";
 import { getAssetLibraryItems } from "../services/mediaService";
-import { getUpcomingRides } from "../services/ridesService";
 
 const dateFormatter = new Intl.DateTimeFormat("en-US", {
   month: "short",
   day: "numeric"
 });
 
-export function Operations() {
-  const eventRecords = getEvents();
+interface OperationsProps {
+  eventRecords: EventRecord[];
+  rideRecords: RideRecord[];
+}
+
+export function Operations({ eventRecords, rideRecords }: OperationsProps) {
   const upcomingEvents = getUpcomingEvents(eventRecords);
   const completedEvents = getPastEvents(eventRecords);
   const currentYear = new Date().getFullYear();
   const completedThisYear = completedEvents.filter(
     (event) => new Date(`${event.startDate}T00:00:00`).getFullYear() === currentYear
   );
-  const upcomingRides = getUpcomingRides(eventRecords);
+  const upcomingRides = rideRecords.filter((ride) => new Date(`${ride.date}T00:00:00`) >= new Date(new Date().toDateString()));
   const mediaItems = getAssetLibraryItems();
   const metrics = [
     { label: "Upcoming events", value: upcomingEvents.length },

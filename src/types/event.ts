@@ -67,7 +67,7 @@ export interface EventRecord {
   location: string;
   city: string;
   description: string;
-  source: "fallback" | "ics";
+  source: "fallback" | "ics" | "supabase";
   type: string;
   status: string;
   flyerStatus: string;

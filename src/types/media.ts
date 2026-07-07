@@ -9,6 +9,8 @@ export interface MediaItem {
   date?: string;
   url?: string;
   previewSurface?: "dark" | "light";
+  storagePath?: string;
+  notes?: string;
 }
 
 export interface MediaSource {

@@ -19,6 +19,21 @@ pnpm build
 
 The deployable output is generated in `dist/`.
 
+## Backend Setup
+
+The app can run without Supabase. When `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` are missing, it uses the static fallback data in `src/data/` and keeps event or ride saves local to the current browser session.
+
+To enable Supabase persistence:
+
+1. Create a Supabase project.
+2. Run [supabase/schema.sql](supabase/schema.sql) in the Supabase SQL editor.
+3. Copy [.env.example](.env.example) to `.env.local`.
+4. Add `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`.
+5. Install dependencies with `pnpm install`.
+6. Start the dev server with `pnpm dev`.
+
+This milestone does not add authentication. The schema includes comments for enabling Row Level Security when auth is added later.
+
 ## Reference Content
 
 The `docs/` directory contains legacy handbook/reference material that may be reused by the React app. It is not the deployed site root.
