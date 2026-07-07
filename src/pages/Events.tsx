@@ -9,7 +9,7 @@ import { SectionHeader } from "../components/ui/SectionHeader";
 import { StatusChip } from "../components/ui/StatusChip";
 import { DateInput, SelectInput, Textarea, TextInput, TimeInput } from "../components/ui/inputs";
 import type { EventRecord } from "../types";
-import { getPastEvents, getUpcomingEvents, type EventSaveInput } from "../services/eventsService";
+import { getPastEvents, getUpcomingEvents, type CalendarImportResult, type EventSaveInput } from "../services/eventsService";
 import type { PersistenceResult } from "../services/persistence";
 
 interface EventsProps {
@@ -19,10 +19,12 @@ interface EventsProps {
   isPersistenceConfigured: boolean;
   onSaveEvent: (input: EventSaveInput) => Promise<PersistenceResult<EventRecord>>;
   onDeleteEvent: (event: EventRecord) => Promise<PersistenceResult<EventRecord>>;
+  onImportCalendarEvents: () => Promise<CalendarImportResult>;
 }
 
 interface EventFormState {
   id?: string;
+  externalUid?: string;
   title: string;
   startDate: string;
   time: string;
@@ -114,7 +116,8 @@ export function Events({
   isLoading,
   isPersistenceConfigured,
   onSaveEvent,
-  onDeleteEvent
+  onDeleteEvent,
+  onImportCalendarEvents
 }: EventsProps) {
   const today = new Date();
   const upcomingEvents = sortAscendingByStartDate(getUpcomingEvents(eventRecords, today));
@@ -123,6 +126,7 @@ export function Events({
   const [formState, setFormState] = useState<EventFormState>(emptyEventForm);
   const [editorOpen, setEditorOpen] = useState(false);
   const [savingId, setSavingId] = useState<string | null>(null);
+  const [isImportingCalendar, setIsImportingCalendar] = useState(false);
   const [saveMessage, setSaveMessage] = useState("");
   const [saveError, setSaveError] = useState("");
   const selectedEvent = eventRecords.find((event) => event.id === selectedEventId);
@@ -216,6 +220,28 @@ export function Events({
     }
   }
 
+  async function handleImportCalendar() {
+    setIsImportingCalendar(true);
+    setSaveMessage("");
+    setSaveError("");
+
+    try {
+      const result = await onImportCalendarEvents();
+
+      if (result.error) {
+        setSaveError(result.error);
+        return;
+      }
+
+      setSaveMessage(`Calendar import complete. ${result.imported.length} imported, ${result.skipped} skipped.`);
+    } catch (error) {
+      console.warn("[events] Unable to import calendar feed.", error);
+      setSaveError("Calendar import could not be completed. Existing Supabase events were kept.");
+    } finally {
+      setIsImportingCalendar(false);
+    }
+  }
+
   return (
     <PageContainer>
       <div className="page-title">
@@ -224,7 +250,23 @@ export function Events({
       </div>
       <div className="module-grid module-grid--wide-left">
         <DashboardCard>
-          <SectionHeader title="Upcoming Events" action={<Button type="button" variant="secondary" onClick={openNewEventForm}>Add event</Button>} />
+          <SectionHeader
+            title="Upcoming Events"
+            action={(
+              <div className="section-actions">
+                <Button
+                  type="button"
+                  variant="secondary"
+                  onClick={handleImportCalendar}
+                  disabled={isImportingCalendar || !isPersistenceConfigured}
+                  title={isPersistenceConfigured ? "Import from the public Google Calendar ICS feed." : "Connect Supabase before importing calendar events."}
+                >
+                  {isImportingCalendar ? "Importing..." : "Import calendar"}
+                </Button>
+                <Button type="button" variant="secondary" onClick={openNewEventForm}>Add event</Button>
+              </div>
+            )}
+          />
           {isLoading ? (
             <EmptyState title="Loading events" message="Checking the configured event source." />
           ) : upcomingEvents.length > 0 ? (
@@ -325,6 +367,7 @@ export function Events({
 function toEventFormState(event: EventRecord): EventFormState {
   return {
     id: event.id,
+    externalUid: event.externalUid,
     title: event.title,
     startDate: event.startDate,
     time: toTimeInputValue(event.time),
@@ -349,7 +392,8 @@ function toEventInput(form: EventFormState): EventSaveInput {
     description: form.notes.trim(),
     status: form.status,
     flyerStatus: "Needed",
-    notes: form.notes.trim()
+    notes: form.notes.trim(),
+    externalUid: form.externalUid
   };
 }
 

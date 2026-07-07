@@ -72,5 +72,6 @@ export interface EventRecord {
   status: string;
   flyerStatus: string;
   notes: string;
+  externalUid?: string;
   checklist: StatusItem[];
 }

@@ -477,6 +477,13 @@ a {
   min-height: 1.6rem;
 }
 
+.section-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.65rem;
+}
+
 .event-list,
 .birthday-list,
 .record-list {

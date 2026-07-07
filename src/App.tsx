@@ -11,8 +11,10 @@ import {
   buildEventDashboardData,
   deleteEventRecord,
   getEvents,
+  importCalendarEventsFromIcs,
   loadEventRecords,
   saveEventRecord,
+  type CalendarImportResult,
   type EventSaveInput
 } from "./services/eventsService";
 import {
@@ -110,6 +112,31 @@ export function App() {
     return result;
   }
 
+  async function handleImportCalendarEvents(): Promise<CalendarImportResult> {
+    const result = await importCalendarEventsFromIcs();
+
+    if (result.imported.length > 0) {
+      setEventRecords((current) => {
+        const nextRecords = [...current];
+
+        for (const event of result.imported) {
+          const index = nextRecords.findIndex(
+            (record) => record.id === event.id || (event.externalUid && record.externalUid === event.externalUid)
+          );
+
+          if (index === -1) {
+            nextRecords.push(event);
+          }
+        }
+
+        return nextRecords;
+      });
+      setEventRecordsSource("supabase");
+    }
+
+    return result;
+  }
+
   async function handleUpdateOperationItem(input: OperationItemInput) {
     const result = await updateOperationItem(input);
     if (result.source === "supabase" || !persistenceStatus.isConfigured) {
@@ -155,6 +182,7 @@ export function App() {
             isPersistenceConfigured={persistenceStatus.isConfigured}
             onSaveEvent={handleSaveEvent}
             onDeleteEvent={handleDeleteEvent}
+            onImportCalendarEvents={handleImportCalendarEvents}
           />
         );
       case "operations":

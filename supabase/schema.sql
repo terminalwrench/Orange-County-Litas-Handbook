@@ -21,10 +21,15 @@ create table if not exists public.events (
   status text,
   flyer_status text,
   notes text,
+  external_uid text,
   source text default 'supabase',
   created_at timestamptz default now(),
   updated_at timestamptz default now()
 );
+
+create unique index if not exists events_external_uid_key
+on public.events (external_uid)
+where external_uid is not null;
 
 create table if not exists public.rides (
   id uuid primary key default gen_random_uuid(),

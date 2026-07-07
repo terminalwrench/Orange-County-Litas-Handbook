@@ -1,7 +1,10 @@
 import type { EventRecord, StatusItem } from "../types";
 import { toDateValue } from "../utils/date";
 
-const DEFAULT_CALENDAR_URL = `${import.meta.env.BASE_URL}calendar.ics`;
+export const PUBLIC_GOOGLE_CALENDAR_ICS_URL =
+  "https://calendar.google.com/calendar/ical/orangecountylitas%40gmail.com/public/basic.ics";
+
+const DEFAULT_CALENDAR_URL = PUBLIC_GOOGLE_CALENDAR_ICS_URL;
 
 interface IcsProperty {
   name: string;
@@ -19,29 +22,47 @@ export interface CalendarLoadResult {
   source: "ics" | "fallback";
 }
 
+export interface CalendarFetchResult {
+  events: EventRecord[];
+  error?: string;
+}
+
 // Replace public/calendar.ics with a fresh exported calendar file to update
 // the local source of truth. Missing or invalid files are handled by fallback data.
 export async function loadCalendarEvents(
   fallbackEvents: EventRecord[],
   calendarUrl = DEFAULT_CALENDAR_URL
 ): Promise<CalendarLoadResult> {
+  const result = await fetchCalendarEvents(calendarUrl);
+
+  if (result.error || result.events.length === 0) {
+    return { events: fallbackEvents, source: "fallback" };
+  }
+
+  return { events: result.events, source: "ics" };
+}
+
+export async function fetchCalendarEvents(
+  calendarUrl = DEFAULT_CALENDAR_URL
+): Promise<CalendarFetchResult> {
   try {
     const response = await fetch(calendarUrl, { cache: "no-store" });
 
     if (!response.ok) {
-      return { events: fallbackEvents, source: "fallback" };
+      return {
+        events: [],
+        error: `Calendar feed returned ${response.status}. Existing Supabase events were kept.`
+      };
     }
 
     const icsText = await response.text();
-    const events = parseIcsCalendar(icsText);
-
-    if (events.length === 0) {
-      return { events: fallbackEvents, source: "fallback" };
-    }
-
-    return { events, source: "ics" };
-  } catch {
-    return { events: fallbackEvents, source: "fallback" };
+    return { events: parseIcsCalendar(icsText) };
+  } catch (error) {
+    console.warn("[calendar] Unable to fetch calendar feed.", error);
+    return {
+      events: [],
+      error: "Could not import the public Google Calendar feed. Existing Supabase events were kept."
+    };
   }
 }
 
@@ -117,6 +138,7 @@ function parseEventBlock(lines: string[]): EventRecord | null {
     status: "Scheduled",
     flyerStatus: "Unknown",
     notes: description,
+    externalUid: uid,
     checklist: getChecklistForEvent(type)
   };
 }

@@ -3,7 +3,7 @@ import { featureFlags } from "../data/featureFlags";
 import type { DashboardEvent, EventRecord, RideWeather, UpcomingEvent, CountdownStatus } from "../types";
 import { getCountdownDisplay, getCountdownLabel as getCountdownLabelValue, getSidebarCountdown } from "../utils/countdown";
 import { isWithinCurrentWeek, parseDate, toDateValue } from "../utils/date";
-import { loadCalendarEvents } from "./calendarService";
+import { fetchCalendarEvents, loadCalendarEvents, PUBLIC_GOOGLE_CALENDAR_ICS_URL } from "./calendarService";
 import { getPersistenceClient, warnAndUseFallback, type PersistenceResult } from "./persistence";
 
 interface SupabaseEventRow {
@@ -19,6 +19,7 @@ interface SupabaseEventRow {
   status: string | null;
   flyer_status: string | null;
   notes: string | null;
+  external_uid: string | null;
   source: string | null;
 }
 
@@ -63,6 +64,7 @@ export interface EventSaveInput {
   status?: string;
   flyerStatus?: string;
   notes?: string;
+  externalUid?: string;
 }
 
 export interface EventDashboardData {
@@ -71,6 +73,14 @@ export interface EventDashboardData {
   upcomingEvents: UpcomingEvent[];
   sidebarCountdown: CountdownStatus;
   rideWeather: RideWeather | null;
+}
+
+export interface CalendarImportResult {
+  source: "supabase" | "fallback";
+  imported: EventRecord[];
+  skipped: number;
+  total: number;
+  error?: string;
 }
 
 export function getEvents(): EventRecord[] {
@@ -134,6 +144,102 @@ export async function deleteEventRecord(event: EventRecord): Promise<Persistence
   return {
     data: event,
     source: "supabase"
+  };
+}
+
+export async function importCalendarEventsFromIcs(
+  calendarUrl = PUBLIC_GOOGLE_CALENDAR_ICS_URL
+): Promise<CalendarImportResult> {
+  const supabase = getPersistenceClient();
+
+  if (!supabase) {
+    return {
+      source: "fallback",
+      imported: [],
+      skipped: 0,
+      total: 0,
+      error: "Supabase is not configured, so calendar events could not be imported."
+    };
+  }
+
+  const calendarResult = await fetchCalendarEvents(calendarUrl);
+
+  if (calendarResult.error) {
+    return {
+      source: "supabase",
+      imported: [],
+      skipped: 0,
+      total: 0,
+      error: calendarResult.error
+    };
+  }
+
+  const events = calendarResult.events.filter((event) => Boolean(event.externalUid));
+  const externalUids = events.map((event) => event.externalUid!);
+
+  if (events.length === 0) {
+    return {
+      source: "supabase",
+      imported: [],
+      skipped: 0,
+      total: calendarResult.events.length,
+      error: "The calendar feed did not contain importable events."
+    };
+  }
+
+  const { data: existingRows, error: existingError } = await supabase
+    .from("events")
+    .select("external_uid")
+    .in("external_uid", externalUids);
+
+  if (existingError) {
+    warnAndUseFallback("Unable to compare calendar events against Supabase external IDs.", existingError);
+    return {
+      source: "supabase",
+      imported: [],
+      skipped: 0,
+      total: events.length,
+      error: "Calendar import needs the events.external_uid column in Supabase before it can avoid duplicates."
+    };
+  }
+
+  const existingUids = new Set(
+    (existingRows as Pick<SupabaseEventRow, "external_uid">[])
+      .map((row) => row.external_uid)
+      .filter((uid): uid is string => Boolean(uid))
+  );
+  const eventsToInsert = events.filter((event) => !existingUids.has(event.externalUid!));
+
+  if (eventsToInsert.length === 0) {
+    return {
+      source: "supabase",
+      imported: [],
+      skipped: events.length,
+      total: events.length
+    };
+  }
+
+  const { data, error } = await supabase
+    .from("events")
+    .insert(eventsToInsert.map(toSupabaseImportedEventPayload))
+    .select();
+
+  if (error || !data) {
+    warnAndUseFallback("Unable to import calendar events into Supabase.", error);
+    return {
+      source: "supabase",
+      imported: [],
+      skipped: events.length - eventsToInsert.length,
+      total: events.length,
+      error: "Calendar events could not be saved to Supabase. Existing events were kept."
+    };
+  }
+
+  return {
+    source: "supabase",
+    imported: (data as SupabaseEventRow[]).map(fromSupabaseEvent),
+    skipped: events.length - eventsToInsert.length,
+    total: events.length
   };
 }
 
@@ -303,6 +409,7 @@ function fromSupabaseEvent(row: SupabaseEventRow): EventRecord {
     status,
     flyerStatus,
     notes: row.notes ?? row.description ?? "",
+    externalUid: row.external_uid ?? undefined,
     checklist: buildChecklist(row.location ?? "", row.type, flyerStatus)
   };
 }
@@ -320,7 +427,26 @@ function toSupabaseEventPayload(input: EventSaveInput) {
     status: input.status ?? "Planning",
     flyer_status: input.flyerStatus ?? "Needed",
     notes: input.notes ?? "",
+    ...(input.externalUid ? { external_uid: input.externalUid } : {}),
     source: "supabase"
+  };
+}
+
+function toSupabaseImportedEventPayload(event: EventRecord) {
+  return {
+    title: event.title,
+    type: event.type,
+    start_date: event.startDate,
+    end_date: event.endDate || event.startDate,
+    time: event.time,
+    location: event.location,
+    city: event.city,
+    description: event.description,
+    status: event.status,
+    flyer_status: event.flyerStatus,
+    notes: event.notes,
+    external_uid: event.externalUid ?? event.id,
+    source: "ics"
   };
 }
 
@@ -343,6 +469,7 @@ function toLocalEventRecord(input: EventSaveInput): EventRecord {
     status: input.status ?? "Planning",
     flyerStatus,
     notes: input.notes ?? input.description ?? "",
+    externalUid: input.externalUid,
     checklist: buildChecklist(input.location, input.type, flyerStatus)
   };
 }
