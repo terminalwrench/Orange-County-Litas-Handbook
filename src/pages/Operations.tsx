@@ -18,7 +18,7 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", {
 });
 
 const operationCategories: OperationCategory[] = ["deadline", "birthday", "flyer", "planning", "reference", "general"];
-const operationStatuses: OperationStatus[] = ["pending", "planned", "confirmed", "complete", "blocked"];
+const operationStatuses: OperationStatus[] = ["pending", "planning", "confirmed", "completed"];
 
 interface OperationsProps {
   eventRecords: EventRecord[];
@@ -68,9 +68,10 @@ export function Operations({
   onDeleteOperationItem
 }: OperationsProps) {
   const completedEvents = getPastEvents(eventRecords);
-  const activeOperationItems = operationItems.filter((item) => item.status !== "complete");
-  const completedOperationItems = operationItems.filter((item) => item.status === "complete");
-  const planningOperationItems = operationItems.filter((item) => item.category === "planning" || item.status === "planned");
+  const activeOperationItems = operationItems.filter((item) => item.status !== "completed");
+  const meetAndGreetsHosted = completedEvents.filter((event) => event.type.toLowerCase().includes("meet")).length;
+  const ridesHosted = completedEvents.filter((event) => `${event.title} ${event.type}`.toLowerCase().includes("ride")).length;
+  const planningOperationItems = activeOperationItems.filter((item) => item.category === "planning" || item.status === "planning");
   const upcomingDeadlineItems = operationItems.filter(isUpcomingDeadline);
   const [formState, setFormState] = useState<OperationFormState>(emptyOperationForm);
   const [editorOpen, setEditorOpen] = useState(false);
@@ -78,10 +79,12 @@ export function Operations({
   const [saveMessage, setSaveMessage] = useState("");
   const [saveError, setSaveError] = useState("");
   const isEditing = Boolean(formState.id);
+  const editingOperationItem = formState.id ? operationItems.find((item) => item.id === formState.id) : undefined;
   const metrics = [
     { label: "Open operation items", value: activeOperationItems.length },
-    { label: "Completed items", value: completedOperationItems.length },
     { label: "Planning items", value: planningOperationItems.length },
+    { label: "Meet & Greets hosted", value: meetAndGreetsHosted },
+    { label: "Rides hosted", value: ridesHosted },
     { label: "Upcoming deadlines", value: upcomingDeadlineItems.length }
   ];
 
@@ -205,14 +208,14 @@ export function Operations({
           />
           {isLoading ? (
             <EmptyState title="Loading operation items" message="Checking the configured operations source." />
-          ) : operationItems.length > 0 ? (
+          ) : activeOperationItems.length > 0 ? (
             <div className="operation-list">
-              {operationItems.map((item) => (
-                <article className="operation-row" key={item.id}>
-                  <span>
+              {activeOperationItems.map((item) => (
+                <article className={formState.id === item.id ? "operation-row operation-row--selected" : "operation-row"} key={item.id}>
+                  <button className="operation-row__select" type="button" onClick={() => openEditForm(item)}>
                     <strong>{item.title}</strong>
                     <em>{getOperationMeta(item)}</em>
-                  </span>
+                  </button>
                   <div className="operation-row__actions">
                     <SelectInput
                       aria-label={`Status for ${item.title}`}
@@ -224,17 +227,13 @@ export function Operations({
                         <option key={status} value={status}>{formatStatus(status)}</option>
                       ))}
                     </SelectInput>
-                    <Button type="button" variant="ghost" onClick={() => openEditForm(item)}>Edit</Button>
-                    <Button type="button" variant="ghost" onClick={() => handleDeleteItem(item)} disabled={savingItemId === item.id}>
-                      Delete
-                    </Button>
                   </div>
                 </article>
               ))}
             </div>
           ) : (
             <div className="empty-action">
-              <EmptyState title="No operation items yet." message="Operational items will appear here when they are added to Supabase." />
+              <EmptyState title="No active operation items." message="Pending, planning, confirmed, and deadline items will appear here." />
               <Button type="button" variant="secondary" onClick={openNewItemForm}>Add First Item</Button>
             </div>
           )}
@@ -326,6 +325,11 @@ export function Operations({
                   {savingItemId === formState.id || savingItemId === "new" ? "Saving..." : "Save item"}
                 </Button>
                 <Button type="button" variant="ghost" onClick={closeEditor}>Cancel</Button>
+                {isEditing && editingOperationItem ? (
+                  <Button type="button" variant="ghost" onClick={() => handleDeleteItem(editingOperationItem)} disabled={savingItemId === formState.id}>
+                    Delete item
+                  </Button>
+                ) : null}
                 <span className="form-note">
                   {isPersistenceConfigured ? "Saves to Supabase when available." : "Fallback mode: saves stay local to this session."}
                 </span>

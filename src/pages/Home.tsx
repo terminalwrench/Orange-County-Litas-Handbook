@@ -26,9 +26,9 @@ export function Home({ nextEvent, upcomingEvents, rideWeather }: HomeProps) {
         <UpcomingEventsCard events={upcomingEvents} />
         <div className="home-grid__stack">
           <BirthdaysCard birthdays={upcomingBirthdays} />
-          <RideWeatherCard weather={rideWeather} referenceDate={referenceDate} />
         </div>
       </div>
+      <RideWeatherCard weather={rideWeather} referenceDate={referenceDate} />
       <BranchNotesPlaceholder />
     </PageContainer>
   );

@@ -1,6 +1,6 @@
 export type OperationCategory = "deadline" | "birthday" | "flyer" | "planning" | "reference" | "general";
 
-export type OperationStatus = "pending" | "planned" | "confirmed" | "complete" | "blocked";
+export type OperationStatus = "pending" | "planning" | "confirmed" | "completed";
 
 export interface OperationItem {
   id: string;

@@ -18,6 +18,7 @@ interface SupabaseEventRow {
   description: string | null;
   status: string | null;
   flyer_status: string | null;
+  ride_difficulty: string | null;
   notes: string | null;
   external_uid: string | null;
   source: string | null;
@@ -63,6 +64,7 @@ export interface EventSaveInput {
   description?: string;
   status?: string;
   flyerStatus?: string;
+  rideDifficulty?: string;
   notes?: string;
   externalUid?: string;
 }
@@ -408,6 +410,7 @@ function fromSupabaseEvent(row: SupabaseEventRow): EventRecord {
     type: row.type,
     status,
     flyerStatus,
+    rideDifficulty: row.ride_difficulty ?? undefined,
     notes: row.notes ?? row.description ?? "",
     externalUid: row.external_uid ?? undefined,
     checklist: buildChecklist(row.location ?? "", row.type, flyerStatus)
@@ -426,6 +429,7 @@ function toSupabaseEventPayload(input: EventSaveInput) {
     description: input.description ?? input.notes ?? "",
     status: input.status ?? "Planning",
     flyer_status: input.flyerStatus ?? "Needed",
+    ...(input.rideDifficulty ? { ride_difficulty: input.rideDifficulty } : {}),
     notes: input.notes ?? "",
     ...(input.externalUid ? { external_uid: input.externalUid } : {}),
     source: "supabase"
@@ -444,6 +448,7 @@ function toSupabaseImportedEventPayload(event: EventRecord) {
     description: event.description,
     status: event.status,
     flyer_status: event.flyerStatus,
+    ...(event.rideDifficulty ? { ride_difficulty: event.rideDifficulty } : {}),
     notes: event.notes,
     external_uid: event.externalUid ?? event.id,
     source: "ics"
@@ -468,6 +473,7 @@ function toLocalEventRecord(input: EventSaveInput): EventRecord {
     type: input.type,
     status: input.status ?? "Planning",
     flyerStatus,
+    rideDifficulty: input.rideDifficulty,
     notes: input.notes ?? input.description ?? "",
     externalUid: input.externalUid,
     checklist: buildChecklist(input.location, input.type, flyerStatus)

@@ -194,7 +194,11 @@ function toOperationCategory(value: string): OperationCategory {
 }
 
 function toOperationStatus(value: string): OperationStatus {
-  const statuses: OperationStatus[] = ["pending", "planned", "confirmed", "complete", "blocked"];
+  if (value === "planned") return "planning";
+  if (value === "complete") return "completed";
+  if (value === "blocked") return "pending";
+
+  const statuses: OperationStatus[] = ["pending", "planning", "confirmed", "completed"];
   return statuses.includes(value as OperationStatus) ? value as OperationStatus : "pending";
 }
 

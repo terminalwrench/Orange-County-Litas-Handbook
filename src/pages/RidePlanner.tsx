@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { PageContainer } from "../components/layout/PageContainer";
-import { Button } from "../components/ui/Button";
 import { DashboardCard } from "../components/ui/DashboardCard";
+import { DateBadge } from "../components/ui/DateBadge";
 import { EmptyState } from "../components/ui/EmptyState";
 import { SectionHeader } from "../components/ui/SectionHeader";
 import { StatusChip } from "../components/ui/StatusChip";
@@ -16,85 +16,204 @@ interface RidePlannerProps {
   isPersistenceConfigured: boolean;
 }
 
+interface RidePlan {
+  id: string;
+  title: string;
+  date: string;
+  status: string;
+  rideLeader: string;
+  sweep: string;
+  difficulty: string;
+  distance: string;
+  duration: string;
+  meetup: string;
+  kickstandsUp: string;
+  gasStopOne: string;
+  gasStopTwo: string;
+  regroupLocations: string;
+  destination: string;
+  returnPlan: string;
+  beginnerFriendly: string;
+  noFreeways: string;
+  fuelInterval: string;
+  weatherReminder: string;
+  notes: string;
+}
+
 export function RidePlanner({ eventRecords, rideRecords, rideRecordsSource, isLoading, isPersistenceConfigured }: RidePlannerProps) {
-  const upcomingRideEvents = getUpcomingRides(eventRecords);
-  const upcomingSavedRides = getUpcomingSavedRides(rideRecords);
-  const nextRide = upcomingRideEvents[0] ?? null;
-  const nextSavedRide = upcomingSavedRides[0] ?? null;
+  const ridePlans = useMemo(() => buildRidePlans(eventRecords, rideRecords), [eventRecords, rideRecords]);
   const [selectedRideId, setSelectedRideId] = useState<string | undefined>();
-  const selectedRide = rideRecords.find((ride) => ride.id === selectedRideId);
+  const selectedRide = ridePlans.find((ride) => ride.id === selectedRideId) ?? ridePlans[0];
 
   return (
     <PageContainer>
       <div className="page-title">
         <span>Ride Planner</span>
-        <h1>Plan rides without overbuilding it</h1>
+        <h1>Build the ride plan</h1>
       </div>
       <div className="module-grid module-grid--wide-left">
         <DashboardCard>
-          <SectionHeader title="Ride List" />
-          <div className="record-list">
-            {isLoading ? (
-              <EmptyState title="Loading rides" message="Checking the configured ride source." />
-            ) : upcomingRideEvents.length > 0 || upcomingSavedRides.length > 0 ? (
-              <>
-                {upcomingRideEvents.map((ride) => (
-                  <article className="record-row" key={ride.id}>
-                    <span>
-                      <strong>{ride.title}</strong>
-                      <em>{ride.startDate} · {ride.location}</em>
-                    </span>
-                    <StatusChip label={ride.status} tone={ride.status === "Planning" ? "warning" : "success"} />
-                  </article>
-                ))}
-                {upcomingSavedRides.map((ride) => (
-                  <article className={ride.id === selectedRideId ? "record-row record-row--selected" : "record-row"} key={ride.id}>
-                    <span>
-                      <strong>{ride.title}</strong>
-                      <em>{ride.date} · {ride.destination}</em>
-                    </span>
-                    <StatusChip label={ride.difficulty} tone="accent" />
-                    <Button type="button" variant="ghost" onClick={() => setSelectedRideId(ride.id)}>
-                      View
-                    </Button>
-                  </article>
-                ))}
-              </>
-            ) : (
-              <EmptyState title="No rides yet" message="Rides will appear here when they are added to Supabase." />
-            )}
-          </div>
-        </DashboardCard>
-        <DashboardCard>
-          <SectionHeader title="Upcoming Ride" />
-          {nextRide ? (
-            <div className="detail-card">
-              <h2>{nextRide.title}</h2>
-              <p>Meetup: {nextRide.location}</p>
-              <p>Date: {nextRide.startDate} at {nextRide.time}</p>
-              <p>Status: {nextRide.status}</p>
-              <p>{nextRide.notes}</p>
+          <SectionHeader title="Ride Queue" />
+          {isLoading ? (
+            <EmptyState title="Loading rides" message="Checking the configured ride source." />
+          ) : ridePlans.length > 0 ? (
+            <div className="record-list">
+              {ridePlans.map((ride) => (
+                <button
+                  className={ride.id === selectedRide?.id ? "event-record-row record-row--selected" : "event-record-row"}
+                  type="button"
+                  key={ride.id}
+                  onClick={() => setSelectedRideId(ride.id)}
+                >
+                  <DateBadge
+                    month={getRideMonth(ride.date)}
+                    day={getRideDay(ride.date)}
+                    dateTime={ride.date}
+                    compact
+                  />
+                  <span className="event-record-row__details">
+                    <strong>{ride.title}</strong>
+                    <em>{ride.date || "Date TBD"} · {ride.meetup}</em>
+                  </span>
+                  <span className="event-record-row__status">
+                    <StatusChip label={ride.status} tone={ride.status === "Planning" ? "warning" : "accent"} />
+                  </span>
+                </button>
+              ))}
             </div>
-          ) : nextSavedRide ? (
-            <RideDetail ride={nextSavedRide} />
           ) : (
-            <EmptyState title="No upcoming branch ride" message="Ride events will appear here when they are added to the shared event source." />
-          )}
-        </DashboardCard>
-        <DashboardCard className="span-all">
-          <SectionHeader title="Ride Details" />
-          {selectedRide ?? nextSavedRide ? (
-            <RideDetail ride={selectedRide ?? nextSavedRide!} />
-          ) : (
-            <EmptyState title="No saved ride selected" message="Saved ride details will appear here when rides are available." />
+            <EmptyState title="No rides yet" message="Ride plans will appear here when ride events or saved routes are available." />
           )}
           <p className="form-note">
             {getSourceNote(rideRecordsSource, isPersistenceConfigured)}
           </p>
         </DashboardCard>
+        <DashboardCard>
+          <SectionHeader title="Ride Overview" />
+          {selectedRide ? (
+            <PlanningList
+              rows={[
+                ["Ride leader", selectedRide.rideLeader],
+                ["Sweep", selectedRide.sweep],
+                ["Difficulty", selectedRide.difficulty],
+                ["Status", selectedRide.status],
+                ["Estimated distance", selectedRide.distance],
+                ["Estimated ride time", selectedRide.duration]
+              ]}
+            />
+          ) : (
+            <EmptyState title="No ride selected" message="Select a ride to review the working plan." />
+          )}
+        </DashboardCard>
+        {selectedRide ? (
+          <>
+            <DashboardCard>
+              <SectionHeader title="Route Plan" />
+              <PlanningList
+                rows={[
+                  ["Meetup location", selectedRide.meetup],
+                  ["Kickstands up", selectedRide.kickstandsUp],
+                  ["Gas stop #1", selectedRide.gasStopOne],
+                  ["Gas stop #2", selectedRide.gasStopTwo],
+                  ["Regroup locations", selectedRide.regroupLocations],
+                  ["Destination", selectedRide.destination],
+                  ["Return plan", selectedRide.returnPlan]
+                ]}
+              />
+            </DashboardCard>
+            <DashboardCard>
+              <SectionHeader title="Safety" />
+              <PlanningList
+                rows={[
+                  ["Beginner Friendly", selectedRide.beginnerFriendly],
+                  ["No Freeways", selectedRide.noFreeways],
+                  ["Fuel interval", selectedRide.fuelInterval],
+                  ["Weather reminder", selectedRide.weatherReminder]
+                ]}
+              />
+            </DashboardCard>
+            <DashboardCard className="span-all">
+              <SectionHeader title="Ride Notes" />
+              <p className="planner-notes">{selectedRide.notes || "Add route notes, known hazards, parking details, and arrival reminders when the plan is ready."}</p>
+            </DashboardCard>
+          </>
+        ) : null}
       </div>
     </PageContainer>
   );
+}
+
+function PlanningList({ rows }: { rows: [string, string][] }) {
+  return (
+    <dl className="planning-list">
+      {rows.map(([label, value]) => (
+        <div className="planning-row" key={label}>
+          <dt>{label}</dt>
+          <dd>{value || "TBD"}</dd>
+        </div>
+      ))}
+    </dl>
+  );
+}
+
+function buildRidePlans(events: EventRecord[], rides: RideRecord[]): RidePlan[] {
+  const eventPlans = getUpcomingRides(events).map(fromRideEvent);
+  const savedRidePlans = getUpcomingSavedRides(rides).map(fromSavedRide);
+  return [...eventPlans, ...savedRidePlans];
+}
+
+function fromRideEvent(event: EventRecord): RidePlan {
+  const difficulty = event.rideDifficulty ?? "TBD";
+
+  return {
+    id: event.id,
+    title: event.title,
+    date: event.startDate,
+    status: event.status,
+    rideLeader: "TBD",
+    sweep: "TBD",
+    difficulty,
+    distance: "TBD",
+    duration: "TBD",
+    meetup: event.location || "TBD",
+    kickstandsUp: event.time || "TBD",
+    gasStopOne: "TBD",
+    gasStopTwo: "TBD",
+    regroupLocations: "TBD",
+    destination: event.city || "TBD",
+    returnPlan: "TBD",
+    beginnerFriendly: difficulty === "Beginner" ? "Yes" : "Review before announcing",
+    noFreeways: "Confirm route",
+    fuelInterval: "Confirm before posting",
+    weatherReminder: "Review during event week",
+    notes: event.notes || event.description
+  };
+}
+
+function fromSavedRide(ride: RideRecord): RidePlan {
+  return {
+    id: ride.id,
+    title: ride.title,
+    date: ride.date,
+    status: "Planning",
+    rideLeader: "TBD",
+    sweep: "TBD",
+    difficulty: ride.difficulty || "TBD",
+    distance: ride.mileage || "TBD",
+    duration: ride.duration || "TBD",
+    meetup: ride.meetup || "TBD",
+    kickstandsUp: ride.time || "TBD",
+    gasStopOne: "TBD",
+    gasStopTwo: "TBD",
+    regroupLocations: "TBD",
+    destination: ride.destination || "TBD",
+    returnPlan: "TBD",
+    beginnerFriendly: ride.difficulty.toLowerCase().includes("beginner") ? "Yes" : "Review before announcing",
+    noFreeways: "Confirm route",
+    fuelInterval: "Confirm before posting",
+    weatherReminder: "Review during event week",
+    notes: ride.notes
+  };
 }
 
 function getSourceNote(source: RidePlannerProps["rideRecordsSource"], isPersistenceConfigured: boolean) {
@@ -103,17 +222,16 @@ function getSourceNote(source: RidePlannerProps["rideRecordsSource"], isPersiste
   return "Source: fallback. Using static ride records.";
 }
 
-function RideDetail({ ride }: { ride: RideRecord }) {
-  return (
-    <div className="detail-card">
-      <h2>{ride.title}</h2>
-      <p>Meetup: {ride.meetup || "TBD"}</p>
-      <p>Date: {ride.date || "TBD"}</p>
-      <p>Destination: {ride.destination || "TBD"}</p>
-      <p>Difficulty: {ride.difficulty}</p>
-      <p>{ride.notes}</p>
-    </div>
-  );
+function getRideMonth(date: string) {
+  if (!date) return "TBD";
+
+  return new Intl.DateTimeFormat("en-US", { month: "short" }).format(new Date(`${date}T00:00:00`));
+}
+
+function getRideDay(date: string) {
+  if (!date) return "-";
+
+  return String(new Date(`${date}T00:00:00`).getDate());
 }
 
 function getUpcomingSavedRides(rides: RideRecord[]) {

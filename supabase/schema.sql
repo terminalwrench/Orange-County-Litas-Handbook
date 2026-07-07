@@ -20,6 +20,7 @@ create table if not exists public.events (
   description text,
   status text,
   flyer_status text,
+  ride_difficulty text,
   notes text,
   external_uid text,
   source text default 'supabase',

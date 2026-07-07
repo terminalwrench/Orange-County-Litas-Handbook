@@ -17,6 +17,7 @@ interface EventsProps {
   eventRecordsSource: "static" | "supabase" | "fallback" | "ics";
   isLoading: boolean;
   isPersistenceConfigured: boolean;
+  isCalendarImportAvailable: boolean;
   onSaveEvent: (input: EventSaveInput) => Promise<PersistenceResult<EventRecord>>;
   onDeleteEvent: (event: EventRecord) => Promise<PersistenceResult<EventRecord>>;
   onImportCalendarEvents: () => Promise<CalendarImportResult>;
@@ -32,11 +33,13 @@ interface EventFormState {
   city: string;
   type: string;
   status: string;
+  rideDifficulty: string;
   notes: string;
 }
 
 const eventStatuses = ["Planning", "Ready", "Active", "Completed", "Cancelled"];
 const eventTypes = ["Meet & Greet", "Ride", "Community", "Special Event"];
+const rideDifficulties = ["Beginner", "Intermediate", "Advanced"];
 const monthFormatter = new Intl.DateTimeFormat("en-US", { month: "short" });
 
 const emptyEventForm: EventFormState = {
@@ -47,6 +50,7 @@ const emptyEventForm: EventFormState = {
   city: "",
   type: "Meet & Greet",
   status: "Planning",
+  rideDifficulty: "Beginner",
   notes: ""
 };
 
@@ -72,22 +76,21 @@ function sortDescendingByStartDate(events: EventRecord[]) {
 function EventRows({
   events,
   selectedId,
-  savingId,
-  onView,
-  onEdit,
-  onDelete
+  onSelect
 }: {
   events: EventRecord[];
   selectedId?: string;
-  savingId: string | null;
-  onView: (event: EventRecord) => void;
-  onEdit: (event: EventRecord) => void;
-  onDelete: (event: EventRecord) => void;
+  onSelect: (event: EventRecord) => void;
 }) {
   return (
     <div className="record-list">
       {events.map((event) => (
-        <article className={event.id === selectedId ? "event-record-row record-row--selected" : "event-record-row"} key={event.id}>
+        <button
+          className={event.id === selectedId ? "event-record-row record-row--selected" : "event-record-row"}
+          type="button"
+          key={event.id}
+          onClick={() => onSelect(event)}
+        >
           <DateBadge
             month={monthFormatter.format(parseEventDate(event.startDate))}
             day={String(parseEventDate(event.startDate).getDate())}
@@ -101,12 +104,7 @@ function EventRows({
           <span className="event-record-row__status">
             <StatusChip label={event.status} tone={getStatusTone(event.status)} />
           </span>
-          <div className="record-row__actions">
-            <Button type="button" variant="ghost" onClick={() => onView(event)}>View</Button>
-            <Button type="button" variant="ghost" onClick={() => onEdit(event)}>Edit</Button>
-            <Button type="button" variant="ghost" onClick={() => onDelete(event)} disabled={savingId === event.id}>Delete</Button>
-          </div>
-        </article>
+        </button>
       ))}
     </div>
   );
@@ -117,6 +115,7 @@ export function Events({
   eventRecordsSource,
   isLoading,
   isPersistenceConfigured,
+  isCalendarImportAvailable,
   onSaveEvent,
   onDeleteEvent,
   onImportCalendarEvents
@@ -134,6 +133,7 @@ export function Events({
   const selectedEvent = eventRecords.find((event) => event.id === selectedEventId);
   const currentEvent = selectedEvent ?? upcomingEvents[0] ?? pastEvents[0];
   const isEditing = Boolean(formState.id);
+  const isCalendarImportDisabled = isImportingCalendar || !isPersistenceConfigured || !isCalendarImportAvailable;
 
   function handleViewEvent(event: EventRecord) {
     setSelectedEventId(event.id);
@@ -260,8 +260,8 @@ export function Events({
                   type="button"
                   variant="secondary"
                   onClick={handleImportCalendar}
-                  disabled={isImportingCalendar || !isPersistenceConfigured}
-                  title={isPersistenceConfigured ? "Import from the public Google Calendar ICS feed." : "Connect Supabase before importing calendar events."}
+                  disabled={isCalendarImportDisabled}
+                  title={getCalendarImportTitle(isPersistenceConfigured, isCalendarImportAvailable, isImportingCalendar)}
                 >
                   {isImportingCalendar ? "Importing..." : "Import calendar"}
                 </Button>
@@ -275,10 +275,7 @@ export function Events({
             <EventRows
               events={upcomingEvents}
               selectedId={selectedEventId}
-              savingId={savingId}
-              onView={handleViewEvent}
-              onEdit={openEditForm}
-              onDelete={handleDeleteEvent}
+              onSelect={handleViewEvent}
             />
           ) : (
             <EmptyState title="No upcoming events." message="Events will appear here when they are added to Supabase." />
@@ -287,24 +284,18 @@ export function Events({
           {saveError ? <p className="form-status form-status--error">{saveError}</p> : null}
         </DashboardCard>
         <DashboardCard>
-          <SectionHeader title="Event Detail" />
-          <div className="detail-card">
-            <h2>{currentEvent?.title ?? "No events yet"}</h2>
-            <p>{currentEvent ? `${currentEvent.startDate} at ${currentEvent.time}` : getEmptySourceMessage(eventRecordsSource, isPersistenceConfigured)}</p>
-            <p>{currentEvent?.location ?? ""}</p>
-            <div className="status-row">
-              <StatusChip label={currentEvent?.type ?? "Calendar"} tone="accent" />
-              <StatusChip label={`Source: ${formatSourceLabel(eventRecordsSource)}`} tone="neutral" />
-            </div>
-            <p>{currentEvent?.notes ?? ""}</p>
-            <p className="form-note">
-              {getSourceNote(eventRecordsSource, isPersistenceConfigured)}
-            </p>
-          </div>
-        </DashboardCard>
-        {editorOpen ? (
-          <DashboardCard className="span-all">
-            <SectionHeader title={isEditing ? "Edit Event" : "Add Event"} />
+          <SectionHeader
+            title={editorOpen ? (isEditing ? "Edit Event" : "Add Event") : "Event Detail"}
+            action={!editorOpen && currentEvent ? (
+              <div className="section-actions">
+                <Button type="button" variant="secondary" onClick={() => openEditForm(currentEvent)}>Edit</Button>
+                <Button type="button" variant="ghost" onClick={() => handleDeleteEvent(currentEvent)} disabled={savingId === currentEvent.id}>
+                  Delete
+                </Button>
+              </div>
+            ) : null}
+          />
+          {editorOpen ? (
             <form className="form-grid" aria-label={isEditing ? "Edit event" : "Add event"} onSubmit={handleSubmit}>
               <FormField label="Title" htmlFor="event-title">
                 <TextInput id="event-title" value={formState.title} onChange={(event) => updateForm("title", event.target.value)} required />
@@ -331,6 +322,17 @@ export function Events({
                   {eventStatuses.map((status) => <option key={status} value={status}>{status}</option>)}
                 </SelectInput>
               </FormField>
+              {formState.type === "Ride" ? (
+                <FormField label="Ride Difficulty" htmlFor="event-ride-difficulty">
+                  <SelectInput
+                    id="event-ride-difficulty"
+                    value={formState.rideDifficulty}
+                    onChange={(event) => updateForm("rideDifficulty", event.target.value)}
+                  >
+                    {rideDifficulties.map((difficulty) => <option key={difficulty} value={difficulty}>{difficulty}</option>)}
+                  </SelectInput>
+                </FormField>
+              ) : null}
               <FormField label="Notes / Description" htmlFor="event-notes">
                 <Textarea id="event-notes" value={formState.notes} onChange={(event) => updateForm("notes", event.target.value)} />
               </FormField>
@@ -344,18 +346,30 @@ export function Events({
                 </span>
               </div>
             </form>
-          </DashboardCard>
-        ) : null}
+          ) : (
+            <div className="detail-card">
+              <h2>{currentEvent?.title ?? "No events yet"}</h2>
+              <p>{currentEvent ? `${currentEvent.startDate} at ${currentEvent.time}` : getEmptySourceMessage(eventRecordsSource, isPersistenceConfigured)}</p>
+              <p>{currentEvent?.location ?? ""}</p>
+              <div className="status-row">
+                <StatusChip label={currentEvent?.type ?? "Calendar"} tone="accent" />
+                {currentEvent?.rideDifficulty ? <StatusChip label={currentEvent.rideDifficulty} tone="neutral" /> : null}
+                <StatusChip label={`Source: ${formatSourceLabel(eventRecordsSource)}`} tone="neutral" />
+              </div>
+              <p>{currentEvent?.notes ?? ""}</p>
+              <p className="form-note">
+                {getSourceNote(eventRecordsSource, isPersistenceConfigured)}
+              </p>
+            </div>
+          )}
+        </DashboardCard>
         <DashboardCard className="span-all">
           <SectionHeader title="Past / History" />
           {pastEvents.length > 0 ? (
             <EventRows
               events={pastEvents}
               selectedId={selectedEventId}
-              savingId={savingId}
-              onView={handleViewEvent}
-              onEdit={openEditForm}
-              onDelete={handleDeleteEvent}
+              onSelect={handleViewEvent}
             />
           ) : (
             <EmptyState title="No archived events yet." message="Past events will appear here automatically after their event dates pass." />
@@ -377,6 +391,7 @@ function toEventFormState(event: EventRecord): EventFormState {
     city: event.city,
     type: event.type,
     status: event.status,
+    rideDifficulty: event.rideDifficulty ?? "Beginner",
     notes: event.notes || event.description
   };
 }
@@ -395,8 +410,20 @@ function toEventInput(form: EventFormState): EventSaveInput {
     status: form.status,
     flyerStatus: "Needed",
     notes: form.notes.trim(),
+    rideDifficulty: form.type === "Ride" ? form.rideDifficulty : undefined,
     externalUid: form.externalUid
   };
+}
+
+function getCalendarImportTitle(
+  isPersistenceConfigured: boolean,
+  isCalendarImportAvailable: boolean,
+  isImportingCalendar: boolean
+) {
+  if (isImportingCalendar) return "Calendar import is already running.";
+  if (!isPersistenceConfigured) return "Connect Supabase before importing calendar events.";
+  if (!isCalendarImportAvailable) return "Configure VITE_EVENTS_ICS_URL before importing calendar events.";
+  return "Import from the configured Google Calendar ICS feed.";
 }
 
 function toTimeInputValue(value: string) {

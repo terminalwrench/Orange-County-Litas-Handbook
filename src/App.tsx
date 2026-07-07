@@ -7,6 +7,7 @@ import { MediaCenter } from "./pages/MediaCenter";
 import { Operations } from "./pages/Operations";
 import { Reference } from "./pages/Reference";
 import { RidePlanner } from "./pages/RidePlanner";
+import { hasEventsIcsUrl } from "./services/calendarService";
 import {
   buildEventDashboardData,
   deleteEventRecord,
@@ -52,6 +53,7 @@ export function App() {
   const eventDashboard = useMemo(() => buildEventDashboardData(eventRecords), [eventRecords]);
   const navItems = getNavItems();
   const persistenceStatus = getPersistenceStatus();
+  const calendarImportAvailable = hasEventsIcsUrl();
 
   useEffect(() => {
     let cancelled = false;
@@ -180,6 +182,7 @@ export function App() {
             eventRecordsSource={eventRecordsSource}
             isLoading={isLoadingRecords}
             isPersistenceConfigured={persistenceStatus.isConfigured}
+            isCalendarImportAvailable={calendarImportAvailable}
             onSaveEvent={handleSaveEvent}
             onDeleteEvent={handleDeleteEvent}
             onImportCalendarEvents={handleImportCalendarEvents}

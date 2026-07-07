@@ -4,7 +4,8 @@ import { toDateValue } from "../utils/date";
 export const PUBLIC_GOOGLE_CALENDAR_ICS_URL =
   "https://calendar.google.com/calendar/ical/orangecountylitas%40gmail.com/public/basic.ics";
 
-const DEFAULT_CALENDAR_URL = PUBLIC_GOOGLE_CALENDAR_ICS_URL;
+const configuredCalendarUrl = import.meta.env.VITE_EVENTS_ICS_URL as string | undefined;
+const DEFAULT_CALENDAR_URL = configuredCalendarUrl?.trim() || PUBLIC_GOOGLE_CALENDAR_ICS_URL;
 
 interface IcsProperty {
   name: string;
@@ -25,6 +26,14 @@ export interface CalendarLoadResult {
 export interface CalendarFetchResult {
   events: EventRecord[];
   error?: string;
+}
+
+export function getEventsIcsUrl() {
+  return DEFAULT_CALENDAR_URL;
+}
+
+export function hasEventsIcsUrl() {
+  return getEventsIcsUrl().trim().length > 0;
 }
 
 // Replace public/calendar.ics with a fresh exported calendar file to update
