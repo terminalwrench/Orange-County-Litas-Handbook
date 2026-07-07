@@ -21,6 +21,11 @@ create table if not exists public.events (
   status text,
   flyer_status text,
   ride_difficulty text,
+  flyer_url text,
+  group_photo_url text,
+  route_image_url text,
+  instagram_url text,
+  apple_album_url text,
   notes text,
   external_uid text,
   source text default 'supabase',
@@ -47,18 +52,14 @@ create table if not exists public.rides (
   updated_at timestamptz default now()
 );
 
-create table if not exists public.media_assets (
+create table if not exists public.branch_assets (
   id uuid primary key default gen_random_uuid(),
   title text not null,
-  type text not null,
-  status text,
-  related_event_id uuid references public.events(id) on delete set null,
-  date date,
-  url text,
+  description text,
+  category text not null,
+  preview_url text,
+  download_url text,
   preview_surface text,
-  storage_path text,
-  notes text,
-  created_at timestamptz default now(),
   updated_at timestamptz default now()
 );
 
@@ -106,9 +107,9 @@ create trigger set_rides_updated_at
 before update on public.rides
 for each row execute function public.set_updated_at();
 
-drop trigger if exists set_media_assets_updated_at on public.media_assets;
-create trigger set_media_assets_updated_at
-before update on public.media_assets
+drop trigger if exists set_branch_assets_updated_at on public.branch_assets;
+create trigger set_branch_assets_updated_at
+before update on public.branch_assets
 for each row execute function public.set_updated_at();
 
 drop trigger if exists set_reference_links_updated_at on public.reference_links;
@@ -125,6 +126,6 @@ for each row execute function public.set_updated_at();
 -- Example future step:
 -- alter table public.events enable row level security;
 -- alter table public.rides enable row level security;
--- alter table public.media_assets enable row level security;
+-- alter table public.branch_assets enable row level security;
 -- alter table public.reference_links enable row level security;
 -- alter table public.operation_items enable row level security;

@@ -5,6 +5,7 @@ import { DashboardCard } from "../components/ui/DashboardCard";
 import { DateBadge } from "../components/ui/DateBadge";
 import { EmptyState } from "../components/ui/EmptyState";
 import { FormField } from "../components/ui/FormField";
+import { PreviewModal } from "../components/ui/PreviewModal";
 import { SectionHeader } from "../components/ui/SectionHeader";
 import { StatusChip } from "../components/ui/StatusChip";
 import { DateInput, SelectInput, Textarea, TextInput, TimeInput } from "../components/ui/inputs";
@@ -34,6 +35,11 @@ interface EventFormState {
   type: string;
   status: string;
   rideDifficulty: string;
+  flyerUrl: string;
+  groupPhotoUrl: string;
+  routeImageUrl: string;
+  instagramUrl: string;
+  appleAlbumUrl: string;
   notes: string;
 }
 
@@ -51,6 +57,11 @@ const emptyEventForm: EventFormState = {
   type: "Meet & Greet",
   status: "Planning",
   rideDifficulty: "Beginner",
+  flyerUrl: "",
+  groupPhotoUrl: "",
+  routeImageUrl: "",
+  instagramUrl: "",
+  appleAlbumUrl: "",
   notes: ""
 };
 
@@ -128,6 +139,7 @@ export function Events({
   const [editorOpen, setEditorOpen] = useState(false);
   const [savingId, setSavingId] = useState<string | null>(null);
   const [isImportingCalendar, setIsImportingCalendar] = useState(false);
+  const [previewMemory, setPreviewMemory] = useState<{ title: string; type: string; url: string; description?: string } | null>(null);
   const [saveMessage, setSaveMessage] = useState("");
   const [saveError, setSaveError] = useState("");
   const selectedEvent = eventRecords.find((event) => event.id === selectedEventId);
@@ -333,6 +345,27 @@ export function Events({
                   </SelectInput>
                 </FormField>
               ) : null}
+              {formState.status === "Completed" ? (
+                <>
+                  <FormField label="Event Flyer URL" htmlFor="event-flyer-url">
+                    <TextInput id="event-flyer-url" value={formState.flyerUrl} onChange={(event) => updateForm("flyerUrl", event.target.value)} />
+                  </FormField>
+                  <FormField label="Group Photo URL" htmlFor="event-group-photo-url">
+                    <TextInput id="event-group-photo-url" value={formState.groupPhotoUrl} onChange={(event) => updateForm("groupPhotoUrl", event.target.value)} />
+                  </FormField>
+                  {formState.type === "Ride" ? (
+                    <FormField label="Route Screenshot URL" htmlFor="event-route-image-url">
+                      <TextInput id="event-route-image-url" value={formState.routeImageUrl} onChange={(event) => updateForm("routeImageUrl", event.target.value)} />
+                    </FormField>
+                  ) : null}
+                  <FormField label="Instagram Link" htmlFor="event-instagram-url">
+                    <TextInput id="event-instagram-url" value={formState.instagramUrl} onChange={(event) => updateForm("instagramUrl", event.target.value)} />
+                  </FormField>
+                  <FormField label="Apple Shared Album Link" htmlFor="event-apple-album-url">
+                    <TextInput id="event-apple-album-url" value={formState.appleAlbumUrl} onChange={(event) => updateForm("appleAlbumUrl", event.target.value)} />
+                  </FormField>
+                </>
+              ) : null}
               <FormField label="Notes / Description" htmlFor="event-notes">
                 <Textarea id="event-notes" value={formState.notes} onChange={(event) => updateForm("notes", event.target.value)} />
               </FormField>
@@ -360,6 +393,9 @@ export function Events({
               <p className="form-note">
                 {getSourceNote(eventRecordsSource, isPersistenceConfigured)}
               </p>
+              {currentEvent?.status === "Completed" ? (
+                <EventMemories event={currentEvent} onPreview={setPreviewMemory} />
+              ) : null}
             </div>
           )}
         </DashboardCard>
@@ -376,7 +412,72 @@ export function Events({
           )}
         </DashboardCard>
       </div>
+      {previewMemory ? (
+        <PreviewModal
+          title={previewMemory.title}
+          subtitle={previewMemory.type}
+          description={previewMemory.description}
+          imageUrl={previewMemory.url}
+          onClose={() => setPreviewMemory(null)}
+        />
+      ) : null}
     </PageContainer>
+  );
+}
+
+function EventMemories({
+  event,
+  onPreview
+}: {
+  event: EventRecord;
+  onPreview: (memory: { title: string; type: string; url: string; description?: string }) => void;
+}) {
+  const imageMemories = [
+    event.flyerUrl ? { title: "Event Flyer", type: "Flyer", url: event.flyerUrl, description: event.title } : null,
+    event.groupPhotoUrl ? { title: "Group Photo", type: "Photo", url: event.groupPhotoUrl, description: event.title } : null,
+    event.routeImageUrl && event.type === "Ride" ? { title: "Ride Route", type: "Route Screenshot", url: event.routeImageUrl, description: event.title } : null
+  ].filter((item): item is { title: string; type: string; url: string; description: string } => Boolean(item));
+  const linkMemories = [
+    event.instagramUrl ? { title: "Instagram", url: event.instagramUrl } : null,
+    event.appleAlbumUrl ? { title: "Apple Shared Album", url: event.appleAlbumUrl } : null
+  ].filter((item): item is { title: string; url: string } => Boolean(item));
+  const hasMemories = imageMemories.length > 0 || linkMemories.length > 0;
+
+  return (
+    <section className="memory-section" aria-labelledby="event-memories-title">
+      <h3 id="event-memories-title">Memories</h3>
+      {hasMemories ? (
+        <>
+          {imageMemories.length > 0 ? (
+            <div className="memory-grid">
+              {imageMemories.map((memory) => (
+                <button className="memory-card" type="button" key={memory.title} onClick={() => onPreview(memory)}>
+                  <span className="memory-card__image">
+                    <img src={memory.url} alt="" />
+                  </span>
+                  <strong>{memory.title}</strong>
+                  <em>{memory.type}</em>
+                </button>
+              ))}
+            </div>
+          ) : null}
+          {linkMemories.length > 0 ? (
+            <div className="memory-links">
+              {linkMemories.map((memory) => (
+                <a className="button button--secondary" key={memory.title} href={memory.url} target="_blank" rel="noreferrer">
+                  {memory.title}
+                </a>
+              ))}
+            </div>
+          ) : null}
+        </>
+      ) : (
+        <EmptyState
+          title="No memories added yet."
+          message="Flyers, photos, routes, and event links will appear here when they are added to this completed event."
+        />
+      )}
+    </section>
   );
 }
 
@@ -392,6 +493,11 @@ function toEventFormState(event: EventRecord): EventFormState {
     type: event.type,
     status: event.status,
     rideDifficulty: event.rideDifficulty ?? "Beginner",
+    flyerUrl: event.flyerUrl ?? "",
+    groupPhotoUrl: event.groupPhotoUrl ?? "",
+    routeImageUrl: event.routeImageUrl ?? "",
+    instagramUrl: event.instagramUrl ?? "",
+    appleAlbumUrl: event.appleAlbumUrl ?? "",
     notes: event.notes || event.description
   };
 }
@@ -411,6 +517,11 @@ function toEventInput(form: EventFormState): EventSaveInput {
     flyerStatus: "Needed",
     notes: form.notes.trim(),
     rideDifficulty: form.type === "Ride" ? form.rideDifficulty : undefined,
+    flyerUrl: form.flyerUrl.trim() || undefined,
+    groupPhotoUrl: form.groupPhotoUrl.trim() || undefined,
+    routeImageUrl: form.type === "Ride" ? form.routeImageUrl.trim() || undefined : undefined,
+    instagramUrl: form.instagramUrl.trim() || undefined,
+    appleAlbumUrl: form.appleAlbumUrl.trim() || undefined,
     externalUid: form.externalUid
   };
 }

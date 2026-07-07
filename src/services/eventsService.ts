@@ -19,6 +19,11 @@ interface SupabaseEventRow {
   status: string | null;
   flyer_status: string | null;
   ride_difficulty: string | null;
+  flyer_url: string | null;
+  group_photo_url: string | null;
+  route_image_url: string | null;
+  instagram_url: string | null;
+  apple_album_url: string | null;
   notes: string | null;
   external_uid: string | null;
   source: string | null;
@@ -65,6 +70,11 @@ export interface EventSaveInput {
   status?: string;
   flyerStatus?: string;
   rideDifficulty?: string;
+  flyerUrl?: string;
+  groupPhotoUrl?: string;
+  routeImageUrl?: string;
+  instagramUrl?: string;
+  appleAlbumUrl?: string;
   notes?: string;
   externalUid?: string;
 }
@@ -411,6 +421,11 @@ function fromSupabaseEvent(row: SupabaseEventRow): EventRecord {
     status,
     flyerStatus,
     rideDifficulty: row.ride_difficulty ?? undefined,
+    flyerUrl: row.flyer_url ?? undefined,
+    groupPhotoUrl: row.group_photo_url ?? undefined,
+    routeImageUrl: row.route_image_url ?? undefined,
+    instagramUrl: row.instagram_url ?? undefined,
+    appleAlbumUrl: row.apple_album_url ?? undefined,
     notes: row.notes ?? row.description ?? "",
     externalUid: row.external_uid ?? undefined,
     checklist: buildChecklist(row.location ?? "", row.type, flyerStatus)
@@ -430,6 +445,11 @@ function toSupabaseEventPayload(input: EventSaveInput) {
     status: input.status ?? "Planning",
     flyer_status: input.flyerStatus ?? "Needed",
     ...(input.rideDifficulty ? { ride_difficulty: input.rideDifficulty } : {}),
+    ...(input.flyerUrl ? { flyer_url: input.flyerUrl } : {}),
+    ...(input.groupPhotoUrl ? { group_photo_url: input.groupPhotoUrl } : {}),
+    ...(input.routeImageUrl ? { route_image_url: input.routeImageUrl } : {}),
+    ...(input.instagramUrl ? { instagram_url: input.instagramUrl } : {}),
+    ...(input.appleAlbumUrl ? { apple_album_url: input.appleAlbumUrl } : {}),
     notes: input.notes ?? "",
     ...(input.externalUid ? { external_uid: input.externalUid } : {}),
     source: "supabase"
@@ -449,6 +469,11 @@ function toSupabaseImportedEventPayload(event: EventRecord) {
     status: event.status,
     flyer_status: event.flyerStatus,
     ...(event.rideDifficulty ? { ride_difficulty: event.rideDifficulty } : {}),
+    ...(event.flyerUrl ? { flyer_url: event.flyerUrl } : {}),
+    ...(event.groupPhotoUrl ? { group_photo_url: event.groupPhotoUrl } : {}),
+    ...(event.routeImageUrl ? { route_image_url: event.routeImageUrl } : {}),
+    ...(event.instagramUrl ? { instagram_url: event.instagramUrl } : {}),
+    ...(event.appleAlbumUrl ? { apple_album_url: event.appleAlbumUrl } : {}),
     notes: event.notes,
     external_uid: event.externalUid ?? event.id,
     source: "ics"
@@ -474,6 +499,11 @@ function toLocalEventRecord(input: EventSaveInput): EventRecord {
     status: input.status ?? "Planning",
     flyerStatus,
     rideDifficulty: input.rideDifficulty,
+    flyerUrl: input.flyerUrl,
+    groupPhotoUrl: input.groupPhotoUrl,
+    routeImageUrl: input.routeImageUrl,
+    instagramUrl: input.instagramUrl,
+    appleAlbumUrl: input.appleAlbumUrl,
     notes: input.notes ?? input.description ?? "",
     externalUid: input.externalUid,
     checklist: buildChecklist(input.location, input.type, flyerStatus)

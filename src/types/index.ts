@@ -1,3 +1,4 @@
+export type { BranchAsset, BranchAssetCategory, BranchAssetPreviewSurface } from "./branchAsset";
 export type { Birthday } from "./birthday";
 export type { Deadline } from "./deadline";
 export type {
@@ -11,7 +12,6 @@ export type {
   UpcomingEvent
 } from "./event";
 export type { ExternalResource } from "./link";
-export type { MediaItem, MediaSource } from "./media";
 export type { OperationCategory, OperationItem, OperationStatus } from "./operation";
 export type { RideRecord } from "./ride";
 export type {

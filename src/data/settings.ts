@@ -20,7 +20,7 @@ export const navItems: NavItem[] = [
   { id: "operations", label: "Operations", icon: "settings" },
   { id: "events", label: "Events", icon: "calendar" },
   { id: "ride-planner", label: "Ride Planner", icon: "route" },
-  { id: "media", label: "Media Center", icon: "image" },
+  { id: "media", label: "Branch Assets", icon: "image" },
   { id: "reference", label: "Reference", icon: "book" }
 ];
 
@@ -115,7 +115,7 @@ export const referenceSections: ReferenceSection[] = [
         label: "Brand Standards",
         detail: "Use official logo files and avoid recreating brand assets.",
         content: [
-          "Use official source assets from the Media Center.",
+          "Use official source assets from Branch Assets.",
           "Do not redraw, recolor, or recreate branch logo files.",
           "Keep final exported assets organized with the related event or media record."
         ]

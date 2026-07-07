@@ -72,6 +72,11 @@ export interface EventRecord {
   status: string;
   flyerStatus: string;
   rideDifficulty?: string;
+  flyerUrl?: string;
+  groupPhotoUrl?: string;
+  routeImageUrl?: string;
+  instagramUrl?: string;
+  appleAlbumUrl?: string;
   notes: string;
   externalUid?: string;
   checklist: StatusItem[];

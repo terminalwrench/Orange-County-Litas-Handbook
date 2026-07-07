@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { AppShell } from "./components/layout/AppShell";
-import type { EventRecord, ExternalResource, MediaItem, ModuleId, OperationItem, OperationStatus, RideRecord } from "./types";
+import type { BranchAsset, EventRecord, ExternalResource, ModuleId, OperationItem, OperationStatus, RideRecord } from "./types";
 import { Events } from "./pages/Events";
 import { Home } from "./pages/Home";
-import { MediaCenter } from "./pages/MediaCenter";
+import { BranchAssets } from "./pages/BranchAssets";
 import { Operations } from "./pages/Operations";
 import { Reference } from "./pages/Reference";
 import { RidePlanner } from "./pages/RidePlanner";
@@ -27,7 +27,7 @@ import {
   updateOperationItemStatus,
   type OperationItemInput
 } from "./services/operationsService";
-import { getMediaItems, loadMediaItems } from "./services/mediaService";
+import { getBranchAssets, loadBranchAssets } from "./services/branchAssetsService";
 import { getPersistenceStatus } from "./services/persistence";
 import { getRides, loadRideRecords } from "./services/ridesService";
 import { getUsefulLinks, loadUsefulLinks } from "./services/linksService";
@@ -45,8 +45,8 @@ export function App() {
   const [rideRecordsSource, setRideRecordsSource] = useState<TableDataSource>(initialPersistenceStatus.isConfigured ? "supabase" : "static");
   const [operationItems, setOperationItems] = useState<OperationItem[]>(initialPersistenceStatus.isConfigured ? [] : getOperationItems());
   const [operationItemsSource, setOperationItemsSource] = useState<TableDataSource>(initialPersistenceStatus.isConfigured ? "supabase" : "static");
-  const [mediaItems, setMediaItems] = useState<MediaItem[]>(initialPersistenceStatus.isConfigured ? [] : getMediaItems());
-  const [mediaItemsSource, setMediaItemsSource] = useState<TableDataSource>(initialPersistenceStatus.isConfigured ? "supabase" : "static");
+  const [branchAssets, setBranchAssets] = useState<BranchAsset[]>(initialPersistenceStatus.isConfigured ? [] : getBranchAssets());
+  const [branchAssetsSource, setBranchAssetsSource] = useState<TableDataSource>(initialPersistenceStatus.isConfigured ? "supabase" : "static");
   const [usefulLinks, setUsefulLinks] = useState<ExternalResource[]>(initialPersistenceStatus.isConfigured ? [] : getUsefulLinks());
   const [usefulLinksSource, setUsefulLinksSource] = useState<TableDataSource>(initialPersistenceStatus.isConfigured ? "supabase" : "static");
   const [isLoadingRecords, setIsLoadingRecords] = useState(true);
@@ -62,9 +62,9 @@ export function App() {
       loadEventRecords(),
       loadRideRecords(),
       loadOperationItems(),
-      loadMediaItems(),
+      loadBranchAssets(),
       loadUsefulLinks()
-    ]).then(([eventResult, rideResult, operationResult, mediaResult, linksResult]) => {
+    ]).then(([eventResult, rideResult, operationResult, branchAssetResult, linksResult]) => {
       if (!cancelled) {
         setEventRecords(eventResult.events);
         setEventRecordsSource(eventResult.source);
@@ -72,8 +72,8 @@ export function App() {
         setRideRecordsSource(rideResult.source);
         setOperationItems(operationResult.items);
         setOperationItemsSource(operationResult.source);
-        setMediaItems(mediaResult.media);
-        setMediaItemsSource(mediaResult.source);
+        setBranchAssets(branchAssetResult.assets);
+        setBranchAssetsSource(branchAssetResult.source);
         setUsefulLinks(linksResult.links);
         setUsefulLinksSource(linksResult.source);
         setIsLoadingRecords(false);
@@ -213,7 +213,7 @@ export function App() {
           />
         );
       case "media":
-        return <MediaCenter eventRecords={eventDashboard.eventRecords} mediaItems={mediaItems} mediaItemsSource={mediaItemsSource} />;
+        return <BranchAssets assets={branchAssets} assetsSource={branchAssetsSource} />;
       case "reference":
         return <Reference externalResources={usefulLinks} externalResourcesSource={usefulLinksSource} />;
     }
