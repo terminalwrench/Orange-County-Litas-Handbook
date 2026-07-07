@@ -380,6 +380,6 @@ function formatStatus(status: OperationStatus) {
 
 function getSourceNote(source: "static" | "supabase" | "fallback", isPersistenceConfigured: boolean) {
   if (source === "supabase") return "Live Supabase operation items are loaded.";
-  if (isPersistenceConfigured) return "Showing fallback/demo operation items because Supabase has no rows or the read failed.";
+  if (isPersistenceConfigured) return "Showing fallback/demo operation items because the Supabase read failed.";
   return "Fallback mode: using static demo operation items.";
 }

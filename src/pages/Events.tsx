@@ -11,6 +11,7 @@ import { getPastEvents, getUpcomingEvents } from "../services/eventsService";
 
 interface EventsProps {
   eventRecords: EventRecord[];
+  eventRecordsSource: "static" | "supabase" | "fallback" | "ics";
   isLoading: boolean;
   isPersistenceConfigured: boolean;
 }
@@ -61,7 +62,7 @@ function EventRows({ events, selectedId, onSelect }: { events: EventRecord[]; se
   );
 }
 
-export function Events({ eventRecords, isLoading, isPersistenceConfigured }: EventsProps) {
+export function Events({ eventRecords, eventRecordsSource, isLoading, isPersistenceConfigured }: EventsProps) {
   const today = new Date();
   const upcomingEvents = sortAscendingByStartDate(getUpcomingEvents(eventRecords, today));
   const pastEvents = sortDescendingByStartDate(getPastEvents(eventRecords, today));
@@ -83,22 +84,22 @@ export function Events({ eventRecords, isLoading, isPersistenceConfigured }: Eve
           ) : upcomingEvents.length > 0 ? (
             <EventRows events={upcomingEvents} selectedId={selectedEventId} onSelect={(event) => setSelectedEventId(event.id)} />
           ) : (
-            <EmptyState title="No upcoming events" message="Future events will appear here when they are added to the shared event source." />
+            <EmptyState title="No events yet" message="Events will appear here when they are added to Supabase." />
           )}
         </DashboardCard>
         <DashboardCard>
           <SectionHeader title="Event Detail" />
           <div className="detail-card">
-            <h2>{currentEvent?.title ?? "No events loaded"}</h2>
-            <p>{currentEvent ? `${currentEvent.startDate} at ${currentEvent.time}` : "Connect Supabase or use fallback events."}</p>
-            <p>{currentEvent?.location ?? "No location"}</p>
+            <h2>{currentEvent?.title ?? "No events yet"}</h2>
+            <p>{currentEvent ? `${currentEvent.startDate} at ${currentEvent.time}` : getEmptySourceMessage(eventRecordsSource, isPersistenceConfigured)}</p>
+            <p>{currentEvent?.location ?? ""}</p>
             <div className="status-row">
               <StatusChip label={currentEvent?.type ?? "Calendar"} tone="accent" />
-              <StatusChip label={`Source: ${currentEvent?.source ?? "none"}`} tone="neutral" />
+              <StatusChip label={`Source: ${formatSourceLabel(eventRecordsSource)}`} tone="neutral" />
             </div>
             <p>{currentEvent?.notes ?? ""}</p>
             <p className="form-note">
-              {isPersistenceConfigured ? "Read-only Supabase mode is configured." : "Fallback mode: using static event records."}
+              {getSourceNote(eventRecordsSource, isPersistenceConfigured)}
             </p>
           </div>
         </DashboardCard>
@@ -113,4 +114,24 @@ export function Events({ eventRecords, isLoading, isPersistenceConfigured }: Eve
       </div>
     </PageContainer>
   );
+}
+
+function formatSourceLabel(source: EventsProps["eventRecordsSource"]) {
+  if (source === "supabase") return "Supabase";
+  if (source === "ics") return "ICS";
+  return "fallback";
+}
+
+function getSourceNote(source: EventsProps["eventRecordsSource"], isPersistenceConfigured: boolean) {
+  if (source === "supabase") return "Live Supabase event records are loaded.";
+  if (source === "ics") return "Calendar export records are loaded.";
+  if (isPersistenceConfigured) return "Fallback mode: Supabase event read failed, so static records are shown.";
+  return "Fallback mode: using static event records.";
+}
+
+function getEmptySourceMessage(source: EventsProps["eventRecordsSource"], isPersistenceConfigured: boolean) {
+  if (source === "supabase") return "The live Supabase events table is empty.";
+  if (source === "ics") return "The calendar source has no events.";
+  if (isPersistenceConfigured) return "Supabase could not be read, so fallback records may be shown when available.";
+  return "Connect Supabase or use fallback events.";
 }

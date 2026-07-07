@@ -11,6 +11,7 @@ import { getMediaSources } from "../services/mediaService";
 interface MediaCenterProps {
   eventRecords: EventRecord[];
   mediaItems: MediaItem[];
+  mediaItemsSource: "static" | "supabase" | "fallback";
 }
 
 function getMediaStatusTone(status: string) {
@@ -36,7 +37,7 @@ function handleSourceTarget(targetId: string) {
   document.getElementById(targetId)?.scrollIntoView({ block: "start", behavior: "smooth" });
 }
 
-export function MediaCenter({ eventRecords, mediaItems }: MediaCenterProps) {
+export function MediaCenter({ eventRecords, mediaItems, mediaItemsSource }: MediaCenterProps) {
   const mediaSources = getMediaSources();
 
   return (
@@ -102,10 +103,11 @@ export function MediaCenter({ eventRecords, mediaItems }: MediaCenterProps) {
             </div>
           ) : (
             <EmptyState
-              title="No assets added yet"
-              message="Flyers, event graphics, logos, templates, and photo links will appear here."
+              title="No media records yet"
+              message={mediaItemsSource === "supabase" ? "Media records will appear here when they are added to Supabase." : "Flyers, event graphics, logos, templates, and photo links will appear here."}
             />
           )}
+          <p className="form-note">{getSourceNote(mediaItemsSource)}</p>
         </DashboardCard>
         <DashboardCard>
           <SectionHeader title="Media Sources" />
@@ -134,4 +136,9 @@ export function MediaCenter({ eventRecords, mediaItems }: MediaCenterProps) {
       </div>
     </PageContainer>
   );
+}
+
+function getSourceNote(source: MediaCenterProps["mediaItemsSource"]) {
+  if (source === "supabase") return "Source: Supabase";
+  return "Source: fallback";
 }

@@ -1,6 +1,7 @@
 import { PageContainer } from "../components/layout/PageContainer";
 import { Button } from "../components/ui/Button";
 import { DashboardCard } from "../components/ui/DashboardCard";
+import { EmptyState } from "../components/ui/EmptyState";
 import { Icon } from "../components/ui/Icon";
 import { SectionHeader } from "../components/ui/SectionHeader";
 import type { ExternalResource } from "../types";
@@ -8,9 +9,10 @@ import { getReferenceSections } from "../services/settingsService";
 
 interface ReferenceProps {
   externalResources: ExternalResource[];
+  externalResourcesSource: "static" | "supabase" | "fallback";
 }
 
-export function Reference({ externalResources }: ReferenceProps) {
+export function Reference({ externalResources, externalResourcesSource }: ReferenceProps) {
   const referenceSections = getReferenceSections();
 
   return (
@@ -22,26 +24,31 @@ export function Reference({ externalResources }: ReferenceProps) {
       <div className="reference-grid">
         <DashboardCard key="useful-links" id="useful-links" className="span-all">
           <SectionHeader title="Useful Links" />
-          <div className="useful-links-grid">
-            {externalResources.map((resource) => (
-              <article className="useful-link-card" key={resource.id}>
-                <Icon name={resource.icon} />
-                <span>
-                  <strong>{resource.title}</strong>
-                  <em>{resource.description}</em>
-                </span>
-                {resource.url ? (
-                  <a className="button button--secondary" href={resource.url} target="_blank" rel="noreferrer">
-                    Open
-                  </a>
-                ) : (
-                  <Button type="button" variant="secondary" disabled title="This link has not been configured yet.">
-                    Open
-                  </Button>
-                )}
-              </article>
-            ))}
-          </div>
+          {externalResources.length > 0 ? (
+            <div className="useful-links-grid">
+              {externalResources.map((resource) => (
+                <article className="useful-link-card" key={resource.id}>
+                  <Icon name={resource.icon} />
+                  <span>
+                    <strong>{resource.title}</strong>
+                    <em>{resource.description}</em>
+                  </span>
+                  {resource.url ? (
+                    <a className="button button--secondary" href={resource.url} target="_blank" rel="noreferrer">
+                      Open
+                    </a>
+                  ) : (
+                    <Button type="button" variant="secondary" disabled title="This link has not been configured yet.">
+                      Open
+                    </Button>
+                  )}
+                </article>
+              ))}
+            </div>
+          ) : (
+            <EmptyState title="No reference links yet" message="Useful links will appear here when they are added to Supabase." />
+          )}
+          <p className="form-note">{externalResourcesSource === "supabase" ? "Source: Supabase" : "Source: fallback"}</p>
         </DashboardCard>
         <DashboardCard className="span-all">
           <SectionHeader title="Operations Playbook" />

@@ -58,13 +58,6 @@ export async function loadOperationItems(): Promise<OperationItemsLoadResult> {
     };
   }
 
-  if (data.length === 0) {
-    return {
-      items: getOperationItems(),
-      source: "fallback" as const
-    };
-  }
-
   return {
     items: (data as SupabaseOperationItemRow[]).map(fromSupabaseOperationItem),
     source: "supabase" as const

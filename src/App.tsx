@@ -22,14 +22,22 @@ import { getRides, loadRideRecords } from "./services/ridesService";
 import { getUsefulLinks, loadUsefulLinks } from "./services/linksService";
 import { getNavItems } from "./services/settingsService";
 
+type TableDataSource = "static" | "supabase" | "fallback";
+type EventDataSource = TableDataSource | "ics";
+const initialPersistenceStatus = getPersistenceStatus();
+
 export function App() {
   const [activeModule, setActiveModule] = useState<ModuleId>("home");
-  const [eventRecords, setEventRecords] = useState<EventRecord[]>(getEvents());
-  const [rideRecords, setRideRecords] = useState<RideRecord[]>(getRides());
-  const [operationItems, setOperationItems] = useState<OperationItem[]>(getOperationItems());
-  const [operationItemsSource, setOperationItemsSource] = useState<"static" | "supabase" | "fallback">("static");
-  const [mediaItems, setMediaItems] = useState<MediaItem[]>(getMediaItems());
-  const [usefulLinks, setUsefulLinks] = useState<ExternalResource[]>(getUsefulLinks());
+  const [eventRecords, setEventRecords] = useState<EventRecord[]>(initialPersistenceStatus.isConfigured ? [] : getEvents());
+  const [eventRecordsSource, setEventRecordsSource] = useState<EventDataSource>(initialPersistenceStatus.isConfigured ? "supabase" : "static");
+  const [rideRecords, setRideRecords] = useState<RideRecord[]>(initialPersistenceStatus.isConfigured ? [] : getRides());
+  const [rideRecordsSource, setRideRecordsSource] = useState<TableDataSource>(initialPersistenceStatus.isConfigured ? "supabase" : "static");
+  const [operationItems, setOperationItems] = useState<OperationItem[]>(initialPersistenceStatus.isConfigured ? [] : getOperationItems());
+  const [operationItemsSource, setOperationItemsSource] = useState<TableDataSource>(initialPersistenceStatus.isConfigured ? "supabase" : "static");
+  const [mediaItems, setMediaItems] = useState<MediaItem[]>(initialPersistenceStatus.isConfigured ? [] : getMediaItems());
+  const [mediaItemsSource, setMediaItemsSource] = useState<TableDataSource>(initialPersistenceStatus.isConfigured ? "supabase" : "static");
+  const [usefulLinks, setUsefulLinks] = useState<ExternalResource[]>(initialPersistenceStatus.isConfigured ? [] : getUsefulLinks());
+  const [usefulLinksSource, setUsefulLinksSource] = useState<TableDataSource>(initialPersistenceStatus.isConfigured ? "supabase" : "static");
   const [isLoadingRecords, setIsLoadingRecords] = useState(true);
   const eventDashboard = useMemo(() => buildEventDashboardData(eventRecords), [eventRecords]);
   const navItems = getNavItems();
@@ -47,11 +55,15 @@ export function App() {
     ]).then(([eventResult, rideResult, operationResult, mediaResult, linksResult]) => {
       if (!cancelled) {
         setEventRecords(eventResult.events);
+        setEventRecordsSource(eventResult.source);
         setRideRecords(rideResult.rides);
+        setRideRecordsSource(rideResult.source);
         setOperationItems(operationResult.items);
         setOperationItemsSource(operationResult.source);
         setMediaItems(mediaResult.media);
+        setMediaItemsSource(mediaResult.source);
         setUsefulLinks(linksResult.links);
+        setUsefulLinksSource(linksResult.source);
         setIsLoadingRecords(false);
       }
     }).catch((error) => {
@@ -99,6 +111,7 @@ export function App() {
         return (
           <Events
             eventRecords={eventDashboard.eventRecords}
+            eventRecordsSource={eventRecordsSource}
             isLoading={isLoadingRecords}
             isPersistenceConfigured={persistenceStatus.isConfigured}
           />
@@ -123,14 +136,15 @@ export function App() {
           <RidePlanner
             eventRecords={eventDashboard.eventRecords}
             rideRecords={rideRecords}
+            rideRecordsSource={rideRecordsSource}
             isLoading={isLoadingRecords}
             isPersistenceConfigured={persistenceStatus.isConfigured}
           />
         );
       case "media":
-        return <MediaCenter eventRecords={eventDashboard.eventRecords} mediaItems={mediaItems} />;
+        return <MediaCenter eventRecords={eventDashboard.eventRecords} mediaItems={mediaItems} mediaItemsSource={mediaItemsSource} />;
       case "reference":
-        return <Reference externalResources={usefulLinks} />;
+        return <Reference externalResources={usefulLinks} externalResourcesSource={usefulLinksSource} />;
     }
   }
 

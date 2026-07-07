@@ -11,11 +11,12 @@ import { getUpcomingRides } from "../services/ridesService";
 interface RidePlannerProps {
   eventRecords: EventRecord[];
   rideRecords: RideRecord[];
+  rideRecordsSource: "static" | "supabase" | "fallback";
   isLoading: boolean;
   isPersistenceConfigured: boolean;
 }
 
-export function RidePlanner({ eventRecords, rideRecords, isLoading, isPersistenceConfigured }: RidePlannerProps) {
+export function RidePlanner({ eventRecords, rideRecords, rideRecordsSource, isLoading, isPersistenceConfigured }: RidePlannerProps) {
   const upcomingRideEvents = getUpcomingRides(eventRecords);
   const upcomingSavedRides = getUpcomingSavedRides(rideRecords);
   const nextRide = upcomingRideEvents[0] ?? null;
@@ -60,7 +61,7 @@ export function RidePlanner({ eventRecords, rideRecords, isLoading, isPersistenc
                 ))}
               </>
             ) : (
-              <EmptyState title="No rides yet" message="Saved rides and ride events will appear here." />
+              <EmptyState title="No rides yet" message="Rides will appear here when they are added to Supabase." />
             )}
           </div>
         </DashboardCard>
@@ -88,12 +89,18 @@ export function RidePlanner({ eventRecords, rideRecords, isLoading, isPersistenc
             <EmptyState title="No saved ride selected" message="Saved ride details will appear here when rides are available." />
           )}
           <p className="form-note">
-            {isPersistenceConfigured ? "Read-only Supabase mode is configured." : "Fallback mode: using static ride records."}
+            {getSourceNote(rideRecordsSource, isPersistenceConfigured)}
           </p>
         </DashboardCard>
       </div>
     </PageContainer>
   );
+}
+
+function getSourceNote(source: RidePlannerProps["rideRecordsSource"], isPersistenceConfigured: boolean) {
+  if (source === "supabase") return "Source: Supabase";
+  if (isPersistenceConfigured) return "Source: fallback. Supabase ride read failed, so static records are shown.";
+  return "Source: fallback. Using static ride records.";
 }
 
 function RideDetail({ ride }: { ride: RideRecord }) {

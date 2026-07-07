@@ -32,6 +32,13 @@ To enable Supabase reads:
 5. Install dependencies with `pnpm install`.
 6. Start the dev server with `pnpm dev`.
 
+For GitHub Pages deployments, add these repository secrets before running the Pages workflow:
+
+- `VITE_SUPABASE_URL`
+- `VITE_SUPABASE_ANON_KEY`
+
+Vite reads these values at build time, so the deployed app will use fallback data if the GitHub Actions build does not receive them.
+
 Only use the Supabase anon public key in frontend environment files. Do not put a service role key in `.env.local` or any committed file.
 
 Current Supabase-backed read tables:
