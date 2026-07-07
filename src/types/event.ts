@@ -1,8 +1,11 @@
 export type StatusTone = "success" | "warning" | "neutral" | "accent";
+export type EventReadinessKey = "venueConfirmed" | "routeComplete" | "flyerPosted" | "emailSent";
 
 export interface StatusItem {
+  key?: EventReadinessKey;
   label: string;
   tone: StatusTone;
+  complete?: boolean;
 }
 
 export interface CountdownStatus {
@@ -34,6 +37,7 @@ export interface DashboardEvent {
   countdown: CountdownDisplay;
   checklist: StatusItem[];
   category: string;
+  isReady: boolean;
 }
 
 export interface UpcomingEvent {
@@ -72,6 +76,10 @@ export interface EventRecord {
   status: string;
   flyerStatus: string;
   rideDifficulty?: string;
+  venueConfirmed?: boolean;
+  routeComplete?: boolean;
+  flyerPosted?: boolean;
+  emailSent?: boolean;
   flyerUrl?: string;
   groupPhotoUrl?: string;
   routeImageUrl?: string;

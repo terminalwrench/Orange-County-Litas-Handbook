@@ -144,8 +144,12 @@ function parseEventBlock(lines: string[]): EventRecord | null {
     description,
     source: "ics",
     type,
-    status: "Scheduled",
+    status: "Planning",
     flyerStatus: "Unknown",
+    venueConfirmed: location !== "TBD",
+    routeComplete: type !== "Ride",
+    flyerPosted: false,
+    emailSent: false,
     notes: description,
     externalUid: uid,
     checklist: getChecklistForEvent(type)
@@ -226,20 +230,13 @@ function inferEventType(title: string, description: string) {
 }
 
 function getChecklistForEvent(type: string): StatusItem[] {
-  if (type === "Ride") {
-    return [
-      { label: "Venue Needed", tone: "neutral" },
-      { label: "Route Needed", tone: "neutral" },
-      { label: "Flyer Needed", tone: "neutral" },
-      { label: "Email Needed", tone: "neutral" }
-    ];
-  }
+  const routeComplete = type !== "Ride";
 
   return [
-    { label: "Venue Review", tone: "neutral" },
-    { label: "Details Review", tone: "neutral" },
-    { label: "Flyer Review", tone: "neutral" },
-    { label: "Email Review", tone: "neutral" }
+    { key: "venueConfirmed", label: "Venue Confirmed", tone: "warning", complete: false },
+    { key: "routeComplete", label: "Route Complete", tone: routeComplete ? "success" : "warning", complete: routeComplete },
+    { key: "flyerPosted", label: "Flyer Posted", tone: "warning", complete: false },
+    { key: "emailSent", label: "Email Sent", tone: "warning", complete: false }
   ];
 }
 

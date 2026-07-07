@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { AppShell } from "./components/layout/AppShell";
-import type { BranchAsset, EventRecord, ExternalResource, ModuleId, OperationItem, OperationStatus, RideRecord } from "./types";
+import type { BranchAsset, EventReadinessKey, EventRecord, ExternalResource, ModuleId, OperationItem, OperationStatus, RideRecord } from "./types";
 import { Events } from "./pages/Events";
 import { Home } from "./pages/Home";
 import { BranchAssets } from "./pages/BranchAssets";
@@ -106,6 +106,42 @@ export function App() {
     return result;
   }
 
+  async function handleToggleEventReadiness(eventId: string, key: EventReadinessKey) {
+    const event = eventRecords.find((record) => record.id === eventId);
+    if (!event) return;
+
+    const result = await saveEventRecord({
+      id: event.id,
+      title: event.title,
+      type: event.type,
+      startDate: event.startDate,
+      endDate: event.endDate,
+      time: event.time,
+      location: event.location,
+      city: event.city,
+      description: event.description,
+      status: event.status,
+      flyerStatus: key === "flyerPosted" && event.flyerPosted ? "Needed" : event.flyerStatus,
+      rideDifficulty: event.rideDifficulty,
+      venueConfirmed: key === "venueConfirmed" ? !event.venueConfirmed : event.venueConfirmed,
+      routeComplete: key === "routeComplete" ? !event.routeComplete : event.routeComplete,
+      flyerPosted: key === "flyerPosted" ? !event.flyerPosted : event.flyerPosted,
+      emailSent: key === "emailSent" ? !event.emailSent : event.emailSent,
+      flyerUrl: event.flyerUrl,
+      groupPhotoUrl: event.groupPhotoUrl,
+      routeImageUrl: event.routeImageUrl,
+      instagramUrl: event.instagramUrl,
+      appleAlbumUrl: event.appleAlbumUrl,
+      notes: event.notes,
+      externalUid: event.externalUid
+    });
+
+    if (result.source === "supabase" || !persistenceStatus.isConfigured) {
+      setEventRecords((current) => upsertById(current, result.data, event.id));
+    }
+    if (result.source === "supabase") setEventRecordsSource("supabase");
+  }
+
   async function handleDeleteEvent(event: EventRecord) {
     const result = await deleteEventRecord(event);
     if (result.source === "supabase" || !persistenceStatus.isConfigured) {
@@ -182,6 +218,8 @@ export function App() {
             nextEvent={eventDashboard.nextEvent}
             upcomingEvents={eventDashboard.upcomingEvents}
             rideWeather={eventDashboard.rideWeather}
+            onOpenEvents={() => setActiveModule("events")}
+            onToggleEventReadiness={handleToggleEventReadiness}
           />
         );
       case "events":

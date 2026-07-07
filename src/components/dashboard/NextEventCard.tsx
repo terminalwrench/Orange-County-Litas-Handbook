@@ -1,14 +1,14 @@
-import type { DashboardEvent } from "../../types";
+import type { DashboardEvent, EventReadinessKey } from "../../types";
 import { DashboardCard } from "../ui/DashboardCard";
 import { DateBadge } from "../ui/DateBadge";
 import { Icon } from "../ui/Icon";
-import { StatusChip } from "../ui/StatusChip";
 
 interface NextEventCardProps {
   event: DashboardEvent | null;
+  onToggleReadiness: (eventId: string, key: EventReadinessKey) => void;
 }
 
-export function NextEventCard({ event }: NextEventCardProps) {
+export function NextEventCard({ event, onToggleReadiness }: NextEventCardProps) {
   if (!event) {
     return (
       <DashboardCard className="next-event-card" ariaLabel="Next event">
@@ -52,9 +52,19 @@ export function NextEventCard({ event }: NextEventCardProps) {
       </div>
       <div className="status-row" aria-label="Event status">
         {event.checklist.map((item) => (
-          <StatusChip key={item.label} label={item.label} tone={item.tone} withIcon />
+          <button
+            className={`status-chip status-chip--${item.tone} readiness-chip`}
+            key={item.label}
+            type="button"
+            onClick={() => item.key ? onToggleReadiness(event.id, item.key) : undefined}
+            aria-pressed={Boolean(item.complete)}
+          >
+            <Icon name="check" />
+            {item.label}
+          </button>
         ))}
       </div>
+      {event.isReady ? <p className="ready-hint">All readiness items are complete. This event appears ready.</p> : null}
     </DashboardCard>
   );
 }

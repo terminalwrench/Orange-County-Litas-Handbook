@@ -43,7 +43,7 @@ interface EventFormState {
   notes: string;
 }
 
-const eventStatuses = ["Planning", "Ready", "Active", "Completed", "Cancelled"];
+const eventStatuses = ["Planning", "Ready", "Completed", "Cancelled"];
 const eventTypes = ["Meet & Greet", "Ride", "Community", "Special Event"];
 const rideDifficulties = ["Beginner", "Intermediate", "Advanced"];
 const monthFormatter = new Intl.DateTimeFormat("en-US", { month: "short" });
@@ -71,7 +71,7 @@ function parseEventDate(value: string) {
 }
 
 function getStatusTone(status: string) {
-  if (status === "Ready" || status === "Active" || status === "Completed") return "success";
+  if (status === "Ready" || status === "Completed") return "success";
   if (status === "Planning") return "warning";
   return "neutral";
 }

@@ -5,6 +5,7 @@ export type {
   CountdownDisplay,
   CountdownStatus,
   DashboardEvent,
+  EventReadinessKey,
   EventRecord,
   RideWeather,
   StatusItem,

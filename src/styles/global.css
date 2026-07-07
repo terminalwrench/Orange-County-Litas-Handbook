@@ -294,6 +294,24 @@ a {
   text-transform: uppercase;
 }
 
+.section-title-button {
+  padding: 0;
+  border: 0;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  background: transparent;
+  cursor: pointer;
+  transition: color var(--motion-fast);
+}
+
+.section-title-button:hover,
+.section-title-button:focus-visible {
+  color: var(--color-orange);
+  outline: none;
+}
+
 .next-event-card__main {
   display: grid;
   grid-template-columns: 7.35rem minmax(0, 1fr) 12rem;
@@ -447,6 +465,29 @@ a {
 
 .status-chip--success {
   border-color: rgba(67, 186, 88, 0.28);
+}
+
+.readiness-chip {
+  cursor: pointer;
+  transition: background var(--motion-fast), border-color var(--motion-fast), color var(--motion-fast);
+}
+
+.readiness-chip:hover,
+.readiness-chip:focus-visible {
+  border-color: rgba(255, 107, 0, 0.5);
+  outline: none;
+}
+
+.readiness-chip[aria-pressed="false"] svg {
+  border: 1px solid currentColor;
+  background: transparent;
+  color: currentColor;
+}
+
+.ready-hint {
+  margin: 0.85rem 0 0;
+  color: var(--color-muted);
+  font-size: 0.82rem;
 }
 
 .home-grid {

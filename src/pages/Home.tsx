@@ -1,4 +1,4 @@
-import type { DashboardEvent, RideWeather, UpcomingEvent } from "../types";
+import type { DashboardEvent, EventReadinessKey, RideWeather, UpcomingEvent } from "../types";
 import { toDateValue } from "../utils/date";
 import { BirthdaysCard } from "../components/dashboard/BirthdaysCard";
 import { BranchNotesPlaceholder } from "../components/dashboard/BranchNotesPlaceholder";
@@ -15,15 +15,17 @@ interface HomeProps {
   nextEvent: DashboardEvent | null;
   upcomingEvents: UpcomingEvent[];
   rideWeather: RideWeather | null;
+  onOpenEvents: () => void;
+  onToggleEventReadiness: (eventId: string, key: EventReadinessKey) => void;
 }
 
-export function Home({ nextEvent, upcomingEvents, rideWeather }: HomeProps) {
+export function Home({ nextEvent, upcomingEvents, rideWeather, onOpenEvents, onToggleEventReadiness }: HomeProps) {
   return (
     <PageContainer className="home-page">
       <h1 className="sr-only">Orange County Litas Operations Center</h1>
-      <NextEventCard event={nextEvent} />
+      <NextEventCard event={nextEvent} onToggleReadiness={onToggleEventReadiness} />
       <div className="home-grid">
-        <UpcomingEventsCard events={upcomingEvents} />
+        <UpcomingEventsCard events={upcomingEvents} onOpenEvents={onOpenEvents} />
         <div className="home-grid__stack">
           <BirthdaysCard birthdays={upcomingBirthdays} />
         </div>

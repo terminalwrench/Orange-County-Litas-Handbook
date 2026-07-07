@@ -15,12 +15,16 @@ export const eventRecords: EventRecord[] = [
     type: "Meet & Greet",
     status: "Ready",
     flyerStatus: "Posted",
+    venueConfirmed: true,
+    routeComplete: true,
+    flyerPosted: true,
+    emailSent: true,
     notes: "Venue, email, and flyer are prepared.",
     checklist: [
-      { label: "Venue Confirmed", tone: "success" },
-      { label: "Route Complete", tone: "success" },
-      { label: "Flyer Posted", tone: "success" },
-      { label: "Email Sent", tone: "success" }
+      { key: "venueConfirmed", label: "Venue Confirmed", tone: "success", complete: true },
+      { key: "routeComplete", label: "Route Complete", tone: "success", complete: true },
+      { key: "flyerPosted", label: "Flyer Posted", tone: "success", complete: true },
+      { key: "emailSent", label: "Email Sent", tone: "success", complete: true }
     ]
   },
   {
@@ -37,12 +41,16 @@ export const eventRecords: EventRecord[] = [
     type: "Ride",
     status: "Planning",
     flyerStatus: "Needed",
+    venueConfirmed: false,
+    routeComplete: false,
+    flyerPosted: false,
+    emailSent: false,
     notes: "Confirm route, meetup location, and lead/sweep plan.",
     checklist: [
-      { label: "Venue Needed", tone: "warning" },
-      { label: "Route Needed", tone: "warning" },
-      { label: "Flyer Needed", tone: "warning" },
-      { label: "Email Needed", tone: "warning" }
+      { key: "venueConfirmed", label: "Venue Confirmed", tone: "warning", complete: false },
+      { key: "routeComplete", label: "Route Complete", tone: "warning", complete: false },
+      { key: "flyerPosted", label: "Flyer Posted", tone: "warning", complete: false },
+      { key: "emailSent", label: "Email Sent", tone: "warning", complete: false }
     ]
   },
   {
@@ -59,12 +67,16 @@ export const eventRecords: EventRecord[] = [
     type: "Community",
     status: "Planning",
     flyerStatus: "Needed",
+    venueConfirmed: false,
+    routeComplete: false,
+    flyerPosted: false,
+    emailSent: false,
     notes: "Coordinate partner tags, parking details, and arrival window.",
     checklist: [
-      { label: "Venue Needed", tone: "warning" },
-      { label: "Route TBD", tone: "neutral" },
-      { label: "Flyer Needed", tone: "warning" },
-      { label: "Email Needed", tone: "warning" }
+      { key: "venueConfirmed", label: "Venue Confirmed", tone: "warning", complete: false },
+      { key: "routeComplete", label: "Route Complete", tone: "warning", complete: false },
+      { key: "flyerPosted", label: "Flyer Posted", tone: "warning", complete: false },
+      { key: "emailSent", label: "Email Sent", tone: "warning", complete: false }
     ]
   }
 ];

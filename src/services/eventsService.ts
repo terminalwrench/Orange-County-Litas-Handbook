@@ -1,6 +1,6 @@
 import { eventRecords as staticEventRecords } from "../data/events";
 import { featureFlags } from "../data/featureFlags";
-import type { DashboardEvent, EventRecord, RideWeather, UpcomingEvent, CountdownStatus } from "../types";
+import type { DashboardEvent, EventReadinessKey, EventRecord, RideWeather, UpcomingEvent, CountdownStatus } from "../types";
 import { getCountdownDisplay, getCountdownLabel as getCountdownLabelValue, getSidebarCountdown } from "../utils/countdown";
 import { isWithinCurrentWeek, parseDate, toDateValue } from "../utils/date";
 import { fetchCalendarEvents, loadCalendarEvents, PUBLIC_GOOGLE_CALENDAR_ICS_URL } from "./calendarService";
@@ -19,6 +19,10 @@ interface SupabaseEventRow {
   status: string | null;
   flyer_status: string | null;
   ride_difficulty: string | null;
+  venue_confirmed: boolean | null;
+  route_complete: boolean | null;
+  flyer_posted: boolean | null;
+  email_sent: boolean | null;
   flyer_url: string | null;
   group_photo_url: string | null;
   route_image_url: string | null;
@@ -70,6 +74,10 @@ export interface EventSaveInput {
   status?: string;
   flyerStatus?: string;
   rideDifficulty?: string;
+  venueConfirmed?: boolean;
+  routeComplete?: boolean;
+  flyerPosted?: boolean;
+  emailSent?: boolean;
   flyerUrl?: string;
   groupPhotoUrl?: string;
   routeImageUrl?: string;
@@ -358,7 +366,8 @@ function toDashboardEvent(event: EventRecord, today = new Date()): DashboardEven
     city: event.city,
     countdown: getCountdownDisplay(event.startDate, today),
     checklist: event.checklist,
-    category: event.type
+    category: event.type,
+    isReady: isEventReady(event)
   };
 }
 
@@ -403,8 +412,17 @@ async function loadSupabaseEvents() {
 }
 
 function fromSupabaseEvent(row: SupabaseEventRow): EventRecord {
-  const status = row.status ?? "Planning";
-  const flyerStatus = row.flyer_status ?? "Needed";
+  const status = normalizeEventStatus(row.status ?? undefined);
+  const flyerStatus = row.flyer_posted ? "Posted" : row.flyer_status ?? "Needed";
+  const readiness = getReadinessState({
+    location: row.location ?? "",
+    type: row.type,
+    flyerStatus,
+    venueConfirmed: row.venue_confirmed ?? undefined,
+    routeComplete: row.route_complete ?? undefined,
+    flyerPosted: row.flyer_posted ?? undefined,
+    emailSent: row.email_sent ?? undefined
+  });
 
   return {
     id: row.id,
@@ -421,6 +439,7 @@ function fromSupabaseEvent(row: SupabaseEventRow): EventRecord {
     status,
     flyerStatus,
     rideDifficulty: row.ride_difficulty ?? undefined,
+    ...readiness,
     flyerUrl: row.flyer_url ?? undefined,
     groupPhotoUrl: row.group_photo_url ?? undefined,
     routeImageUrl: row.route_image_url ?? undefined,
@@ -428,7 +447,7 @@ function fromSupabaseEvent(row: SupabaseEventRow): EventRecord {
     appleAlbumUrl: row.apple_album_url ?? undefined,
     notes: row.notes ?? row.description ?? "",
     externalUid: row.external_uid ?? undefined,
-    checklist: buildChecklist(row.location ?? "", row.type, flyerStatus)
+    checklist: buildChecklist(readiness)
   };
 }
 
@@ -442,9 +461,13 @@ function toSupabaseEventPayload(input: EventSaveInput) {
     location: input.location ?? "",
     city: input.city ?? "",
     description: input.description ?? input.notes ?? "",
-    status: input.status ?? "Planning",
-    flyer_status: input.flyerStatus ?? "Needed",
+    status: normalizeEventStatus(input.status),
+    flyer_status: typeof input.flyerPosted === "boolean" ? (input.flyerPosted ? "Posted" : "Needed") : input.flyerStatus ?? "Needed",
     ...(input.rideDifficulty ? { ride_difficulty: input.rideDifficulty } : {}),
+    ...(typeof input.venueConfirmed === "boolean" ? { venue_confirmed: input.venueConfirmed } : {}),
+    ...(typeof input.routeComplete === "boolean" ? { route_complete: input.routeComplete } : {}),
+    ...(typeof input.flyerPosted === "boolean" ? { flyer_posted: input.flyerPosted } : {}),
+    ...(typeof input.emailSent === "boolean" ? { email_sent: input.emailSent } : {}),
     ...(input.flyerUrl ? { flyer_url: input.flyerUrl } : {}),
     ...(input.groupPhotoUrl ? { group_photo_url: input.groupPhotoUrl } : {}),
     ...(input.routeImageUrl ? { route_image_url: input.routeImageUrl } : {}),
@@ -466,9 +489,13 @@ function toSupabaseImportedEventPayload(event: EventRecord) {
     location: event.location,
     city: event.city,
     description: event.description,
-    status: event.status,
-    flyer_status: event.flyerStatus,
+    status: normalizeEventStatus(event.status),
+    flyer_status: typeof event.flyerPosted === "boolean" ? (event.flyerPosted ? "Posted" : "Needed") : event.flyerStatus,
     ...(event.rideDifficulty ? { ride_difficulty: event.rideDifficulty } : {}),
+    ...(typeof event.venueConfirmed === "boolean" ? { venue_confirmed: event.venueConfirmed } : {}),
+    ...(typeof event.routeComplete === "boolean" ? { route_complete: event.routeComplete } : {}),
+    ...(typeof event.flyerPosted === "boolean" ? { flyer_posted: event.flyerPosted } : {}),
+    ...(typeof event.emailSent === "boolean" ? { email_sent: event.emailSent } : {}),
     ...(event.flyerUrl ? { flyer_url: event.flyerUrl } : {}),
     ...(event.groupPhotoUrl ? { group_photo_url: event.groupPhotoUrl } : {}),
     ...(event.routeImageUrl ? { route_image_url: event.routeImageUrl } : {}),
@@ -483,6 +510,15 @@ function toSupabaseImportedEventPayload(event: EventRecord) {
 function toLocalEventRecord(input: EventSaveInput): EventRecord {
   const startDate = input.startDate || toDateValue(new Date());
   const flyerStatus = input.flyerStatus ?? "Needed";
+  const readiness = getReadinessState({
+    location: input.location ?? "",
+    type: input.type,
+    flyerStatus,
+    venueConfirmed: input.venueConfirmed,
+    routeComplete: input.routeComplete,
+    flyerPosted: input.flyerPosted,
+    emailSent: input.emailSent
+  });
 
   return {
     id: input.id ?? createLocalId("event"),
@@ -496,9 +532,10 @@ function toLocalEventRecord(input: EventSaveInput): EventRecord {
     description: input.description ?? input.notes ?? "",
     source: "fallback",
     type: input.type,
-    status: input.status ?? "Planning",
+    status: normalizeEventStatus(input.status),
     flyerStatus,
     rideDifficulty: input.rideDifficulty,
+    ...readiness,
     flyerUrl: input.flyerUrl,
     groupPhotoUrl: input.groupPhotoUrl,
     routeImageUrl: input.routeImageUrl,
@@ -506,21 +543,64 @@ function toLocalEventRecord(input: EventSaveInput): EventRecord {
     appleAlbumUrl: input.appleAlbumUrl,
     notes: input.notes ?? input.description ?? "",
     externalUid: input.externalUid,
-    checklist: buildChecklist(input.location, input.type, flyerStatus)
+    checklist: buildChecklist(readiness)
   };
 }
 
-function buildChecklist(location = "", type = "", flyerStatus = "Needed") {
+function buildChecklist(readiness: Record<EventReadinessKey, boolean>) {
+  return [
+    toReadinessItem("venueConfirmed", "Venue Confirmed", readiness.venueConfirmed),
+    toReadinessItem("routeComplete", "Route Complete", readiness.routeComplete),
+    toReadinessItem("flyerPosted", "Flyer Posted", readiness.flyerPosted),
+    toReadinessItem("emailSent", "Email Sent", readiness.emailSent)
+  ] as EventRecord["checklist"];
+}
+
+function toReadinessItem(key: EventReadinessKey, label: string, complete: boolean) {
+  return {
+    key,
+    label,
+    complete,
+    tone: complete ? "success" : "warning"
+  } as EventRecord["checklist"][number];
+}
+
+function getReadinessState({
+  location = "",
+  type = "",
+  flyerStatus = "Needed",
+  venueConfirmed,
+  routeComplete,
+  flyerPosted,
+  emailSent
+}: {
+  location?: string;
+  type?: string;
+  flyerStatus?: string;
+  venueConfirmed?: boolean;
+  routeComplete?: boolean;
+  flyerPosted?: boolean;
+  emailSent?: boolean;
+}): Record<EventReadinessKey, boolean> {
   const hasVenue = location.trim() !== "" && !location.toLowerCase().includes("tbd");
   const isRide = type.toLowerCase().includes("ride");
-  const flyerPosted = flyerStatus === "Posted";
 
-  return [
-    { label: hasVenue ? "Venue Confirmed" : "Venue Needed", tone: hasVenue ? "success" : "warning" },
-    { label: isRide ? "Route Needed" : "Route Optional", tone: isRide ? "warning" : "neutral" },
-    { label: flyerPosted ? "Flyer Posted" : "Flyer Needed", tone: flyerPosted ? "success" : "warning" },
-    { label: "Email Needed", tone: "warning" }
-  ] as EventRecord["checklist"];
+  return {
+    venueConfirmed: venueConfirmed ?? hasVenue,
+    routeComplete: routeComplete ?? !isRide,
+    flyerPosted: flyerPosted ?? flyerStatus === "Posted",
+    emailSent: emailSent ?? false
+  };
+}
+
+function isEventReady(event: EventRecord) {
+  return event.checklist.every((item) => item.complete);
+}
+
+function normalizeEventStatus(status = "Planning") {
+  if (status === "Active") return "Ready";
+  if (status === "Ready" || status === "Completed" || status === "Cancelled" || status === "Planning") return status;
+  return "Planning";
 }
 
 function isUuid(value: string) {

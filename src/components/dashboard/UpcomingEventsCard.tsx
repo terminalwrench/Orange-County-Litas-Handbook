@@ -1,16 +1,22 @@
 import type { UpcomingEvent } from "../../types";
 import { DashboardCard } from "../ui/DashboardCard";
 import { DateBadge } from "../ui/DateBadge";
-import { SectionHeader } from "../ui/SectionHeader";
 
 interface UpcomingEventsCardProps {
   events: UpcomingEvent[];
+  onOpenEvents: () => void;
 }
 
-export function UpcomingEventsCard({ events }: UpcomingEventsCardProps) {
+export function UpcomingEventsCard({ events, onOpenEvents }: UpcomingEventsCardProps) {
   return (
     <DashboardCard className="list-card" ariaLabel="Upcoming events">
-      <SectionHeader title="Upcoming Events" />
+      <div className="section-header">
+        <h2>
+          <button className="section-title-button" type="button" onClick={onOpenEvents}>
+            Upcoming Events
+          </button>
+        </h2>
+      </div>
       <div className="event-list">
         {events.map((event) => (
           <article className="event-list__row" key={event.id}>
@@ -22,7 +28,6 @@ export function UpcomingEventsCard({ events }: UpcomingEventsCardProps) {
           </article>
         ))}
       </div>
-      <p className="card-note">Open the Events module for the complete event list.</p>
     </DashboardCard>
   );
 }
