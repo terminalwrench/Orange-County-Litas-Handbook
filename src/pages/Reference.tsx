@@ -3,11 +3,14 @@ import { Button } from "../components/ui/Button";
 import { DashboardCard } from "../components/ui/DashboardCard";
 import { Icon } from "../components/ui/Icon";
 import { SectionHeader } from "../components/ui/SectionHeader";
-import { getUsefulLinks } from "../services/linksService";
+import type { ExternalResource } from "../types";
 import { getReferenceSections } from "../services/settingsService";
 
-export function Reference() {
-  const externalResources = getUsefulLinks();
+interface ReferenceProps {
+  externalResources: ExternalResource[];
+}
+
+export function Reference({ externalResources }: ReferenceProps) {
   const referenceSections = getReferenceSections();
 
   return (

@@ -21,9 +21,9 @@ The deployable output is generated in `dist/`.
 
 ## Backend Setup
 
-The app can run without Supabase. When `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` are missing, it uses the static fallback data in `src/data/` and keeps event or ride saves local to the current browser session.
+The app can run without Supabase. When `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` are missing, it uses the static fallback data in `src/data/`.
 
-To enable Supabase persistence:
+To enable Supabase reads:
 
 1. Create a Supabase project.
 2. Run [supabase/schema.sql](supabase/schema.sql) in the Supabase SQL editor.
@@ -32,7 +32,19 @@ To enable Supabase persistence:
 5. Install dependencies with `pnpm install`.
 6. Start the dev server with `pnpm dev`.
 
-This milestone does not add authentication. The schema includes comments for enabling Row Level Security when auth is added later.
+Only use the Supabase anon public key in frontend environment files. Do not put a service role key in `.env.local` or any committed file.
+
+Current Supabase-backed read tables:
+
+- `events`
+- `rides`
+- `media_assets`
+- `reference_links`
+- `operation_items`
+
+If Supabase is unconfigured or a read request fails, the app falls back to static data. If Supabase is configured and a table is empty, the app shows the appropriate empty state instead of mixing in mock records.
+
+This milestone does not add authentication or public write controls. The schema includes comments for enabling Row Level Security when auth is added later.
 
 ## Reference Content
 

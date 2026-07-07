@@ -1,14 +1,6 @@
 import { getSupabaseClient, isSupabaseConfigured } from "../lib/supabaseClient";
 
-export interface PersistenceResult<T> {
-  data: T;
-  source: "supabase" | "fallback";
-}
-
-export interface PersistenceListResult<T> {
-  data: T[];
-  source: "supabase" | "fallback";
-}
+const warningKeys = new Set<string>();
 
 export function getPersistenceStatus() {
   return {
@@ -17,9 +9,30 @@ export function getPersistenceStatus() {
 }
 
 export function getPersistenceClient() {
-  return getSupabaseClient();
+  const client = getSupabaseClient();
+
+  if (!client) {
+    warnOnce(
+      "supabase-unconfigured",
+      "[persistence] Supabase env vars are not configured. Using static fallback data."
+    );
+  }
+
+  return client;
 }
 
 export function warnAndUseFallback(message: string, error: unknown) {
-  console.warn(`[persistence] ${message}`, error);
+  warnOnce(message, `[persistence] ${message}`, error);
+}
+
+function warnOnce(key: string, message: string, error?: unknown) {
+  if (warningKeys.has(key)) return;
+  warningKeys.add(key);
+
+  if (error === undefined) {
+    console.warn(message);
+    return;
+  }
+
+  console.warn(message, error);
 }

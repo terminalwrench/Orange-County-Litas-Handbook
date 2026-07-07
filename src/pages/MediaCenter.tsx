@@ -6,10 +6,11 @@ import { Icon } from "../components/ui/Icon";
 import { SectionHeader } from "../components/ui/SectionHeader";
 import { StatusChip } from "../components/ui/StatusChip";
 import type { EventRecord, MediaItem } from "../types";
-import { getAssetLibraryItems, getMediaSources } from "../services/mediaService";
+import { getMediaSources } from "../services/mediaService";
 
 interface MediaCenterProps {
   eventRecords: EventRecord[];
+  mediaItems: MediaItem[];
 }
 
 function getMediaStatusTone(status: string) {
@@ -35,8 +36,7 @@ function handleSourceTarget(targetId: string) {
   document.getElementById(targetId)?.scrollIntoView({ block: "start", behavior: "smooth" });
 }
 
-export function MediaCenter({ eventRecords }: MediaCenterProps) {
-  const mediaItems = getAssetLibraryItems();
+export function MediaCenter({ eventRecords, mediaItems }: MediaCenterProps) {
   const mediaSources = getMediaSources();
 
   return (

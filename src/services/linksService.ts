@@ -44,8 +44,8 @@ export async function loadUsefulLinks() {
   };
 }
 
-export function getConfiguredLinks(): ExternalResource[] {
-  return getUsefulLinks().filter((link) => Boolean(link.url));
+export function getConfiguredLinks(links: ExternalResource[] = getUsefulLinks()): ExternalResource[] {
+  return links.filter((link) => Boolean(link.url));
 }
 
 function fromSupabaseReferenceLink(row: SupabaseReferenceLinkRow): ExternalResource {

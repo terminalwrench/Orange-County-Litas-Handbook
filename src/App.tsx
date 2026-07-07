@@ -1,16 +1,18 @@
 import { useEffect, useMemo, useState } from "react";
 import { AppShell } from "./components/layout/AppShell";
-import type { EventRecord, ModuleId, OperationItem, OperationStatus, RideRecord } from "./types";
+import type { EventRecord, ExternalResource, MediaItem, ModuleId, OperationItem, RideRecord } from "./types";
 import { Events } from "./pages/Events";
 import { Home } from "./pages/Home";
 import { MediaCenter } from "./pages/MediaCenter";
 import { Operations } from "./pages/Operations";
 import { Reference } from "./pages/Reference";
 import { RidePlanner } from "./pages/RidePlanner";
-import { buildEventDashboardData, getEvents, loadEventRecords, saveEventRecord, type EventSaveInput } from "./services/eventsService";
-import { getOperationItems, loadOperationItems, updateOperationItemStatus } from "./services/operationsService";
+import { buildEventDashboardData, getEvents, loadEventRecords } from "./services/eventsService";
+import { getOperationItems, loadOperationItems } from "./services/operationsService";
+import { getMediaItems, loadMediaItems } from "./services/mediaService";
 import { getPersistenceStatus } from "./services/persistence";
-import { getRides, loadRideRecords, saveRideRecord, type RideSaveInput } from "./services/ridesService";
+import { getRides, loadRideRecords } from "./services/ridesService";
+import { getUsefulLinks, loadUsefulLinks } from "./services/linksService";
 import { getNavItems } from "./services/settingsService";
 
 export function App() {
@@ -18,6 +20,8 @@ export function App() {
   const [eventRecords, setEventRecords] = useState<EventRecord[]>(getEvents());
   const [rideRecords, setRideRecords] = useState<RideRecord[]>(getRides());
   const [operationItems, setOperationItems] = useState<OperationItem[]>(getOperationItems());
+  const [mediaItems, setMediaItems] = useState<MediaItem[]>(getMediaItems());
+  const [usefulLinks, setUsefulLinks] = useState<ExternalResource[]>(getUsefulLinks());
   const [isLoadingRecords, setIsLoadingRecords] = useState(true);
   const eventDashboard = useMemo(() => buildEventDashboardData(eventRecords), [eventRecords]);
   const navItems = getNavItems();
@@ -26,11 +30,19 @@ export function App() {
   useEffect(() => {
     let cancelled = false;
 
-    Promise.all([loadEventRecords(), loadRideRecords(), loadOperationItems()]).then(([eventResult, rideResult, operationResult]) => {
+    Promise.all([
+      loadEventRecords(),
+      loadRideRecords(),
+      loadOperationItems(),
+      loadMediaItems(),
+      loadUsefulLinks()
+    ]).then(([eventResult, rideResult, operationResult, mediaResult, linksResult]) => {
       if (!cancelled) {
         setEventRecords(eventResult.events);
         setRideRecords(rideResult.rides);
         setOperationItems(operationResult.items);
+        setMediaItems(mediaResult.media);
+        setUsefulLinks(linksResult.links);
         setIsLoadingRecords(false);
       }
     }).catch((error) => {
@@ -42,24 +54,6 @@ export function App() {
       cancelled = true;
     };
   }, []);
-
-  async function handleSaveEvent(input: EventSaveInput, previousId?: string) {
-    const result = await saveEventRecord(input);
-    setEventRecords((current) => upsertById(current, result.data, previousId));
-    return result;
-  }
-
-  async function handleSaveRide(input: RideSaveInput, previousId?: string) {
-    const result = await saveRideRecord(input);
-    setRideRecords((current) => upsertById(current, result.data, previousId));
-    return result;
-  }
-
-  async function handleUpdateOperationStatus(item: OperationItem, status: OperationStatus) {
-    const result = await updateOperationItemStatus(item, status);
-    setOperationItems((current) => upsertById(current, result.data, item.id));
-    return result;
-  }
 
   function renderActivePage() {
     switch (activeModule) {
@@ -77,7 +71,6 @@ export function App() {
             eventRecords={eventDashboard.eventRecords}
             isLoading={isLoadingRecords}
             isPersistenceConfigured={persistenceStatus.isConfigured}
-            onSaveEvent={handleSaveEvent}
           />
         );
       case "operations":
@@ -86,9 +79,9 @@ export function App() {
             eventRecords={eventDashboard.eventRecords}
             rideRecords={rideRecords}
             operationItems={operationItems}
+            mediaItems={mediaItems}
             isLoading={isLoadingRecords}
             isPersistenceConfigured={persistenceStatus.isConfigured}
-            onUpdateOperationStatus={handleUpdateOperationStatus}
           />
         );
       case "ride-planner":
@@ -98,13 +91,12 @@ export function App() {
             rideRecords={rideRecords}
             isLoading={isLoadingRecords}
             isPersistenceConfigured={persistenceStatus.isConfigured}
-            onSaveRide={handleSaveRide}
           />
         );
       case "media":
-        return <MediaCenter eventRecords={eventDashboard.eventRecords} />;
+        return <MediaCenter eventRecords={eventDashboard.eventRecords} mediaItems={mediaItems} />;
       case "reference":
-        return <Reference />;
+        return <Reference externalResources={usefulLinks} />;
     }
   }
 
@@ -118,11 +110,4 @@ export function App() {
       {renderActivePage()}
     </AppShell>
   );
-}
-
-function upsertById<T extends { id: string }>(records: T[], saved: T, previousId?: string) {
-  const index = records.findIndex((record) => record.id === saved.id || record.id === previousId);
-  if (index === -1) return [...records, saved];
-
-  return records.map((record, recordIndex) => recordIndex === index ? saved : record);
 }

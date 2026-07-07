@@ -51,8 +51,8 @@ export function getMediaSources(): MediaSource[] {
   return mediaSources;
 }
 
-export function getAssetLibraryItems(): MediaItem[] {
-  return getMediaItems();
+export function getAssetLibraryItems(items: MediaItem[] = getMediaItems()): MediaItem[] {
+  return items;
 }
 
 function fromSupabaseMediaAsset(row: SupabaseMediaAssetRow): MediaItem {
