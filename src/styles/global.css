@@ -1132,6 +1132,21 @@ a {
   line-height: 1.55;
 }
 
+.ride-stop-list {
+  display: grid;
+  gap: 0.85rem;
+  margin-top: 1rem;
+}
+
+.ride-stop-row {
+  display: grid;
+  gap: 0.85rem;
+  padding: 1rem;
+  border: var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.032);
+}
+
 .empty-state {
   display: grid;
   gap: 0.3rem;

@@ -29,7 +29,7 @@ import {
 } from "./services/operationsService";
 import { getBranchAssets, loadBranchAssets } from "./services/branchAssetsService";
 import { getPersistenceStatus } from "./services/persistence";
-import { getRides, loadRideRecords } from "./services/ridesService";
+import { getRides, loadRideRecords, saveRideRecord, type RideSaveInput } from "./services/ridesService";
 import { getUsefulLinks, loadUsefulLinks } from "./services/linksService";
 import { getNavItems } from "./services/settingsService";
 
@@ -165,6 +165,15 @@ export function App() {
     return result;
   }
 
+  async function handleSaveRide(input: RideSaveInput) {
+    const result = await saveRideRecord(input);
+    if (result.source === "supabase" || !persistenceStatus.isConfigured) {
+      setRideRecords((current) => upsertById(current, result.data, input.id));
+    }
+    if (result.source === "supabase") setRideRecordsSource("supabase");
+    return result;
+  }
+
   function renderActivePage() {
     switch (activeModule) {
       case "home":
@@ -210,6 +219,7 @@ export function App() {
             rideRecordsSource={rideRecordsSource}
             isLoading={isLoadingRecords}
             isPersistenceConfigured={persistenceStatus.isConfigured}
+            onSaveRide={handleSaveRide}
           />
         );
       case "media":
