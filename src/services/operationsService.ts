@@ -50,7 +50,15 @@ export async function loadOperationItems(): Promise<OperationItemsLoadResult> {
     .order("due_date", { ascending: true, nullsFirst: false })
     .order("created_at", { ascending: true });
 
-  if (error || !data) {
+  if (error) {
+    if (isOperationTableUnavailable(error)) {
+      warnAndUseFallback("Supabase operation_items table is unavailable. Showing an empty live operations state instead of demo data.", error);
+      return {
+        items: [],
+        source: "supabase" as const
+      };
+    }
+
     warnAndUseFallback("Unable to load operation items from Supabase. Falling back to static operation data.", error);
     return {
       items: getOperationItems(),
@@ -59,7 +67,7 @@ export async function loadOperationItems(): Promise<OperationItemsLoadResult> {
   }
 
   return {
-    items: (data as SupabaseOperationItemRow[]).map(fromSupabaseOperationItem),
+    items: ((data ?? []) as SupabaseOperationItemRow[]).map(fromSupabaseOperationItem),
     source: "supabase" as const
   };
 }
@@ -192,6 +200,16 @@ function toOperationStatus(value: string): OperationStatus {
 
 function isUuid(value: string) {
   return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{12}$/i.test(value);
+}
+
+function isOperationTableUnavailable(error: unknown) {
+  const candidate = error as { code?: string; message?: string; details?: string };
+  const message = `${candidate.message ?? ""} ${candidate.details ?? ""}`.toLowerCase();
+
+  return candidate.code === "42P01"
+    || candidate.code === "PGRST205"
+    || message.includes("operation_items")
+    || message.includes("could not find the table");
 }
 
 function createLocalId(prefix: string) {

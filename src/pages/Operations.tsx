@@ -7,8 +7,8 @@ import { FormField } from "../components/ui/FormField";
 import { SectionHeader } from "../components/ui/SectionHeader";
 import { StatusChip } from "../components/ui/StatusChip";
 import { DateInput, SelectInput, Textarea, TextInput } from "../components/ui/inputs";
-import type { EventRecord, MediaItem, OperationCategory, OperationItem, OperationStatus, RideRecord } from "../types";
-import { getPastEvents, getUpcomingEvents, isRideEvent } from "../services/eventsService";
+import type { EventRecord, OperationCategory, OperationItem, OperationStatus } from "../types";
+import { getPastEvents } from "../services/eventsService";
 import type { OperationItemInput } from "../services/operationsService";
 import type { PersistenceResult } from "../services/persistence";
 
@@ -22,10 +22,8 @@ const operationStatuses: OperationStatus[] = ["pending", "planned", "confirmed",
 
 interface OperationsProps {
   eventRecords: EventRecord[];
-  rideRecords: RideRecord[];
   operationItems: OperationItem[];
   operationItemsSource: "static" | "supabase" | "fallback";
-  mediaItems: MediaItem[];
   isLoading: boolean;
   isPersistenceConfigured: boolean;
   onCreateOperationItem: (input: OperationItemInput) => Promise<PersistenceResult<OperationItem>>;
@@ -60,10 +58,8 @@ const emptyOperationForm: OperationFormState = {
 
 export function Operations({
   eventRecords,
-  rideRecords,
   operationItems,
   operationItemsSource,
-  mediaItems,
   isLoading,
   isPersistenceConfigured,
   onCreateOperationItem,
@@ -71,15 +67,11 @@ export function Operations({
   onUpdateOperationStatus,
   onDeleteOperationItem
 }: OperationsProps) {
-  const upcomingEvents = getUpcomingEvents(eventRecords);
   const completedEvents = getPastEvents(eventRecords);
-  const currentYear = new Date().getFullYear();
-  const completedThisYear = completedEvents.filter(
-    (event) => new Date(`${event.startDate}T00:00:00`).getFullYear() === currentYear
-  );
-  const upcomingRideEvents = upcomingEvents.filter(isRideEvent);
-  const upcomingRides = rideRecords.filter((ride) => new Date(`${ride.date}T00:00:00`) >= new Date(new Date().toDateString()));
   const activeOperationItems = operationItems.filter((item) => item.status !== "complete");
+  const completedOperationItems = operationItems.filter((item) => item.status === "complete");
+  const planningOperationItems = operationItems.filter((item) => item.category === "planning" || item.status === "planned");
+  const upcomingDeadlineItems = operationItems.filter(isUpcomingDeadline);
   const [formState, setFormState] = useState<OperationFormState>(emptyOperationForm);
   const [editorOpen, setEditorOpen] = useState(false);
   const [savingItemId, setSavingItemId] = useState<string | null>(null);
@@ -87,11 +79,10 @@ export function Operations({
   const [saveError, setSaveError] = useState("");
   const isEditing = Boolean(formState.id);
   const metrics = [
-    { label: "Upcoming events", value: upcomingEvents.length },
-    { label: "Completed events this year", value: completedThisYear.length },
-    { label: "Total media assets", value: mediaItems.length },
-    { label: "Upcoming rides", value: upcomingRideEvents.length || upcomingRides.length },
-    { label: "Open operation items", value: activeOperationItems.length }
+    { label: "Open operation items", value: activeOperationItems.length },
+    { label: "Completed items", value: completedOperationItems.length },
+    { label: "Planning items", value: planningOperationItems.length },
+    { label: "Upcoming deadlines", value: upcomingDeadlineItems.length }
   ];
 
   function openNewItemForm() {
@@ -242,7 +233,10 @@ export function Operations({
               ))}
             </div>
           ) : (
-            <EmptyState title="No operation items yet." message="Operational items will appear here when they are added to Supabase." />
+            <div className="empty-action">
+              <EmptyState title="No operation items yet." message="Operational items will appear here when they are added to Supabase." />
+              <Button type="button" variant="secondary" onClick={openNewItemForm}>Add First Item</Button>
+            </div>
           )}
           <p className="form-note">
             {getSourceNote(operationItemsSource, isPersistenceConfigured)}
@@ -399,6 +393,16 @@ function getOperationMeta(item: OperationItem) {
   return parts.join(" · ");
 }
 
+function isUpcomingDeadline(item: OperationItem) {
+  if (item.category !== "deadline" || !item.dueDate) return false;
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const dueDate = new Date(`${item.dueDate}T00:00:00`);
+
+  return dueDate >= today;
+}
+
 function formatCategory(category: string) {
   return category.replace(/-/g, " ").replace(/\b\w/g, (letter) => letter.toUpperCase());
 }
@@ -408,7 +412,7 @@ function formatStatus(status: OperationStatus) {
 }
 
 function getSourceNote(source: "static" | "supabase" | "fallback", isPersistenceConfigured: boolean) {
-  if (source === "supabase") return "Live Supabase operation items are loaded.";
+  if (source === "supabase") return "Live Supabase operations source is active.";
   if (isPersistenceConfigured) return "Showing fallback/demo operation items because the Supabase read failed.";
   return "Fallback mode: using static demo operation items.";
 }

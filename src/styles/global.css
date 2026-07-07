@@ -1020,6 +1020,12 @@ a {
   color: var(--color-white);
 }
 
+.empty-action {
+  display: grid;
+  justify-items: start;
+  gap: 1rem;
+}
+
 .media-grid,
 .reference-grid {
   display: grid;

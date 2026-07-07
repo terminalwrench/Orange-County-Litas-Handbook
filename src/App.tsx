@@ -161,10 +161,8 @@ export function App() {
         return (
           <Operations
             eventRecords={eventDashboard.eventRecords}
-            rideRecords={rideRecords}
             operationItems={operationItems}
             operationItemsSource={operationItemsSource}
-            mediaItems={mediaItems}
             isLoading={isLoadingRecords}
             isPersistenceConfigured={persistenceStatus.isConfigured}
             onCreateOperationItem={handleCreateOperationItem}
