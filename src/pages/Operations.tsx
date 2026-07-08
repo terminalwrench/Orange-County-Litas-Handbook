@@ -1,215 +1,45 @@
-import { useState, type FormEvent } from "react";
 import { PageContainer } from "../components/layout/PageContainer";
 import { Button } from "../components/ui/Button";
 import { DashboardCard } from "../components/ui/DashboardCard";
 import { EmptyState } from "../components/ui/EmptyState";
-import { FormField } from "../components/ui/FormField";
+import { Icon } from "../components/ui/Icon";
 import { SectionHeader } from "../components/ui/SectionHeader";
 import { StatusChip } from "../components/ui/StatusChip";
-import { DateInput, SelectInput, Textarea, TextInput } from "../components/ui/inputs";
-import type { EventRecord, OperationCategory, OperationChecklistItem, OperationItem, OperationStatus } from "../types";
-import { getPastEvents } from "../services/eventsService";
-import { getDefaultOperationChecklist, type OperationItemInput } from "../services/operationsService";
-import type { PersistenceResult } from "../services/persistence";
+import type { EventRecord, IconName, StatusTone } from "../types";
+import { getPastEvents, getUpcomingEvents } from "../services/eventsService";
+import { getBirthdays } from "../services/birthdaysService";
 
 const dateFormatter = new Intl.DateTimeFormat("en-US", {
   month: "short",
   day: "numeric"
 });
 
-const operationCategories: OperationCategory[] = ["ride", "meet-greet", "collaboration", "major-event"];
-const operationStatuses: OperationStatus[] = ["pending", "confirmed", "completed"];
+const founderRotation = [
+  { monthIndex: 6, month: "July", founder: "Jessica M" },
+  { monthIndex: 7, month: "August", founder: "Jessica H" },
+  { monthIndex: 8, month: "September", founder: "Aly" }
+];
 
 interface OperationsProps {
   eventRecords: EventRecord[];
-  operationItems: OperationItem[];
-  operationItemsSource: "static" | "supabase" | "fallback";
   isLoading: boolean;
-  isPersistenceConfigured: boolean;
-  onCreateOperationItem: (input: OperationItemInput) => Promise<PersistenceResult<OperationItem>>;
-  onUpdateOperationItem: (input: OperationItemInput) => Promise<PersistenceResult<OperationItem>>;
-  onUpdateOperationStatus: (
-    item: OperationItem,
-    status: OperationStatus
-  ) => Promise<PersistenceResult<OperationItem>>;
-  onDeleteOperationItem: (item: OperationItem) => Promise<PersistenceResult<OperationItem>>;
+  onOpenEvents: () => void;
+  onOpenRidePlanner: () => void;
 }
 
-interface OperationFormState {
-  id?: string;
-  title: string;
-  category: OperationCategory;
-  status: OperationStatus;
-  checklist: OperationChecklistItem[];
-  priority: string;
-  dueDate: string;
-  owner: string;
-  notes: string;
-}
-
-const emptyOperationForm: OperationFormState = {
-  title: "",
-  category: "ride",
-  status: "pending",
-  checklist: getDefaultOperationChecklist("ride"),
-  priority: "",
-  dueDate: "",
-  owner: "",
-  notes: ""
-};
-
-export function Operations({
-  eventRecords,
-  operationItems,
-  operationItemsSource,
-  isLoading,
-  isPersistenceConfigured,
-  onCreateOperationItem,
-  onUpdateOperationItem,
-  onUpdateOperationStatus,
-  onDeleteOperationItem
-}: OperationsProps) {
-  const completedEvents = getPastEvents(eventRecords);
-  const activeOperationItems = operationItems.filter((item) => item.status !== "completed");
-  const meetAndGreetsHosted = completedEvents.filter((event) => event.type.toLowerCase().includes("meet")).length;
-  const ridesHosted = completedEvents.filter((event) => `${event.title} ${event.type}`.toLowerCase().includes("ride")).length;
-  const upcomingDeadlineItems = operationItems.filter(isUpcomingDeadline);
-  const confirmedOperationItems = operationItems.filter((item) => item.status === "confirmed");
-  const [formState, setFormState] = useState<OperationFormState>(emptyOperationForm);
-  const [editorOpen, setEditorOpen] = useState(false);
-  const [savingItemId, setSavingItemId] = useState<string | null>(null);
-  const [saveMessage, setSaveMessage] = useState("");
-  const [saveError, setSaveError] = useState("");
-  const isEditing = Boolean(formState.id);
-  const editingOperationItem = formState.id ? operationItems.find((item) => item.id === formState.id) : undefined;
-  const metrics = [
-    { label: "Open operation items", value: activeOperationItems.length },
-    { label: "Confirmed items", value: confirmedOperationItems.length },
-    { label: "Meet & Greets hosted", value: meetAndGreetsHosted },
-    { label: "Rides hosted", value: ridesHosted },
-    { label: "Upcoming due dates", value: upcomingDeadlineItems.length }
+export function Operations({ eventRecords, isLoading, onOpenEvents, onOpenRidePlanner }: OperationsProps) {
+  const today = new Date();
+  const upcomingEvents = getUpcomingEvents(eventRecords, today);
+  const pastEvents = getPastEvents(eventRecords, today);
+  const completedEvents = getCompletedEvents(eventRecords, pastEvents);
+  const cancelledEvents = eventRecords.filter((event) => event.status === "Cancelled");
+  const metrics = buildBranchMetrics(eventRecords, upcomingEvents, completedEvents, cancelledEvents);
+  const statusRows = [
+    { label: "Planning", count: eventRecords.filter((event) => event.status === "Planning").length, tone: "warning" as StatusTone },
+    { label: "Ready", count: eventRecords.filter((event) => event.status === "Ready").length, tone: "success" as StatusTone },
+    { label: "Completed", count: completedEvents.length, tone: "success" as StatusTone },
+    { label: "Cancelled", count: cancelledEvents.length, tone: "neutral" as StatusTone }
   ];
-
-  function openNewItemForm() {
-    setFormState(emptyOperationForm);
-    setEditorOpen(true);
-    setSaveMessage("");
-    setSaveError("");
-  }
-
-  function openEditForm(item: OperationItem) {
-    setFormState(toOperationFormState(item));
-    setEditorOpen(true);
-    setSaveMessage("");
-    setSaveError("");
-  }
-
-  function closeEditor() {
-    setFormState(emptyOperationForm);
-    setEditorOpen(false);
-    setSaveMessage("");
-    setSaveError("");
-  }
-
-  function updateForm(field: keyof OperationFormState, value: string) {
-    setFormState((current) => ({ ...current, [field]: value }));
-  }
-
-  function updateEventType(category: OperationCategory) {
-    setFormState((current) => ({
-      ...current,
-      category,
-      checklist: getDefaultOperationChecklist(category)
-    }));
-  }
-
-  function toggleChecklistItem(itemId: string) {
-    setFormState((current) => ({
-      ...current,
-      checklist: current.checklist.map((item) => item.id === itemId ? { ...item, complete: !item.complete } : item)
-    }));
-  }
-
-  async function handleStatusChange(item: OperationItem, status: OperationStatus) {
-    setSavingItemId(item.id);
-    setSaveError("");
-    setSaveMessage("");
-
-    try {
-      const result = await onUpdateOperationStatus(item, status);
-      if (result.source === "fallback" && isPersistenceConfigured) {
-        setSaveError("Status could not be saved to Supabase. The local view was kept stable.");
-      } else {
-        setSaveMessage(result.source === "supabase" ? "Status updated." : "Status saved locally for this session.");
-      }
-      if (formState.id === item.id) {
-        setFormState(toOperationFormState(result.data));
-      }
-    } catch (error) {
-      console.warn("[operations] Unable to update operation item status.", error);
-      setSaveError("Status could not be saved. The page is still stable; try again in a moment.");
-    } finally {
-      setSavingItemId(null);
-    }
-  }
-
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-
-    if (!formState.title.trim()) {
-      setSaveError("Title is required.");
-      setSaveMessage("");
-      return;
-    }
-
-    setSavingItemId(formState.id ?? "new");
-    setSaveError("");
-    setSaveMessage("");
-
-    const input = toOperationInput(formState);
-
-    try {
-      const result = isEditing
-        ? await onUpdateOperationItem(input)
-        : await onCreateOperationItem(input);
-
-      setFormState(toOperationFormState(result.data));
-      if (result.source === "fallback" && isPersistenceConfigured) {
-        setSaveError("Item could not be saved to Supabase. The local view was kept stable.");
-      } else {
-        setSaveMessage(result.source === "supabase" ? (isEditing ? "Item updated." : "Item added.") : "Saved locally for this session.");
-      }
-      setEditorOpen(true);
-    } catch (error) {
-      console.warn("[operations] Unable to save operation item.", error);
-      setSaveError("Item could not be saved. The page is still stable; try again in a moment.");
-    } finally {
-      setSavingItemId(null);
-    }
-  }
-
-  async function handleDeleteItem(item: OperationItem) {
-    if (!window.confirm("Delete this operation item? This action cannot be undone.")) return;
-
-    setSavingItemId(item.id);
-    setSaveError("");
-    setSaveMessage("");
-
-    try {
-      const result = await onDeleteOperationItem(item);
-      if (result.source === "fallback" && isPersistenceConfigured) {
-        setSaveError("Operation item could not be deleted from Supabase.");
-      } else {
-        setSaveMessage(result.source === "supabase" ? "Operation item deleted." : "Operation item deleted locally for this session.");
-        if (formState.id === item.id) closeEditor();
-      }
-    } catch (error) {
-      console.warn("[operations] Unable to delete operation item.", error);
-      setSaveError("Operation item could not be deleted. Try again in a moment.");
-    } finally {
-      setSavingItemId(null);
-    }
-  }
 
   return (
     <PageContainer>
@@ -218,51 +48,9 @@ export function Operations({
         <h1>Branch operations overview</h1>
       </div>
       <div className="module-grid">
-        <DashboardCard>
-          <SectionHeader
-            title="Operational Status"
-            action={<Button type="button" variant="secondary" onClick={openNewItemForm}>Add item</Button>}
-          />
-          {isLoading ? (
-            <EmptyState title="Loading operation items" message="Checking the configured operations source." />
-          ) : activeOperationItems.length > 0 ? (
-            <div className="operation-list">
-              {activeOperationItems.map((item) => (
-                <article className={formState.id === item.id ? "operation-row operation-row--selected" : "operation-row"} key={item.id}>
-                  <button className="operation-row__select" type="button" onClick={() => openEditForm(item)}>
-                    <strong>{item.title}</strong>
-                    <em>{getOperationMeta(item)}</em>
-                  </button>
-                  <div className="operation-row__actions">
-                    <SelectInput
-                      aria-label={`Status for ${item.title}`}
-                      value={item.status}
-                      disabled={savingItemId === item.id}
-                      onChange={(event) => handleStatusChange(item, event.target.value as OperationStatus)}
-                    >
-                      {operationStatuses.map((status) => (
-                        <option key={status} value={status}>{formatStatus(status)}</option>
-                      ))}
-                    </SelectInput>
-                  </div>
-                </article>
-              ))}
-            </div>
-          ) : (
-            <div className="empty-action">
-              <EmptyState title="No active operation items." message="Ride, Meet & Greet, Collaboration, and Major Event workflows will appear here." />
-              <Button type="button" variant="secondary" onClick={openNewItemForm}>Add First Item</Button>
-            </div>
-          )}
-          <p className="form-note">
-            {getSourceNote(operationItemsSource, isPersistenceConfigured)}
-          </p>
-          {saveMessage ? <p className="form-status form-status--success">{saveMessage}</p> : null}
-          {saveError ? <p className="form-status form-status--error">{saveError}</p> : null}
-        </DashboardCard>
-        <DashboardCard>
+        <DashboardCard className="span-all">
           <SectionHeader title="Branch Metrics" />
-          <div className="metrics-grid">
+          <div className="metrics-grid metrics-grid--operations">
             {metrics.map((metric) => (
               <article className="metric-tile" key={metric.label}>
                 <strong>{metric.value}</strong>
@@ -271,201 +59,164 @@ export function Operations({
             ))}
           </div>
         </DashboardCard>
-        {editorOpen ? (
-          <DashboardCard className="span-all">
-            <SectionHeader title={isEditing ? "Edit Operation Item" : "Add Operation Item"} />
-            <form className="form-grid" aria-label={isEditing ? "Edit operation item" : "Add operation item"} onSubmit={handleSubmit}>
-              <FormField label="Title" htmlFor="operation-title">
-                <TextInput
-                  id="operation-title"
-                  value={formState.title}
-                  onChange={(event) => updateForm("title", event.target.value)}
-                  placeholder="Operation item"
-                  required
-                />
-              </FormField>
-              <FormField label="Event Type" htmlFor="operation-category">
-                <SelectInput
-                  id="operation-category"
-                  value={formState.category}
-                  onChange={(event) => updateEventType(event.target.value as OperationCategory)}
-                >
-                  {operationCategories.map((category) => (
-                    <option key={category} value={category}>{formatCategory(category)}</option>
-                  ))}
-                </SelectInput>
-              </FormField>
-              <FormField label="Status" htmlFor="operation-status">
-                <SelectInput
-                  id="operation-status"
-                  value={formState.status}
-                  onChange={(event) => updateForm("status", event.target.value as OperationStatus)}
-                >
-                  {operationStatuses.map((status) => (
-                    <option key={status} value={status}>{formatStatus(status)}</option>
-                  ))}
-                </SelectInput>
-              </FormField>
-              <FormField label="Priority" htmlFor="operation-priority">
-                <TextInput
-                  id="operation-priority"
-                  value={formState.priority}
-                  onChange={(event) => updateForm("priority", event.target.value)}
-                  placeholder="High, normal, low"
-                />
-              </FormField>
-              <FormField label="Due Date" htmlFor="operation-due-date">
-                <DateInput
-                  id="operation-due-date"
-                  value={formState.dueDate}
-                  onChange={(event) => updateForm("dueDate", event.target.value)}
-                />
-              </FormField>
-              <FormField label="Owner" htmlFor="operation-owner">
-                <TextInput
-                  id="operation-owner"
-                  value={formState.owner}
-                  onChange={(event) => updateForm("owner", event.target.value)}
-                  placeholder="Leadership, media, ride lead"
-                />
-              </FormField>
-              <FormField label="Description" htmlFor="operation-notes">
-                <Textarea
-                  id="operation-notes"
-                  value={formState.notes}
-                  onChange={(event) => updateForm("notes", event.target.value)}
-                  placeholder="Context, follow-up, or details the team should remember."
-                />
-              </FormField>
-              <div className="form-field operation-checklist-field">
-                <span>Checklist</span>
-                <ul className="checklist operation-checklist">
-                  {formState.checklist.map((item) => (
-                    <li key={item.id}>
-                      <label className="checklist-toggle">
-                        <input
-                          type="checkbox"
-                          checked={item.complete}
-                          onChange={() => toggleChecklistItem(item.id)}
-                        />
-                        <span>{item.label}</span>
-                      </label>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className="form-actions">
-                <Button type="submit" variant="primary" disabled={savingItemId === formState.id || savingItemId === "new"}>
-                  {savingItemId === formState.id || savingItemId === "new" ? "Saving..." : "Save item"}
-                </Button>
-                <Button type="button" variant="ghost" onClick={closeEditor}>Cancel</Button>
-                {isEditing && editingOperationItem ? (
-                  <Button type="button" variant="ghost" onClick={() => handleDeleteItem(editingOperationItem)} disabled={savingItemId === formState.id}>
-                    Delete item
-                  </Button>
-                ) : null}
-                <span className="form-note">
-                  {isPersistenceConfigured ? "Saves to Supabase when available." : "Fallback mode: saves stay local to this session."}
-                </span>
-              </div>
-            </form>
-          </DashboardCard>
-        ) : null}
+        <DashboardCard>
+          <SectionHeader title="Operational Status" />
+          {isLoading ? (
+            <EmptyState title="Loading event status" message="Checking the shared event source." />
+          ) : (
+            <div className="operation-list">
+              {statusRows.map((row) => (
+                <button className="operation-row operation-status-row" type="button" key={row.label} onClick={onOpenEvents}>
+                  <span>
+                    <strong>{row.label}</strong>
+                    <em>{row.count} {row.count === 1 ? "event" : "events"}</em>
+                  </span>
+                  <StatusChip label={row.label} tone={row.tone} />
+                </button>
+              ))}
+            </div>
+          )}
+        </DashboardCard>
+        <DashboardCard>
+          <SectionHeader title="Quick Actions" />
+          <div className="source-list source-list--compact">
+            <QuickAction
+              icon="calendar"
+              title="Add Event"
+              buttonLabel="Open Events"
+              onClick={onOpenEvents}
+            />
+            <QuickAction
+              icon="route"
+              title="Add Ride"
+              buttonLabel="Open Ride Planner"
+              onClick={onOpenRidePlanner}
+            />
+          </div>
+        </DashboardCard>
         <DashboardCard className="span-all">
           <SectionHeader title="Recently Completed" />
           {completedEvents.length > 0 ? (
             <div className="record-list">
               {completedEvents.slice(0, 4).map((event) => (
-                <article className="record-row" key={event.id}>
+                <button className="record-row operation-history-row" type="button" key={event.id} onClick={onOpenEvents}>
                   <span>
                     <strong>{event.title}</strong>
-                    <em>{dateFormatter.format(new Date(`${event.startDate}T00:00:00`))} · {event.type}</em>
+                    <em>{formatEventDate(event)} · {formatEventType(event)}</em>
                   </span>
                   <StatusChip label="Completed" tone="success" />
-                </article>
+                </button>
               ))}
             </div>
           ) : (
-            <EmptyState title="No completed events in the current source" message="Completed events appear here automatically when the shared event source includes past records." />
+            <EmptyState title="No completed events in the current source" message="Completed events appear here when event records are marked completed or pass their event date." />
           )}
+        </DashboardCard>
+        <DashboardCard className="span-all">
+          <SectionHeader title="Founder Month" />
+          <div className="record-list">
+            {founderRotation.map((rotation) => {
+              const isCurrentMonth = rotation.monthIndex === today.getMonth();
+
+              return (
+                <article className={isCurrentMonth ? "record-row operation-founder-row record-row--selected" : "record-row operation-founder-row"} key={rotation.month}>
+                  <span>
+                    <strong>{rotation.month}</strong>
+                    <em>{rotation.founder}</em>
+                  </span>
+                  {isCurrentMonth ? <StatusChip label="Current" tone="accent" /> : null}
+                </article>
+              );
+            })}
+          </div>
         </DashboardCard>
       </div>
     </PageContainer>
   );
 }
 
-function toOperationFormState(item: OperationItem): OperationFormState {
-  return {
-    id: item.id,
-    title: item.title,
-    category: item.category,
-    status: item.status,
-    checklist: item.checklist,
-    priority: item.priority ?? "",
-    dueDate: item.dueDate ?? "",
-    owner: item.owner ?? "",
-    notes: item.notes ?? ""
-  };
+function QuickAction({
+  icon,
+  title,
+  buttonLabel,
+  onClick
+}: {
+  icon: IconName;
+  title: string;
+  buttonLabel: string;
+  onClick: () => void;
+}) {
+  return (
+    <article className="source-card">
+      <Icon name={icon} />
+      <span>
+        <strong>{title}</strong>
+      </span>
+      <Button type="button" variant="secondary" onClick={onClick}>{buttonLabel}</Button>
+    </article>
+  );
 }
 
-function toOperationInput(form: OperationFormState): OperationItemInput {
-  return {
-    id: form.id,
-    title: form.title.trim(),
-    category: form.category,
-    status: form.status,
-    checklist: form.checklist,
-    priority: form.priority.trim() || undefined,
-    dueDate: form.dueDate || undefined,
-    owner: form.owner.trim() || undefined,
-    notes: form.notes.trim() || undefined
-  };
+function buildBranchMetrics(
+  events: EventRecord[],
+  upcomingEvents: EventRecord[],
+  completedEvents: EventRecord[],
+  cancelledEvents: EventRecord[]
+) {
+  const members = getBirthdays();
+
+  return [
+    { label: "Total Members", value: members.length },
+    { label: "Active Members", value: members.length },
+    { label: "Total Events", value: events.length },
+    { label: "Total Rides", value: events.filter(isRideEvent).length },
+    { label: "Total Meet & Greets", value: events.filter(isMeetAndGreetEvent).length },
+    { label: "Total Collaborations", value: events.filter(isCollaborationEvent).length },
+    { label: "Total Major Events", value: events.filter(isMajorEvent).length },
+    { label: "Upcoming Events", value: upcomingEvents.length },
+    { label: "Completed Events", value: completedEvents.length },
+    { label: "Cancelled Events", value: cancelledEvents.length }
+  ];
 }
 
-function getOperationMeta(item: OperationItem) {
-  const parts = [
-    formatCategory(item.category),
-    getChecklistMeta(item),
-    item.dueDate ? dateFormatter.format(new Date(`${item.dueDate}T00:00:00`)) : "",
-    item.owner ?? "",
-    item.priority ? `${item.priority} priority` : ""
-  ].filter(Boolean);
+function getCompletedEvents(events: EventRecord[], pastEvents: EventRecord[]) {
+  const completedIds = new Set(events.filter((event) => event.status === "Completed").map((event) => event.id));
+  const completed = [
+    ...events.filter((event) => event.status === "Completed"),
+    ...pastEvents.filter((event) => !completedIds.has(event.id) && event.status !== "Cancelled")
+  ];
 
-  return parts.join(" · ");
+  return completed.sort((a, b) => new Date(`${b.startDate}T00:00:00`).getTime() - new Date(`${a.startDate}T00:00:00`).getTime());
 }
 
-function isUpcomingDeadline(item: OperationItem) {
-  if (!item.dueDate || item.status === "completed") return false;
-
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const dueDate = new Date(`${item.dueDate}T00:00:00`);
-
-  return dueDate >= today;
+function isRideEvent(event: EventRecord) {
+  const text = `${event.title} ${event.type}`.toLowerCase();
+  return text.includes("ride") && !isMajorEvent(event);
 }
 
-function formatCategory(category: string) {
-  const labels: Record<string, string> = {
-    ride: "Ride",
-    "meet-greet": "Meet & Greet",
-    collaboration: "Collaboration",
-    "major-event": "Major Event"
-  };
-
-  return labels[category] ?? category.replace(/-/g, " ").replace(/\b\w/g, (letter) => letter.toUpperCase());
+function isMeetAndGreetEvent(event: EventRecord) {
+  const text = `${event.title} ${event.type}`.toLowerCase();
+  return text.includes("meet") || text.includes("greet");
 }
 
-function formatStatus(status: OperationStatus) {
-  return status.replace(/-/g, " ").replace(/\b\w/g, (letter) => letter.toUpperCase());
+function isCollaborationEvent(event: EventRecord) {
+  const text = `${event.title} ${event.type}`.toLowerCase();
+  return text.includes("collaboration") || text.includes("community") || text.includes("chapter");
 }
 
-function getSourceNote(source: "static" | "supabase" | "fallback", isPersistenceConfigured: boolean) {
-  if (source === "supabase") return "Live Supabase operations source is active.";
-  if (isPersistenceConfigured) return "Showing fallback/demo operation items because the Supabase read failed.";
-  return "Fallback mode: using static demo operation items.";
+function isMajorEvent(event: EventRecord) {
+  const text = `${event.title} ${event.type}`.toLowerCase();
+  return text.includes("major") || text.includes("special") || text.includes("babes") || text.includes("born free") || text.includes("anniversary") || text.includes("poker");
 }
 
-function getChecklistMeta(item: OperationItem) {
-  const completed = item.checklist.filter((checklistItem) => checklistItem.complete).length;
-  return `${completed}/${item.checklist.length} complete`;
+function formatEventType(event: EventRecord) {
+  if (isMajorEvent(event)) return "Major Event";
+  if (isRideEvent(event)) return "Ride";
+  if (isMeetAndGreetEvent(event)) return "Meet & Greet";
+  if (isCollaborationEvent(event)) return "Collaboration";
+  return event.type;
+}
+
+function formatEventDate(event: EventRecord) {
+  return dateFormatter.format(new Date(`${event.startDate}T00:00:00`));
 }

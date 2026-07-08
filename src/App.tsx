@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { AppShell } from "./components/layout/AppShell";
-import type { BranchAsset, EventReadinessKey, EventRecord, ExternalResource, ModuleId, OperationItem, OperationStatus, RideRecord } from "./types";
+import type { BranchAsset, EventReadinessKey, EventRecord, ExternalResource, ModuleId, RideRecord } from "./types";
 import { Events } from "./pages/Events";
 import { Home } from "./pages/Home";
 import { BranchAssets } from "./pages/BranchAssets";
@@ -18,15 +18,6 @@ import {
   type CalendarImportResult,
   type EventSaveInput
 } from "./services/eventsService";
-import {
-  createOperationItem,
-  deleteOperationItem,
-  getOperationItems,
-  loadOperationItems,
-  updateOperationItem,
-  updateOperationItemStatus,
-  type OperationItemInput
-} from "./services/operationsService";
 import { getBranchAssets, loadBranchAssets } from "./services/branchAssetsService";
 import { getPersistenceStatus } from "./services/persistence";
 import { getRides, loadRideRecords, saveRideRecord, type RideSaveInput } from "./services/ridesService";
@@ -43,8 +34,6 @@ export function App() {
   const [eventRecordsSource, setEventRecordsSource] = useState<EventDataSource>(initialPersistenceStatus.isConfigured ? "supabase" : "static");
   const [rideRecords, setRideRecords] = useState<RideRecord[]>(initialPersistenceStatus.isConfigured ? [] : getRides());
   const [rideRecordsSource, setRideRecordsSource] = useState<TableDataSource>(initialPersistenceStatus.isConfigured ? "supabase" : "static");
-  const [operationItems, setOperationItems] = useState<OperationItem[]>(initialPersistenceStatus.isConfigured ? [] : getOperationItems());
-  const [operationItemsSource, setOperationItemsSource] = useState<TableDataSource>(initialPersistenceStatus.isConfigured ? "supabase" : "static");
   const [branchAssets, setBranchAssets] = useState<BranchAsset[]>(initialPersistenceStatus.isConfigured ? [] : getBranchAssets());
   const [branchAssetsSource, setBranchAssetsSource] = useState<TableDataSource>(initialPersistenceStatus.isConfigured ? "supabase" : "static");
   const [usefulLinks, setUsefulLinks] = useState<ExternalResource[]>(initialPersistenceStatus.isConfigured ? [] : getUsefulLinks());
@@ -61,17 +50,14 @@ export function App() {
     Promise.all([
       loadEventRecords(),
       loadRideRecords(),
-      loadOperationItems(),
       loadBranchAssets(),
       loadUsefulLinks()
-    ]).then(([eventResult, rideResult, operationResult, branchAssetResult, linksResult]) => {
+    ]).then(([eventResult, rideResult, branchAssetResult, linksResult]) => {
       if (!cancelled) {
         setEventRecords(eventResult.events);
         setEventRecordsSource(eventResult.source);
         setRideRecords(rideResult.rides);
         setRideRecordsSource(rideResult.source);
-        setOperationItems(operationResult.items);
-        setOperationItemsSource(operationResult.source);
         setBranchAssets(branchAssetResult.assets);
         setBranchAssetsSource(branchAssetResult.source);
         setUsefulLinks(linksResult.links);
@@ -87,15 +73,6 @@ export function App() {
       cancelled = true;
     };
   }, []);
-
-  async function handleCreateOperationItem(input: OperationItemInput) {
-    const result = await createOperationItem(input);
-    if (result.source === "supabase" || !persistenceStatus.isConfigured) {
-      setOperationItems((current) => upsertById(current, result.data));
-    }
-    if (result.source === "supabase") setOperationItemsSource("supabase");
-    return result;
-  }
 
   async function handleSaveEvent(input: EventSaveInput) {
     const result = await saveEventRecord(input);
@@ -175,32 +152,6 @@ export function App() {
     return result;
   }
 
-  async function handleUpdateOperationItem(input: OperationItemInput) {
-    const result = await updateOperationItem(input);
-    if (result.source === "supabase" || !persistenceStatus.isConfigured) {
-      setOperationItems((current) => upsertById(current, result.data, input.id));
-    }
-    if (result.source === "supabase") setOperationItemsSource("supabase");
-    return result;
-  }
-
-  async function handleUpdateOperationStatus(item: OperationItem, status: OperationStatus) {
-    const result = await updateOperationItemStatus(item, status);
-    if (result.source === "supabase" || !persistenceStatus.isConfigured) {
-      setOperationItems((current) => upsertById(current, result.data, item.id));
-    }
-    if (result.source === "supabase") setOperationItemsSource("supabase");
-    return result;
-  }
-
-  async function handleDeleteOperationItem(item: OperationItem) {
-    const result = await deleteOperationItem(item);
-    if (result.source === "supabase" || !persistenceStatus.isConfigured) {
-      setOperationItems((current) => current.filter((record) => record.id !== item.id));
-    }
-    return result;
-  }
-
   async function handleSaveRide(input: RideSaveInput) {
     const result = await saveRideRecord(input);
     if (result.source === "supabase" || !persistenceStatus.isConfigured) {
@@ -239,14 +190,9 @@ export function App() {
         return (
           <Operations
             eventRecords={eventDashboard.eventRecords}
-            operationItems={operationItems}
-            operationItemsSource={operationItemsSource}
             isLoading={isLoadingRecords}
-            isPersistenceConfigured={persistenceStatus.isConfigured}
-            onCreateOperationItem={handleCreateOperationItem}
-            onUpdateOperationItem={handleUpdateOperationItem}
-            onUpdateOperationStatus={handleUpdateOperationStatus}
-            onDeleteOperationItem={handleDeleteOperationItem}
+            onOpenEvents={() => setActiveModule("events")}
+            onOpenRidePlanner={() => setActiveModule("ride-planner")}
           />
         );
       case "ride-planner":

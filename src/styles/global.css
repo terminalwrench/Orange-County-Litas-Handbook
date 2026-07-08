@@ -774,6 +774,10 @@ a {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+.metrics-grid--operations {
+  grid-template-columns: repeat(auto-fit, minmax(9.25rem, 1fr));
+}
+
 .metric-tile {
   min-height: 5.2rem;
   padding: 0.9rem;
@@ -793,6 +797,27 @@ a {
   color: var(--color-muted);
   font-size: 0.76rem;
   line-height: 1.35;
+}
+
+.operation-status-row,
+.operation-history-row {
+  width: 100%;
+  color: inherit;
+  text-align: left;
+  background: transparent;
+  cursor: pointer;
+}
+
+.operation-status-row:hover strong,
+.operation-status-row:focus-visible strong,
+.operation-history-row:hover strong,
+.operation-history-row:focus-visible strong {
+  color: var(--color-orange);
+}
+
+.operation-founder-row {
+  grid-template-columns: minmax(0, 1fr) auto;
+  padding: 0.8rem 0;
 }
 
 .module-grid {
