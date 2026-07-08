@@ -1,5 +1,15 @@
 import { operationItems } from "../data/operationItems";
-import type { OperationCategory, OperationChecklistItem, OperationItem, OperationStatus } from "../types";
+import { annualBranchReports, sharedAccounts } from "../data/operations";
+import type {
+  AnnualBranchReport,
+  BranchMetric,
+  EventRecord,
+  OperationCategory,
+  OperationChecklistItem,
+  OperationItem,
+  OperationStatus,
+  SharedAccount
+} from "../types";
 import { getPersistenceClient, warnAndUseFallback, type PersistenceResult } from "./persistence";
 
 interface SupabaseOperationItemRow {
@@ -35,6 +45,55 @@ export interface OperationItemsLoadResult {
 
 export function getOperationItems(): OperationItem[] {
   return operationItems;
+}
+
+export function getSharedAccounts(): SharedAccount[] {
+  return sharedAccounts;
+}
+
+export function getAvailableReportYears(events: EventRecord[] = []): number[] {
+  const years = new Set([
+    new Date().getFullYear(),
+    ...annualBranchReports.map((report) => report.year),
+    ...events.map((event) => getEventYear(event)).filter(Boolean)
+  ]);
+
+  return [...years].sort((a, b) => b - a);
+}
+
+export function getBranchMetrics(
+  events: EventRecord[],
+  options: { memberCount?: number; today?: Date } = {}
+): BranchMetric[] {
+  const today = options.today ?? new Date();
+  const upcomingEvents = events.filter((event) => daysUntil(event, today) >= 0);
+  const memberCount = options.memberCount ?? 0;
+
+  return [
+    { label: "Members", value: memberCount },
+    { label: "Active Members", value: memberCount },
+    { label: "Total Rides", value: events.filter(isRideEvent).length },
+    { label: "Meet & Greets", value: events.filter(isMeetAndGreetEvent).length },
+    { label: "Collaborations", value: events.filter(isCollaborationEvent).length },
+    { label: "Upcoming Events", value: upcomingEvents.length }
+  ];
+}
+
+export function getAnnualBranchReport(events: EventRecord[], year: number): AnnualBranchReport {
+  const baseReport = annualBranchReports.find((report) => report.year === year);
+  const eventsForYear = events.filter((event) => getEventYear(event) === year);
+
+  return {
+    year,
+    totalRides: eventsForYear.filter(isRideEvent).length,
+    meetAndGreets: eventsForYear.filter(isMeetAndGreetEvent).length,
+    collaborations: eventsForYear.filter(isCollaborationEvent).length,
+    beginnerRides: eventsForYear.filter(isBeginnerRideEvent).length,
+    estimatedRiders: baseReport?.estimatedRiders ?? 0,
+    newMembers: baseReport?.newMembers ?? 0,
+    charityEvents: eventsForYear.filter(isCharityEvent).length,
+    partnerBusinesses: baseReport?.partnerBusinesses ?? 0
+  };
 }
 
 export async function loadOperationItems(): Promise<OperationItemsLoadResult> {
@@ -272,4 +331,45 @@ function createLocalId(prefix: string) {
   }
 
   return `${prefix}-${Date.now()}`;
+}
+
+function daysUntil(event: EventRecord, today: Date) {
+  const eventDate = new Date(`${event.startDate}T00:00:00`);
+  const start = Date.UTC(today.getFullYear(), today.getMonth(), today.getDate());
+  const end = Date.UTC(eventDate.getFullYear(), eventDate.getMonth(), eventDate.getDate());
+  return Math.round((end - start) / 86_400_000);
+}
+
+function getEventYear(event: EventRecord) {
+  return Number(event.startDate.slice(0, 4));
+}
+
+function isRideEvent(event: EventRecord) {
+  const text = `${event.title} ${event.type}`.toLowerCase();
+  return text.includes("ride") && !isMajorEvent(event);
+}
+
+function isBeginnerRideEvent(event: EventRecord) {
+  const text = `${event.title} ${event.type} ${event.rideDifficulty ?? ""}`.toLowerCase();
+  return isRideEvent(event) && text.includes("beginner");
+}
+
+function isMeetAndGreetEvent(event: EventRecord) {
+  const text = `${event.title} ${event.type}`.toLowerCase();
+  return text.includes("meet") || text.includes("greet");
+}
+
+function isCollaborationEvent(event: EventRecord) {
+  const text = `${event.title} ${event.type}`.toLowerCase();
+  return text.includes("collaboration") || text.includes("community") || text.includes("branch");
+}
+
+function isCharityEvent(event: EventRecord) {
+  const text = `${event.title} ${event.type}`.toLowerCase();
+  return text.includes("charity") || text.includes("fundraiser") || text.includes("dgr") || text.includes("distinguished");
+}
+
+function isMajorEvent(event: EventRecord) {
+  const text = `${event.title} ${event.type}`.toLowerCase();
+  return text.includes("major") || text.includes("special") || text.includes("babes") || text.includes("born free") || text.includes("anniversary") || text.includes("poker");
 }

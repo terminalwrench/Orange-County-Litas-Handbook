@@ -1,45 +1,41 @@
+import { useMemo, useState } from "react";
 import { PageContainer } from "../components/layout/PageContainer";
-import { Button } from "../components/ui/Button";
 import { DashboardCard } from "../components/ui/DashboardCard";
 import { EmptyState } from "../components/ui/EmptyState";
 import { Icon } from "../components/ui/Icon";
 import { SectionHeader } from "../components/ui/SectionHeader";
+import { SelectInput } from "../components/ui/inputs";
 import { StatusChip } from "../components/ui/StatusChip";
-import type { EventRecord, IconName, StatusTone } from "../types";
-import { getPastEvents, getUpcomingEvents } from "../services/eventsService";
+import type { AnnualBranchReport, EventRecord, SharedAccount } from "../types";
 import { getBirthdays } from "../services/birthdaysService";
+import {
+  getAnnualBranchReport,
+  getAvailableReportYears,
+  getBranchMetrics,
+  getSharedAccounts
+} from "../services/operationsService";
 
 const dateFormatter = new Intl.DateTimeFormat("en-US", {
   month: "short",
-  day: "numeric"
+  day: "numeric",
+  year: "numeric"
 });
-
-const founderRotation = [
-  { monthIndex: 6, month: "July", founder: "Jessica M" },
-  { monthIndex: 7, month: "August", founder: "Jessica H" },
-  { monthIndex: 8, month: "September", founder: "Aly" }
-];
 
 interface OperationsProps {
   eventRecords: EventRecord[];
   isLoading: boolean;
-  onOpenEvents: () => void;
-  onOpenRidePlanner: () => void;
 }
 
-export function Operations({ eventRecords, isLoading, onOpenEvents, onOpenRidePlanner }: OperationsProps) {
+export function Operations({ eventRecords, isLoading }: OperationsProps) {
   const today = new Date();
-  const upcomingEvents = getUpcomingEvents(eventRecords, today);
-  const pastEvents = getPastEvents(eventRecords, today);
-  const completedEvents = getCompletedEvents(eventRecords, pastEvents);
-  const cancelledEvents = eventRecords.filter((event) => event.status === "Cancelled");
-  const metrics = buildBranchMetrics(eventRecords, upcomingEvents, completedEvents, cancelledEvents);
-  const statusRows = [
-    { label: "Planning", count: eventRecords.filter((event) => event.status === "Planning").length, tone: "warning" as StatusTone },
-    { label: "Ready", count: eventRecords.filter((event) => event.status === "Ready").length, tone: "success" as StatusTone },
-    { label: "Completed", count: completedEvents.length, tone: "success" as StatusTone },
-    { label: "Cancelled", count: cancelledEvents.length, tone: "neutral" as StatusTone }
-  ];
+  const reportYears = useMemo(() => getAvailableReportYears(eventRecords), [eventRecords]);
+  const [selectedYear, setSelectedYear] = useState(reportYears[0] ?? today.getFullYear());
+  const metrics = getBranchMetrics(eventRecords, {
+    memberCount: getBirthdays().length,
+    today
+  });
+  const sharedAccounts = getSharedAccounts();
+  const annualReport = getAnnualBranchReport(eventRecords, selectedYear);
 
   return (
     <PageContainer>
@@ -47,7 +43,7 @@ export function Operations({ eventRecords, isLoading, onOpenEvents, onOpenRidePl
         <span>Operations</span>
         <h1>Branch operations overview</h1>
       </div>
-      <div className="module-grid">
+      <div className="module-grid module-grid--wide-left">
         <DashboardCard className="span-all">
           <SectionHeader title="Branch Metrics" />
           <div className="metrics-grid metrics-grid--operations">
@@ -59,164 +55,83 @@ export function Operations({ eventRecords, isLoading, onOpenEvents, onOpenRidePl
             ))}
           </div>
         </DashboardCard>
-        <DashboardCard>
-          <SectionHeader title="Operational Status" />
-          {isLoading ? (
-            <EmptyState title="Loading event status" message="Checking the shared event source." />
-          ) : (
-            <div className="operation-list">
-              {statusRows.map((row) => (
-                <button className="operation-row operation-status-row" type="button" key={row.label} onClick={onOpenEvents}>
-                  <span>
-                    <strong>{row.label}</strong>
-                    <em>{row.count} {row.count === 1 ? "event" : "events"}</em>
-                  </span>
-                  <StatusChip label={row.label} tone={row.tone} />
-                </button>
-              ))}
-            </div>
-          )}
-        </DashboardCard>
-        <DashboardCard>
-          <SectionHeader title="Quick Actions" />
-          <div className="source-list source-list--compact">
-            <QuickAction
-              icon="calendar"
-              title="Add Event"
-              buttonLabel="Open Events"
-              onClick={onOpenEvents}
-            />
-            <QuickAction
-              icon="route"
-              title="Add Ride"
-              buttonLabel="Open Ride Planner"
-              onClick={onOpenRidePlanner}
-            />
-          </div>
-        </DashboardCard>
-        <DashboardCard className="span-all">
-          <SectionHeader title="Recently Completed" />
-          {completedEvents.length > 0 ? (
-            <div className="record-list">
-              {completedEvents.slice(0, 4).map((event) => (
-                <button className="record-row operation-history-row" type="button" key={event.id} onClick={onOpenEvents}>
-                  <span>
-                    <strong>{event.title}</strong>
-                    <em>{formatEventDate(event)} · {formatEventType(event)}</em>
-                  </span>
-                  <StatusChip label="Completed" tone="success" />
-                </button>
-              ))}
-            </div>
-          ) : (
-            <EmptyState title="No completed events in the current source" message="Completed events appear here when event records are marked completed or pass their event date." />
-          )}
-        </DashboardCard>
-        <DashboardCard className="span-all">
-          <SectionHeader title="Founder Month" />
-          <div className="record-list">
-            {founderRotation.map((rotation) => {
-              const isCurrentMonth = rotation.monthIndex === today.getMonth();
 
-              return (
-                <article className={isCurrentMonth ? "record-row operation-founder-row record-row--selected" : "record-row operation-founder-row"} key={rotation.month}>
-                  <span>
-                    <strong>{rotation.month}</strong>
-                    <em>{rotation.founder}</em>
-                  </span>
-                  {isCurrentMonth ? <StatusChip label="Current" tone="accent" /> : null}
-                </article>
-              );
-            })}
+        <DashboardCard>
+          <SectionHeader title="Shared Accounts" />
+          <p className="card-note operations-card-note">Operational accounts used by branch leadership.</p>
+          <div className="account-list">
+            {sharedAccounts.map((account) => (
+              <SharedAccountRow account={account} key={account.id} />
+            ))}
           </div>
+        </DashboardCard>
+
+        <DashboardCard>
+          <SectionHeader
+            title="Annual Branch Report"
+            action={(
+              <label className="report-year-select">
+                <span className="sr-only">Report year</span>
+                <SelectInput value={selectedYear} onChange={(event) => setSelectedYear(Number(event.target.value))}>
+                  {reportYears.map((year) => (
+                    <option key={year} value={year}>{year}</option>
+                  ))}
+                </SelectInput>
+              </label>
+            )}
+          />
+          {isLoading ? (
+            <EmptyState title="Loading branch report" message="Checking the shared event source." />
+          ) : (
+            <AnnualReportSummary report={annualReport} />
+          )}
         </DashboardCard>
       </div>
     </PageContainer>
   );
 }
 
-function QuickAction({
-  icon,
-  title,
-  buttonLabel,
-  onClick
-}: {
-  icon: IconName;
-  title: string;
-  buttonLabel: string;
-  onClick: () => void;
-}) {
+function SharedAccountRow({ account }: { account: SharedAccount }) {
   return (
-    <article className="source-card">
-      <Icon name={icon} />
-      <span>
-        <strong>{title}</strong>
+    <article className="account-row">
+      <Icon name={account.icon} />
+      <span className="account-row__details">
+        <strong>{account.service}</strong>
+        <em>{account.username ?? "Not Configured"}</em>
+        {account.lastUpdated ? <small>Updated {formatDate(account.lastUpdated)}</small> : null}
       </span>
-      <Button type="button" variant="secondary" onClick={onClick}>{buttonLabel}</Button>
+      <StatusChip
+        label={account.configured ? "Configured" : "Not Configured"}
+        tone={account.configured ? "success" : "neutral"}
+      />
     </article>
   );
 }
 
-function buildBranchMetrics(
-  events: EventRecord[],
-  upcomingEvents: EventRecord[],
-  completedEvents: EventRecord[],
-  cancelledEvents: EventRecord[]
-) {
-  const members = getBirthdays();
-
-  return [
-    { label: "Total Members", value: members.length },
-    { label: "Active Members", value: members.length },
-    { label: "Total Events", value: events.length },
-    { label: "Total Rides", value: events.filter(isRideEvent).length },
-    { label: "Total Meet & Greets", value: events.filter(isMeetAndGreetEvent).length },
-    { label: "Total Collaborations", value: events.filter(isCollaborationEvent).length },
-    { label: "Total Major Events", value: events.filter(isMajorEvent).length },
-    { label: "Upcoming Events", value: upcomingEvents.length },
-    { label: "Completed Events", value: completedEvents.length },
-    { label: "Cancelled Events", value: cancelledEvents.length }
-  ];
-}
-
-function getCompletedEvents(events: EventRecord[], pastEvents: EventRecord[]) {
-  const completedIds = new Set(events.filter((event) => event.status === "Completed").map((event) => event.id));
-  const completed = [
-    ...events.filter((event) => event.status === "Completed"),
-    ...pastEvents.filter((event) => !completedIds.has(event.id) && event.status !== "Cancelled")
+function AnnualReportSummary({ report }: { report: AnnualBranchReport }) {
+  const rows = [
+    { label: "Total Rides", value: report.totalRides },
+    { label: "Meet & Greets", value: report.meetAndGreets },
+    { label: "Collaborations", value: report.collaborations },
+    { label: "Beginner Rides", value: report.beginnerRides },
+    { label: "Estimated Riders", value: report.estimatedRiders },
+    { label: "New Members", value: report.newMembers },
+    { label: "Charity Events", value: report.charityEvents },
+    { label: "Partner Businesses", value: report.partnerBusinesses }
   ];
 
-  return completed.sort((a, b) => new Date(`${b.startDate}T00:00:00`).getTime() - new Date(`${a.startDate}T00:00:00`).getTime());
+  return (
+    <div className="report-list">
+      {rows.map((row) => (
+        <article className="report-row" key={row.label}>
+          <span>{row.label}</span>
+          <strong>{row.value}</strong>
+        </article>
+      ))}
+    </div>
+  );
 }
 
-function isRideEvent(event: EventRecord) {
-  const text = `${event.title} ${event.type}`.toLowerCase();
-  return text.includes("ride") && !isMajorEvent(event);
-}
-
-function isMeetAndGreetEvent(event: EventRecord) {
-  const text = `${event.title} ${event.type}`.toLowerCase();
-  return text.includes("meet") || text.includes("greet");
-}
-
-function isCollaborationEvent(event: EventRecord) {
-  const text = `${event.title} ${event.type}`.toLowerCase();
-  return text.includes("collaboration") || text.includes("community") || text.includes("chapter");
-}
-
-function isMajorEvent(event: EventRecord) {
-  const text = `${event.title} ${event.type}`.toLowerCase();
-  return text.includes("major") || text.includes("special") || text.includes("babes") || text.includes("born free") || text.includes("anniversary") || text.includes("poker");
-}
-
-function formatEventType(event: EventRecord) {
-  if (isMajorEvent(event)) return "Major Event";
-  if (isRideEvent(event)) return "Ride";
-  if (isMeetAndGreetEvent(event)) return "Meet & Greet";
-  if (isCollaborationEvent(event)) return "Collaboration";
-  return event.type;
-}
-
-function formatEventDate(event: EventRecord) {
-  return dateFormatter.format(new Date(`${event.startDate}T00:00:00`));
+function formatDate(value: string) {
+  return dateFormatter.format(new Date(`${value}T00:00:00`));
 }

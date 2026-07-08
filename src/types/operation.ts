@@ -1,3 +1,5 @@
+import type { IconName } from "./settings";
+
 export type OperationCategory = "ride" | "meet-greet" | "collaboration" | "major-event";
 
 export type OperationStatus = "pending" | "confirmed" | "completed";
@@ -19,4 +21,30 @@ export interface OperationItem {
   owner?: string;
   notes?: string;
   relatedEventId?: string;
+}
+
+export interface BranchMetric {
+  label: string;
+  value: string | number;
+}
+
+export interface SharedAccount {
+  id: string;
+  service: string;
+  icon: IconName;
+  username?: string;
+  configured: boolean;
+  lastUpdated?: string;
+}
+
+export interface AnnualBranchReport {
+  year: number;
+  totalRides: number;
+  meetAndGreets: number;
+  collaborations: number;
+  beginnerRides: number;
+  estimatedRiders: number;
+  newMembers: number;
+  charityEvents: number;
+  partnerBusinesses: number;
 }

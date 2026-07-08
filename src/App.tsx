@@ -196,8 +196,6 @@ export function App() {
           <Operations
             eventRecords={eventDashboard.eventRecords}
             isLoading={isLoadingRecords}
-            onOpenEvents={() => setActiveModule("events")}
-            onOpenRidePlanner={() => setActiveModule("ride-planner")}
           />
         );
       case "ride-planner":

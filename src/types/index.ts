@@ -14,7 +14,15 @@ export type {
 } from "./event";
 export type { ExternalResource } from "./link";
 export type { MemberRecord, MemberSaveInput, MemberValidationResult } from "./member";
-export type { OperationCategory, OperationChecklistItem, OperationItem, OperationStatus } from "./operation";
+export type {
+  AnnualBranchReport,
+  BranchMetric,
+  OperationCategory,
+  OperationChecklistItem,
+  OperationItem,
+  OperationStatus,
+  SharedAccount
+} from "./operation";
 export type { RideRecord, RideStop } from "./ride";
 export type {
   AppSettings,
