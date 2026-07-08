@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { AppShell } from "./components/layout/AppShell";
-import type { BranchAsset, EventReadinessKey, EventRecord, ExternalResource, ModuleId, RideRecord } from "./types";
+import type { Birthday, BranchAsset, EventReadinessKey, EventRecord, ExternalResource, ModuleId, RideRecord } from "./types";
 import { Events } from "./pages/Events";
 import { Home } from "./pages/Home";
 import { BranchAssets } from "./pages/BranchAssets";
@@ -23,6 +23,7 @@ import { getPersistenceStatus } from "./services/persistence";
 import { getRides, loadRideRecords, saveRideRecord, type RideSaveInput } from "./services/ridesService";
 import { getUsefulLinks, loadUsefulLinks } from "./services/linksService";
 import { getNavItems } from "./services/settingsService";
+import { getUpcomingBirthdays, loadBirthdaysThisMonth } from "./services/birthdaysService";
 
 type TableDataSource = "static" | "supabase" | "fallback";
 type EventDataSource = TableDataSource | "ics";
@@ -38,6 +39,7 @@ export function App() {
   const [branchAssetsSource, setBranchAssetsSource] = useState<TableDataSource>(initialPersistenceStatus.isConfigured ? "supabase" : "static");
   const [usefulLinks, setUsefulLinks] = useState<ExternalResource[]>(initialPersistenceStatus.isConfigured ? [] : getUsefulLinks());
   const [usefulLinksSource, setUsefulLinksSource] = useState<TableDataSource>(initialPersistenceStatus.isConfigured ? "supabase" : "static");
+  const [birthdaysThisMonth, setBirthdaysThisMonth] = useState<Birthday[]>(initialPersistenceStatus.isConfigured ? [] : getUpcomingBirthdays());
   const [isLoadingRecords, setIsLoadingRecords] = useState(true);
   const eventDashboard = useMemo(() => buildEventDashboardData(eventRecords), [eventRecords]);
   const navItems = getNavItems();
@@ -51,8 +53,9 @@ export function App() {
       loadEventRecords(),
       loadRideRecords(),
       loadBranchAssets(),
-      loadUsefulLinks()
-    ]).then(([eventResult, rideResult, branchAssetResult, linksResult]) => {
+      loadUsefulLinks(),
+      loadBirthdaysThisMonth()
+    ]).then(([eventResult, rideResult, branchAssetResult, linksResult, birthdayResult]) => {
       if (!cancelled) {
         setEventRecords(eventResult.events);
         setEventRecordsSource(eventResult.source);
@@ -62,6 +65,7 @@ export function App() {
         setBranchAssetsSource(branchAssetResult.source);
         setUsefulLinks(linksResult.links);
         setUsefulLinksSource(linksResult.source);
+        setBirthdaysThisMonth(birthdayResult.birthdays);
         setIsLoadingRecords(false);
       }
     }).catch((error) => {
@@ -168,6 +172,7 @@ export function App() {
           <Home
             nextEvent={eventDashboard.nextEvent}
             upcomingEvents={eventDashboard.upcomingEvents}
+            birthdaysThisMonth={birthdaysThisMonth}
             rideWeather={eventDashboard.rideWeather}
             onOpenEvents={() => setActiveModule("events")}
             onToggleEventReadiness={handleToggleEventReadiness}

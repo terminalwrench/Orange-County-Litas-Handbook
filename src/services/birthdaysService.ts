@@ -1,11 +1,225 @@
 import { birthdayRecords } from "../data/birthdays";
-import type { Birthday } from "../types";
+import type { Birthday, MemberRecord, MemberSaveInput, MemberValidationResult } from "../types";
+import { getPersistenceClient, warnAndUseFallback, type PersistenceResult } from "./persistence";
+
+interface SupabaseMemberRow {
+  id: string;
+  first_name: string | null;
+  last_initial: string | null;
+  birthday_month: number | null;
+  birthday_day: number | null;
+  instagram_handle: string | null;
+}
+
+export interface BirthdayLoadResult {
+  birthdays: Birthday[];
+  source: "static" | "supabase" | "fallback";
+}
+
+const monthFormatter = new Intl.DateTimeFormat("en-US", { month: "short" });
 
 export function getBirthdays(): Birthday[] {
   return birthdayRecords;
 }
 
 export function getUpcomingBirthdays(today = new Date()): Birthday[] {
-  const currentMonth = new Intl.DateTimeFormat("en-US", { month: "short" }).format(today);
-  return getBirthdays().filter((birthday) => birthday.dateLabel.startsWith(currentMonth));
+  return getStaticBirthdaysThisMonth(today);
 }
+
+export async function loadBirthdaysThisMonth(today = new Date()): Promise<BirthdayLoadResult> {
+  const supabase = getPersistenceClient();
+  const currentMonth = today.getMonth() + 1;
+
+  if (!supabase) {
+    return {
+      birthdays: getStaticBirthdaysThisMonth(today),
+      source: "static"
+    };
+  }
+
+  const { data, error } = await supabase
+    .from("members")
+    .select("id, first_name, last_initial, birthday_month, birthday_day, instagram_handle")
+    .eq("birthday_month", currentMonth)
+    .not("birthday_day", "is", null)
+    .order("birthday_day", { ascending: true });
+
+  if (error || !data) {
+    warnAndUseFallback("Unable to load member birthdays from Supabase. Falling back to static birthday data.", error);
+    return {
+      birthdays: getStaticBirthdaysThisMonth(today),
+      source: "fallback"
+    };
+  }
+
+  return {
+    birthdays: (data as SupabaseMemberRow[])
+      .map(toBirthday)
+      .filter((birthday): birthday is Birthday => Boolean(birthday)),
+    source: "supabase"
+  };
+}
+
+export async function saveMemberRecord(input: MemberSaveInput): Promise<PersistenceResult<MemberRecord>> {
+  const validation = validateMemberInput(input);
+  if (!validation.isValid) {
+    return Promise.reject(validation);
+  }
+
+  const supabase = getPersistenceClient();
+
+  if (!supabase) {
+    return {
+      data: toLocalMemberRecord(input),
+      source: "fallback"
+    };
+  }
+
+  const payload = toSupabaseMemberPayload(input);
+  const query = input.id
+    ? supabase.from("members").update(payload).eq("id", input.id).select().single()
+    : supabase.from("members").insert(payload).select().single();
+
+  const { data, error } = await query;
+
+  if (error || !data) {
+    warnAndUseFallback("Unable to save member birthday data to Supabase. Keeping local UI stable.", error);
+    return {
+      data: toLocalMemberRecord(input),
+      source: "fallback"
+    };
+  }
+
+  return {
+    data: fromSupabaseMember(data as SupabaseMemberRow),
+    source: "supabase"
+  };
+}
+
+export function validateMemberInput(input: MemberSaveInput): MemberValidationResult {
+  const errors: MemberValidationResult["errors"] = {};
+  const firstName = input.firstName.trim();
+  const birthdayMonth = normalizeOptionalNumber(input.birthdayMonth);
+  const birthdayDay = normalizeOptionalNumber(input.birthdayDay);
+
+  if (!firstName) {
+    errors.firstName = "First name is required.";
+  }
+
+  if (birthdayMonth !== undefined && (!Number.isInteger(birthdayMonth) || birthdayMonth < 1 || birthdayMonth > 12)) {
+    errors.birthdayMonth = "Birthday month must be 1–12.";
+  }
+
+  if (birthdayDay !== undefined) {
+    const maxDay = birthdayMonth ? getMaxBirthdayDay(birthdayMonth) : 31;
+
+    if (!Number.isInteger(birthdayDay) || birthdayDay < 1 || birthdayDay > maxDay) {
+      errors.birthdayDay = `Birthday day must be 1–${maxDay}.`;
+    }
+  }
+
+  return {
+    isValid: Object.keys(errors).length === 0,
+    errors
+  };
+}
+
+function getStaticBirthdaysThisMonth(today: Date) {
+  const currentMonth = monthFormatter.format(today);
+
+  return [...birthdayRecords]
+    .filter((birthday) => birthday.dateLabel.startsWith(currentMonth))
+    .sort((a, b) => getDayFromDateLabel(a.dateLabel) - getDayFromDateLabel(b.dateLabel));
+}
+
+function toBirthday(row: SupabaseMemberRow): Birthday | null {
+  if (!row.first_name || !row.birthday_month || !row.birthday_day) return null;
+
+  return {
+    id: row.id,
+    name: formatMemberName(row.first_name, row.last_initial),
+    initials: getInitials(row.first_name, row.last_initial),
+    dateLabel: `${monthFormatter.format(new Date(2026, row.birthday_month - 1, 1))} ${row.birthday_day}`,
+    instagramHandle: normalizeInstagramHandle(row.instagram_handle)
+  };
+}
+
+function fromSupabaseMember(row: SupabaseMemberRow): MemberRecord {
+  return {
+    id: row.id,
+    firstName: row.first_name ?? "",
+    lastInitial: normalizeLastInitial(row.last_initial),
+    birthdayMonth: row.birthday_month ?? undefined,
+    birthdayDay: row.birthday_day ?? undefined,
+    instagramHandle: normalizeInstagramHandle(row.instagram_handle)
+  };
+}
+
+function toLocalMemberRecord(input: MemberSaveInput): MemberRecord {
+  return {
+    id: input.id ?? createLocalId("member"),
+    firstName: input.firstName.trim(),
+    lastInitial: normalizeLastInitial(input.lastInitial),
+    birthdayMonth: normalizeOptionalNumber(input.birthdayMonth),
+    birthdayDay: normalizeOptionalNumber(input.birthdayDay),
+    instagramHandle: normalizeInstagramHandle(input.instagramHandle)
+  };
+}
+
+function toSupabaseMemberPayload(input: MemberSaveInput) {
+  return {
+    first_name: input.firstName.trim(),
+    last_initial: normalizeLastInitial(input.lastInitial) ?? null,
+    birthday_month: normalizeOptionalNumber(input.birthdayMonth) ?? null,
+    birthday_day: normalizeOptionalNumber(input.birthdayDay) ?? null,
+    instagram_handle: normalizeInstagramHandle(input.instagramHandle) ?? null
+  };
+}
+
+function formatMemberName(firstName: string, lastInitial?: string | null) {
+  const normalizedLastInitial = normalizeLastInitial(lastInitial);
+  return normalizedLastInitial ? `${firstName} ${normalizedLastInitial}.` : firstName;
+}
+
+function getInitials(firstName: string, lastInitial?: string | null) {
+  const first = firstName.trim().charAt(0).toUpperCase();
+  const last = normalizeLastInitial(lastInitial);
+  return `${first}${last ?? ""}`;
+}
+
+function normalizeLastInitial(value?: string | null) {
+  const normalized = value?.trim().replace(".", "").charAt(0).toUpperCase();
+  return normalized || undefined;
+}
+
+function normalizeInstagramHandle(value?: string | null) {
+  const normalized = value?.trim();
+  if (!normalized) return undefined;
+  return normalized.startsWith("@") ? normalized : `@${normalized}`;
+}
+
+function normalizeOptionalNumber(value: number | null | undefined) {
+  if (value === null || value === undefined || Number.isNaN(value)) return undefined;
+  return Number(value);
+}
+
+function getMaxBirthdayDay(month: number) {
+  if (month === 2) return 29;
+  if ([4, 6, 9, 11].includes(month)) return 30;
+  return 31;
+}
+
+function getDayFromDateLabel(dateLabel: string) {
+  return Number(dateLabel.split(" ")[1] ?? 0);
+}
+
+function createLocalId(prefix: string) {
+  if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
+    return `${prefix}-${crypto.randomUUID()}`;
+  }
+
+  return `${prefix}-${Date.now()}`;
+}
+
+// TODO: Future member tooling may support .ics export, Google Calendar subscription,
+// or Apple Calendar subscription for birthdays. Keep this pass read/write-data only.

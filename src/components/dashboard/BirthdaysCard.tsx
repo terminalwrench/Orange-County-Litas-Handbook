@@ -9,8 +9,8 @@ interface BirthdaysCardProps {
 
 export function BirthdaysCard({ birthdays }: BirthdaysCardProps) {
   return (
-    <DashboardCard className="birthday-card" ariaLabel="Upcoming birthdays">
-      <SectionHeader title="Upcoming Birthdays" />
+    <DashboardCard className="birthday-card" ariaLabel="Birthdays this month">
+      <SectionHeader title="Birthdays This Month" />
       {birthdays.length > 0 ? (
         <div className="birthday-list">
           {birthdays.map((birthday) => (
@@ -18,15 +18,17 @@ export function BirthdaysCard({ birthdays }: BirthdaysCardProps) {
               <span className="birthday-initials" aria-hidden="true">{birthday.initials}</span>
               <span>
                 <strong>{birthday.name}</strong>
-                <em>{birthday.dateLabel}</em>
+                <em>
+                  {birthday.dateLabel}
+                  {birthday.instagramHandle ? ` · ${birthday.instagramHandle}` : ""}
+                </em>
               </span>
             </article>
           ))}
         </div>
       ) : (
-        <EmptyState title="No birthdays this month" message="Birthdays from future months stay hidden until that month begins." />
+        <EmptyState title="No birthdays this month." />
       )}
-      <p className="card-note">Birthday source is static until member records are connected.</p>
     </DashboardCard>
   );
 }

@@ -110,6 +110,59 @@ create table if not exists public.operation_items (
   updated_at timestamptz default now()
 );
 
+create table if not exists public.members (
+  id uuid primary key default gen_random_uuid(),
+  first_name text not null,
+  last_initial text,
+  birthday_month integer,
+  birthday_day integer,
+  instagram_handle text,
+  created_at timestamptz default now(),
+  updated_at timestamptz default now()
+);
+
+alter table public.members
+  add column if not exists first_name text,
+  add column if not exists last_initial text,
+  add column if not exists birthday_month integer,
+  add column if not exists birthday_day integer,
+  add column if not exists instagram_handle text,
+  add column if not exists created_at timestamptz default now(),
+  add column if not exists updated_at timestamptz default now();
+
+create index if not exists members_birthday_month_day_idx
+on public.members (birthday_month, birthday_day)
+where birthday_month is not null and birthday_day is not null;
+
+do $$
+begin
+  if not exists (
+    select 1 from pg_constraint where conname = 'members_birthday_month_check'
+  ) then
+    alter table public.members
+      add constraint members_birthday_month_check
+      check (birthday_month is null or birthday_month between 1 and 12);
+  end if;
+
+  if not exists (
+    select 1 from pg_constraint where conname = 'members_birthday_day_check'
+  ) then
+    alter table public.members
+      add constraint members_birthday_day_check
+      check (
+        birthday_day is null
+        or (
+          birthday_day >= 1
+          and birthday_day <= case
+            when birthday_month = 2 then 29
+            when birthday_month in (4, 6, 9, 11) then 30
+            else 31
+          end
+        )
+      );
+  end if;
+end $$;
+
 create or replace function public.set_updated_at()
 returns trigger as $$
 begin
@@ -143,6 +196,11 @@ create trigger set_operation_items_updated_at
 before update on public.operation_items
 for each row execute function public.set_updated_at();
 
+drop trigger if exists set_members_updated_at on public.members;
+create trigger set_members_updated_at
+before update on public.members
+for each row execute function public.set_updated_at();
+
 -- RLS should be enabled when authentication is added.
 -- Example future step:
 -- alter table public.events enable row level security;
@@ -150,3 +208,4 @@ for each row execute function public.set_updated_at();
 -- alter table public.branch_assets enable row level security;
 -- alter table public.reference_links enable row level security;
 -- alter table public.operation_items enable row level security;
+-- alter table public.members enable row level security;

@@ -3,4 +3,5 @@ export interface Birthday {
   name: string;
   initials: string;
   dateLabel: string;
+  instagramHandle?: string;
 }
