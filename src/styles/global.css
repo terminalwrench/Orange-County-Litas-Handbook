@@ -277,6 +277,7 @@ a {
   border-radius: var(--radius-lg);
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.035), transparent 54%), rgba(12, 14, 16, 0.9);
   box-shadow: var(--shadow-panel);
+  min-width: 0;
 }
 
 .next-event-card {
@@ -521,7 +522,13 @@ a {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
-  gap: 0.65rem;
+  gap: 0.55rem;
+}
+
+.section-actions .button {
+  min-height: 2.4rem;
+  padding-inline: 0.85rem;
+  font-size: 0.84rem;
 }
 
 .event-list,
@@ -714,8 +721,10 @@ a {
   gap: 0.85rem;
   align-items: center;
   min-height: 3.7rem;
-  padding-bottom: 0.75rem;
-  border-bottom: var(--border-subtle);
+  padding: 0 0.15rem 0.78rem;
+  border: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.075);
+  border-radius: calc(var(--radius-md) - 0.18rem);
 }
 
 .operation-row--selected {
@@ -767,7 +776,9 @@ a {
 }
 
 .operation-row__actions .button {
-  min-height: 2.45rem;
+  min-height: 2.35rem;
+  padding-inline: 0.72rem;
+  font-size: 0.84rem;
 }
 
 .metrics-grid {
@@ -779,11 +790,11 @@ a {
 }
 
 .metric-tile {
-  min-height: 5.2rem;
-  padding: 0.9rem;
-  border: var(--border-subtle);
+  min-height: 5rem;
+  padding: 0.88rem;
+  border: 1px solid rgba(255, 255, 255, 0.075);
   border-radius: var(--radius-md);
-  background: rgba(255, 255, 255, 0.032);
+  background: rgba(255, 255, 255, 0.026);
 }
 
 .metric-tile strong {
@@ -802,10 +813,21 @@ a {
 .operation-status-row,
 .operation-history-row {
   width: 100%;
+  border-right: 0;
+  border-left: 0;
+  border-top: 0;
   color: inherit;
   text-align: left;
   background: transparent;
   cursor: pointer;
+}
+
+.operation-status-row:hover,
+.operation-status-row:focus-visible,
+.operation-history-row:hover,
+.operation-history-row:focus-visible,
+.record-row--selected {
+  background: rgba(255, 107, 0, 0.045);
 }
 
 .operation-status-row:hover strong,
@@ -823,7 +845,7 @@ a {
 .module-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.9rem;
+  gap: 1rem;
 }
 
 .module-grid--wide-left {
@@ -907,9 +929,9 @@ a {
 .data-table-wrap {
   margin-top: 1rem;
   overflow-x: auto;
-  border: var(--border-subtle);
+  border: 1px solid rgba(255, 255, 255, 0.075);
   border-radius: var(--radius-md);
-  background: rgba(255, 255, 255, 0.022);
+  background: rgba(255, 255, 255, 0.018);
 }
 
 .data-table {
@@ -921,12 +943,13 @@ a {
 .data-table th,
 .data-table td {
   padding: 0.9rem 0.85rem;
-  border-bottom: var(--border-subtle);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
   text-align: left;
   vertical-align: top;
 }
 
 .data-table th {
+  background: rgba(255, 255, 255, 0.018);
   color: var(--color-muted);
   font-size: 0.72rem;
   font-weight: 760;
@@ -949,9 +972,10 @@ a {
   align-items: center;
   width: 100%;
   min-height: 4.6rem;
-  padding: 0.9rem 0;
+  padding: 0.9rem 0.15rem;
   border: 0;
-  border-bottom: var(--border-subtle);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.075);
+  border-radius: calc(var(--radius-md) - 0.18rem);
   background: transparent;
   text-align: left;
   transition: background var(--motion-fast), border-color var(--motion-fast);
@@ -981,6 +1005,11 @@ a {
   justify-self: end;
 }
 
+.event-record-row__status .status-chip {
+  min-height: 2.3rem;
+  padding-inline: 0.7rem;
+}
+
 .event-record-row:hover,
 .event-record-row:focus-visible {
   background: rgba(255, 107, 0, 0.035);
@@ -998,7 +1027,9 @@ a {
 
 .record-row {
   grid-template-columns: minmax(0, 1fr) auto;
-  padding: 0.8rem 0;
+  padding: 0.82rem 0.15rem;
+  border-bottom-color: rgba(255, 255, 255, 0.075);
+  border-radius: calc(var(--radius-md) - 0.18rem);
 }
 
 .record-row:has(.button) {
@@ -1015,12 +1046,13 @@ a {
   display: flex;
   flex-wrap: nowrap;
   justify-content: flex-end;
-  gap: 0.45rem;
+  gap: 0.42rem;
 }
 
 .record-row__actions .button {
-  min-height: 2.45rem;
-  padding-inline: 0.75rem;
+  min-height: 2.35rem;
+  padding-inline: 0.72rem;
+  font-size: 0.84rem;
 }
 
 .record-row--selected {
@@ -1048,7 +1080,7 @@ a {
 .form-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1rem;
+  gap: 1.05rem 1rem;
   margin-top: 1rem;
 }
 
@@ -1108,6 +1140,7 @@ a {
   align-items: center;
   gap: 0.7rem;
   grid-column: 1 / -1;
+  padding-top: 0.15rem;
 }
 
 .button {
@@ -1618,7 +1651,7 @@ a {
 .source-list--compact .source-card {
   grid-template-columns: 1.2rem minmax(0, 1fr);
   align-items: center;
-  min-height: 6.25rem;
+  min-height: 5.7rem;
 }
 
 .source-card:hover,
@@ -1660,6 +1693,9 @@ a {
 .useful-link-card .button {
   grid-column: 2;
   justify-self: start;
+  min-height: 2.35rem;
+  padding-inline: 0.8rem;
+  font-size: 0.84rem;
 }
 
 .playbook {
@@ -1843,7 +1879,7 @@ a {
     grid-template-columns: 4.8rem minmax(0, 1fr);
     gap: 0.85rem;
     align-items: start;
-    padding: 1rem 0;
+    padding: 1rem 0.15rem;
   }
 
   .event-record-row .date-badge--compact {
@@ -1868,7 +1904,7 @@ a {
   .event-record-row .record-row__actions {
     display: grid;
     grid-column: 2;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     width: 100%;
     gap: 0.5rem;
   }
@@ -1877,6 +1913,16 @@ a {
     width: 100%;
     min-height: 2.65rem;
     padding-inline: 0.45rem;
+  }
+
+  .record-row:has(.date-badge--compact) {
+    grid-template-columns: 4.8rem minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .record-row:has(.date-badge--compact) .record-row__actions {
+    grid-column: 2;
+    width: 100%;
   }
 
   .record-row__actions {
