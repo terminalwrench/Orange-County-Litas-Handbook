@@ -1,10 +1,11 @@
 -- Orange County Litas Operations Center
 -- Initial Supabase schema for the lightweight internal operations app.
 --
--- Local-development note:
--- This milestone intentionally keeps access simple while the app has no auth.
--- Enable Row Level Security and add authenticated policies before introducing
--- Supabase Auth, public deployment writes, or broader user access.
+-- Auth note:
+-- This portal is founder/admin only. Create users manually in Supabase Auth.
+-- RLS below denies unauthenticated access and allows authenticated portal users
+-- to manage the app tables. If public signup is ever enabled, replace these
+-- simple authenticated policies with app_metadata/profile-based authorization.
 
 create extension if not exists "pgcrypto";
 
@@ -201,11 +202,72 @@ create trigger set_members_updated_at
 before update on public.members
 for each row execute function public.set_updated_at();
 
--- RLS should be enabled when authentication is added.
--- Example future step:
--- alter table public.events enable row level security;
--- alter table public.rides enable row level security;
--- alter table public.branch_assets enable row level security;
--- alter table public.reference_links enable row level security;
--- alter table public.operation_items enable row level security;
--- alter table public.members enable row level security;
+alter table public.events enable row level security;
+alter table public.rides enable row level security;
+alter table public.branch_assets enable row level security;
+alter table public.reference_links enable row level security;
+alter table public.operation_items enable row level security;
+alter table public.members enable row level security;
+
+revoke all on public.events from anon;
+revoke all on public.rides from anon;
+revoke all on public.branch_assets from anon;
+revoke all on public.reference_links from anon;
+revoke all on public.operation_items from anon;
+revoke all on public.members from anon;
+
+grant usage on schema public to authenticated;
+grant select, insert, update, delete on public.events to authenticated;
+grant select, insert, update, delete on public.rides to authenticated;
+grant select, insert, update, delete on public.branch_assets to authenticated;
+grant select, insert, update, delete on public.reference_links to authenticated;
+grant select, insert, update, delete on public.operation_items to authenticated;
+grant select, insert, update, delete on public.members to authenticated;
+
+drop policy if exists "founders can manage events" on public.events;
+create policy "founders can manage events"
+on public.events
+for all
+to authenticated
+using (true)
+with check (true);
+
+drop policy if exists "founders can manage rides" on public.rides;
+create policy "founders can manage rides"
+on public.rides
+for all
+to authenticated
+using (true)
+with check (true);
+
+drop policy if exists "founders can manage branch assets" on public.branch_assets;
+create policy "founders can manage branch assets"
+on public.branch_assets
+for all
+to authenticated
+using (true)
+with check (true);
+
+drop policy if exists "founders can manage reference links" on public.reference_links;
+create policy "founders can manage reference links"
+on public.reference_links
+for all
+to authenticated
+using (true)
+with check (true);
+
+drop policy if exists "founders can manage operation items" on public.operation_items;
+create policy "founders can manage operation items"
+on public.operation_items
+for all
+to authenticated
+using (true)
+with check (true);
+
+drop policy if exists "founders can manage members" on public.members;
+create policy "founders can manage members"
+on public.members
+for all
+to authenticated
+using (true)
+with check (true);

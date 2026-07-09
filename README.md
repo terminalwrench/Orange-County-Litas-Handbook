@@ -19,18 +19,20 @@ pnpm build
 
 The deployable output is generated in `dist/`.
 
-## Backend Setup
+## Backend And Auth Setup
 
-The app can run without Supabase. When `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` are missing, it uses the static fallback data in `src/data/`.
+The production portal is protected by Supabase Auth. `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` are required for founder login. Static fallback data remains in `src/data/` for service resilience during local development, but protected portal content is not shown without a signed-in Supabase session.
 
-To enable Supabase reads:
+To enable the backend:
 
 1. Create a Supabase project.
 2. Run [supabase/schema.sql](supabase/schema.sql) in the Supabase SQL editor.
 3. Copy [.env.example](.env.example) to `.env.local`.
 4. Add `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`.
-5. Install dependencies with `pnpm install`.
-6. Start the dev server with `pnpm dev`.
+5. Create founder/admin users manually in Supabase Dashboard → Authentication → Users.
+6. Disable public signup in Supabase Auth settings unless the access model is intentionally changed later.
+7. Install dependencies with `pnpm install`.
+8. Start the dev server with `pnpm dev`.
 
 For GitHub Pages deployments, add these repository secrets before running the Pages workflow:
 
@@ -41,17 +43,16 @@ Vite reads these values at build time, so the deployed app will use fallback dat
 
 Only use the Supabase anon public key in frontend environment files. Do not put a service role key in `.env.local` or any committed file.
 
-Current Supabase-backed read tables:
+Current Supabase-backed app tables:
 
 - `events`
 - `rides`
-- `media_assets`
+- `branch_assets`
 - `reference_links`
 - `operation_items`
+- `members`
 
-If Supabase is unconfigured or a read request fails, the app falls back to static data. If Supabase is configured and a table is empty, the app shows the appropriate empty state instead of mixing in mock records.
-
-This milestone does not add authentication or public write controls. The schema includes comments for enabling Row Level Security when auth is added later.
+Row Level Security is enabled in [supabase/schema.sql](supabase/schema.sql). Unauthenticated visitors cannot read or write portal data. Authenticated founder/admin users can manage the current portal tables. If public signup is ever enabled, replace the simple authenticated policies with role or profile-based authorization first.
 
 ## Reference Content
 

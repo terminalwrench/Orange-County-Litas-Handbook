@@ -1,12 +1,21 @@
 import { useEffect, useMemo, useState } from "react";
+import type { Session } from "@supabase/supabase-js";
 import { AppShell } from "./components/layout/AppShell";
 import type { BranchAsset, EventReadinessKey, EventRecord, ExternalResource, MemberRecord, MemberSaveInput, ModuleId, RideRecord } from "./types";
 import { Events } from "./pages/Events";
 import { Home } from "./pages/Home";
 import { BranchAssets } from "./pages/BranchAssets";
+import { Login } from "./pages/Login";
 import { Operations } from "./pages/Operations";
 import { Reference } from "./pages/Reference";
 import { RidePlanner } from "./pages/RidePlanner";
+import {
+  getCurrentSession,
+  isAuthConfigured,
+  signInToPortal,
+  signOutOfPortal,
+  subscribeToAuthChanges
+} from "./services/authService";
 import { hasEventsIcsUrl } from "./services/calendarService";
 import {
   buildEventDashboardData,
@@ -36,6 +45,9 @@ const initialPersistenceStatus = getPersistenceStatus();
 
 export function App() {
   const [activeModule, setActiveModule] = useState<ModuleId>("home");
+  const [authSession, setAuthSession] = useState<Session | null>(null);
+  const [isAuthLoading, setIsAuthLoading] = useState(true);
+  const [authError, setAuthError] = useState<string | null>(null);
   const [eventRecords, setEventRecords] = useState<EventRecord[]>(initialPersistenceStatus.isConfigured ? [] : getEvents());
   const [eventRecordsSource, setEventRecordsSource] = useState<EventDataSource>(initialPersistenceStatus.isConfigured ? "supabase" : "static");
   const [rideRecords, setRideRecords] = useState<RideRecord[]>(initialPersistenceStatus.isConfigured ? [] : getRides());
@@ -54,6 +66,48 @@ export function App() {
 
   useEffect(() => {
     let cancelled = false;
+
+    if (!isAuthConfigured()) {
+      setIsAuthLoading(false);
+      return () => {
+        cancelled = true;
+      };
+    }
+
+    getCurrentSession()
+      .then((session) => {
+        if (!cancelled) setAuthSession(session);
+      })
+      .catch((error) => {
+        console.warn("[auth] Unable to restore Supabase session.", error);
+        if (!cancelled) setAuthError("Unable to restore your session. Please sign in again.");
+      })
+      .finally(() => {
+        if (!cancelled) setIsAuthLoading(false);
+      });
+
+    const subscription = subscribeToAuthChanges((session) => {
+      if (!cancelled) {
+        setAuthSession(session);
+        setAuthError(null);
+        setIsAuthLoading(false);
+      }
+    });
+
+    return () => {
+      cancelled = true;
+      subscription.unsubscribe();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!authSession) {
+      setIsLoadingRecords(false);
+      return;
+    }
+
+    let cancelled = false;
+    setIsLoadingRecords(true);
 
     Promise.all([
       loadEventRecords(),
@@ -82,7 +136,34 @@ export function App() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [authSession]);
+
+  async function handleLogin(email: string, password: string) {
+    setAuthError(null);
+    try {
+      const session = await signInToPortal(email, password);
+      setAuthSession(session);
+    } catch (error) {
+      console.warn("[auth] Sign in failed.", error);
+      setAuthError("Sign in failed. Check the email and password, then try again.");
+    }
+  }
+
+  async function handleLogout() {
+    try {
+      await signOutOfPortal();
+    } catch (error) {
+      console.warn("[auth] Sign out failed.", error);
+    } finally {
+      setAuthSession(null);
+      setActiveModule("home");
+      setEventRecords(initialPersistenceStatus.isConfigured ? [] : getEvents());
+      setRideRecords(initialPersistenceStatus.isConfigured ? [] : getRides());
+      setBranchAssets(initialPersistenceStatus.isConfigured ? [] : getBranchAssets());
+      setUsefulLinks(initialPersistenceStatus.isConfigured ? [] : getUsefulLinks());
+      setMemberRecords([]);
+    }
+  }
 
   async function handleSaveEvent(input: EventSaveInput) {
     const result = await saveEventRecord(input);
@@ -242,12 +323,24 @@ export function App() {
     }
   }
 
+  if (isAuthLoading || !authSession) {
+    return (
+      <Login
+        isCheckingSession={isAuthLoading}
+        isConfigured={isAuthConfigured()}
+        error={authError}
+        onLogin={handleLogin}
+      />
+    );
+  }
+
   return (
     <AppShell
       navItems={navItems}
       activeModule={activeModule}
       onSelectModule={setActiveModule}
       sidebarCountdown={eventDashboard.sidebarCountdown}
+      onLogout={handleLogout}
     >
       {renderActivePage()}
     </AppShell>

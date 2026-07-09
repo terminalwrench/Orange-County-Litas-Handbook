@@ -8,10 +8,11 @@ interface AppShellProps {
   activeModule: ModuleId;
   onSelectModule: (moduleId: ModuleId) => void;
   sidebarCountdown: CountdownStatus;
+  onLogout: () => void;
   children: ReactNode;
 }
 
-export function AppShell({ navItems, activeModule, onSelectModule, sidebarCountdown, children }: AppShellProps) {
+export function AppShell({ navItems, activeModule, onSelectModule, sidebarCountdown, onLogout, children }: AppShellProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   function handleSelect(moduleId: ModuleId) {
@@ -27,6 +28,7 @@ export function AppShell({ navItems, activeModule, onSelectModule, sidebarCountd
         onSelect={handleSelect}
         isOpen={sidebarOpen}
         countdown={sidebarCountdown}
+        onLogout={onLogout}
       />
       <div className="app-shell__body">
         <TopBar

@@ -10,9 +10,10 @@ interface SidebarProps {
   onSelect: (moduleId: ModuleId) => void;
   isOpen: boolean;
   countdown: CountdownStatus;
+  onLogout: () => void;
 }
 
-export function Sidebar({ navItems, activeModule, onSelect, isOpen, countdown }: SidebarProps) {
+export function Sidebar({ navItems, activeModule, onSelect, isOpen, countdown, onLogout }: SidebarProps) {
   return (
     <aside className={`sidebar ${isOpen ? "is-open" : ""}`} aria-label="Primary">
       <div className="sidebar__brand">
@@ -25,6 +26,9 @@ export function Sidebar({ navItems, activeModule, onSelect, isOpen, countdown }:
           ))}
         </ul>
       </nav>
+      <button className="sidebar-logout" type="button" onClick={onLogout}>
+        Sign out
+      </button>
       <SidebarCountdown countdown={countdown} />
     </aside>
   );
