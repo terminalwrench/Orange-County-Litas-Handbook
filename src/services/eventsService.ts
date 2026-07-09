@@ -219,7 +219,7 @@ export async function importCalendarEventsFromIcs(
       imported: [],
       skipped: 0,
       total: calendarResult.events.length,
-      error: "The calendar feed did not contain importable events."
+      error: "No usable calendar events were found. Existing events were kept."
     };
   }
 
@@ -235,7 +235,7 @@ export async function importCalendarEventsFromIcs(
       imported: [],
       skipped: 0,
       total: events.length,
-      error: "Calendar import needs the events.external_uid column in Supabase before it can avoid duplicates."
+      error: "Calendar import needs the latest database setup before it can safely prevent duplicates."
     };
   }
 
@@ -348,7 +348,7 @@ export function buildEventDashboardData(
   return {
     eventRecords: records,
     nextEvent: nextEventRecord ? toDashboardEvent(nextEventRecord, today) : null,
-    upcomingEvents: upcomingEventRecords.slice(1, 4).map(toUpcomingEvent),
+    upcomingEvents: upcomingEventRecords.slice(0, 3).map(toUpcomingEvent),
     featuredEvent: featuredEventRecord ? toFeaturedEvent(featuredEventRecord) : null,
     sidebarCountdown: getSidebarCountdown(nextEventRecord, today),
     rideWeather: toRideWeather(nextRideRecord, today)

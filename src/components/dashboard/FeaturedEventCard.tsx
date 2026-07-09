@@ -15,11 +15,18 @@ export function FeaturedEventCard({ event }: FeaturedEventCardProps) {
         <div className="featured-event-card__content">
           <h3>{event.title}</h3>
           <p>{event.dateLabel}</p>
-          {event.cityState ? <span>{event.cityState}</span> : null}
+          {isMeaningfulEventValue(event.cityState) ? <span>{event.cityState}</span> : null}
         </div>
       ) : (
         <EmptyState title="No major events scheduled." />
       )}
     </DashboardCard>
   );
+}
+
+function isMeaningfulEventValue(value: string | undefined | null) {
+  const normalized = value?.trim();
+  if (!normalized) return false;
+
+  return !["tbd", "n/a", "not provided", "none", "-", "—"].includes(normalized.toLowerCase());
 }

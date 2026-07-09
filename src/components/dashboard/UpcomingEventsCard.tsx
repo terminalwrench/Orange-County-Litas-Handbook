@@ -1,6 +1,7 @@
 import type { UpcomingEvent } from "../../types";
 import { DashboardCard } from "../ui/DashboardCard";
 import { DateBadge } from "../ui/DateBadge";
+import { EmptyState } from "../ui/EmptyState";
 
 interface UpcomingEventsCardProps {
   events: UpcomingEvent[];
@@ -17,17 +18,21 @@ export function UpcomingEventsCard({ events, onOpenEvents }: UpcomingEventsCardP
           </button>
         </h2>
       </div>
-      <div className="event-list">
-        {events.map((event) => (
-          <article className="event-list__row" key={event.id}>
-            <DateBadge month={event.month} day={event.day} dateTime={event.date} compact />
-            <span>
-              <strong>{event.title}</strong>
-              {isMeaningfulEventValue(event.time) ? <em>{event.time}</em> : null}
-            </span>
-          </article>
-        ))}
-      </div>
+      {events.length > 0 ? (
+        <div className="event-list">
+          {events.map((event) => (
+            <article className="event-list__row" key={event.id}>
+              <DateBadge month={event.month} day={event.day} dateTime={event.date} compact />
+              <span>
+                <strong>{event.title}</strong>
+                {isMeaningfulEventValue(event.time) ? <em>{event.time}</em> : null}
+              </span>
+            </article>
+          ))}
+        </div>
+      ) : (
+        <EmptyState title="No upcoming events." message="Events will appear here when they are added." />
+      )}
     </DashboardCard>
   );
 }

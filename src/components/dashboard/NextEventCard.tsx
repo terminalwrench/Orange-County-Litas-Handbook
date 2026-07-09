@@ -6,9 +6,10 @@ import { Icon } from "../ui/Icon";
 interface NextEventCardProps {
   event: DashboardEvent | null;
   onToggleReadiness: (eventId: string, key: EventReadinessKey) => void;
+  readinessError?: string;
 }
 
-export function NextEventCard({ event, onToggleReadiness }: NextEventCardProps) {
+export function NextEventCard({ event, onToggleReadiness, readinessError }: NextEventCardProps) {
   if (!event) {
     return (
       <DashboardCard className="next-event-card" ariaLabel="Next event">
@@ -22,8 +23,10 @@ export function NextEventCard({ event, onToggleReadiness }: NextEventCardProps) 
   }
 
   const countdownIsWord = event.countdown.unit === "";
-  const dateText = event.time ? `${event.time}, ${event.dateLine}` : event.dateLine;
-  const hasLocation = Boolean(event.venue || event.city);
+  const dateText = isMeaningfulEventValue(event.time) ? `${event.time}, ${event.dateLine}` : event.dateLine;
+  const hasVenue = isMeaningfulEventValue(event.venue);
+  const hasCity = isMeaningfulEventValue(event.city);
+  const hasLocation = hasVenue || hasCity;
 
   return (
     <DashboardCard className="next-event-card" ariaLabel="Next event">
@@ -42,8 +45,8 @@ export function NextEventCard({ event, onToggleReadiness }: NextEventCardProps) 
             <p>
               <Icon name="pin" />
               <span>
-                {event.venue}
-                {event.city ? <em>{event.city}</em> : null}
+                {hasVenue ? event.venue : null}
+                {hasCity ? <em>{event.city}</em> : null}
               </span>
             </p>
           ) : null}
@@ -68,7 +71,15 @@ export function NextEventCard({ event, onToggleReadiness }: NextEventCardProps) 
           </button>
         ))}
       </div>
+      {readinessError ? <p className="form-status form-status--error">{readinessError}</p> : null}
       {event.isReady ? <p className="ready-hint">All readiness items are complete. This event appears ready.</p> : null}
     </DashboardCard>
   );
+}
+
+function isMeaningfulEventValue(value: string | undefined | null) {
+  const normalized = value?.trim();
+  if (!normalized) return false;
+
+  return !["tbd", "n/a", "not provided", "none", "-", "—"].includes(normalized.toLowerCase());
 }

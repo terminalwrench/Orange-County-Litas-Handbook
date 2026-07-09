@@ -60,7 +60,7 @@ export async function fetchCalendarEvents(
     if (!response.ok) {
       return {
         events: [],
-        error: `Calendar feed returned ${response.status}. Existing Supabase events were kept.`
+        error: "Calendar feed could not be reached. Existing events were kept."
       };
     }
 

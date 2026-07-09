@@ -18,13 +18,14 @@ interface HomeProps {
   rideWeather: RideWeather | null;
   onOpenEvents: () => void;
   onToggleEventReadiness: (eventId: string, key: EventReadinessKey) => void;
+  readinessError?: string;
 }
 
-export function Home({ nextEvent, upcomingEvents, featuredEvent, birthdaysThisMonth, rideWeather, onOpenEvents, onToggleEventReadiness }: HomeProps) {
+export function Home({ nextEvent, upcomingEvents, featuredEvent, birthdaysThisMonth, rideWeather, onOpenEvents, onToggleEventReadiness, readinessError }: HomeProps) {
   return (
     <PageContainer className="home-page">
       <h1 className="sr-only">Orange County Litas Operations Center</h1>
-      <NextEventCard event={nextEvent} onToggleReadiness={onToggleEventReadiness} />
+      <NextEventCard event={nextEvent} onToggleReadiness={onToggleEventReadiness} readinessError={readinessError} />
       <div className="home-grid">
         <div className="home-grid__main">
           <UpcomingEventsCard events={upcomingEvents} onOpenEvents={onOpenEvents} />

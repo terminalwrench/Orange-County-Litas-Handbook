@@ -58,6 +58,7 @@ export function App() {
   const [usefulLinksSource, setUsefulLinksSource] = useState<TableDataSource>(initialPersistenceStatus.isConfigured ? "supabase" : "static");
   const [memberRecords, setMemberRecords] = useState<MemberRecord[]>([]);
   const [isLoadingRecords, setIsLoadingRecords] = useState(true);
+  const [readinessError, setReadinessError] = useState("");
   const eventDashboard = useMemo(() => buildEventDashboardData(eventRecords), [eventRecords]);
   const birthdaysThisMonth = useMemo(() => getBirthdaysThisMonthFromMembers(memberRecords), [memberRecords]);
   const navItems = getNavItems();
@@ -178,36 +179,26 @@ export function App() {
     const event = eventRecords.find((record) => record.id === eventId);
     if (!event) return;
 
-    const result = await saveEventRecord({
-      id: event.id,
-      title: event.title,
-      type: event.type,
-      startDate: event.startDate,
-      endDate: event.endDate,
-      time: event.time,
-      location: event.location,
-      city: event.city,
-      description: event.description,
-      status: event.status,
-      flyerStatus: key === "flyerPosted" && event.flyerPosted ? "Needed" : event.flyerStatus,
-      rideDifficulty: event.rideDifficulty,
-      venueConfirmed: key === "venueConfirmed" ? !event.venueConfirmed : event.venueConfirmed,
-      routeComplete: key === "routeComplete" ? !event.routeComplete : event.routeComplete,
-      flyerPosted: key === "flyerPosted" ? !event.flyerPosted : event.flyerPosted,
-      emailSent: key === "emailSent" ? !event.emailSent : event.emailSent,
-      flyerUrl: event.flyerUrl,
-      groupPhotoUrl: event.groupPhotoUrl,
-      routeImageUrl: event.routeImageUrl,
-      instagramUrl: event.instagramUrl,
-      appleAlbumUrl: event.appleAlbumUrl,
-      notes: event.notes,
-      externalUid: event.externalUid
-    });
+    const previousRecords = eventRecords;
+    const optimisticEvent = toggleReadinessField(event, key);
+    setReadinessError("");
+    setEventRecords((current) => upsertById(current, optimisticEvent, event.id));
 
-    if (result.source === "supabase" || !persistenceStatus.isConfigured) {
-      setEventRecords((current) => upsertById(current, result.data, event.id));
+    try {
+      const result = await saveEventRecord(toEventSaveInput(optimisticEvent));
+
+      if (result.source === "supabase" || !persistenceStatus.isConfigured) {
+        setEventRecords((current) => upsertById(current, result.data, event.id));
+      } else {
+        setEventRecords(previousRecords);
+        setReadinessError("Readiness could not be saved to the shared event record.");
+      }
+      if (result.source === "supabase") setEventRecordsSource("supabase");
+    } catch (error) {
+      console.warn("[home] Unable to save readiness state.", error);
+      setEventRecords(previousRecords);
+      setReadinessError("Readiness could not be saved to the shared event record.");
     }
-    if (result.source === "supabase") setEventRecordsSource("supabase");
   }
 
   async function handleDeleteEvent(event: EventRecord) {
@@ -221,23 +212,10 @@ export function App() {
   async function handleImportCalendarEvents(): Promise<CalendarImportResult> {
     const result = await importCalendarEventsFromIcs();
 
-    if (result.imported.length > 0) {
-      setEventRecords((current) => {
-        const nextRecords = [...current];
-
-        for (const event of result.imported) {
-          const index = nextRecords.findIndex(
-            (record) => record.id === event.id || (event.externalUid && record.externalUid === event.externalUid)
-          );
-
-          if (index === -1) {
-            nextRecords.push(event);
-          }
-        }
-
-        return nextRecords;
-      });
-      setEventRecordsSource("supabase");
+    if (!result.error) {
+      const eventResult = await loadEventRecords();
+      setEventRecords(eventResult.events);
+      setEventRecordsSource(eventResult.source);
     }
 
     return result;
@@ -280,6 +258,7 @@ export function App() {
             rideWeather={eventDashboard.rideWeather}
             onOpenEvents={() => setActiveModule("events")}
             onToggleEventReadiness={handleToggleEventReadiness}
+            readinessError={readinessError}
           />
         );
       case "events":
@@ -353,4 +332,54 @@ function upsertById<T extends { id: string }>(records: T[], saved: T, previousId
   if (index === -1) return [...records, saved];
 
   return records.map((record, recordIndex) => recordIndex === index ? saved : record);
+}
+
+function toggleReadinessField(event: EventRecord, key: EventReadinessKey): EventRecord {
+  const nextComplete = !event[key];
+  const nextEvent = {
+    ...event,
+    [key]: nextComplete,
+    flyerStatus: key === "flyerPosted" ? (nextComplete ? "Posted" : "Needed") : event.flyerStatus
+  };
+
+  return {
+    ...nextEvent,
+    checklist: event.checklist.map((item) => {
+      if (item.key !== key) return item;
+
+      return {
+        ...item,
+        complete: nextComplete,
+        tone: nextComplete ? "success" : "warning"
+      };
+    })
+  };
+}
+
+function toEventSaveInput(event: EventRecord): EventSaveInput {
+  return {
+    id: event.id,
+    title: event.title,
+    type: event.type,
+    startDate: event.startDate,
+    endDate: event.endDate,
+    time: event.time,
+    location: event.location,
+    city: event.city,
+    description: event.description,
+    status: event.status,
+    flyerStatus: event.flyerStatus,
+    rideDifficulty: event.rideDifficulty,
+    venueConfirmed: event.venueConfirmed,
+    routeComplete: event.routeComplete,
+    flyerPosted: event.flyerPosted,
+    emailSent: event.emailSent,
+    flyerUrl: event.flyerUrl,
+    groupPhotoUrl: event.groupPhotoUrl,
+    routeImageUrl: event.routeImageUrl,
+    instagramUrl: event.instagramUrl,
+    appleAlbumUrl: event.appleAlbumUrl,
+    notes: event.notes,
+    externalUid: event.externalUid
+  };
 }
