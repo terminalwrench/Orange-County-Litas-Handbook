@@ -72,6 +72,8 @@ export function Operations({
   const [savingMemberId, setSavingMemberId] = useState<string | null>(null);
   const [birthdayMessage, setBirthdayMessage] = useState("");
   const [birthdayError, setBirthdayError] = useState("");
+  const [selectedAccount, setSelectedAccount] = useState<SharedAccount | null>(null);
+  const [credentialMessage, setCredentialMessage] = useState("");
   const metrics = getBranchMetrics(eventRecords, {
     memberCount: memberRecords.length,
     today
@@ -181,7 +183,14 @@ export function Operations({
           <p className="card-note operations-card-note">Operational accounts used by branch leadership.</p>
           <div className="account-list">
             {sharedAccounts.map((account) => (
-              <SharedAccountRow account={account} key={account.id} />
+              <SharedAccountRow
+                account={account}
+                key={account.id}
+                onOpenCredentials={(account) => {
+                  setSelectedAccount(account);
+                  setCredentialMessage("");
+                }}
+              />
             ))}
           </div>
         </DashboardCard>
@@ -287,23 +296,148 @@ export function Operations({
           {birthdayError ? <p className="form-status form-status--error">{birthdayError}</p> : null}
         </DashboardCard>
       </div>
+      {selectedAccount ? (
+        <CredentialsModal
+          account={selectedAccount}
+          message={credentialMessage}
+          onCopy={async (label, value) => {
+            const copied = await copyToClipboard(value);
+            setCredentialMessage(copied ? `${label} copied.` : `${label} could not be copied.`);
+          }}
+          onClose={() => {
+            setSelectedAccount(null);
+            setCredentialMessage("");
+          }}
+        />
+      ) : null}
     </PageContainer>
   );
 }
 
-function SharedAccountRow({ account }: { account: SharedAccount }) {
+function SharedAccountRow({
+  account,
+  onOpenCredentials
+}: {
+  account: SharedAccount;
+  onOpenCredentials: (account: SharedAccount) => void;
+}) {
+  const hasUrl = Boolean(account.url);
+  const hasCredentials = hasSavedCredentials(account);
+  const isConfigured = hasUrl || hasCredentials;
+
   return (
     <article className="account-row">
       <Icon name={account.icon} />
       <span className="account-row__details">
         <strong>{account.service}</strong>
-        <em>{account.username ?? "Not Configured"}</em>
+        {account.username ? <em>{account.username}</em> : null}
+        {!account.username && !isConfigured ? <em>Not Configured</em> : null}
         {account.lastUpdated ? <small>Updated {formatDate(account.lastUpdated)}</small> : null}
       </span>
-      <StatusChip
-        label={account.configured ? "Configured" : "Not Configured"}
-        tone={account.configured ? "success" : "neutral"}
-      />
+      <div className="account-row__actions">
+        <StatusChip
+          label={isConfigured ? "Configured" : "Not Configured"}
+          tone={isConfigured ? "success" : "neutral"}
+        />
+        {hasUrl ? (
+          <a className="button button--secondary" href={account.url} target="_blank" rel="noreferrer">
+            Open
+          </a>
+        ) : (
+          <Button type="button" variant="secondary" disabled title="No account URL has been saved.">
+            Open
+          </Button>
+        )}
+        {hasCredentials ? (
+          <Button type="button" variant="ghost" onClick={() => onOpenCredentials(account)}>
+            Credentials
+          </Button>
+        ) : (
+          <Button type="button" variant="ghost" disabled title="No credentials have been saved.">
+            Credentials
+          </Button>
+        )}
+      </div>
+    </article>
+  );
+}
+
+function hasSavedCredentials(account: SharedAccount) {
+  return Boolean(account.username || account.password);
+}
+
+async function copyToClipboard(value: string) {
+  try {
+    await navigator.clipboard.writeText(value);
+    return true;
+  } catch (error) {
+    console.warn("[operations] Unable to copy credential.", error);
+    return false;
+  }
+}
+
+function CredentialsModal({
+  account,
+  message,
+  onCopy,
+  onClose
+}: {
+  account: SharedAccount;
+  message: string;
+  onCopy: (label: string, value: string) => void | Promise<void>;
+  onClose: () => void;
+}) {
+  return (
+    <div className="preview-modal-backdrop" role="presentation" onMouseDown={onClose}>
+      <section
+        className="credentials-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="credentials-modal-title"
+        onMouseDown={(event) => event.stopPropagation()}
+      >
+        <div className="credentials-modal__header">
+          <span>Vault</span>
+          <h2 id="credentials-modal-title">{account.service}</h2>
+          <p>Credentials are hidden from the account list and only shown here for founder use.</p>
+        </div>
+        <div className="credentials-list">
+          {account.username ? (
+            <CredentialRow label="Username" value={account.username} onCopy={onCopy} />
+          ) : null}
+          {account.password ? (
+            <CredentialRow label="Password" value={account.password} secret onCopy={onCopy} />
+          ) : null}
+        </div>
+        {message ? <p className="form-status form-status--success">{message}</p> : null}
+        <div className="form-actions">
+          <Button type="button" variant="ghost" onClick={onClose}>Close</Button>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function CredentialRow({
+  label,
+  value,
+  secret = false,
+  onCopy
+}: {
+  label: string;
+  value: string;
+  secret?: boolean;
+  onCopy: (label: string, value: string) => void | Promise<void>;
+}) {
+  return (
+    <article className="credential-row">
+      <span>
+        <em>{label}</em>
+        <strong>{secret ? "••••••••••••" : value}</strong>
+      </span>
+      <Button type="button" variant="secondary" onClick={() => onCopy(label, value)}>
+        Copy
+      </Button>
     </article>
   );
 }

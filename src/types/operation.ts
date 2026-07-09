@@ -33,6 +33,8 @@ export interface SharedAccount {
   service: string;
   icon: IconName;
   username?: string;
+  password?: string;
+  url?: string;
   configured: boolean;
   lastUpdated?: string;
 }

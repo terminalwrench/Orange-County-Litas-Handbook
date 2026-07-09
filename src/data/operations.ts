@@ -6,6 +6,7 @@ export const sharedAccounts: SharedAccount[] = [
     service: "Instagram",
     icon: "image",
     username: "@thelitasorangecounty",
+    url: "https://www.instagram.com/thelitasorangecounty/",
     configured: true,
     lastUpdated: "2026-07-01"
   },
@@ -13,13 +14,15 @@ export const sharedAccounts: SharedAccount[] = [
     id: "canva",
     service: "Canva",
     icon: "box",
-    configured: false
+    url: "https://www.canva.com/",
+    configured: true
   },
   {
     id: "shared-calendar",
     service: "Shared Calendar",
     icon: "calendar",
     username: "orangecountylitas@gmail.com",
+    url: "https://calendar.google.com/calendar/u/0/r?cid=orangecountylitas%40gmail.com",
     configured: true,
     lastUpdated: "2026-07-01"
   },
@@ -27,7 +30,8 @@ export const sharedAccounts: SharedAccount[] = [
     id: "google-keep",
     service: "Google Keep",
     icon: "file",
-    configured: false
+    url: "https://keep.google.com/",
+    configured: true
   },
   {
     id: "icloud-album",
@@ -40,6 +44,7 @@ export const sharedAccounts: SharedAccount[] = [
     service: "Shared Gmail",
     icon: "mail",
     username: "orangecountylitas@gmail.com",
+    url: "https://mail.google.com/mail/u/0/",
     configured: true,
     lastUpdated: "2026-07-01"
   }
@@ -81,5 +86,5 @@ export const annualBranchReports: AnnualBranchReport[] = [
   }
 ];
 
-// TODO: Real credential storage requires authentication, RLS, and encrypted
-// secret storage before implementation.
+// TODO: Move saved secrets into encrypted storage before expanding beyond the
+// founder-only admin portal. Passwords are intentionally optional here.
