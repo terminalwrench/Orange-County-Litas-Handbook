@@ -44,7 +44,7 @@ interface EventFormState {
 }
 
 const eventStatuses = ["Planning", "Ready", "Completed", "Cancelled"];
-const eventTypes = ["Meet & Greet", "Ride", "Community", "Special Event"];
+const eventTypes = ["Meet & Greet", "Ride", "Community", "Special Event", "Major Event"];
 const rideDifficulties = ["Beginner", "Intermediate", "Advanced"];
 const monthFormatter = new Intl.DateTimeFormat("en-US", { month: "short" });
 
@@ -497,7 +497,7 @@ function toEventFormState(event: EventRecord): EventFormState {
     title: event.title,
     startDate: event.startDate,
     time: toTimeInputValue(event.time),
-    location: event.location === "TBD" ? "" : event.location,
+    location: isMeaningfulEventValue(event.location) ? event.location : "",
     city: event.city,
     type: event.type,
     status: event.status,
@@ -519,7 +519,7 @@ function toEventInput(form: EventFormState): EventSaveInput {
     startDate: form.startDate,
     endDate: form.startDate,
     time: toDisplayTime(form.time),
-    location: form.location.trim() || "TBD",
+    location: form.location.trim(),
     city: form.city.trim(),
     description: form.notes.trim(),
     status: form.status,
@@ -586,7 +586,7 @@ function toTimeInputValue(value: string) {
 }
 
 function toDisplayTime(value: string) {
-  if (!value) return "TBD";
+  if (!value) return "";
 
   const [hourValue, minutes] = value.split(":");
   const hours = Number(hourValue);

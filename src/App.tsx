@@ -275,6 +275,7 @@ export function App() {
           <Home
             nextEvent={eventDashboard.nextEvent}
             upcomingEvents={eventDashboard.upcomingEvents}
+            featuredEvent={eventDashboard.featuredEvent}
             birthdaysThisMonth={birthdaysThisMonth}
             rideWeather={eventDashboard.rideWeather}
             onOpenEvents={() => setActiveModule("events")}

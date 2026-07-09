@@ -579,10 +579,46 @@ a {
   gap: 1rem;
 }
 
+.home-grid__main {
+  display: grid;
+  gap: 1rem;
+}
+
 .list-card,
 .birthday-card {
   min-height: 16.75rem;
   padding: 1.05rem 1.2rem;
+}
+
+.featured-event-card {
+  min-height: 10.5rem;
+  padding: 1.05rem 1.2rem;
+}
+
+.featured-event-card__content {
+  display: grid;
+  gap: 0.28rem;
+  margin-top: 1.15rem;
+}
+
+.featured-event-card__content h3 {
+  margin: 0;
+  color: var(--color-white);
+  font-size: clamp(1.35rem, 2.4vw, 1.8rem);
+  font-weight: 500;
+  line-height: 1.12;
+}
+
+.featured-event-card__content p,
+.featured-event-card__content span {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.featured-event-card__content p {
+  color: var(--color-white);
 }
 
 .section-header {

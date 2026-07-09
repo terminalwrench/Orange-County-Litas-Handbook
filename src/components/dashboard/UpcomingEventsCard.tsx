@@ -23,11 +23,18 @@ export function UpcomingEventsCard({ events, onOpenEvents }: UpcomingEventsCardP
             <DateBadge month={event.month} day={event.day} dateTime={event.date} compact />
             <span>
               <strong>{event.title}</strong>
-              <em>{event.time}</em>
+              {isMeaningfulEventValue(event.time) ? <em>{event.time}</em> : null}
             </span>
           </article>
         ))}
       </div>
     </DashboardCard>
   );
+}
+
+function isMeaningfulEventValue(value: string | undefined | null) {
+  const normalized = value?.trim();
+  if (!normalized) return false;
+
+  return !["tbd", "n/a", "not provided", "none", "-", "—"].includes(normalized.toLowerCase());
 }

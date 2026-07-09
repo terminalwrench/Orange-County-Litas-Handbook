@@ -22,6 +22,8 @@ export function NextEventCard({ event, onToggleReadiness }: NextEventCardProps) 
   }
 
   const countdownIsWord = event.countdown.unit === "";
+  const dateText = event.time ? `${event.time}, ${event.dateLine}` : event.dateLine;
+  const hasLocation = Boolean(event.venue || event.city);
 
   return (
     <DashboardCard className="next-event-card" ariaLabel="Next event">
@@ -33,19 +35,21 @@ export function NextEventCard({ event, onToggleReadiness }: NextEventCardProps) 
           <p>
             <Icon name="clock" />
             <span>
-              {event.time}, {event.dateLine}
+              {dateText}
             </span>
           </p>
-          <p>
-            <Icon name="pin" />
-            <span>
-              {event.venue}
-              <em>{event.city}</em>
-            </span>
-          </p>
+          {hasLocation ? (
+            <p>
+              <Icon name="pin" />
+              <span>
+                {event.venue}
+                {event.city ? <em>{event.city}</em> : null}
+              </span>
+            </p>
+          ) : null}
         </div>
         <div className="starts-in" aria-label={event.countdown.ariaLabel}>
-          <span>Starts in</span>
+          <span>{countdownIsWord ? "Starts" : "Starts in"}</span>
           <strong className={countdownIsWord ? "starts-in__word" : undefined}>{event.countdown.value}</strong>
           {event.countdown.unit ? <em>{event.countdown.unit}</em> : null}
         </div>

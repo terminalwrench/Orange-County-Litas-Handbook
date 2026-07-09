@@ -127,7 +127,7 @@ function parseEventBlock(lines: string[]): EventRecord | null {
   const endProperty = getProperty(properties, "DTEND");
   const end = endProperty ? parseIcsDate(endProperty) : start;
   const title = getPropertyValue(properties, "SUMMARY") || "Untitled Event";
-  const location = getPropertyValue(properties, "LOCATION") || "TBD";
+  const location = getPropertyValue(properties, "LOCATION") || "";
   const description = getPropertyValue(properties, "DESCRIPTION") || "";
   const uid = getPropertyValue(properties, "UID") || `${toDateValue(start.date)}-${slugify(title)}`;
   const type = inferEventType(title, description);
@@ -146,7 +146,7 @@ function parseEventBlock(lines: string[]): EventRecord | null {
     type,
     status: "Planning",
     flyerStatus: "Unknown",
-    venueConfirmed: location !== "TBD",
+    venueConfirmed: Boolean(location),
     routeComplete: type !== "Ride",
     flyerPosted: false,
     emailSent: false,
@@ -222,6 +222,16 @@ function formatTime(date: Date) {
 
 function inferEventType(title: string, description: string) {
   const text = `${title} ${description}`.toLowerCase();
+
+  if (
+    text.includes("born free")
+    || text.includes("babes ride out")
+    || text.includes("babes in borrego")
+    || text.includes("paradise road show")
+    || text.includes("distinguished gentleman")
+  ) {
+    return "Major Event";
+  }
 
   if (text.includes("meet") || text.includes("greet")) return "Meet & Greet";
   if (text.includes("ride")) return "Ride";

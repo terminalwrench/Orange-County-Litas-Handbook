@@ -1,6 +1,6 @@
 import { eventRecords as staticEventRecords } from "../data/events";
 import { featureFlags } from "../data/featureFlags";
-import type { DashboardEvent, EventReadinessKey, EventRecord, RideWeather, UpcomingEvent, CountdownStatus } from "../types";
+import type { DashboardEvent, EventReadinessKey, EventRecord, FeaturedEvent, RideWeather, UpcomingEvent, CountdownStatus } from "../types";
 import { getCountdownDisplay, getCountdownLabel as getCountdownLabelValue, getSidebarCountdown } from "../utils/countdown";
 import { isWithinCurrentWeek, parseDate, toDateValue } from "../utils/date";
 import { fetchCalendarEvents, loadCalendarEvents, PUBLIC_GOOGLE_CALENDAR_ICS_URL } from "./calendarService";
@@ -56,6 +56,21 @@ const dateLineFormatter = new Intl.DateTimeFormat("en-US", {
   day: "numeric"
 });
 
+const featuredMonthFormatter = new Intl.DateTimeFormat("en-US", {
+  month: "long"
+});
+
+const featuredMonthDayFormatter = new Intl.DateTimeFormat("en-US", {
+  month: "long",
+  day: "numeric"
+});
+
+const featuredFullDateFormatter = new Intl.DateTimeFormat("en-US", {
+  month: "long",
+  day: "numeric",
+  year: "numeric"
+});
+
 export interface EventLoadResult {
   events: EventRecord[];
   source: "static" | "ics" | "supabase" | "fallback";
@@ -91,6 +106,7 @@ export interface EventDashboardData {
   eventRecords: EventRecord[];
   nextEvent: DashboardEvent | null;
   upcomingEvents: UpcomingEvent[];
+  featuredEvent: FeaturedEvent | null;
   sidebarCountdown: CountdownStatus;
   rideWeather: RideWeather | null;
 }
@@ -327,11 +343,13 @@ export function buildEventDashboardData(
   const upcomingEventRecords = getUpcomingEvents(records, today);
   const nextEventRecord = getNextEvent(records, today);
   const nextRideRecord = upcomingEventRecords.find(isRideEvent) ?? null;
+  const featuredEventRecord = upcomingEventRecords.find(isMajorEvent) ?? null;
 
   return {
     eventRecords: records,
     nextEvent: nextEventRecord ? toDashboardEvent(nextEventRecord, today) : null,
     upcomingEvents: upcomingEventRecords.slice(1, 4).map(toUpcomingEvent),
+    featuredEvent: featuredEventRecord ? toFeaturedEvent(featuredEventRecord) : null,
     sidebarCountdown: getSidebarCountdown(nextEventRecord, today),
     rideWeather: toRideWeather(nextRideRecord, today)
   };
@@ -371,6 +389,15 @@ function toDashboardEvent(event: EventRecord, today = new Date()): DashboardEven
   };
 }
 
+function toFeaturedEvent(event: EventRecord): FeaturedEvent {
+  return {
+    id: event.id,
+    title: event.title,
+    dateLabel: formatFeaturedEventDate(event),
+    cityState: event.city
+  };
+}
+
 function toUpcomingEvent(event: EventRecord): UpcomingEvent {
   return {
     id: event.id,
@@ -381,6 +408,32 @@ function toUpcomingEvent(event: EventRecord): UpcomingEvent {
     time: event.time,
     type: event.type
   };
+}
+
+function isMajorEvent(event: EventRecord) {
+  return event.type.trim().toLowerCase() === "major event";
+}
+
+function formatFeaturedEventDate(event: EventRecord) {
+  const startDate = parseDate(event.startDate);
+  const endDate = parseDate(event.endDate || event.startDate);
+
+  if (event.endDate && event.endDate !== event.startDate) {
+    const sameYear = startDate.getFullYear() === endDate.getFullYear();
+    const sameMonth = sameYear && startDate.getMonth() === endDate.getMonth();
+
+    if (sameMonth) {
+      return `${featuredMonthFormatter.format(startDate)} ${startDate.getDate()}-${endDate.getDate()}, ${startDate.getFullYear()}`;
+    }
+
+    if (sameYear) {
+      return `${featuredMonthDayFormatter.format(startDate)}-${featuredMonthDayFormatter.format(endDate)}, ${startDate.getFullYear()}`;
+    }
+
+    return `${featuredFullDateFormatter.format(startDate)}-${featuredFullDateFormatter.format(endDate)}`;
+  }
+
+  return featuredFullDateFormatter.format(startDate);
 }
 
 function toRideWeather(event: EventRecord | null, today = new Date()): RideWeather | null {
@@ -430,8 +483,8 @@ function fromSupabaseEvent(row: SupabaseEventRow): EventRecord {
     date: row.start_date,
     startDate: row.start_date,
     endDate: row.end_date ?? row.start_date,
-    time: row.time ?? "TBD",
-    location: row.location ?? "TBD",
+    time: row.time ?? "",
+    location: row.location ?? "",
     city: row.city ?? "",
     description: row.description ?? "",
     source: "supabase",
@@ -526,8 +579,8 @@ function toLocalEventRecord(input: EventSaveInput): EventRecord {
     date: startDate,
     startDate,
     endDate: input.endDate || startDate,
-    time: input.time ?? "TBD",
-    location: input.location ?? "TBD",
+    time: input.time ?? "",
+    location: input.location ?? "",
     city: input.city ?? "",
     description: input.description ?? input.notes ?? "",
     source: "fallback",

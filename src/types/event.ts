@@ -50,6 +50,13 @@ export interface UpcomingEvent {
   type: string;
 }
 
+export interface FeaturedEvent {
+  id: string;
+  title: string;
+  dateLabel: string;
+  cityState: string;
+}
+
 export interface RideWeather {
   eventDate: string;
   label: string;

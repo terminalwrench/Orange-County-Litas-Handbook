@@ -7,6 +7,7 @@ export type {
   DashboardEvent,
   EventReadinessKey,
   EventRecord,
+  FeaturedEvent,
   RideWeather,
   StatusItem,
   StatusTone,
