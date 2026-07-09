@@ -201,7 +201,7 @@ export function RidePlanner({
               ))}
             </div>
           ) : (
-            <EmptyState title="No rides yet" message="Ride plans will appear here when ride events or saved routes are available." />
+            <EmptyState title="No ride plans available." message="Ride plans will appear here when ride events or saved routes are available." />
           )}
           <p className="form-note">
             {getSourceNote(rideRecordsSource, isPersistenceConfigured)}

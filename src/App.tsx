@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { AppShell } from "./components/layout/AppShell";
-import type { Birthday, BranchAsset, EventReadinessKey, EventRecord, ExternalResource, ModuleId, RideRecord } from "./types";
+import type { BranchAsset, EventReadinessKey, EventRecord, ExternalResource, MemberRecord, MemberSaveInput, ModuleId, RideRecord } from "./types";
 import { Events } from "./pages/Events";
 import { Home } from "./pages/Home";
 import { BranchAssets } from "./pages/BranchAssets";
@@ -23,7 +23,12 @@ import { getPersistenceStatus } from "./services/persistence";
 import { getRides, loadRideRecords, saveRideRecord, type RideSaveInput } from "./services/ridesService";
 import { getUsefulLinks, loadUsefulLinks } from "./services/linksService";
 import { getNavItems } from "./services/settingsService";
-import { getUpcomingBirthdays, loadBirthdaysThisMonth } from "./services/birthdaysService";
+import {
+  deleteMemberRecord,
+  getBirthdaysThisMonthFromMembers,
+  loadMemberRecords,
+  saveMemberRecord
+} from "./services/birthdaysService";
 
 type TableDataSource = "static" | "supabase" | "fallback";
 type EventDataSource = TableDataSource | "ics";
@@ -39,9 +44,10 @@ export function App() {
   const [branchAssetsSource, setBranchAssetsSource] = useState<TableDataSource>(initialPersistenceStatus.isConfigured ? "supabase" : "static");
   const [usefulLinks, setUsefulLinks] = useState<ExternalResource[]>(initialPersistenceStatus.isConfigured ? [] : getUsefulLinks());
   const [usefulLinksSource, setUsefulLinksSource] = useState<TableDataSource>(initialPersistenceStatus.isConfigured ? "supabase" : "static");
-  const [birthdaysThisMonth, setBirthdaysThisMonth] = useState<Birthday[]>(initialPersistenceStatus.isConfigured ? [] : getUpcomingBirthdays());
+  const [memberRecords, setMemberRecords] = useState<MemberRecord[]>([]);
   const [isLoadingRecords, setIsLoadingRecords] = useState(true);
   const eventDashboard = useMemo(() => buildEventDashboardData(eventRecords), [eventRecords]);
+  const birthdaysThisMonth = useMemo(() => getBirthdaysThisMonthFromMembers(memberRecords), [memberRecords]);
   const navItems = getNavItems();
   const persistenceStatus = getPersistenceStatus();
   const calendarImportAvailable = hasEventsIcsUrl();
@@ -54,8 +60,8 @@ export function App() {
       loadRideRecords(),
       loadBranchAssets(),
       loadUsefulLinks(),
-      loadBirthdaysThisMonth()
-    ]).then(([eventResult, rideResult, branchAssetResult, linksResult, birthdayResult]) => {
+      loadMemberRecords()
+    ]).then(([eventResult, rideResult, branchAssetResult, linksResult, memberResult]) => {
       if (!cancelled) {
         setEventRecords(eventResult.events);
         setEventRecordsSource(eventResult.source);
@@ -65,7 +71,7 @@ export function App() {
         setBranchAssetsSource(branchAssetResult.source);
         setUsefulLinks(linksResult.links);
         setUsefulLinksSource(linksResult.source);
-        setBirthdaysThisMonth(birthdayResult.birthdays);
+        setMemberRecords(memberResult.members);
         setIsLoadingRecords(false);
       }
     }).catch((error) => {
@@ -165,6 +171,22 @@ export function App() {
     return result;
   }
 
+  async function handleSaveMember(input: MemberSaveInput) {
+    const result = await saveMemberRecord(input);
+    if (result.source === "supabase" || !persistenceStatus.isConfigured) {
+      setMemberRecords((current) => upsertById(current, result.data, input.id));
+    }
+    return result;
+  }
+
+  async function handleDeleteMember(member: MemberRecord) {
+    const result = await deleteMemberRecord(member);
+    if (result.source === "supabase" || !persistenceStatus.isConfigured) {
+      setMemberRecords((current) => current.filter((record) => record.id !== member.id));
+    }
+    return result;
+  }
+
   function renderActivePage() {
     switch (activeModule) {
       case "home":
@@ -195,7 +217,11 @@ export function App() {
         return (
           <Operations
             eventRecords={eventDashboard.eventRecords}
+            memberRecords={memberRecords}
             isLoading={isLoadingRecords}
+            isPersistenceConfigured={persistenceStatus.isConfigured}
+            onSaveMember={handleSaveMember}
+            onDeleteMember={handleDeleteMember}
           />
         );
       case "ride-planner":

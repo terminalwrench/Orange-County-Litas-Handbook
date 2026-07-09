@@ -16,7 +16,12 @@ export interface BirthdayLoadResult {
   source: "static" | "supabase" | "fallback";
 }
 
-const monthFormatter = new Intl.DateTimeFormat("en-US", { month: "short" });
+export interface MemberLoadResult {
+  members: MemberRecord[];
+  source: "static" | "supabase" | "fallback";
+}
+
+const monthFormatter = new Intl.DateTimeFormat("en-US", { month: "long" });
 
 export function getBirthdays(): Birthday[] {
   return birthdayRecords;
@@ -24,6 +29,46 @@ export function getBirthdays(): Birthday[] {
 
 export function getUpcomingBirthdays(today = new Date()): Birthday[] {
   return getStaticBirthdaysThisMonth(today);
+}
+
+export function getBirthdaysThisMonthFromMembers(members: MemberRecord[], today = new Date()): Birthday[] {
+  const currentMonth = today.getMonth() + 1;
+
+  return members
+    .filter((member) => member.birthdayMonth === currentMonth && Boolean(member.birthdayDay))
+    .sort((a, b) => (a.birthdayDay ?? 0) - (b.birthdayDay ?? 0))
+    .map(toBirthdayFromMember);
+}
+
+export async function loadMemberRecords(): Promise<MemberLoadResult> {
+  const supabase = getPersistenceClient();
+
+  if (!supabase) {
+    return {
+      members: [],
+      source: "static"
+    };
+  }
+
+  const { data, error } = await supabase
+    .from("members")
+    .select("id, first_name, last_initial, birthday_month, birthday_day, instagram_handle")
+    .order("birthday_month", { ascending: true, nullsFirst: false })
+    .order("birthday_day", { ascending: true, nullsFirst: false })
+    .order("first_name", { ascending: true });
+
+  if (error || !data) {
+    warnAndUseFallback("Unable to load member birthday records from Supabase. Showing an empty birthday manager.", error);
+    return {
+      members: [],
+      source: "fallback"
+    };
+  }
+
+  return {
+    members: (data as SupabaseMemberRow[]).map(fromSupabaseMember),
+    source: "supabase"
+  };
 }
 
 export async function loadBirthdaysThisMonth(today = new Date()): Promise<BirthdayLoadResult> {
@@ -76,7 +121,7 @@ export async function saveMemberRecord(input: MemberSaveInput): Promise<Persiste
   }
 
   const payload = toSupabaseMemberPayload(input);
-  const query = input.id
+  const query = input.id && isUuid(input.id)
     ? supabase.from("members").update(payload).eq("id", input.id).select().single()
     : supabase.from("members").insert(payload).select().single();
 
@@ -92,6 +137,35 @@ export async function saveMemberRecord(input: MemberSaveInput): Promise<Persiste
 
   return {
     data: fromSupabaseMember(data as SupabaseMemberRow),
+    source: "supabase"
+  };
+}
+
+export async function deleteMemberRecord(member: MemberRecord): Promise<PersistenceResult<MemberRecord>> {
+  const supabase = getPersistenceClient();
+
+  if (!supabase || !isUuid(member.id)) {
+    return {
+      data: member,
+      source: "fallback"
+    };
+  }
+
+  const { error } = await supabase
+    .from("members")
+    .delete()
+    .eq("id", member.id);
+
+  if (error) {
+    warnAndUseFallback("Unable to delete member birthday record from Supabase. Keeping local UI stable.", error);
+    return {
+      data: member,
+      source: "fallback"
+    };
+  }
+
+  return {
+    data: member,
     source: "supabase"
   };
 }
@@ -144,6 +218,16 @@ function toBirthday(row: SupabaseMemberRow): Birthday | null {
   };
 }
 
+function toBirthdayFromMember(member: MemberRecord): Birthday {
+  return {
+    id: member.id,
+    name: formatMemberName(member.firstName, member.lastInitial),
+    initials: getInitials(member.firstName, member.lastInitial),
+    dateLabel: `${monthFormatter.format(new Date(2026, (member.birthdayMonth ?? 1) - 1, 1))} ${member.birthdayDay}`,
+    instagramHandle: member.instagramHandle
+  };
+}
+
 function fromSupabaseMember(row: SupabaseMemberRow): MemberRecord {
   return {
     id: row.id,
@@ -178,7 +262,7 @@ function toSupabaseMemberPayload(input: MemberSaveInput) {
 
 function formatMemberName(firstName: string, lastInitial?: string | null) {
   const normalizedLastInitial = normalizeLastInitial(lastInitial);
-  return normalizedLastInitial ? `${firstName} ${normalizedLastInitial}.` : firstName;
+  return normalizedLastInitial ? `${firstName} ${normalizedLastInitial}` : firstName;
 }
 
 function getInitials(firstName: string, lastInitial?: string | null) {
@@ -219,6 +303,10 @@ function createLocalId(prefix: string) {
   }
 
   return `${prefix}-${Date.now()}`;
+}
+
+function isUuid(value: string) {
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{12}$/i.test(value);
 }
 
 // TODO: Future member tooling may support .ics export, Google Calendar subscription,

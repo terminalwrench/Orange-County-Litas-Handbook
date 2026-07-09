@@ -10,7 +10,7 @@ interface BirthdaysCardProps {
 export function BirthdaysCard({ birthdays }: BirthdaysCardProps) {
   return (
     <DashboardCard className="birthday-card" ariaLabel="Birthdays this month">
-      <SectionHeader title="Birthdays This Month" />
+      <SectionHeader title="Current Month Birthdays" />
       {birthdays.length > 0 ? (
         <div className="birthday-list">
           {birthdays.map((birthday) => (

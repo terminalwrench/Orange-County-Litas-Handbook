@@ -95,28 +95,32 @@ function EventRows({
 }) {
   return (
     <div className="record-list">
-      {events.map((event) => (
-        <button
-          className={event.id === selectedId ? "event-record-row record-row--selected" : "event-record-row"}
-          type="button"
-          key={event.id}
-          onClick={() => onSelect(event)}
-        >
-          <DateBadge
-            month={monthFormatter.format(parseEventDate(event.startDate))}
-            day={String(parseEventDate(event.startDate).getDate())}
-            dateTime={event.startDate}
-            compact
-          />
-          <span className="event-record-row__details">
-            <strong>{event.title}</strong>
-            <em>{event.time} · {event.location}</em>
-          </span>
-          <span className="event-record-row__status">
-            <StatusChip label={event.status} tone={getStatusTone(event.status)} />
-          </span>
-        </button>
-      ))}
+      {events.map((event) => {
+        const summary = formatEventRowSummary(event);
+
+        return (
+          <button
+            className={event.id === selectedId ? "event-record-row record-row--selected" : "event-record-row"}
+            type="button"
+            key={event.id}
+            onClick={() => onSelect(event)}
+          >
+            <DateBadge
+              month={monthFormatter.format(parseEventDate(event.startDate))}
+              day={String(parseEventDate(event.startDate).getDate())}
+              dateTime={event.startDate}
+              compact
+            />
+            <span className="event-record-row__details">
+              <strong>{event.title}</strong>
+              {summary ? <em>{summary}</em> : null}
+            </span>
+            <span className="event-record-row__status">
+              <StatusChip label={event.status} tone={getStatusTone(event.status)} />
+            </span>
+          </button>
+        );
+      })}
     </div>
   );
 }
@@ -382,13 +386,19 @@ export function Events({
           ) : (
             <div className="detail-card">
               <h2>{currentEvent?.title ?? "No events yet"}</h2>
-              <p>{currentEvent ? `${currentEvent.startDate} at ${currentEvent.time}` : getEmptySourceMessage(eventRecordsSource, isPersistenceConfigured)}</p>
-              <p>{currentEvent?.location ?? ""}</p>
-              <div className="status-row">
-                <StatusChip label={currentEvent?.type ?? "Calendar"} tone="accent" />
-                {currentEvent?.rideDifficulty ? <StatusChip label={currentEvent.rideDifficulty} tone="neutral" /> : null}
-              </div>
-              <p>{currentEvent?.notes ?? ""}</p>
+              {currentEvent ? (
+                <div className="metadata-grid">
+                  {getEventMetadata(currentEvent).map((item) => (
+                    <article className="metadata-item" key={item.label}>
+                      <span>{item.label}</span>
+                      <strong>{item.value}</strong>
+                    </article>
+                  ))}
+                </div>
+              ) : (
+                <p>{getEmptySourceMessage(eventRecordsSource, isPersistenceConfigured)}</p>
+              )}
+              {currentEvent && isMeaningfulEventValue(currentEvent.notes) ? <p>{currentEvent.notes}</p> : null}
               {getSourceNote(eventRecordsSource, isPersistenceConfigured) ? (
                 <p className="form-note">{getSourceNote(eventRecordsSource, isPersistenceConfigured)}</p>
               ) : null}
@@ -534,6 +544,31 @@ function getCalendarImportTitle(
   if (!isPersistenceConfigured) return "Connect the shared event records before importing calendar events.";
   if (!isCalendarImportAvailable) return "Configure VITE_EVENTS_ICS_URL before importing calendar events.";
   return "Import from the configured Google Calendar ICS feed.";
+}
+
+function formatEventRowSummary(event: EventRecord) {
+  return [event.time, event.location]
+    .filter(isMeaningfulEventValue)
+    .join(" · ");
+}
+
+function getEventMetadata(event: EventRecord) {
+  return [
+    { label: "Date", value: event.startDate },
+    { label: "Time", value: event.time },
+    { label: "Location", value: event.location },
+    { label: "City", value: event.city },
+    { label: "Type", value: event.type },
+    { label: "Difficulty", value: event.rideDifficulty },
+    { label: "Status", value: event.status }
+  ].filter((item): item is { label: string; value: string } => isMeaningfulEventValue(item.value));
+}
+
+function isMeaningfulEventValue(value: string | undefined | null) {
+  const normalized = value?.trim();
+  if (!normalized) return false;
+
+  return !["tbd", "n/a", "not provided", "none", "-", "—"].includes(normalized.toLowerCase());
 }
 
 function toTimeInputValue(value: string) {
