@@ -196,7 +196,7 @@ export function Events({
     try {
       const result = await onSaveEvent(toEventInput(formState));
       if (result.source === "fallback" && isPersistenceConfigured) {
-        setSaveError("Event could not be saved to Supabase.");
+        setSaveError("Event could not be saved to the shared records.");
       } else {
         setSelectedEventId(result.data.id);
         setFormState(toEventFormState(result.data));
@@ -220,7 +220,7 @@ export function Events({
     try {
       const result = await onDeleteEvent(event);
       if (result.source === "fallback" && isPersistenceConfigured) {
-        setSaveError("Event could not be deleted from Supabase.");
+        setSaveError("Event could not be deleted from the shared records.");
       } else {
         setSaveMessage(result.source === "supabase" ? "Event deleted." : "Event deleted locally for this session.");
         if (selectedEventId === event.id) setSelectedEventId(undefined);
@@ -250,7 +250,7 @@ export function Events({
       setSaveMessage(`Calendar import complete. ${result.imported.length} imported, ${result.skipped} skipped.`);
     } catch (error) {
       console.warn("[events] Unable to import calendar feed.", error);
-      setSaveError("Calendar import could not be completed. Existing Supabase events were kept.");
+      setSaveError("Calendar import could not be completed. Existing events were kept.");
     } finally {
       setIsImportingCalendar(false);
     }
@@ -282,7 +282,7 @@ export function Events({
             )}
           />
           {isLoading ? (
-            <EmptyState title="Loading events" message="Checking the configured event source." />
+            <EmptyState title="Loading events" message="Checking the shared event records." />
           ) : upcomingEvents.length > 0 ? (
             <EventRows
               events={upcomingEvents}
@@ -290,7 +290,7 @@ export function Events({
               onSelect={handleViewEvent}
             />
           ) : (
-            <EmptyState title="No upcoming events." message="Events will appear here when they are added to Supabase." />
+            <EmptyState title="No upcoming events." message="Events will appear here when they are added." />
           )}
           {saveMessage ? <p className="form-status form-status--success">{saveMessage}</p> : null}
           {saveError ? <p className="form-status form-status--error">{saveError}</p> : null}
@@ -375,7 +375,7 @@ export function Events({
                 </Button>
                 <Button type="button" variant="ghost" onClick={closeEditor}>Cancel</Button>
                 <span className="form-note">
-                  {isPersistenceConfigured ? "Saves to Supabase when available." : "Fallback mode: saves stay local to this session."}
+                  {isPersistenceConfigured ? "Changes save to the shared event records." : "Changes are kept for this browser session."}
                 </span>
               </div>
             </form>
@@ -387,12 +387,11 @@ export function Events({
               <div className="status-row">
                 <StatusChip label={currentEvent?.type ?? "Calendar"} tone="accent" />
                 {currentEvent?.rideDifficulty ? <StatusChip label={currentEvent.rideDifficulty} tone="neutral" /> : null}
-                <StatusChip label={`Source: ${formatSourceLabel(eventRecordsSource)}`} tone="neutral" />
               </div>
               <p>{currentEvent?.notes ?? ""}</p>
-              <p className="form-note">
-                {getSourceNote(eventRecordsSource, isPersistenceConfigured)}
-              </p>
+              {getSourceNote(eventRecordsSource, isPersistenceConfigured) ? (
+                <p className="form-note">{getSourceNote(eventRecordsSource, isPersistenceConfigured)}</p>
+              ) : null}
               {currentEvent?.status === "Completed" ? (
                 <EventMemories event={currentEvent} onPreview={setPreviewMemory} />
               ) : null}
@@ -532,7 +531,7 @@ function getCalendarImportTitle(
   isImportingCalendar: boolean
 ) {
   if (isImportingCalendar) return "Calendar import is already running.";
-  if (!isPersistenceConfigured) return "Connect Supabase before importing calendar events.";
+  if (!isPersistenceConfigured) return "Connect the shared event records before importing calendar events.";
   if (!isCalendarImportAvailable) return "Configure VITE_EVENTS_ICS_URL before importing calendar events.";
   return "Import from the configured Google Calendar ICS feed.";
 }
@@ -562,22 +561,15 @@ function toDisplayTime(value: string) {
   return `${displayHour}:${minutes} ${period}`;
 }
 
-function formatSourceLabel(source: EventsProps["eventRecordsSource"]) {
-  if (source === "supabase") return "Supabase";
-  if (source === "ics") return "ICS";
-  return "fallback";
-}
-
 function getSourceNote(source: EventsProps["eventRecordsSource"], isPersistenceConfigured: boolean) {
-  if (source === "supabase") return "Live Supabase event records are loaded.";
-  if (source === "ics") return "Calendar export records are loaded.";
-  if (isPersistenceConfigured) return "Fallback mode: Supabase event read failed, so static records are shown.";
-  return "Fallback mode: using static event records.";
+  if (source === "supabase" || source === "ics") return "";
+  if (isPersistenceConfigured) return "Shared event records could not be reached, so saved backup records are shown.";
+  return "Sample records are shown until the shared event source is connected.";
 }
 
 function getEmptySourceMessage(source: EventsProps["eventRecordsSource"], isPersistenceConfigured: boolean) {
-  if (source === "supabase") return "The live Supabase events table is empty.";
+  if (source === "supabase") return "No events have been added yet.";
   if (source === "ics") return "The calendar source has no events.";
-  if (isPersistenceConfigured) return "Supabase could not be read, so fallback records may be shown when available.";
-  return "Connect Supabase or use fallback events.";
+  if (isPersistenceConfigured) return "Shared event records could not be reached.";
+  return "Sample records are available until the shared event source is connected.";
 }

@@ -6,7 +6,6 @@ import { EmptyState } from "../components/ui/EmptyState";
 import { FormField } from "../components/ui/FormField";
 import { PreviewModal } from "../components/ui/PreviewModal";
 import { SectionHeader } from "../components/ui/SectionHeader";
-import { StatusChip } from "../components/ui/StatusChip";
 import { TextInput } from "../components/ui/inputs";
 import type { BranchAsset } from "../types";
 
@@ -46,7 +45,7 @@ export function BranchAssets({ assets, assetsSource }: BranchAssetsProps) {
       </div>
       <div className="module-grid">
         <DashboardCard className="span-all">
-          <div className="metrics-grid">
+          <div className="metrics-grid metrics-grid--summary">
             <Metric label="Branch Assets" value={String(assets.length)} />
             <Metric label="Logos" value={String(logoCount)} />
             <Metric label="Templates" value={String(templateCount)} />
@@ -85,9 +84,6 @@ export function BranchAssets({ assets, assetsSource }: BranchAssetsProps) {
                         <dd>{asset.updatedAt || "Not set"}</dd>
                       </div>
                     </dl>
-                    <div className="status-row">
-                      <StatusChip label={assetsSource === "supabase" ? "Supabase" : "Packaged"} tone="neutral" />
-                    </div>
                   </div>
                   <div className="branch-asset-card__actions">
                     <Button
@@ -116,7 +112,6 @@ export function BranchAssets({ assets, assetsSource }: BranchAssetsProps) {
               message={assets.length > 0 ? "Try a different asset title or type." : getEmptyAssetMessage(assetsSource)}
             />
           )}
-          <p className="form-note">{assetsSource === "supabase" ? "Source: Supabase" : "Source: packaged branch assets"}</p>
         </DashboardCard>
       </div>
       {previewAsset?.previewUrl ? (
@@ -137,8 +132,8 @@ export function BranchAssets({ assets, assetsSource }: BranchAssetsProps) {
 function Metric({ label, value }: { label: string; value: string }) {
   return (
     <div className="metric-card">
-      <span>{label}</span>
       <strong>{value}</strong>
+      <span>{label}</span>
     </div>
   );
 }
@@ -153,6 +148,6 @@ function getLatestUpdatedAt(assets: BranchAsset[]) {
 }
 
 function getEmptyAssetMessage(source: BranchAssetsProps["assetsSource"]) {
-  if (source === "supabase") return "Branch assets will appear here when they are added to Supabase.";
+  if (source === "supabase") return "Branch assets will appear here when they are added.";
   return "Flyers, event graphics, logos, templates, and photo links will appear here.";
 }

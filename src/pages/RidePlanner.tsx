@@ -150,7 +150,7 @@ export function RidePlanner({
       const result = await onSaveRide(toRideSaveInput(formState));
 
       if (result.source === "fallback" && isPersistenceConfigured) {
-        setSaveError("Ride could not be saved to Supabase. Check the rides table columns before trying again.");
+        setSaveError("Ride could not be saved to the shared ride records.");
       } else {
         setSaveMessage(result.source === "supabase" ? "Ride plan saved." : "Saved locally for this session.");
         setFormState(fromSavedRide(result.data));
@@ -174,7 +174,7 @@ export function RidePlanner({
         <DashboardCard>
           <SectionHeader title="Ride Queue" />
           {isLoading ? (
-            <EmptyState title="Loading rides" message="Checking the configured ride source." />
+            <EmptyState title="Loading rides" message="Checking the shared ride records." />
           ) : ridePlans.length > 0 ? (
             <div className="record-list">
               {ridePlans.map((ride) => (
@@ -343,7 +343,7 @@ export function RidePlanner({
                   {savingId === formState.id ? "Saving..." : "Save ride"}
                 </Button>
                 <span className="form-note">
-                  {isPersistenceConfigured ? "Saves to Supabase when available." : "Fallback mode: saves stay local to this session."}
+                  {isPersistenceConfigured ? "Changes save to the shared ride records." : "Changes are kept for this browser session."}
                 </span>
               </div>
               {saveMessage ? <p className="form-status form-status--success">{saveMessage}</p> : null}
@@ -474,9 +474,9 @@ function getStatusTone(status: string) {
 }
 
 function getSourceNote(source: RidePlannerProps["rideRecordsSource"], isPersistenceConfigured: boolean) {
-  if (source === "supabase") return "Source: Supabase";
-  if (isPersistenceConfigured) return "Source: fallback. Supabase ride read failed, so static records are shown.";
-  return "Source: fallback. Using static ride records.";
+  if (source === "supabase") return "";
+  if (isPersistenceConfigured) return "Shared ride records could not be reached, so saved backup records are shown.";
+  return "Sample ride records are shown until the shared ride source is connected.";
 }
 
 function getRideMonth(date: string) {

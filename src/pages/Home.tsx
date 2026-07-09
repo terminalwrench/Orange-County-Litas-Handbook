@@ -27,9 +27,9 @@ export function Home({ nextEvent, upcomingEvents, birthdaysThisMonth, rideWeathe
         <UpcomingEventsCard events={upcomingEvents} onOpenEvents={onOpenEvents} />
         <div className="home-grid__stack">
           <BirthdaysCard birthdays={birthdaysThisMonth} />
+          <RideWeatherCard weather={rideWeather} referenceDate={referenceDate} />
         </div>
       </div>
-      <RideWeatherCard weather={rideWeather} referenceDate={referenceDate} />
       <BranchNotesPlaceholder />
     </PageContainer>
   );

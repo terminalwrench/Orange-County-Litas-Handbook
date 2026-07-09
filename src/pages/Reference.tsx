@@ -46,9 +46,11 @@ export function Reference({ externalResources, externalResourcesSource }: Refere
               ))}
             </div>
           ) : (
-            <EmptyState title="No reference links yet" message="Useful links will appear here when they are added to Supabase." />
+            <EmptyState title="No reference links yet" message="Useful links will appear here when they are added." />
           )}
-          <p className="form-note">{externalResourcesSource === "supabase" ? "Source: Supabase" : "Source: fallback"}</p>
+          {externalResourcesSource === "fallback" ? (
+            <p className="form-note">Saved backup links are shown until the shared reference source is available.</p>
+          ) : null}
         </DashboardCard>
         <DashboardCard className="span-all">
           <SectionHeader title="Operations Playbook" />
