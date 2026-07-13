@@ -33,6 +33,13 @@ interface SupabaseRideRow {
   notes: string | null;
 }
 
+interface SupabaseRideSaveError {
+  code?: string;
+  message?: string;
+  details?: string | null;
+  hint?: string | null;
+}
+
 export interface RideSaveInput {
   id?: string;
   eventId?: string;
@@ -82,11 +89,8 @@ export async function saveRideRecord(input: RideSaveInput): Promise<PersistenceR
   const { data, error } = await query;
 
   if (error || !data) {
-    warnAndUseFallback("Unable to save ride to Supabase. Keeping the app stable.", error);
-    return {
-      data: toLocalRideRecord(input),
-      source: "fallback"
-    };
+    logRideSaveError(input.id && isUuid(input.id) ? "update" : "insert", input.id, payload, error ?? new Error("Supabase ride save returned no data."));
+    throw createRideSaveError(input.id && isUuid(input.id) ? "update" : "insert", input.id, payload, error ?? new Error("Supabase ride save returned no data."));
   }
 
   return {
@@ -220,6 +224,51 @@ function toSupabaseRidePayload(input: RideSaveInput) {
     weather_policy: input.weatherPolicy ?? "Leader Decision",
     stops: input.stops,
     notes: input.notes ?? ""
+  };
+}
+
+function logRideSaveError(action: string, rideId: string | undefined, payload: Record<string, unknown>, error: unknown) {
+  console.error("[ride-planner] Supabase ride save failed.", {
+    action,
+    rideId,
+    payloadKeys: Object.keys(payload),
+    payload,
+    supabaseError: getSupabaseErrorDetails(error),
+    error
+  });
+}
+
+function createRideSaveError(action: string, rideId: string | undefined, payload: Record<string, unknown>, error: unknown) {
+  const details = getSupabaseErrorDetails(error);
+  const message = details.message || (error instanceof Error ? error.message : "Ride could not be saved to Supabase.");
+  const nextError = new Error(message);
+
+  Object.assign(nextError, {
+    action,
+    rideId,
+    payloadKeys: Object.keys(payload),
+    payload,
+    supabaseError: details,
+    cause: error
+  });
+
+  return nextError;
+}
+
+function getSupabaseErrorDetails(error: unknown): SupabaseRideSaveError {
+  if (!error || typeof error !== "object") {
+    return {
+      message: error instanceof Error ? error.message : String(error ?? "Unknown Supabase error")
+    };
+  }
+
+  const supabaseError = error as SupabaseRideSaveError;
+
+  return {
+    code: supabaseError.code,
+    message: supabaseError.message,
+    details: supabaseError.details,
+    hint: supabaseError.hint
   };
 }
 

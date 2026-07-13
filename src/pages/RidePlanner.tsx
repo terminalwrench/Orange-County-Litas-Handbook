@@ -215,9 +215,9 @@ export function RidePlanner({
     } catch (error) {
       console.warn("[ride-planner] Unable to save ride.", error);
       if (mode === "new") {
-        setNewRideError("Ride could not be saved. Try again in a moment.");
+        setNewRideError(getRideSaveErrorMessage(error));
       } else {
-        setSaveError("Ride could not be saved. Try again in a moment.");
+        setSaveError(getRideSaveErrorMessage(error));
       }
     } finally {
       setSavingId(null);
@@ -464,6 +464,12 @@ function RidePlannerEditor({
           <FormField label="Destination" htmlFor={`${idPrefix}-destination`}>
             <TextInput id={`${idPrefix}-destination`} value={ride.destination} onChange={(event) => onUpdateField("destination", event.target.value)} />
           </FormField>
+          <FormField label="Freeways" htmlFor={`${idPrefix}-freeways`}>
+            <SelectInput id={`${idPrefix}-freeways`} value={ride.freeways ? "yes" : "no"} onChange={(event) => onUpdateField("freeways", event.target.value === "yes")}>
+              <option value="yes">Yes</option>
+              <option value="no">No</option>
+            </SelectInput>
+          </FormField>
         </div>
         {ride.stops.length > 0 ? (
           <div className="ride-stop-list">
@@ -498,35 +504,26 @@ function RidePlannerEditor({
         )}
       </section>
       <section className="ride-planner-section">
-        <SectionHeader title="Safety" />
-        <div className="form-grid">
-          <FormField label="Freeways" htmlFor={`${idPrefix}-freeways`}>
-            <SelectInput id={`${idPrefix}-freeways`} value={ride.freeways ? "yes" : "no"} onChange={(event) => onUpdateField("freeways", event.target.value === "yes")}>
-              <option value="yes">Yes</option>
-              <option value="no">No</option>
-            </SelectInput>
-          </FormField>
-        </div>
-      </section>
-      <section className="ride-planner-section">
         <SectionHeader title="Notes" />
         <FormField label="Ride Notes" htmlFor={`${idPrefix}-notes`}>
           <Textarea id={`${idPrefix}-notes`} value={ride.notes} onChange={(event) => onUpdateField("notes", event.target.value)} />
         </FormField>
       </section>
       <section className="ride-planner-section ride-planner-actions">
-        <div className="form-actions">
-          <Button type="button" variant="primary" onClick={onSave} disabled={isSaving}>
-            {isSaving ? "Saving..." : "Save ride"}
-          </Button>
+        <div className="ride-action-footer">
+          <div className="ride-action-footer__primary">
+            <Button type="button" variant="primary" onClick={onSave} disabled={isSaving}>
+              {isSaving ? "Saving..." : "Save ride"}
+            </Button>
+            <span className="form-note">
+              {isPersistenceConfigured ? "Changes save to the shared ride records." : "Changes are kept for this browser session."}
+            </span>
+          </div>
           {onDelete ? (
-            <Button type="button" variant="ghost" onClick={onDelete} disabled={!ride.recordId || isSaving}>
+            <Button type="button" variant="secondary" onClick={onDelete} disabled={!ride.recordId || isSaving}>
               Delete ride
             </Button>
           ) : null}
-          <span className="form-note">
-            {isPersistenceConfigured ? "Changes save to the shared ride records." : "Changes are kept for this browser session."}
-          </span>
         </div>
         {saveMessage ? <p className="form-status form-status--success">{saveMessage}</p> : null}
         {saveError ? <p className="form-status form-status--error">{saveError}</p> : null}
@@ -756,6 +753,24 @@ function getSourceNote(source: RidePlannerProps["rideRecordsSource"], isPersiste
   if (source === "supabase") return "";
   if (isPersistenceConfigured) return "Shared ride records could not be reached, so saved backup records are shown.";
   return "Sample ride records are shown until the shared ride source is connected.";
+}
+
+function getRideSaveErrorMessage(error: unknown) {
+  if (error && typeof error === "object") {
+    const supabaseError = (error as { supabaseError?: { code?: string; message?: string } }).supabaseError;
+
+    if (supabaseError?.code === "42703") {
+      return "Ride records need the latest database migration before this field can be saved.";
+    }
+
+    if (supabaseError?.message) {
+      return supabaseError.message;
+    }
+  }
+
+  if (error instanceof Error && error.message) return error.message;
+
+  return "Ride could not be saved to the shared ride records.";
 }
 
 function getRideMonth(date: string) {

@@ -1765,6 +1765,20 @@ a {
   padding-block: 0.85rem;
 }
 
+.ride-action-footer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 1rem;
+  align-items: center;
+}
+
+.ride-action-footer__primary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
 .new-ride-card .ride-inline-planner {
   padding: 0;
 }
@@ -2479,6 +2493,16 @@ a {
 
   .ride-planner-section {
     padding: 0.85rem;
+  }
+
+  .ride-action-footer {
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
+
+  .ride-action-footer > .button,
+  .ride-action-footer__primary .button {
+    width: 100%;
   }
 
   .record-row:has(.date-badge--compact) {
