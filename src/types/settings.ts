@@ -47,4 +47,6 @@ export interface AppSettings {
 export interface BranchSettings {
   name: string;
   timezone: string;
+  currentCofounders: string[];
+  priorCofounders: string[];
 }

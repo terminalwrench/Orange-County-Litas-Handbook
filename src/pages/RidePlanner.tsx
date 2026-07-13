@@ -11,6 +11,7 @@ import { DateInput, SelectInput, Textarea, TextInput, TimeInput } from "../compo
 import type { EventRecord, RideRecord, RideStop } from "../types";
 import { getUpcomingRides, type RideSaveInput } from "../services/ridesService";
 import type { PersistenceResult } from "../services/persistence";
+import { getBranchSettings } from "../services/settingsService";
 
 interface RidePlannerProps {
   eventRecords: EventRecord[];
@@ -49,7 +50,7 @@ interface RidePlan {
   notes: string;
 }
 
-const memberOptions = ["Jessica", "Diana", "Rachel"];
+const memberOptions = getBranchSettings().currentCofounders;
 const difficultyOptions = ["Beginner", "Intermediate", "Advanced"];
 const statusOptions = ["Planning", "Ready", "Completed", "Cancelled"];
 const rideTimeOptions = ["Flexible", "Under 1 hour", "1–2 hours", "2–4 hours", "4+ hours"];

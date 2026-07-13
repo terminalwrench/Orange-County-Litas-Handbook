@@ -136,11 +136,33 @@ export async function saveEventRecord(input: EventSaveInput): Promise<Persistenc
   }
 
   const payload = toSupabaseEventPayload(input);
-  const query = input.id && isUuid(input.id)
+  const action = input.id && isUuid(input.id) ? "update" : "insert";
+  const query = action === "update"
     ? supabase.from("events").update(payload).eq("id", input.id).select().single()
     : supabase.from("events").insert(payload).select().single();
 
   const { data, error } = await query;
+
+  if (error && isMissingEventColumnError(error, "ride_difficulty") && "ride_difficulty" in payload) {
+    logEventSaveError(action, input.id, payload, error);
+
+    const retryPayload = omitPayloadColumn(payload, "ride_difficulty");
+    const retryQuery = action === "update"
+      ? supabase.from("events").update(retryPayload).eq("id", input.id).select().single()
+      : supabase.from("events").insert(retryPayload).select().single();
+    const { data: retryData, error: retryError } = await retryQuery;
+
+    if (!retryError && retryData) {
+      return {
+        data: fromSupabaseEvent(retryData as SupabaseEventRow),
+        source: "supabase"
+      };
+    }
+
+    logEventSaveError(`${action}:retry-without-ride_difficulty`, input.id, retryPayload, retryError);
+  } else if (error) {
+    logEventSaveError(action, input.id, payload, error);
+  }
 
   if (error || !data) {
     warnAndUseFallback("Unable to save event to Supabase. Using local UI state instead.", error);
@@ -576,6 +598,28 @@ function toSupabaseEventPayload(input: EventSaveInput) {
     ...(input.externalUid ? { external_uid: input.externalUid } : {}),
     source: "supabase"
   };
+}
+
+function isMissingEventColumnError(error: unknown, column: string) {
+  if (!error || typeof error !== "object") return false;
+
+  const { code, message } = error as { code?: string; message?: string };
+  return (code === "42703" || code === "PGRST204") && (message ?? "").includes(column);
+}
+
+function omitPayloadColumn<T extends Record<string, unknown>, K extends keyof T>(payload: T, column: K) {
+  const { [column]: _omitted, ...nextPayload } = payload;
+  return nextPayload;
+}
+
+function logEventSaveError(action: string, eventId: string | undefined, payload: Record<string, unknown>, error: unknown) {
+  console.error("[events] Supabase event save failed.", {
+    action,
+    eventId,
+    payloadKeys: Object.keys(payload),
+    payload,
+    error
+  });
 }
 
 function toSupabaseImportedEventPayload(event: EventRecord) {

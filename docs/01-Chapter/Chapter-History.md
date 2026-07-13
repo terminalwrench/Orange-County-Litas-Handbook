@@ -93,6 +93,22 @@ For each major event, capture:
 
 Leadership changes are part of chapter continuity. They should be documented clearly and respectfully.
 
+## Confirmed Co-founder Reference
+
+Use this reference when updating leadership records, operational contact lists, or public-facing chapter materials.
+
+### Current Co-founders
+
+- Jessica Hogan
+- Jessica Madrid
+- Aly Humphreys
+
+### Prior Co-founders
+
+- Diana
+- Rachel
+- Yvonne
+
 Record:
 
 - Role

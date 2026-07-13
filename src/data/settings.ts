@@ -12,7 +12,9 @@ export const appSettings: AppSettings = {
 
 export const branchSettings: BranchSettings = {
   name: "Orange County Litas",
-  timezone: "America/Los_Angeles"
+  timezone: "America/Los_Angeles",
+  currentCofounders: ["Jessica Hogan", "Jessica Madrid", "Aly Humphreys"],
+  priorCofounders: ["Diana", "Rachel", "Yvonne"]
 };
 
 export const navItems: NavItem[] = [
