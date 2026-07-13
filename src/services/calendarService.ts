@@ -1,11 +1,14 @@
 import type { EventRecord, StatusItem } from "../types";
 import { toDateValue } from "../utils/date";
+import { getPersistenceClient } from "./persistence";
 
 export const PUBLIC_GOOGLE_CALENDAR_ICS_URL =
   "https://calendar.google.com/calendar/ical/orangecountylitas%40gmail.com/public/basic.ics";
 
 const configuredCalendarUrl = import.meta.env.VITE_EVENTS_ICS_URL as string | undefined;
+const configuredCalendarFunctionName = import.meta.env.VITE_EVENTS_ICS_FUNCTION_NAME as string | undefined;
 const DEFAULT_CALENDAR_URL = configuredCalendarUrl?.trim() || PUBLIC_GOOGLE_CALENDAR_ICS_URL;
+const DEFAULT_CALENDAR_FUNCTION_NAME = configuredCalendarFunctionName?.trim() || "import-events-ics";
 
 interface IcsProperty {
   name: string;
@@ -55,17 +58,16 @@ export async function fetchCalendarEvents(
   calendarUrl = DEFAULT_CALENDAR_URL
 ): Promise<CalendarFetchResult> {
   try {
-    const response = await fetch(calendarUrl, { cache: "no-store" });
+    const result = await fetchCalendarIcsText(calendarUrl);
 
-    if (!response.ok) {
+    if (result.error) {
       return {
         events: [],
-        error: "Calendar feed could not be reached. Existing events were kept."
+        error: result.error
       };
     }
 
-    const icsText = await response.text();
-    return { events: parseIcsCalendar(icsText) };
+    return { events: parseIcsCalendar(result.icsText) };
   } catch (error) {
     console.warn("[calendar] Unable to fetch calendar feed.", error);
     return {
@@ -73,6 +75,52 @@ export async function fetchCalendarEvents(
       error: "Could not import the public Google Calendar feed. Existing Supabase events were kept."
     };
   }
+}
+
+async function fetchCalendarIcsText(calendarUrl: string) {
+  const supabase = getPersistenceClient();
+
+  if (supabase) {
+    const { data, error } = await supabase.functions.invoke(DEFAULT_CALENDAR_FUNCTION_NAME, {
+      body: { calendarUrl }
+    });
+
+    if (error) {
+      console.warn("[calendar] Edge Function could not fetch calendar feed.", error);
+      return {
+        icsText: "",
+        error: "Could not import the public Google Calendar feed. Existing Supabase events were kept."
+      };
+    }
+
+    const response = data as { icsText?: string; error?: string } | null;
+
+    if (!response?.icsText) {
+      return {
+        icsText: "",
+        error: response?.error || "Calendar feed could not be reached. Existing events were kept."
+      };
+    }
+
+    return {
+      icsText: response.icsText,
+      error: ""
+    };
+  }
+
+  const response = await fetch(calendarUrl, { cache: "no-store" });
+
+  if (!response.ok) {
+    return {
+      icsText: "",
+      error: "Calendar feed could not be reached. Existing events were kept."
+    };
+  }
+
+  return {
+    icsText: await response.text(),
+    error: ""
+  };
 }
 
 export function parseIcsCalendar(icsText: string): EventRecord[] {
