@@ -128,6 +128,12 @@ export async function saveMemberRecord(input: MemberSaveInput): Promise<Persiste
   const { data, error } = await query;
 
   if (error || !data) {
+    console.error("[birthdays] Supabase member save failed.", {
+      error,
+      data,
+      input,
+      payload
+    });
     warnAndUseFallback("Unable to save member birthday data to Supabase. Keeping local UI stable.", error);
     return {
       data: toLocalMemberRecord(input),

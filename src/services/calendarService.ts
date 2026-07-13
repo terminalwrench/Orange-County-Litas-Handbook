@@ -81,9 +81,18 @@ async function fetchCalendarIcsText(calendarUrl: string) {
   const supabase = getPersistenceClient();
 
   if (supabase) {
+    const functionUrl = getEdgeFunctionUrl(DEFAULT_CALENDAR_FUNCTION_NAME);
+    console.info("[calendar] Calling Events ICS Edge Function.", {
+      functionName: DEFAULT_CALENDAR_FUNCTION_NAME,
+      functionUrl,
+      calendarUrl
+    });
+
     const { data, error } = await supabase.functions.invoke(DEFAULT_CALENDAR_FUNCTION_NAME, {
       body: { calendarUrl }
     });
+
+    await logEdgeFunctionResponse(error, data);
 
     if (error) {
       console.warn("[calendar] Edge Function could not fetch calendar feed.", error);
@@ -110,6 +119,12 @@ async function fetchCalendarIcsText(calendarUrl: string) {
 
   const response = await fetch(calendarUrl, { cache: "no-store" });
 
+  console.info("[calendar] Direct ICS fetch response.", {
+    url: calendarUrl,
+    status: response.status,
+    statusText: response.statusText
+  });
+
   if (!response.ok) {
     return {
       icsText: "",
@@ -121,6 +136,42 @@ async function fetchCalendarIcsText(calendarUrl: string) {
     icsText: await response.text(),
     error: ""
   };
+}
+
+function getEdgeFunctionUrl(functionName: string) {
+  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string | undefined;
+  if (!supabaseUrl) return "(Supabase URL not configured)";
+
+  return `${supabaseUrl.replace(/\/$/, "")}/functions/v1/${functionName}`;
+}
+
+async function logEdgeFunctionResponse(error: unknown, data: unknown) {
+  const context = getErrorContext(error);
+  const response = context instanceof Response ? context : undefined;
+  const responseBody = response ? await readResponseBody(response) : undefined;
+
+  console.info("[calendar] Events ICS Edge Function response.", {
+    status: response?.status ?? "(not exposed by Supabase client)",
+    statusText: response?.statusText ?? "",
+    responseBody: responseBody ?? data ?? null,
+    data,
+    error
+  });
+}
+
+function getErrorContext(error: unknown) {
+  if (!error || typeof error !== "object") return undefined;
+
+  return (error as { context?: unknown }).context;
+}
+
+async function readResponseBody(response: Response) {
+  try {
+    return await response.clone().text();
+  } catch (error) {
+    console.warn("[calendar] Unable to read Edge Function response body.", error);
+    return undefined;
+  }
 }
 
 export function parseIcsCalendar(icsText: string): EventRecord[] {
