@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { PageContainer } from "../components/layout/PageContainer";
 import { Button } from "../components/ui/Button";
 import { DashboardCard } from "../components/ui/DashboardCard";
@@ -50,6 +50,8 @@ interface RidePlan {
   notes: string;
 }
 
+type RideFieldValue = string | boolean | RideStop[];
+
 const memberOptions = getBranchSettings().currentCofounders;
 const difficultyOptions = ["Beginner", "Intermediate", "Advanced"];
 const statusOptions = ["Planning", "Ready", "Completed", "Cancelled"];
@@ -69,12 +71,35 @@ export function RidePlanner({
   onDeleteRide
 }: RidePlannerProps) {
   const ridePlans = useMemo(() => buildRidePlans(eventRecords, rideRecords), [eventRecords, rideRecords]);
-  const [selectedRideId, setSelectedRideId] = useState<string | undefined>();
-  const selectedRide = ridePlans.find((ride) => ride.id === selectedRideId) ?? (selectedRideId ? undefined : ridePlans[0]);
+  const [expandedRideId, setExpandedRideId] = useState<string | undefined>();
+  const [hasInitializedQueue, setHasInitializedQueue] = useState(false);
+  const selectedRide = expandedRideId ? ridePlans.find((ride) => ride.id === expandedRideId) : undefined;
   const [formState, setFormState] = useState<RidePlan | null>(selectedRide ?? null);
+  const [newRideState, setNewRideState] = useState<RidePlan>(() => createBlankRidePlan());
   const [savingId, setSavingId] = useState<string | null>(null);
   const [saveMessage, setSaveMessage] = useState("");
   const [saveError, setSaveError] = useState("");
+  const [newRideMessage, setNewRideMessage] = useState("");
+  const [newRideError, setNewRideError] = useState("");
+  const newRideRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (ridePlans.length === 0) {
+      setExpandedRideId(undefined);
+      setFormState(null);
+      return;
+    }
+
+    if (!hasInitializedQueue) {
+      setExpandedRideId(ridePlans[0].id);
+      setHasInitializedQueue(true);
+      return;
+    }
+
+    if (expandedRideId && !ridePlans.some((ride) => ride.id === expandedRideId)) {
+      setExpandedRideId(ridePlans[0].id);
+    }
+  }, [expandedRideId, hasInitializedQueue, ridePlans]);
 
   useEffect(() => {
     setFormState(selectedRide ?? null);
@@ -82,100 +107,118 @@ export function RidePlanner({
     setSaveError("");
   }, [selectedRide?.id]);
 
-  function selectRide(ride: RidePlan) {
-    setSelectedRideId(ride.id);
-  }
-
-  function startNewRide() {
-    const nextRide = createBlankRidePlan();
-    setSelectedRideId(nextRide.id);
-    setFormState(nextRide);
+  function toggleRide(ride: RidePlan) {
+    setExpandedRideId((current) => current === ride.id ? undefined : ride.id);
     setSaveMessage("");
     setSaveError("");
   }
 
-  function updateField(field: keyof RidePlan, value: string | boolean | RideStop[]) {
+  function startNewRide() {
+    newRideRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    setNewRideMessage("");
+    setNewRideError("");
+  }
+
+  function updateField(field: keyof RidePlan, value: RideFieldValue) {
     setFormState((current) => current ? { ...current, [field]: value } : current);
   }
 
-  function updateStop(stopId: string, field: keyof RideStop, value: string) {
-    setFormState((current) => {
-      if (!current) return current;
+  function updateNewRideField(field: keyof RidePlan, value: RideFieldValue) {
+    setNewRideState((current) => ({ ...current, [field]: value }));
+  }
 
-      return {
-        ...current,
-        stops: current.stops.map((stop) => stop.id === stopId ? { ...stop, [field]: value } : stop)
-      };
-    });
+  function updateStop(stopId: string, field: keyof RideStop, value: string) {
+    setFormState((current) => current ? updateStopsForRide(current, stopId, field, value) : current);
+  }
+
+  function updateNewRideStop(stopId: string, field: keyof RideStop, value: string) {
+    setNewRideState((current) => updateStopsForRide(current, stopId, field, value));
   }
 
   function addStop() {
-    setFormState((current) => {
-      if (!current) return current;
+    setFormState((current) => current ? addStopToRide(current) : current);
+  }
 
-      return {
-        ...current,
-        stops: [
-          ...current.stops,
-          {
-            id: createLocalStopId(),
-            type: "Meetup",
-            location: "",
-            arrivalTime: "",
-            notes: ""
-          }
-        ]
-      };
-    });
+  function addNewRideStop() {
+    setNewRideState((current) => addStopToRide(current));
   }
 
   function removeStop(stopId: string) {
-    setFormState((current) => current ? { ...current, stops: current.stops.filter((stop) => stop.id !== stopId) } : current);
+    setFormState((current) => current ? removeStopFromRide(current, stopId) : current);
+  }
+
+  function removeNewRideStop(stopId: string) {
+    setNewRideState((current) => removeStopFromRide(current, stopId));
   }
 
   function moveStop(stopId: string, direction: -1 | 1) {
-    setFormState((current) => {
-      if (!current) return current;
+    setFormState((current) => current ? moveStopInRide(current, stopId, direction) : current);
+  }
 
-      const currentIndex = current.stops.findIndex((stop) => stop.id === stopId);
-      const nextIndex = currentIndex + direction;
-
-      if (currentIndex < 0 || nextIndex < 0 || nextIndex >= current.stops.length) return current;
-
-      const stops = [...current.stops];
-      const [stop] = stops.splice(currentIndex, 1);
-      stops.splice(nextIndex, 0, stop);
-
-      return { ...current, stops };
-    });
+  function moveNewRideStop(stopId: string, direction: -1 | 1) {
+    setNewRideState((current) => moveStopInRide(current, stopId, direction));
   }
 
   async function handleSaveRide() {
     if (!formState) return;
 
-    if (!formState.title.trim() || !formState.date) {
+    await saveRidePlan(formState, "existing");
+  }
+
+  async function handleSaveNewRide() {
+    await saveRidePlan(newRideState, "new");
+  }
+
+  async function saveRidePlan(ride: RidePlan, mode: "existing" | "new") {
+    if (!ride.title.trim() || !ride.date) {
+      if (mode === "new") {
+        setNewRideMessage("");
+        setNewRideError("Ride name and date are required.");
+        return;
+      }
+
       setSaveMessage("");
       setSaveError("Ride name and date are required.");
       return;
     }
 
-    setSavingId(formState.id);
-    setSaveMessage("");
-    setSaveError("");
+    setSavingId(ride.id);
+    if (mode === "new") {
+      setNewRideMessage("");
+      setNewRideError("");
+    } else {
+      setSaveMessage("");
+      setSaveError("");
+    }
 
     try {
-      const result = await onSaveRide(toRideSaveInput(formState));
+      const result = await onSaveRide(toRideSaveInput(ride));
 
       if (result.source === "fallback" && isPersistenceConfigured) {
-        setSaveError("Ride could not be saved to the shared ride records.");
+        if (mode === "new") {
+          setNewRideError("Ride could not be saved to the shared ride records.");
+        } else {
+          setSaveError("Ride could not be saved to the shared ride records.");
+        }
       } else {
-        setSaveMessage(result.source === "supabase" ? "Ride plan saved." : "Saved locally for this session.");
-        setFormState(fromSavedRide(result.data));
-        setSelectedRideId(result.data.id);
+        const savedRide = fromSavedRide(result.data);
+        setExpandedRideId(result.data.id);
+        setFormState(savedRide);
+
+        if (mode === "new") {
+          setNewRideState(createBlankRidePlan());
+          setNewRideMessage(result.source === "supabase" ? "Ride plan created." : "Saved locally for this session.");
+        } else {
+          setSaveMessage(result.source === "supabase" ? "Ride plan saved." : "Saved locally for this session.");
+        }
       }
     } catch (error) {
       console.warn("[ride-planner] Unable to save ride.", error);
-      setSaveError("Ride could not be saved. Try again in a moment.");
+      if (mode === "new") {
+        setNewRideError("Ride could not be saved. Try again in a moment.");
+      } else {
+        setSaveError("Ride could not be saved. Try again in a moment.");
+      }
     } finally {
       setSavingId(null);
     }
@@ -195,7 +238,7 @@ export function RidePlanner({
       if (result.source === "fallback" && isPersistenceConfigured) {
         setSaveError("Ride could not be deleted from the shared ride records.");
       } else {
-        setSelectedRideId(undefined);
+        setExpandedRideId(undefined);
         setFormState(null);
         setSaveMessage(result.source === "supabase" ? "Ride plan deleted." : "Ride deleted locally for this session.");
       }
@@ -213,35 +256,59 @@ export function RidePlanner({
         <span>Ride Planner</span>
         <h1>Build the ride plan</h1>
       </div>
-      <div className="module-grid module-grid--wide-left">
+      <div className="ride-planner-flow">
         <DashboardCard>
           <SectionHeader title="Ride Queue" action={<Button type="button" variant="secondary" onClick={startNewRide}>Add Ride</Button>} />
           {isLoading ? (
             <EmptyState title="Loading rides" message="Checking the shared ride records." />
           ) : ridePlans.length > 0 ? (
-            <div className="record-list">
-              {ridePlans.map((ride) => (
-                <button
-                  className={ride.id === selectedRide?.id ? "event-record-row record-row--selected" : "event-record-row"}
-                  type="button"
-                  key={ride.id}
-                  onClick={() => selectRide(ride)}
-                >
-                  <DateBadge
-                    month={getRideMonth(ride.date)}
-                    day={getRideDay(ride.date)}
-                    dateTime={ride.date}
-                    compact
-                  />
-                  <span className="event-record-row__details">
-                    <strong>{ride.title}</strong>
-                    <em>{ride.date || "Date not set"} · {ride.startingLocation || "Starting location not set"}</em>
-                  </span>
-                  <span className="event-record-row__status">
-                    <StatusChip label={ride.status} tone={getStatusTone(ride.status)} />
-                  </span>
-                </button>
-              ))}
+            <div className="ride-accordion-list">
+              {ridePlans.map((ride) => {
+                const isExpanded = ride.id === expandedRideId;
+
+                return (
+                  <article className={isExpanded ? "ride-accordion-item ride-accordion-item--expanded" : "ride-accordion-item"} key={ride.id}>
+                    <button
+                      className={isExpanded ? "event-record-row record-row--selected ride-accordion-row" : "event-record-row ride-accordion-row"}
+                      type="button"
+                      onClick={() => toggleRide(ride)}
+                      aria-expanded={isExpanded}
+                    >
+                      <DateBadge
+                        month={getRideMonth(ride.date)}
+                        day={getRideDay(ride.date)}
+                        dateTime={ride.date}
+                        compact
+                      />
+                      <span className="event-record-row__details">
+                        <strong>{ride.title || "Untitled ride"}</strong>
+                        <em>{ride.date || "Date not set"} · {ride.startingLocation || "Starting location not set"}</em>
+                      </span>
+                      <span className="event-record-row__status">
+                        <StatusChip label={ride.status} tone={getStatusTone(ride.status)} />
+                      </span>
+                      <span className="ride-accordion-row__chevron" aria-hidden="true">{isExpanded ? "⌃" : "⌄"}</span>
+                    </button>
+                    {isExpanded && formState ? (
+                      <RidePlannerEditor
+                        ride={formState}
+                        idPrefix={`ride-${ride.id}`}
+                        savingId={savingId}
+                        saveMessage={saveMessage}
+                        saveError={saveError}
+                        isPersistenceConfigured={isPersistenceConfigured}
+                        onUpdateField={updateField}
+                        onUpdateStop={updateStop}
+                        onAddStop={addStop}
+                        onRemoveStop={removeStop}
+                        onMoveStop={moveStop}
+                        onSave={handleSaveRide}
+                        onDelete={handleDeleteRide}
+                      />
+                    ) : null}
+                  </article>
+                );
+              })}
             </div>
           ) : (
             <EmptyState title="No ride plans available." message="Ride plans will appear here when ride events or saved routes are available." />
@@ -250,173 +317,265 @@ export function RidePlanner({
             {getSourceNote(rideRecordsSource, isPersistenceConfigured)}
           </p>
         </DashboardCard>
-        {formState ? (
-          <>
-            <DashboardCard>
-              <SectionHeader
-                title="Ride Overview"
-                action={(
-                  <Button type="button" variant="secondary" onClick={handleSaveRide} disabled={savingId === formState.id}>
-                    {savingId === formState.id ? "Saving..." : "Save ride"}
-                  </Button>
-                )}
-              />
-              <div className="form-grid">
-                <FormField label="Ride Leader" htmlFor="ride-leader">
-                  <SelectInput id="ride-leader" value={formState.rideLeader} onChange={(event) => updateField("rideLeader", event.target.value)}>
-                    <option value="">Blank</option>
-                    {memberOptions.map((member) => <option key={member} value={member}>{member}</option>)}
-                  </SelectInput>
-                </FormField>
-                <FormField label="Ride Name" htmlFor="ride-name">
-                  <TextInput id="ride-name" value={formState.title} onChange={(event) => updateField("title", event.target.value)} />
-                </FormField>
-                <FormField label="Date" htmlFor="ride-date">
-                  <DateInput id="ride-date" value={formState.date} onChange={(event) => updateField("date", event.target.value)} />
-                </FormField>
-                <FormField label="Sweep" htmlFor="ride-sweep">
-                  <SelectInput id="ride-sweep" value={formState.sweep} onChange={(event) => updateField("sweep", event.target.value)}>
-                    <option value="">Blank</option>
-                    {memberOptions.map((member) => <option key={member} value={member}>{member}</option>)}
-                  </SelectInput>
-                </FormField>
-                <FormField label="Difficulty" htmlFor="ride-difficulty">
-                  <SelectInput id="ride-difficulty" value={formState.difficulty} onChange={(event) => updateField("difficulty", event.target.value)}>
-                    {difficultyOptions.map((difficulty) => <option key={difficulty} value={difficulty}>{difficulty}</option>)}
-                  </SelectInput>
-                </FormField>
-                <FormField label="Status" htmlFor="ride-status">
-                  <SelectInput id="ride-status" value={formState.status} onChange={(event) => updateField("status", event.target.value)}>
-                    {statusOptions.map((status) => <option key={status} value={status}>{status}</option>)}
-                  </SelectInput>
-                </FormField>
-                <FormField label="Estimated Distance" htmlFor="ride-distance">
-                  <TextInput id="ride-distance" type="number" min="0" inputMode="decimal" value={formState.estimatedDistance} onChange={(event) => updateField("estimatedDistance", event.target.value)} />
-                </FormField>
-                <FormField label="Estimated Ride Time" htmlFor="ride-duration">
-                  <SelectInput id="ride-duration" value={formState.estimatedRideTime} onChange={(event) => updateField("estimatedRideTime", event.target.value)}>
-                    {rideTimeOptions.map((duration) => <option key={duration} value={duration}>{duration}</option>)}
-                  </SelectInput>
-                </FormField>
-                <FormField label="Freeways" htmlFor="ride-freeways">
-                  <SelectInput id="ride-freeways" value={formState.freeways ? "yes" : "no"} onChange={(event) => updateField("freeways", event.target.value === "yes")}>
-                    <option value="yes">Yes</option>
-                    <option value="no">No</option>
-                  </SelectInput>
-                </FormField>
-                <FormField label="Notes" htmlFor="ride-notes">
-                  <Textarea id="ride-notes" value={formState.notes} onChange={(event) => updateField("notes", event.target.value)} />
-                </FormField>
-              </div>
-            </DashboardCard>
-            <DashboardCard>
-              <SectionHeader title="Route Plan" />
-              <div className="form-grid">
-                <FormField label="Starting Location" htmlFor="ride-starting-location">
-                  <TextInput id="ride-starting-location" value={formState.startingLocation} onChange={(event) => updateField("startingLocation", event.target.value)} />
-                </FormField>
-                <FormField label="Meetup Time" htmlFor="ride-kickstands-up">
-                  <TimeInput id="ride-kickstands-up" value={formState.kickstandsUp} onChange={(event) => updateField("kickstandsUp", event.target.value)} />
-                </FormField>
-                <FormField label="Primary Route Link" htmlFor="ride-primary-route">
-                  <TextInput id="ride-primary-route" type="url" value={formState.primaryRouteLink} onChange={(event) => updateField("primaryRouteLink", event.target.value)} />
-                </FormField>
-                <FormField label="Alternative Route Link" htmlFor="ride-alternative-route">
-                  <TextInput id="ride-alternative-route" type="url" value={formState.alternativeRouteLink} onChange={(event) => updateField("alternativeRouteLink", event.target.value)} />
-                </FormField>
-                <FormField label="Total Distance" htmlFor="ride-total-distance">
-                  <TextInput id="ride-total-distance" type="number" min="0" inputMode="decimal" value={formState.totalDistance} onChange={(event) => updateField("totalDistance", event.target.value)} />
-                </FormField>
-                <FormField label="Estimated Ride Time" htmlFor="ride-route-duration">
-                  <SelectInput id="ride-route-duration" value={formState.routeDuration} onChange={(event) => updateField("routeDuration", event.target.value)}>
-                    <option value="">No override</option>
-                    {rideTimeOptions.map((duration) => <option key={duration} value={duration}>{duration}</option>)}
-                  </SelectInput>
-                </FormField>
-                <FormField label="Destination" htmlFor="ride-destination">
-                  <TextInput id="ride-destination" value={formState.destination} onChange={(event) => updateField("destination", event.target.value)} />
-                </FormField>
-              </div>
-            </DashboardCard>
-            <DashboardCard className="span-all">
-              <SectionHeader title="Stops" action={<Button type="button" variant="secondary" onClick={addStop}>+ Add Stop</Button>} />
-              {formState.stops.length > 0 ? (
-                <div className="ride-stop-list">
-                  {formState.stops.map((stop, index) => (
-                    <article className="ride-stop-row" key={stop.id}>
-                      <div className="form-grid">
-                        <FormField label="Stop Type" htmlFor={`stop-type-${stop.id}`}>
-                          <SelectInput id={`stop-type-${stop.id}`} value={stop.type} onChange={(event) => updateStop(stop.id, "type", event.target.value)}>
-                            {stopTypeOptions.map((type) => <option key={type} value={type}>{type}</option>)}
-                          </SelectInput>
-                        </FormField>
-                        <FormField label="Location" htmlFor={`stop-location-${stop.id}`}>
-                          <TextInput id={`stop-location-${stop.id}`} value={stop.location} onChange={(event) => updateStop(stop.id, "location", event.target.value)} />
-                        </FormField>
-                        <FormField label="Arrival Time" htmlFor={`stop-arrival-${stop.id}`}>
-                          <TimeInput id={`stop-arrival-${stop.id}`} value={stop.arrivalTime ?? ""} onChange={(event) => updateStop(stop.id, "arrivalTime", event.target.value)} />
-                        </FormField>
-                        <FormField label="Notes" htmlFor={`stop-notes-${stop.id}`}>
-                          <TextInput id={`stop-notes-${stop.id}`} value={stop.notes ?? ""} onChange={(event) => updateStop(stop.id, "notes", event.target.value)} />
-                        </FormField>
-                      </div>
-                      <div className="record-row__actions">
-                        <Button type="button" variant="ghost" onClick={() => moveStop(stop.id, -1)} disabled={index === 0}>Up</Button>
-                        <Button type="button" variant="ghost" onClick={() => moveStop(stop.id, 1)} disabled={index === formState.stops.length - 1}>Down</Button>
-                        <Button type="button" variant="ghost" onClick={() => removeStop(stop.id)}>Remove</Button>
-                      </div>
-                    </article>
-                  ))}
-                </div>
-              ) : (
-                <EmptyState title="No stops added" message="Add gas, food, restroom, photo, meetup, scenic, or other ride stops." />
-              )}
-            </DashboardCard>
-            <DashboardCard>
-              <SectionHeader title="Ride Settings" />
-              <div className="form-grid">
-                <FormField label="Ride Type" htmlFor="ride-type">
-                  <SelectInput id="ride-type" value={formState.rideType} onChange={(event) => updateField("rideType", event.target.value)}>
-                    {rideTypeOptions.map((type) => <option key={type} value={type}>{type}</option>)}
-                  </SelectInput>
-                </FormField>
-                <FormField label="Visibility" htmlFor="ride-visibility">
-                  <SelectInput id="ride-visibility" value={formState.visibility} onChange={(event) => updateField("visibility", event.target.value)}>
-                    {visibilityOptions.map((visibility) => <option key={visibility} value={visibility}>{visibility}</option>)}
-                  </SelectInput>
-                </FormField>
-                <FormField label="Weather Policy" htmlFor="ride-weather-policy">
-                  <SelectInput id="ride-weather-policy" value={formState.weatherPolicy} onChange={(event) => updateField("weatherPolicy", event.target.value)}>
-                    {weatherPolicyOptions.map((policy) => <option key={policy} value={policy}>{policy}</option>)}
-                  </SelectInput>
-                </FormField>
-              </div>
-            </DashboardCard>
-            <DashboardCard>
-              <SectionHeader title="Save Plan" />
-              <div className="form-actions">
-                <Button type="button" variant="primary" onClick={handleSaveRide} disabled={savingId === formState.id}>
-                  {savingId === formState.id ? "Saving..." : "Save ride"}
-                </Button>
-                <Button type="button" variant="ghost" onClick={handleDeleteRide} disabled={!formState.recordId || savingId === formState.id}>
-                  Delete ride
-                </Button>
-                <span className="form-note">
-                  {isPersistenceConfigured ? "Changes save to the shared ride records." : "Changes are kept for this browser session."}
-                </span>
-              </div>
-              {saveMessage ? <p className="form-status form-status--success">{saveMessage}</p> : null}
-              {saveError ? <p className="form-status form-status--error">{saveError}</p> : null}
-            </DashboardCard>
-          </>
-        ) : (
-          <DashboardCard>
-            <EmptyState title="No ride selected" message="Select a ride to build the working plan." />
+        <div ref={newRideRef}>
+          <DashboardCard className="new-ride-card">
+            <SectionHeader title="New Ride" />
+            <RidePlannerEditor
+              ride={newRideState}
+              idPrefix="new-ride"
+              savingId={savingId}
+              saveMessage={newRideMessage}
+              saveError={newRideError}
+              isPersistenceConfigured={isPersistenceConfigured}
+              onUpdateField={updateNewRideField}
+              onUpdateStop={updateNewRideStop}
+              onAddStop={addNewRideStop}
+              onRemoveStop={removeNewRideStop}
+              onMoveStop={moveNewRideStop}
+              onSave={handleSaveNewRide}
+            />
           </DashboardCard>
-        )}
+        </div>
       </div>
     </PageContainer>
   );
+}
+
+function RidePlannerEditor({
+  ride,
+  idPrefix,
+  savingId,
+  saveMessage,
+  saveError,
+  isPersistenceConfigured,
+  onUpdateField,
+  onUpdateStop,
+  onAddStop,
+  onRemoveStop,
+  onMoveStop,
+  onSave,
+  onDelete
+}: {
+  ride: RidePlan;
+  idPrefix: string;
+  savingId: string | null;
+  saveMessage: string;
+  saveError: string;
+  isPersistenceConfigured: boolean;
+  onUpdateField: (field: keyof RidePlan, value: RideFieldValue) => void;
+  onUpdateStop: (stopId: string, field: keyof RideStop, value: string) => void;
+  onAddStop: () => void;
+  onRemoveStop: (stopId: string) => void;
+  onMoveStop: (stopId: string, direction: -1 | 1) => void;
+  onSave: () => void;
+  onDelete?: () => void;
+}) {
+  const isSaving = savingId === ride.id;
+
+  return (
+    <div className="ride-inline-planner">
+      <section className="ride-planner-section">
+        <SectionHeader
+          title="Ride Overview"
+          action={(
+            <Button type="button" variant="secondary" onClick={onSave} disabled={isSaving}>
+              {isSaving ? "Saving..." : "Save ride"}
+            </Button>
+          )}
+        />
+        <div className="form-grid">
+          <FormField label="Ride Leader" htmlFor={`${idPrefix}-leader`}>
+            <SelectInput id={`${idPrefix}-leader`} value={ride.rideLeader} onChange={(event) => onUpdateField("rideLeader", event.target.value)}>
+              <option value="">Blank</option>
+              {memberOptions.map((member) => <option key={member} value={member}>{member}</option>)}
+            </SelectInput>
+          </FormField>
+          <FormField label="Ride Name" htmlFor={`${idPrefix}-name`}>
+            <TextInput id={`${idPrefix}-name`} value={ride.title} onChange={(event) => onUpdateField("title", event.target.value)} />
+          </FormField>
+          <FormField label="Date" htmlFor={`${idPrefix}-date`}>
+            <DateInput id={`${idPrefix}-date`} value={ride.date} onChange={(event) => onUpdateField("date", event.target.value)} />
+          </FormField>
+          <FormField label="Sweep" htmlFor={`${idPrefix}-sweep`}>
+            <SelectInput id={`${idPrefix}-sweep`} value={ride.sweep} onChange={(event) => onUpdateField("sweep", event.target.value)}>
+              <option value="">Blank</option>
+              {memberOptions.map((member) => <option key={member} value={member}>{member}</option>)}
+            </SelectInput>
+          </FormField>
+          <FormField label="Difficulty" htmlFor={`${idPrefix}-difficulty`}>
+            <SelectInput id={`${idPrefix}-difficulty`} value={ride.difficulty} onChange={(event) => onUpdateField("difficulty", event.target.value)}>
+              {difficultyOptions.map((difficulty) => <option key={difficulty} value={difficulty}>{difficulty}</option>)}
+            </SelectInput>
+          </FormField>
+          <FormField label="Status" htmlFor={`${idPrefix}-status`}>
+            <SelectInput id={`${idPrefix}-status`} value={ride.status} onChange={(event) => onUpdateField("status", event.target.value)}>
+              {statusOptions.map((status) => <option key={status} value={status}>{status}</option>)}
+            </SelectInput>
+          </FormField>
+          <FormField label="Estimated Distance" htmlFor={`${idPrefix}-distance`}>
+            <TextInput id={`${idPrefix}-distance`} type="number" min="0" inputMode="decimal" value={ride.estimatedDistance} onChange={(event) => onUpdateField("estimatedDistance", event.target.value)} />
+          </FormField>
+          <FormField label="Estimated Ride Time" htmlFor={`${idPrefix}-duration`}>
+            <SelectInput id={`${idPrefix}-duration`} value={ride.estimatedRideTime} onChange={(event) => onUpdateField("estimatedRideTime", event.target.value)}>
+              {rideTimeOptions.map((duration) => <option key={duration} value={duration}>{duration}</option>)}
+            </SelectInput>
+          </FormField>
+          <FormField label="Ride Type" htmlFor={`${idPrefix}-type`}>
+            <SelectInput id={`${idPrefix}-type`} value={ride.rideType} onChange={(event) => onUpdateField("rideType", event.target.value)}>
+              {rideTypeOptions.map((type) => <option key={type} value={type}>{type}</option>)}
+            </SelectInput>
+          </FormField>
+          <FormField label="Visibility" htmlFor={`${idPrefix}-visibility`}>
+            <SelectInput id={`${idPrefix}-visibility`} value={ride.visibility} onChange={(event) => onUpdateField("visibility", event.target.value)}>
+              {visibilityOptions.map((visibility) => <option key={visibility} value={visibility}>{visibility}</option>)}
+            </SelectInput>
+          </FormField>
+          <FormField label="Weather Policy" htmlFor={`${idPrefix}-weather-policy`}>
+            <SelectInput id={`${idPrefix}-weather-policy`} value={ride.weatherPolicy} onChange={(event) => onUpdateField("weatherPolicy", event.target.value)}>
+              {weatherPolicyOptions.map((policy) => <option key={policy} value={policy}>{policy}</option>)}
+            </SelectInput>
+          </FormField>
+        </div>
+      </section>
+      <section className="ride-planner-section">
+        <SectionHeader title="Route Plan" action={<Button type="button" variant="secondary" onClick={onAddStop}>+ Add Stop</Button>} />
+        <div className="form-grid">
+          <FormField label="Starting Location" htmlFor={`${idPrefix}-starting-location`}>
+            <TextInput id={`${idPrefix}-starting-location`} value={ride.startingLocation} onChange={(event) => onUpdateField("startingLocation", event.target.value)} />
+          </FormField>
+          <FormField label="Meetup Time" htmlFor={`${idPrefix}-kickstands-up`}>
+            <TimeInput id={`${idPrefix}-kickstands-up`} value={ride.kickstandsUp} onChange={(event) => onUpdateField("kickstandsUp", event.target.value)} />
+          </FormField>
+          <FormField label="Primary Route Link" htmlFor={`${idPrefix}-primary-route`}>
+            <TextInput id={`${idPrefix}-primary-route`} type="url" value={ride.primaryRouteLink} onChange={(event) => onUpdateField("primaryRouteLink", event.target.value)} />
+          </FormField>
+          <FormField label="Alternative Route Link" htmlFor={`${idPrefix}-alternative-route`}>
+            <TextInput id={`${idPrefix}-alternative-route`} type="url" value={ride.alternativeRouteLink} onChange={(event) => onUpdateField("alternativeRouteLink", event.target.value)} />
+          </FormField>
+          <FormField label="Total Distance" htmlFor={`${idPrefix}-total-distance`}>
+            <TextInput id={`${idPrefix}-total-distance`} type="number" min="0" inputMode="decimal" value={ride.totalDistance} onChange={(event) => onUpdateField("totalDistance", event.target.value)} />
+          </FormField>
+          <FormField label="Estimated Ride Time" htmlFor={`${idPrefix}-route-duration`}>
+            <SelectInput id={`${idPrefix}-route-duration`} value={ride.routeDuration} onChange={(event) => onUpdateField("routeDuration", event.target.value)}>
+              <option value="">No override</option>
+              {rideTimeOptions.map((duration) => <option key={duration} value={duration}>{duration}</option>)}
+            </SelectInput>
+          </FormField>
+          <FormField label="Destination" htmlFor={`${idPrefix}-destination`}>
+            <TextInput id={`${idPrefix}-destination`} value={ride.destination} onChange={(event) => onUpdateField("destination", event.target.value)} />
+          </FormField>
+        </div>
+        {ride.stops.length > 0 ? (
+          <div className="ride-stop-list">
+            {ride.stops.map((stop, index) => (
+              <article className="ride-stop-row" key={stop.id}>
+                <div className="form-grid">
+                  <FormField label="Stop Type" htmlFor={`${idPrefix}-stop-type-${stop.id}`}>
+                    <SelectInput id={`${idPrefix}-stop-type-${stop.id}`} value={stop.type} onChange={(event) => onUpdateStop(stop.id, "type", event.target.value)}>
+                      {stopTypeOptions.map((type) => <option key={type} value={type}>{type}</option>)}
+                    </SelectInput>
+                  </FormField>
+                  <FormField label="Location" htmlFor={`${idPrefix}-stop-location-${stop.id}`}>
+                    <TextInput id={`${idPrefix}-stop-location-${stop.id}`} value={stop.location} onChange={(event) => onUpdateStop(stop.id, "location", event.target.value)} />
+                  </FormField>
+                  <FormField label="Arrival Time" htmlFor={`${idPrefix}-stop-arrival-${stop.id}`}>
+                    <TimeInput id={`${idPrefix}-stop-arrival-${stop.id}`} value={stop.arrivalTime ?? ""} onChange={(event) => onUpdateStop(stop.id, "arrivalTime", event.target.value)} />
+                  </FormField>
+                  <FormField label="Notes" htmlFor={`${idPrefix}-stop-notes-${stop.id}`}>
+                    <TextInput id={`${idPrefix}-stop-notes-${stop.id}`} value={stop.notes ?? ""} onChange={(event) => onUpdateStop(stop.id, "notes", event.target.value)} />
+                  </FormField>
+                </div>
+                <div className="record-row__actions">
+                  <Button type="button" variant="ghost" onClick={() => onMoveStop(stop.id, -1)} disabled={index === 0}>Up</Button>
+                  <Button type="button" variant="ghost" onClick={() => onMoveStop(stop.id, 1)} disabled={index === ride.stops.length - 1}>Down</Button>
+                  <Button type="button" variant="ghost" onClick={() => onRemoveStop(stop.id)}>Remove</Button>
+                </div>
+              </article>
+            ))}
+          </div>
+        ) : (
+          <EmptyState title="No stops added" message="Add gas, food, restroom, photo, meetup, scenic, or other ride stops." />
+        )}
+      </section>
+      <section className="ride-planner-section">
+        <SectionHeader title="Safety" />
+        <div className="form-grid">
+          <FormField label="Freeways" htmlFor={`${idPrefix}-freeways`}>
+            <SelectInput id={`${idPrefix}-freeways`} value={ride.freeways ? "yes" : "no"} onChange={(event) => onUpdateField("freeways", event.target.value === "yes")}>
+              <option value="yes">Yes</option>
+              <option value="no">No</option>
+            </SelectInput>
+          </FormField>
+        </div>
+      </section>
+      <section className="ride-planner-section">
+        <SectionHeader title="Notes" />
+        <FormField label="Ride Notes" htmlFor={`${idPrefix}-notes`}>
+          <Textarea id={`${idPrefix}-notes`} value={ride.notes} onChange={(event) => onUpdateField("notes", event.target.value)} />
+        </FormField>
+      </section>
+      <section className="ride-planner-section ride-planner-actions">
+        <div className="form-actions">
+          <Button type="button" variant="primary" onClick={onSave} disabled={isSaving}>
+            {isSaving ? "Saving..." : "Save ride"}
+          </Button>
+          {onDelete ? (
+            <Button type="button" variant="ghost" onClick={onDelete} disabled={!ride.recordId || isSaving}>
+              Delete ride
+            </Button>
+          ) : null}
+          <span className="form-note">
+            {isPersistenceConfigured ? "Changes save to the shared ride records." : "Changes are kept for this browser session."}
+          </span>
+        </div>
+        {saveMessage ? <p className="form-status form-status--success">{saveMessage}</p> : null}
+        {saveError ? <p className="form-status form-status--error">{saveError}</p> : null}
+      </section>
+    </div>
+  );
+}
+
+function updateStopsForRide(ride: RidePlan, stopId: string, field: keyof RideStop, value: string): RidePlan {
+  return {
+    ...ride,
+    stops: ride.stops.map((stop) => stop.id === stopId ? { ...stop, [field]: value } : stop)
+  };
+}
+
+function addStopToRide(ride: RidePlan): RidePlan {
+  return {
+    ...ride,
+    stops: [
+      ...ride.stops,
+      {
+        id: createLocalStopId(),
+        type: "Meetup",
+        location: "",
+        arrivalTime: "",
+        notes: ""
+      }
+    ]
+  };
+}
+
+function removeStopFromRide(ride: RidePlan, stopId: string): RidePlan {
+  return {
+    ...ride,
+    stops: ride.stops.filter((stop) => stop.id !== stopId)
+  };
+}
+
+function moveStopInRide(ride: RidePlan, stopId: string, direction: -1 | 1): RidePlan {
+  const currentIndex = ride.stops.findIndex((stop) => stop.id === stopId);
+  const nextIndex = currentIndex + direction;
+
+  if (currentIndex < 0 || nextIndex < 0 || nextIndex >= ride.stops.length) return ride;
+
+  const stops = [...ride.stops];
+  const [stop] = stops.splice(currentIndex, 1);
+  stops.splice(nextIndex, 0, stop);
+
+  return { ...ride, stops };
 }
 
 function buildRidePlans(events: EventRecord[], rides: RideRecord[]): RidePlan[] {
