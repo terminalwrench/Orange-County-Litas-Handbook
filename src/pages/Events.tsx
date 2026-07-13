@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { PageContainer } from "../components/layout/PageContainer";
 import { Button } from "../components/ui/Button";
 import { DashboardCard } from "../components/ui/DashboardCard";
@@ -147,9 +147,16 @@ export function Events({
   const [saveMessage, setSaveMessage] = useState("");
   const [saveError, setSaveError] = useState("");
   const selectedEvent = eventRecords.find((event) => event.id === selectedEventId);
-  const currentEvent = selectedEvent ?? upcomingEvents[0] ?? pastEvents[0];
+  const currentEvent = selectedEvent;
   const isEditing = Boolean(formState.id);
   const isCalendarImportDisabled = isImportingCalendar || !isPersistenceConfigured || !isCalendarImportAvailable;
+
+  useEffect(() => {
+    if (!selectedEventId) return;
+    if (eventRecords.some((event) => event.id === selectedEventId)) return;
+
+    setSelectedEventId(undefined);
+  }, [eventRecords, selectedEventId]);
 
   function handleViewEvent(event: EventRecord) {
     setSelectedEventId(event.id);
@@ -385,7 +392,7 @@ export function Events({
             </form>
           ) : (
             <div className="detail-card">
-              <h2>{currentEvent?.title ?? "No events yet"}</h2>
+              <h2>{currentEvent?.title ?? getEventDetailEmptyTitle(eventRecords.length)}</h2>
               {currentEvent ? (
                 <div className="metadata-grid">
                   {getEventMetadata(currentEvent).map((item) => (
@@ -396,7 +403,7 @@ export function Events({
                   ))}
                 </div>
               ) : (
-                <p>{getEmptySourceMessage(eventRecordsSource, isPersistenceConfigured)}</p>
+                <p>{getEventDetailEmptyMessage(eventRecords.length, eventRecordsSource, isPersistenceConfigured)}</p>
               )}
               {currentEvent && isMeaningfulEventValue(currentEvent.notes) ? <p>{currentEvent.notes}</p> : null}
               {getSourceNote(eventRecordsSource, isPersistenceConfigured) ? (
@@ -607,4 +614,18 @@ function getEmptySourceMessage(source: EventsProps["eventRecordsSource"], isPers
   if (source === "ics") return "The calendar source has no events.";
   if (isPersistenceConfigured) return "Shared event records could not be reached.";
   return "Sample records are available until the shared event source is connected.";
+}
+
+function getEventDetailEmptyTitle(eventCount: number) {
+  return eventCount > 0 ? "Select an event" : "No events yet";
+}
+
+function getEventDetailEmptyMessage(
+  eventCount: number,
+  source: EventsProps["eventRecordsSource"],
+  isPersistenceConfigured: boolean
+) {
+  if (eventCount > 0) return "Choose an event from Upcoming Events or Past / History to view details.";
+
+  return getEmptySourceMessage(source, isPersistenceConfigured);
 }

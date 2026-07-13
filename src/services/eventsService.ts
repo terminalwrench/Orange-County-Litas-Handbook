@@ -31,6 +31,8 @@ interface SupabaseEventRow {
   notes: string | null;
   external_uid: string | null;
   source: string | null;
+  created_at?: string | null;
+  updated_at?: string | null;
 }
 
 const rideWeatherForecast = {
@@ -461,7 +463,7 @@ async function loadSupabaseEvents() {
     return null;
   }
 
-  return (data as SupabaseEventRow[]).map(fromSupabaseEvent);
+  return normalizeSupabaseEventRows(data as SupabaseEventRow[]);
 }
 
 function fromSupabaseEvent(row: SupabaseEventRow): EventRecord {
@@ -502,6 +504,50 @@ function fromSupabaseEvent(row: SupabaseEventRow): EventRecord {
     externalUid: row.external_uid ?? undefined,
     checklist: buildChecklist(readiness)
   };
+}
+
+function normalizeSupabaseEventRows(rows: SupabaseEventRow[]) {
+  const recordsByKey = new Map<string, SupabaseEventRow>();
+
+  rows.forEach((row) => {
+    const key = getSupabaseEventIdentityKey(row);
+    const existing = recordsByKey.get(key);
+
+    if (!existing || isNewerSupabaseEventRow(row, existing)) {
+      recordsByKey.set(key, row);
+    }
+  });
+
+  return Array.from(recordsByKey.values())
+    .map(fromSupabaseEvent)
+    .sort((a, b) => parseDate(a.startDate).getTime() - parseDate(b.startDate).getTime());
+}
+
+function getSupabaseEventIdentityKey(row: SupabaseEventRow) {
+  if (row.external_uid) return `external:${row.external_uid}`;
+
+  return [
+    "event",
+    normalizeEventIdentityValue(row.title),
+    row.start_date,
+    row.end_date ?? row.start_date,
+    normalizeEventIdentityValue(row.time),
+    normalizeEventIdentityValue(row.location),
+    normalizeEventIdentityValue(row.city),
+    normalizeEventIdentityValue(row.type)
+  ].join("|");
+}
+
+function normalizeEventIdentityValue(value: string | null | undefined) {
+  return value?.trim().toLowerCase() ?? "";
+}
+
+function isNewerSupabaseEventRow(candidate: SupabaseEventRow, existing: SupabaseEventRow) {
+  return getSupabaseEventTimestamp(candidate) > getSupabaseEventTimestamp(existing);
+}
+
+function getSupabaseEventTimestamp(row: SupabaseEventRow) {
+  return Date.parse(row.updated_at ?? row.created_at ?? "") || 0;
 }
 
 function toSupabaseEventPayload(input: EventSaveInput) {
