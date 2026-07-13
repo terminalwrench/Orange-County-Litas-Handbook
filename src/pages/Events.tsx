@@ -46,6 +46,7 @@ interface EventFormState {
 const eventStatuses = ["Planning", "Ready", "Completed", "Cancelled"];
 const eventTypes = ["Meet & Greet", "Ride", "Community", "Special Event", "Major Event"];
 const rideDifficulties = ["Beginner", "Intermediate", "Advanced"];
+const HISTORY_BATCH_SIZE = 10;
 const monthFormatter = new Intl.DateTimeFormat("en-US", { month: "short" });
 
 const emptyEventForm: EventFormState = {
@@ -87,6 +88,22 @@ function sortAscendingByStartDate(events: EventRecord[]) {
 
 function sortDescendingByStartDate(events: EventRecord[]) {
   return [...events].sort((a, b) => parseEventDate(b.startDate).getTime() - parseEventDate(a.startDate).getTime());
+}
+
+function groupEventsByYear(events: EventRecord[]) {
+  const groups = new Map<string, EventRecord[]>();
+
+  events.forEach((event) => {
+    const year = String(parseEventDate(event.startDate).getFullYear());
+    groups.set(year, [...(groups.get(year) ?? []), event]);
+  });
+
+  return Array.from(groups.entries())
+    .map(([year, yearEvents]) => ({
+      year,
+      events: sortDescendingByStartDate(yearEvents)
+    }))
+    .sort((a, b) => Number(b.year) - Number(a.year));
 }
 
 function EventRows({
@@ -133,6 +150,64 @@ function EventRows({
   );
 }
 
+function EventHistoryByYear({
+  events,
+  selectedId,
+  today,
+  expandedYears,
+  visibleCounts,
+  onSelect,
+  onToggleYear,
+  onShowMore
+}: {
+  events: EventRecord[];
+  selectedId?: string;
+  today: Date;
+  expandedYears: Record<string, boolean>;
+  visibleCounts: Record<string, number>;
+  onSelect: (event: EventRecord) => void;
+  onToggleYear: (year: string) => void;
+  onShowMore: (year: string) => void;
+}) {
+  const groups = groupEventsByYear(events);
+  const currentYear = String(today.getFullYear());
+
+  return (
+    <div className="history-year-list">
+      {groups.map((group) => {
+        const isExpanded = expandedYears[group.year] ?? group.year === currentYear;
+        const visibleCount = visibleCounts[group.year] ?? HISTORY_BATCH_SIZE;
+        const visibleEvents = group.events.slice(0, visibleCount);
+        const hiddenCount = group.events.length - visibleEvents.length;
+
+        return (
+          <section className="history-year" key={group.year}>
+            <button className="history-year-header" type="button" onClick={() => onToggleYear(group.year)} aria-expanded={isExpanded}>
+              <span>{group.year} — {group.events.length} {group.events.length === 1 ? "event" : "events"}</span>
+              <em>{isExpanded ? "Collapse" : "Expand"}</em>
+            </button>
+            {isExpanded ? (
+              <>
+                <EventRows
+                  events={visibleEvents}
+                  selectedId={selectedId}
+                  onSelect={onSelect}
+                  getDisplayStatus={(event) => getDisplayEventStatus(event, today)}
+                />
+                {hiddenCount > 0 ? (
+                  <Button type="button" variant="ghost" onClick={() => onShowMore(group.year)}>
+                    Show more
+                  </Button>
+                ) : null}
+              </>
+            ) : null}
+          </section>
+        );
+      })}
+    </div>
+  );
+}
+
 export function Events({
   eventRecords,
   eventRecordsSource,
@@ -154,6 +229,8 @@ export function Events({
   const [previewMemory, setPreviewMemory] = useState<{ title: string; type: string; url: string; description?: string } | null>(null);
   const [saveMessage, setSaveMessage] = useState("");
   const [saveError, setSaveError] = useState("");
+  const [expandedHistoryYears, setExpandedHistoryYears] = useState<Record<string, boolean>>({});
+  const [visibleHistoryCounts, setVisibleHistoryCounts] = useState<Record<string, number>>({});
   const selectedEvent = eventRecords.find((event) => event.id === selectedEventId);
   const currentEvent = selectedEvent;
   const isEditing = Boolean(formState.id);
@@ -219,11 +296,12 @@ export function Events({
       } else {
         setSelectedEventId(result.data.id);
         setFormState(toEventFormState(result.data));
+        setEditorOpen(false);
         setSaveMessage(result.source === "supabase" ? (isEditing ? "Event updated." : "Event added.") : "Saved locally for this session.");
       }
     } catch (error) {
       console.warn("[events] Unable to save event.", error);
-      setSaveError("Event could not be saved. Try again in a moment.");
+      setSaveError("Event could not be saved to the shared records.");
     } finally {
       setSavingId(null);
     }
@@ -273,6 +351,20 @@ export function Events({
     } finally {
       setIsImportingCalendar(false);
     }
+  }
+
+  function toggleHistoryYear(year: string) {
+    setExpandedHistoryYears((current) => ({
+      ...current,
+      [year]: !(current[year] ?? year === String(today.getFullYear()))
+    }));
+  }
+
+  function showMoreHistory(year: string) {
+    setVisibleHistoryCounts((current) => ({
+      ...current,
+      [year]: (current[year] ?? HISTORY_BATCH_SIZE) + HISTORY_BATCH_SIZE
+    }));
   }
 
   return (
@@ -426,11 +518,15 @@ export function Events({
         <DashboardCard className="span-all">
           <SectionHeader title="Past / History" />
           {pastEvents.length > 0 ? (
-            <EventRows
+            <EventHistoryByYear
               events={pastEvents}
               selectedId={selectedEventId}
+              today={today}
+              expandedYears={expandedHistoryYears}
+              visibleCounts={visibleHistoryCounts}
               onSelect={handleViewEvent}
-              getDisplayStatus={(event) => getDisplayEventStatus(event, today)}
+              onToggleYear={toggleHistoryYear}
+              onShowMore={showMoreHistory}
             />
           ) : (
             <EmptyState title="No archived events yet." message="Past events will appear here automatically after their event dates pass." />

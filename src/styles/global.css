@@ -1384,6 +1384,49 @@ a {
   border-bottom: 0;
 }
 
+.history-year-list {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.history-year {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.history-year-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+  min-height: 3rem;
+  padding: 0.72rem 0.15rem;
+  border: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.075);
+  background: transparent;
+  color: var(--color-white);
+  text-align: left;
+  transition: color var(--motion-fast), background var(--motion-fast);
+}
+
+.history-year-header em {
+  color: var(--color-muted);
+  font-size: 0.78rem;
+  font-style: normal;
+}
+
+.history-year-header:hover,
+.history-year-header:focus-visible {
+  color: var(--color-orange);
+  outline: none;
+}
+
+.history-year .button {
+  justify-self: start;
+  margin-top: 0.35rem;
+}
+
 .record-row {
   grid-template-columns: minmax(0, 1fr) auto;
   padding: 0.82rem 0.15rem;

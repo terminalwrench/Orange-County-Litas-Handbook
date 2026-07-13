@@ -35,6 +35,19 @@ interface SupabaseEventRow {
   updated_at?: string | null;
 }
 
+interface SupabaseEventSaveError {
+  code?: string;
+  message?: string;
+  details?: string | null;
+  hint?: string | null;
+}
+
+interface EventSaveTarget {
+  action: "insert" | "update";
+  column?: "id";
+  value?: string;
+}
+
 const rideWeatherForecast = {
   temperature: "72°",
   condition: "Sunny",
@@ -136,19 +149,19 @@ export async function saveEventRecord(input: EventSaveInput): Promise<Persistenc
   }
 
   const payload = toSupabaseEventPayload(input);
-  const action = input.id && isUuid(input.id) ? "update" : "insert";
-  const query = action === "update"
-    ? supabase.from("events").update(payload).eq("id", input.id).select().single()
+  const target = await resolveEventSaveTarget(input);
+  const query = target.action === "update"
+    ? supabase.from("events").update(payload).eq(target.column!, target.value!).select().single()
     : supabase.from("events").insert(payload).select().single();
 
   const { data, error } = await query;
 
   if (error && isMissingEventColumnError(error, "ride_difficulty") && "ride_difficulty" in payload) {
-    logEventSaveError(action, input.id, payload, error);
+    logEventSaveError(target.action, input.id, payload, error);
 
     const retryPayload = omitPayloadColumn(payload, "ride_difficulty");
-    const retryQuery = action === "update"
-      ? supabase.from("events").update(retryPayload).eq("id", input.id).select().single()
+    const retryQuery = target.action === "update"
+      ? supabase.from("events").update(retryPayload).eq(target.column!, target.value!).select().single()
       : supabase.from("events").insert(retryPayload).select().single();
     const { data: retryData, error: retryError } = await retryQuery;
 
@@ -159,23 +172,50 @@ export async function saveEventRecord(input: EventSaveInput): Promise<Persistenc
       };
     }
 
-    logEventSaveError(`${action}:retry-without-ride_difficulty`, input.id, retryPayload, retryError);
+    logEventSaveError(`${target.action}:retry-without-ride_difficulty`, input.id, retryPayload, retryError);
+    throw createEventSaveError(`${target.action}:retry-without-ride_difficulty`, input.id, retryPayload, retryError);
   } else if (error) {
-    logEventSaveError(action, input.id, payload, error);
+    logEventSaveError(target.action, input.id, payload, error);
+    throw createEventSaveError(target.action, input.id, payload, error);
   }
 
   if (error || !data) {
-    warnAndUseFallback("Unable to save event to Supabase. Using local UI state instead.", error);
-    return {
-      data: toLocalEventRecord(input),
-      source: "fallback"
-    };
+    logEventSaveError(target.action, input.id, payload, error ?? new Error("Supabase event save returned no data."));
+    throw createEventSaveError(target.action, input.id, payload, error ?? new Error("Supabase event save returned no data."));
   }
 
   return {
     data: fromSupabaseEvent(data as SupabaseEventRow),
     source: "supabase"
   };
+}
+
+async function resolveEventSaveTarget(input: EventSaveInput): Promise<EventSaveTarget> {
+  if (!input.id) return { action: "insert" };
+  if (isUuid(input.id)) return { action: "update", column: "id", value: input.id };
+
+  if (input.externalUid) {
+    const supabase = getPersistenceClient();
+    const { data, error } = await supabase!
+      .from("events")
+      .select("id")
+      .eq("external_uid", input.externalUid)
+      .order("updated_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (error || !data?.id) {
+      const payload = { external_uid: input.externalUid };
+      logEventSaveError("resolve-update-target", input.id, payload, error ?? new Error("No Supabase event row matched the imported external UID."));
+      throw createEventSaveError("resolve-update-target", input.id, payload, error ?? new Error("No Supabase event row matched the imported external UID."));
+    }
+
+    return { action: "update", column: "id", value: data.id as string };
+  }
+
+  const error = new Error("Event save cannot update a non-Supabase event id without an external UID.");
+  logEventSaveError("resolve-update-target", input.id, {}, error);
+  throw createEventSaveError("resolve-update-target", input.id, {}, error);
 }
 
 export async function deleteEventRecord(event: EventRecord): Promise<PersistenceResult<EventRecord>> {
@@ -618,8 +658,43 @@ function logEventSaveError(action: string, eventId: string | undefined, payload:
     eventId,
     payloadKeys: Object.keys(payload),
     payload,
+    supabaseError: getSupabaseErrorDetails(error),
     error
   });
+}
+
+function createEventSaveError(action: string, eventId: string | undefined, payload: Record<string, unknown>, error: unknown) {
+  const details = getSupabaseErrorDetails(error);
+  const message = details.message || (error instanceof Error ? error.message : "Event could not be saved to Supabase.");
+  const nextError = new Error(message);
+
+  Object.assign(nextError, {
+    action,
+    eventId,
+    payloadKeys: Object.keys(payload),
+    payload,
+    supabaseError: details,
+    cause: error
+  });
+
+  return nextError;
+}
+
+function getSupabaseErrorDetails(error: unknown): SupabaseEventSaveError {
+  if (!error || typeof error !== "object") {
+    return {
+      message: error instanceof Error ? error.message : String(error ?? "Unknown Supabase error")
+    };
+  }
+
+  const supabaseError = error as SupabaseEventSaveError;
+
+  return {
+    code: supabaseError.code,
+    message: supabaseError.message,
+    details: supabaseError.details,
+    hint: supabaseError.hint
+  };
 }
 
 function toSupabaseImportedEventPayload(event: EventRecord) {
