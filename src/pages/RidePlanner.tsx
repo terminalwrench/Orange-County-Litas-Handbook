@@ -7,7 +7,7 @@ import { EmptyState } from "../components/ui/EmptyState";
 import { FormField } from "../components/ui/FormField";
 import { SectionHeader } from "../components/ui/SectionHeader";
 import { StatusChip } from "../components/ui/StatusChip";
-import { SelectInput, Textarea, TextInput, TimeInput } from "../components/ui/inputs";
+import { DateInput, SelectInput, Textarea, TextInput, TimeInput } from "../components/ui/inputs";
 import type { EventRecord, RideRecord, RideStop } from "../types";
 import { getUpcomingRides, type RideSaveInput } from "../services/ridesService";
 import type { PersistenceResult } from "../services/persistence";
@@ -19,6 +19,7 @@ interface RidePlannerProps {
   isLoading: boolean;
   isPersistenceConfigured: boolean;
   onSaveRide: (input: RideSaveInput) => Promise<PersistenceResult<RideRecord>>;
+  onDeleteRide: (ride: RideRecord) => Promise<PersistenceResult<RideRecord>>;
 }
 
 interface RidePlan {
@@ -63,11 +64,12 @@ export function RidePlanner({
   rideRecordsSource,
   isLoading,
   isPersistenceConfigured,
-  onSaveRide
+  onSaveRide,
+  onDeleteRide
 }: RidePlannerProps) {
   const ridePlans = useMemo(() => buildRidePlans(eventRecords, rideRecords), [eventRecords, rideRecords]);
   const [selectedRideId, setSelectedRideId] = useState<string | undefined>();
-  const selectedRide = ridePlans.find((ride) => ride.id === selectedRideId) ?? ridePlans[0];
+  const selectedRide = ridePlans.find((ride) => ride.id === selectedRideId) ?? (selectedRideId ? undefined : ridePlans[0]);
   const [formState, setFormState] = useState<RidePlan | null>(selectedRide ?? null);
   const [savingId, setSavingId] = useState<string | null>(null);
   const [saveMessage, setSaveMessage] = useState("");
@@ -81,6 +83,14 @@ export function RidePlanner({
 
   function selectRide(ride: RidePlan) {
     setSelectedRideId(ride.id);
+  }
+
+  function startNewRide() {
+    const nextRide = createBlankRidePlan();
+    setSelectedRideId(nextRide.id);
+    setFormState(nextRide);
+    setSaveMessage("");
+    setSaveError("");
   }
 
   function updateField(field: keyof RidePlan, value: string | boolean | RideStop[]) {
@@ -142,6 +152,12 @@ export function RidePlanner({
   async function handleSaveRide() {
     if (!formState) return;
 
+    if (!formState.title.trim() || !formState.date) {
+      setSaveMessage("");
+      setSaveError("Ride name and date are required.");
+      return;
+    }
+
     setSavingId(formState.id);
     setSaveMessage("");
     setSaveError("");
@@ -164,6 +180,32 @@ export function RidePlanner({
     }
   }
 
+  async function handleDeleteRide() {
+    if (!formState?.recordId) return;
+    if (!window.confirm("Delete this ride plan? This action cannot be undone.")) return;
+
+    setSavingId(formState.id);
+    setSaveMessage("");
+    setSaveError("");
+
+    try {
+      const result = await onDeleteRide(toRideRecord(formState));
+
+      if (result.source === "fallback" && isPersistenceConfigured) {
+        setSaveError("Ride could not be deleted from the shared ride records.");
+      } else {
+        setSelectedRideId(undefined);
+        setFormState(null);
+        setSaveMessage(result.source === "supabase" ? "Ride plan deleted." : "Ride deleted locally for this session.");
+      }
+    } catch (error) {
+      console.warn("[ride-planner] Unable to delete ride.", error);
+      setSaveError("Ride could not be deleted. Try again in a moment.");
+    } finally {
+      setSavingId(null);
+    }
+  }
+
   return (
     <PageContainer>
       <div className="page-title">
@@ -172,7 +214,7 @@ export function RidePlanner({
       </div>
       <div className="module-grid module-grid--wide-left">
         <DashboardCard>
-          <SectionHeader title="Ride Queue" />
+          <SectionHeader title="Ride Queue" action={<Button type="button" variant="secondary" onClick={startNewRide}>Add Ride</Button>} />
           {isLoading ? (
             <EmptyState title="Loading rides" message="Checking the shared ride records." />
           ) : ridePlans.length > 0 ? (
@@ -218,6 +260,12 @@ export function RidePlanner({
                     {memberOptions.map((member) => <option key={member} value={member}>{member}</option>)}
                   </SelectInput>
                 </FormField>
+                <FormField label="Ride Name" htmlFor="ride-name">
+                  <TextInput id="ride-name" value={formState.title} onChange={(event) => updateField("title", event.target.value)} />
+                </FormField>
+                <FormField label="Date" htmlFor="ride-date">
+                  <DateInput id="ride-date" value={formState.date} onChange={(event) => updateField("date", event.target.value)} />
+                </FormField>
                 <FormField label="Sweep" htmlFor="ride-sweep">
                   <SelectInput id="ride-sweep" value={formState.sweep} onChange={(event) => updateField("sweep", event.target.value)}>
                     <option value="">Blank</option>
@@ -259,7 +307,7 @@ export function RidePlanner({
                 <FormField label="Starting Location" htmlFor="ride-starting-location">
                   <TextInput id="ride-starting-location" value={formState.startingLocation} onChange={(event) => updateField("startingLocation", event.target.value)} />
                 </FormField>
-                <FormField label="Kickstands Up" htmlFor="ride-kickstands-up">
+                <FormField label="Meetup Time" htmlFor="ride-kickstands-up">
                   <TimeInput id="ride-kickstands-up" value={formState.kickstandsUp} onChange={(event) => updateField("kickstandsUp", event.target.value)} />
                 </FormField>
                 <FormField label="Primary Route Link" htmlFor="ride-primary-route">
@@ -342,6 +390,9 @@ export function RidePlanner({
                 <Button type="button" variant="primary" onClick={handleSaveRide} disabled={savingId === formState.id}>
                   {savingId === formState.id ? "Saving..." : "Save ride"}
                 </Button>
+                <Button type="button" variant="ghost" onClick={handleDeleteRide} disabled={!formState.recordId || savingId === formState.id}>
+                  Delete ride
+                </Button>
                 <span className="form-note">
                   {isPersistenceConfigured ? "Changes save to the shared ride records." : "Changes are kept for this browser session."}
                 </span>
@@ -414,7 +465,7 @@ function fromSavedRide(ride: RideRecord): RidePlan {
     estimatedRideTime: ride.estimatedRideTime ?? ride.duration ?? "Flexible",
     freeways: ride.freeways ?? false,
     startingLocation: ride.startingLocation ?? ride.meetup ?? "",
-    kickstandsUp: ride.kickstandsUp ?? toTimeInputValue(ride.time ?? ""),
+    kickstandsUp: ride.meetupTime ?? ride.kickstandsUp ?? toTimeInputValue(ride.time ?? ""),
     primaryRouteLink: ride.primaryRouteLink ?? "",
     alternativeRouteLink: ride.alternativeRouteLink ?? "",
     totalDistance: ride.totalDistance ?? ride.mileage ?? "",
@@ -441,6 +492,7 @@ function toRideSaveInput(ride: RidePlan): RideSaveInput {
     estimatedDistance: ride.estimatedDistance,
     estimatedRideTime: ride.estimatedRideTime,
     freeways: ride.freeways,
+    meetupTime: ride.kickstandsUp,
     startingLocation: ride.startingLocation,
     kickstandsUp: ride.kickstandsUp,
     primaryRouteLink: ride.primaryRouteLink,
@@ -453,6 +505,65 @@ function toRideSaveInput(ride: RidePlan): RideSaveInput {
     weatherPolicy: ride.weatherPolicy,
     stops: ride.stops,
     notes: ride.notes
+  };
+}
+
+function toRideRecord(ride: RidePlan): RideRecord {
+  return {
+    id: ride.recordId ?? ride.id,
+    eventId: ride.eventId,
+    title: ride.title,
+    date: ride.date,
+    status: ride.status,
+    meetup: ride.startingLocation,
+    destination: ride.destination,
+    mileage: ride.estimatedDistance,
+    duration: ride.estimatedRideTime,
+    difficulty: ride.difficulty,
+    rideLeader: ride.rideLeader || undefined,
+    sweep: ride.sweep || undefined,
+    estimatedDistance: ride.estimatedDistance,
+    estimatedRideTime: ride.estimatedRideTime,
+    freeways: ride.freeways,
+    meetupTime: ride.kickstandsUp,
+    startingLocation: ride.startingLocation,
+    kickstandsUp: ride.kickstandsUp,
+    primaryRouteLink: ride.primaryRouteLink,
+    alternativeRouteLink: ride.alternativeRouteLink,
+    totalDistance: ride.totalDistance,
+    routeDuration: ride.routeDuration,
+    rideType: ride.rideType,
+    visibility: ride.visibility,
+    weatherPolicy: ride.weatherPolicy,
+    stops: ride.stops,
+    notes: ride.notes
+  };
+}
+
+function createBlankRidePlan(): RidePlan {
+  return {
+    id: createLocalRideId(),
+    title: "",
+    date: "",
+    status: "Planning",
+    rideLeader: "",
+    sweep: "",
+    difficulty: "Beginner",
+    estimatedDistance: "",
+    estimatedRideTime: "Flexible",
+    freeways: false,
+    startingLocation: "",
+    kickstandsUp: "",
+    primaryRouteLink: "",
+    alternativeRouteLink: "",
+    totalDistance: "",
+    routeDuration: "",
+    destination: "",
+    rideType: "Group Ride",
+    visibility: "Chapter Only",
+    weatherPolicy: "Leader Decision",
+    stops: [],
+    notes: ""
   };
 }
 
@@ -519,4 +630,12 @@ function createLocalStopId() {
   }
 
   return `stop-${Date.now()}`;
+}
+
+function createLocalRideId() {
+  if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
+    return `new-ride-${crypto.randomUUID()}`;
+  }
+
+  return `new-ride-${Date.now()}`;
 }

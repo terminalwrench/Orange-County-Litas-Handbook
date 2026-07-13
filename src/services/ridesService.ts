@@ -19,6 +19,7 @@ interface SupabaseRideRow {
   estimated_distance: string | null;
   estimated_ride_time: string | null;
   freeways: boolean | null;
+  meetup_time: string | null;
   starting_location: string | null;
   kickstands_up: string | null;
   primary_route_link: string | null;
@@ -44,6 +45,7 @@ export interface RideSaveInput {
   estimatedDistance?: string;
   estimatedRideTime?: string;
   freeways: boolean;
+  meetupTime?: string;
   startingLocation?: string;
   kickstandsUp?: string;
   primaryRouteLink?: string;
@@ -89,6 +91,35 @@ export async function saveRideRecord(input: RideSaveInput): Promise<PersistenceR
 
   return {
     data: fromSupabaseRide(data as SupabaseRideRow),
+    source: "supabase"
+  };
+}
+
+export async function deleteRideRecord(ride: RideRecord): Promise<PersistenceResult<RideRecord>> {
+  const supabase = getPersistenceClient();
+
+  if (!supabase || !isUuid(ride.id)) {
+    return {
+      data: ride,
+      source: "fallback"
+    };
+  }
+
+  const { error } = await supabase
+    .from("rides")
+    .delete()
+    .eq("id", ride.id);
+
+  if (error) {
+    warnAndUseFallback("Unable to delete ride from Supabase. Keeping local UI state stable.", error);
+    return {
+      data: ride,
+      source: "fallback"
+    };
+  }
+
+  return {
+    data: ride,
     source: "supabase"
   };
 }
@@ -146,8 +177,9 @@ function fromSupabaseRide(row: SupabaseRideRow): RideRecord {
     estimatedDistance: row.estimated_distance ?? row.mileage ?? "",
     estimatedRideTime: row.estimated_ride_time ?? row.duration ?? "Flexible",
     freeways: row.freeways ?? false,
+    meetupTime: toTimeInputValue(row.meetup_time ?? ""),
     startingLocation: row.starting_location ?? row.meetup ?? "",
-    kickstandsUp: row.kickstands_up ?? "",
+    kickstandsUp: toTimeInputValue(row.meetup_time ?? row.kickstands_up ?? ""),
     primaryRouteLink: row.primary_route_link ?? undefined,
     alternativeRouteLink: row.alternative_route_link ?? undefined,
     totalDistance: row.total_distance ?? row.mileage ?? "",
@@ -176,6 +208,7 @@ function toSupabaseRidePayload(input: RideSaveInput) {
     estimated_distance: input.estimatedDistance ?? "",
     estimated_ride_time: input.estimatedRideTime ?? "Flexible",
     freeways: input.freeways,
+    meetup_time: toDatabaseTime(input.meetupTime ?? input.kickstandsUp ?? ""),
     starting_location: input.startingLocation ?? "",
     kickstands_up: input.kickstandsUp ?? "",
     primary_route_link: input.primaryRouteLink ?? "",
@@ -207,6 +240,7 @@ function toLocalRideRecord(input: RideSaveInput): RideRecord {
     estimatedDistance: input.estimatedDistance,
     estimatedRideTime: input.estimatedRideTime,
     freeways: input.freeways,
+    meetupTime: input.meetupTime ?? input.kickstandsUp,
     startingLocation: input.startingLocation,
     kickstandsUp: input.kickstandsUp,
     primaryRouteLink: input.primaryRouteLink,
@@ -231,4 +265,13 @@ function createLocalId(prefix: string) {
   }
 
   return `${prefix}-${Date.now()}`;
+}
+
+function toTimeInputValue(value: string) {
+  const match = /^(\d{2}):(\d{2})/.exec(value);
+  return match ? `${match[1]}:${match[2]}` : "";
+}
+
+function toDatabaseTime(value: string) {
+  return /^\d{2}:\d{2}$/.test(value) ? value : null;
 }

@@ -23,6 +23,7 @@ export interface RideRecord {
   estimatedDistance?: string;
   estimatedRideTime?: string;
   freeways?: boolean;
+  meetupTime?: string;
   startingLocation?: string;
   kickstandsUp?: string;
   primaryRouteLink?: string;

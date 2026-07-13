@@ -1,0 +1,80 @@
+-- Restore the original Ride Planner records into Supabase.
+-- Safe to run repeatedly: stable UUIDs and ON CONFLICT DO NOTHING prevent
+-- duplicate inserts and avoid overwriting founder-edited rows.
+
+alter table public.rides
+  add column if not exists meetup_time time;
+
+insert into public.rides (
+  id,
+  title,
+  date,
+  status,
+  meetup,
+  destination,
+  mileage,
+  duration,
+  difficulty,
+  estimated_distance,
+  estimated_ride_time,
+  freeways,
+  meetup_time,
+  starting_location,
+  kickstands_up,
+  total_distance,
+  route_duration,
+  ride_type,
+  visibility,
+  weather_policy,
+  stops,
+  notes
+) values
+(
+  'b7257f75-0f14-4e0f-9f4f-f450f2c9b001',
+  'Branch Ride',
+  '2026-07-25',
+  'Planning',
+  '',
+  '',
+  '',
+  'Flexible',
+  'Intermediate',
+  '',
+  'Flexible',
+  false,
+  null,
+  '',
+  '',
+  '',
+  '',
+  'Group Ride',
+  'Chapter Only',
+  'Leader Decision',
+  '[]'::jsonb,
+  'Confirm fuel, regroup, weather, and direct-arrival option.'
+),
+(
+  'a4d28dfa-15da-4718-a279-868ea872b002',
+  'Litas Beach Day Ride',
+  '2026-08-15',
+  'Planning',
+  '',
+  '',
+  'Local',
+  'Flexible',
+  'Beginner Friendly',
+  'Local',
+  'Flexible',
+  false,
+  null,
+  '',
+  '',
+  'Local',
+  'Flexible',
+  'Beginner Ride',
+  'Chapter Only',
+  'Leader Decision',
+  '[{"id":"beach-day-stop-1","type":"Meetup","location":"","notes":"Confirm parking and arrival instructions."}]'::jsonb,
+  'Confirm parking, sand exposure, crowds, and backup destination.'
+)
+on conflict (id) do nothing;

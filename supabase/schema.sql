@@ -58,6 +58,7 @@ create table if not exists public.rides (
   estimated_distance text,
   estimated_ride_time text,
   freeways boolean default false,
+  meetup_time time,
   starting_location text,
   kickstands_up text,
   primary_route_link text,
