@@ -252,7 +252,14 @@ export function RidePlanner({
         {formState ? (
           <>
             <DashboardCard>
-              <SectionHeader title="Ride Overview" />
+              <SectionHeader
+                title="Ride Overview"
+                action={(
+                  <Button type="button" variant="secondary" onClick={handleSaveRide} disabled={savingId === formState.id}>
+                    {savingId === formState.id ? "Saving..." : "Save ride"}
+                  </Button>
+                )}
+              />
               <div className="form-grid">
                 <FormField label="Ride Leader" htmlFor="ride-leader">
                   <SelectInput id="ride-leader" value={formState.rideLeader} onChange={(event) => updateField("rideLeader", event.target.value)}>
@@ -574,6 +581,7 @@ function normalizeDifficulty(value = "") {
 }
 
 function normalizeStatus(value = "") {
+  if (value === "Pending") return "Planning";
   if (statusOptions.includes(value)) return value;
   return "Planning";
 }

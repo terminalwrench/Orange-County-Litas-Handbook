@@ -698,6 +698,7 @@ function isEventReady(event: EventRecord) {
 
 function normalizeEventStatus(status = "Planning") {
   if (status === "Active") return "Ready";
+  if (status === "Pending") return "Planning";
   if (status === "Ready" || status === "Completed" || status === "Cancelled" || status === "Planning") return status;
   return "Planning";
 }

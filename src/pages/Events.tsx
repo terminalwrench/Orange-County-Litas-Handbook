@@ -76,6 +76,11 @@ function getStatusTone(status: string) {
   return "neutral";
 }
 
+function getDisplayEventStatus(event: EventRecord, today = new Date()) {
+  if (parseEventDate(event.startDate) < getStartOfToday(today)) return "Completed";
+  return event.status;
+}
+
 function sortAscendingByStartDate(events: EventRecord[]) {
   return [...events].sort((a, b) => parseEventDate(a.startDate).getTime() - parseEventDate(b.startDate).getTime());
 }
@@ -87,16 +92,19 @@ function sortDescendingByStartDate(events: EventRecord[]) {
 function EventRows({
   events,
   selectedId,
-  onSelect
+  onSelect,
+  getDisplayStatus = (event) => event.status
 }: {
   events: EventRecord[];
   selectedId?: string;
   onSelect: (event: EventRecord) => void;
+  getDisplayStatus?: (event: EventRecord) => string;
 }) {
   return (
     <div className="record-list">
       {events.map((event) => {
         const summary = formatEventRowSummary(event);
+        const displayStatus = getDisplayStatus(event);
 
         return (
           <button
@@ -116,7 +124,7 @@ function EventRows({
               {summary ? <em>{summary}</em> : null}
             </span>
             <span className="event-record-row__status">
-              <StatusChip label={event.status} tone={getStatusTone(event.status)} />
+              <StatusChip label={displayStatus} tone={getStatusTone(displayStatus)} />
             </span>
           </button>
         );
@@ -422,6 +430,7 @@ export function Events({
               events={pastEvents}
               selectedId={selectedEventId}
               onSelect={handleViewEvent}
+              getDisplayStatus={(event) => getDisplayEventStatus(event, today)}
             />
           ) : (
             <EmptyState title="No archived events yet." message="Past events will appear here automatically after their event dates pass." />
@@ -560,6 +569,8 @@ function formatEventRowSummary(event: EventRecord) {
 }
 
 function getEventMetadata(event: EventRecord) {
+  const displayStatus = getDisplayEventStatus(event);
+
   return [
     { label: "Date", value: event.startDate },
     { label: "Time", value: event.time },
@@ -567,8 +578,12 @@ function getEventMetadata(event: EventRecord) {
     { label: "City", value: event.city },
     { label: "Type", value: event.type },
     { label: "Difficulty", value: event.rideDifficulty },
-    { label: "Status", value: event.status }
+    { label: "Status", value: displayStatus }
   ].filter((item): item is { label: string; value: string } => isMeaningfulEventValue(item.value));
+}
+
+function getStartOfToday(today = new Date()) {
+  return new Date(today.getFullYear(), today.getMonth(), today.getDate());
 }
 
 function isMeaningfulEventValue(value: string | undefined | null) {
