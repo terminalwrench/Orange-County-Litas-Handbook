@@ -2718,6 +2718,11 @@ a {
   .slide-over-panel {
     width: min(100%, 29rem);
     padding: 0.95rem;
+    background:
+      linear-gradient(180deg, rgba(14, 15, 15, 0.98), rgba(5, 6, 6, 0.98)),
+      #070808;
+    backdrop-filter: none;
+    box-shadow: -0.65rem 0 1.5rem rgba(0, 0, 0, 0.34);
   }
 
   .slide-over-form {
