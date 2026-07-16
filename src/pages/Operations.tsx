@@ -313,62 +313,55 @@ export function Operations({
               </div>
             </form>
           ) : null}
-          {sortedMembers.length > 0 ? (
-            <section className="birthday-list-panel" aria-labelledby="birthday-list-title">
-              <div className="birthday-list-header">
-                <div>
-                  <h3 id="birthday-list-title">Birthday List</h3>
-                  <p>Grouped to keep member birthdays easy to scan and maintain.</p>
-                </div>
+          <section className="birthday-list-panel" aria-labelledby="birthday-list-title">
+            <div className="birthday-list-header">
+              <div>
+                <h3 id="birthday-list-title">Birthday List</h3>
+                <p>Select a month to manage birthdays.</p>
               </div>
-              {birthdayGroups.length > 0 ? (
-                <div className="birthday-month-groups">
-                  {birthdayGroups.map((group) => {
-                    const isExpanded = expandedBirthdayMonth === group.month;
-                    const visibleMembers = group.members.slice(0, visibleBirthdayCount);
-                    const hiddenCount = group.members.length - visibleMembers.length;
+            </div>
+            <div className="birthday-month-groups">
+              {birthdayGroups.map((group) => {
+                const isSelected = expandedBirthdayMonth === group.month;
+                const isCurrent = group.month === String(today.getMonth() + 1);
+                const isMuted = group.members.length === 0;
 
-                    return (
-                      <section className="birthday-month-group" key={group.month}>
-                        <button
-                          className="birthday-month-header"
-                          type="button"
-                          onClick={() => toggleBirthdayMonth(group.month)}
-                          aria-expanded={isExpanded}
-                        >
-                          <span>{group.label}</span>
-                          <em>{group.members.length} {group.members.length === 1 ? "birthday" : "birthdays"} · {isExpanded ? "Collapse" : "Expand"}</em>
-                        </button>
-                        {isExpanded ? (
-                          <>
-                            <div className="birthday-management-list">
-                              {visibleMembers.map((member) => (
-                                <button className="birthday-management-row" type="button" key={member.id} onClick={() => editMember(member)}>
-                                  <span>
-                                    <strong>{formatMemberName(member)}</strong>
-                                    <em>{formatBirthday(member)}{member.instagramHandle ? ` · ${member.instagramHandle}` : ""}</em>
-                                  </span>
-                                </button>
-                              ))}
-                            </div>
-                            {hiddenCount > 0 ? (
-                              <Button type="button" variant="ghost" onClick={() => setVisibleBirthdayCount((current) => current + birthdayPageSize)}>
-                                Load More
-                              </Button>
-                            ) : null}
-                          </>
-                        ) : null}
-                      </section>
-                    );
-                  })}
-                </div>
-              ) : (
-                <EmptyState title="No birthdays have been added." />
-              )}
-            </section>
-          ) : (
-            <EmptyState title="No birthdays have been added." />
-          )}
+                return (
+                  <button
+                    className={[
+                      "birthday-month-tile",
+                      isMuted ? "birthday-month-tile--muted" : "",
+                      isCurrent ? "birthday-month-tile--current" : "",
+                      isSelected ? "birthday-month-tile--selected" : ""
+                    ].filter(Boolean).join(" ")}
+                    type="button"
+                    key={group.month}
+                    onClick={() => toggleBirthdayMonth(group.month)}
+                    aria-expanded={isSelected}
+                  >
+                    {group.month === "unscheduled" ? (
+                      <span className="birthday-month-tile__icon" aria-hidden="true">
+                        <Icon name="calendar" />
+                        <em>?</em>
+                      </span>
+                    ) : (
+                      <span className="birthday-month-tile__abbr">{getMonthAbbreviation(group.month)}</span>
+                    )}
+                    <strong>{group.members.length}</strong>
+                    <em>{group.members.length === 1 ? "birthday" : "birthdays"}</em>
+                  </button>
+                );
+              })}
+            </div>
+            {expandedBirthdayMonth ? (
+              <BirthdayMonthDrawer
+                group={birthdayGroups.find((group) => group.month === expandedBirthdayMonth)}
+                visibleCount={visibleBirthdayCount}
+                onEditMember={editMember}
+                onShowMore={() => setVisibleBirthdayCount((current) => current + birthdayPageSize)}
+              />
+            ) : null}
+          </section>
           {birthdayMessage ? <p className="form-status form-status--success">{birthdayMessage}</p> : null}
           {birthdayError ? <p className="form-status form-status--error">{birthdayError}</p> : null}
         </DashboardCard>
@@ -388,6 +381,53 @@ export function Operations({
         />
       ) : null}
     </PageContainer>
+  );
+}
+
+function BirthdayMonthDrawer({
+  group,
+  visibleCount,
+  onEditMember,
+  onShowMore
+}: {
+  group?: ReturnType<typeof getBirthdayGroups>[number];
+  visibleCount: number;
+  onEditMember: (member: MemberRecord) => void;
+  onShowMore: () => void;
+}) {
+  if (!group) return null;
+
+  const visibleMembers = group.members.slice(0, visibleCount);
+  const hiddenCount = group.members.length - visibleMembers.length;
+
+  return (
+    <div className="birthday-month-drawer">
+      <div className="birthday-month-drawer__header">
+        <strong>{group.label}</strong>
+        <span>{group.members.length} {group.members.length === 1 ? "birthday" : "birthdays"}</span>
+      </div>
+      {visibleMembers.length > 0 ? (
+        <>
+          <div className="birthday-management-list">
+            {visibleMembers.map((member) => (
+              <button className="birthday-management-row" type="button" key={member.id} onClick={() => onEditMember(member)}>
+                <span>
+                  <strong>{formatMemberName(member)}</strong>
+                  <em>{formatBirthday(member)}{member.instagramHandle ? ` · ${member.instagramHandle}` : ""}</em>
+                </span>
+              </button>
+            ))}
+          </div>
+          {hiddenCount > 0 ? (
+            <Button type="button" variant="ghost" onClick={onShowMore}>
+              Load More
+            </Button>
+          ) : null}
+        </>
+      ) : (
+        <EmptyState title={`No birthdays in ${group.label}.`} />
+      )}
+    </div>
   );
 }
 
@@ -567,6 +607,10 @@ function getBirthdayGroups(members: MemberRecord[]) {
 function getBirthdayGroupSortValue(month: string) {
   if (month === "unscheduled") return 13;
   return Number(month);
+}
+
+function getMonthAbbreviation(month: string) {
+  return monthOptions[Number(month)].label.slice(0, 3).toUpperCase();
 }
 
 function formatDate(value: string) {
