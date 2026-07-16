@@ -451,73 +451,84 @@ export function Events({
           >
             <div className="slide-over-panel__header">
               <div>
-                <span>{isEditing ? "Event Editor" : "New Event"}</span>
-                <h2 id="event-slide-over-title">{isEditing ? "Edit event" : "Add event"}</h2>
+                <h2 id="event-slide-over-title">{formState.title || (isEditing ? "Untitled event" : "New event")}</h2>
+                <span>{getSlideOverSubtitle(formState)}</span>
               </div>
               <Button type="button" variant="ghost" onClick={closeEditor}>Close</Button>
             </div>
             <form className="form-grid slide-over-form" aria-label={isEditing ? "Edit event" : "Add event"} onSubmit={handleSubmit}>
-              <FormField label="Title" htmlFor="event-title">
-                <TextInput id="event-title" value={formState.title} onChange={(event) => updateForm("title", event.target.value)} required />
-              </FormField>
-              <FormField label="Date" htmlFor="event-date">
-                <DateInput id="event-date" value={formState.startDate} onChange={(event) => updateForm("startDate", event.target.value)} required />
-              </FormField>
-              <FormField label="Time" htmlFor="event-time">
-                <TimeInput id="event-time" value={formState.time} onChange={(event) => updateForm("time", event.target.value)} />
-              </FormField>
-              <FormField label="Location" htmlFor="event-location">
-                <TextInput id="event-location" value={formState.location} onChange={(event) => updateForm("location", event.target.value)} />
-              </FormField>
-              <FormField label="City" htmlFor="event-city">
-                <TextInput id="event-city" value={formState.city} onChange={(event) => updateForm("city", event.target.value)} />
-              </FormField>
-              <FormField label="Event Type" htmlFor="event-type">
-                <SelectInput id="event-type" value={formState.type} onChange={(event) => updateForm("type", event.target.value)}>
-                  {eventTypes.map((type) => <option key={type} value={type}>{type}</option>)}
-                </SelectInput>
-              </FormField>
-              <FormField label="Status" htmlFor="event-status">
-                <SelectInput id="event-status" value={formState.status} onChange={(event) => updateForm("status", event.target.value)}>
-                  {eventStatuses.map((status) => <option key={status} value={status}>{status}</option>)}
-                </SelectInput>
-              </FormField>
-              {formState.type === "Ride" ? (
-                <FormField label="Ride Difficulty" htmlFor="event-ride-difficulty">
-                  <SelectInput
-                    id="event-ride-difficulty"
-                    value={formState.rideDifficulty}
-                    onChange={(event) => updateForm("rideDifficulty", event.target.value)}
-                  >
-                    {rideDifficulties.map((difficulty) => <option key={difficulty} value={difficulty}>{difficulty}</option>)}
-                  </SelectInput>
-                </FormField>
-              ) : null}
-              {formState.status === "Completed" ? (
-                <>
-                  <FormField label="Event Flyer URL" htmlFor="event-flyer-url">
-                    <TextInput id="event-flyer-url" value={formState.flyerUrl} onChange={(event) => updateForm("flyerUrl", event.target.value)} />
+              <section className="slide-over-section">
+                <h3>Event Information</h3>
+                <div className="form-grid">
+                  <FormField label="Title" htmlFor="event-title">
+                    <TextInput id="event-title" value={formState.title} onChange={(event) => updateForm("title", event.target.value)} required />
                   </FormField>
-                  <FormField label="Group Photo URL" htmlFor="event-group-photo-url">
-                    <TextInput id="event-group-photo-url" value={formState.groupPhotoUrl} onChange={(event) => updateForm("groupPhotoUrl", event.target.value)} />
+                  <FormField label="Date" htmlFor="event-date">
+                    <DateInput id="event-date" value={formState.startDate} onChange={(event) => updateForm("startDate", event.target.value)} required />
+                  </FormField>
+                  <FormField label="Time" htmlFor="event-time">
+                    <TimeInput id="event-time" value={formState.time} onChange={(event) => updateForm("time", event.target.value)} />
+                  </FormField>
+                  <FormField label="Location" htmlFor="event-location">
+                    <TextInput id="event-location" value={formState.location} onChange={(event) => updateForm("location", event.target.value)} />
+                  </FormField>
+                  <FormField label="City" htmlFor="event-city">
+                    <TextInput id="event-city" value={formState.city} onChange={(event) => updateForm("city", event.target.value)} />
+                  </FormField>
+                  <FormField label="Event Type" htmlFor="event-type">
+                    <SelectInput id="event-type" value={formState.type} onChange={(event) => updateForm("type", event.target.value)}>
+                      {eventTypes.map((type) => <option key={type} value={type}>{type}</option>)}
+                    </SelectInput>
+                  </FormField>
+                  <FormField label="Status" htmlFor="event-status">
+                    <SelectInput id="event-status" value={formState.status} onChange={(event) => updateForm("status", event.target.value)}>
+                      {eventStatuses.map((status) => <option key={status} value={status}>{status}</option>)}
+                    </SelectInput>
                   </FormField>
                   {formState.type === "Ride" ? (
-                    <FormField label="Route Screenshot URL" htmlFor="event-route-image-url">
-                      <TextInput id="event-route-image-url" value={formState.routeImageUrl} onChange={(event) => updateForm("routeImageUrl", event.target.value)} />
+                    <FormField label="Ride Difficulty" htmlFor="event-ride-difficulty">
+                      <SelectInput
+                        id="event-ride-difficulty"
+                        value={formState.rideDifficulty}
+                        onChange={(event) => updateForm("rideDifficulty", event.target.value)}
+                      >
+                        {rideDifficulties.map((difficulty) => <option key={difficulty} value={difficulty}>{difficulty}</option>)}
+                      </SelectInput>
                     </FormField>
                   ) : null}
-                  <FormField label="Instagram Link" htmlFor="event-instagram-url">
-                    <TextInput id="event-instagram-url" value={formState.instagramUrl} onChange={(event) => updateForm("instagramUrl", event.target.value)} />
-                  </FormField>
-                  <FormField label="Apple Shared Album Link" htmlFor="event-apple-album-url">
-                    <TextInput id="event-apple-album-url" value={formState.appleAlbumUrl} onChange={(event) => updateForm("appleAlbumUrl", event.target.value)} />
-                  </FormField>
-                </>
+                </div>
+              </section>
+              {formState.status === "Completed" ? (
+                <section className="slide-over-section">
+                  <h3>Media</h3>
+                  <div className="form-grid">
+                    <FormField label="Event Flyer URL" htmlFor="event-flyer-url">
+                      <TextInput id="event-flyer-url" value={formState.flyerUrl} onChange={(event) => updateForm("flyerUrl", event.target.value)} />
+                    </FormField>
+                    <FormField label="Group Photo URL" htmlFor="event-group-photo-url">
+                      <TextInput id="event-group-photo-url" value={formState.groupPhotoUrl} onChange={(event) => updateForm("groupPhotoUrl", event.target.value)} />
+                    </FormField>
+                    {formState.type === "Ride" ? (
+                      <FormField label="Route Screenshot URL" htmlFor="event-route-image-url">
+                        <TextInput id="event-route-image-url" value={formState.routeImageUrl} onChange={(event) => updateForm("routeImageUrl", event.target.value)} />
+                      </FormField>
+                    ) : null}
+                    <FormField label="Instagram Link" htmlFor="event-instagram-url">
+                      <TextInput id="event-instagram-url" value={formState.instagramUrl} onChange={(event) => updateForm("instagramUrl", event.target.value)} />
+                    </FormField>
+                    <FormField label="Apple Shared Album Link" htmlFor="event-apple-album-url">
+                      <TextInput id="event-apple-album-url" value={formState.appleAlbumUrl} onChange={(event) => updateForm("appleAlbumUrl", event.target.value)} />
+                    </FormField>
+                  </div>
+                </section>
               ) : null}
-              <FormField label="Notes / Description" htmlFor="event-notes">
-                <Textarea id="event-notes" value={formState.notes} onChange={(event) => updateForm("notes", event.target.value)} />
-              </FormField>
-              <section className="event-flyer-preview-panel" aria-labelledby="event-flyer-preview-title">
+              <section className="slide-over-section">
+                <h3>Notes</h3>
+                <FormField label="Notes / Description" htmlFor="event-notes">
+                  <Textarea id="event-notes" value={formState.notes} onChange={(event) => updateForm("notes", event.target.value)} />
+                </FormField>
+              </section>
+              <section className="slide-over-section event-flyer-preview-panel" aria-labelledby="event-flyer-preview-title">
                 <h3 id="event-flyer-preview-title">Flyer Preview</h3>
                 {formState.flyerUrl ? (
                   <button
@@ -536,20 +547,23 @@ export function Events({
                   <EmptyState title="No flyer attached." />
                 )}
               </section>
-              <div className="form-actions">
-                <Button type="submit" variant="primary" disabled={savingId === formState.id || savingId === "new"}>
-                  {savingId === formState.id || savingId === "new" ? "Saving..." : "Save event"}
-                </Button>
-                {isEditing && editorEvent ? (
-                  <Button type="button" variant="ghost" onClick={() => handleDeleteEvent(editorEvent)} disabled={savingId === editorEvent.id}>
-                    Delete
+              <section className="slide-over-section slide-over-section--actions">
+                <h3>Actions</h3>
+                <div className="form-actions">
+                  <Button type="submit" variant="primary" disabled={savingId === formState.id || savingId === "new"}>
+                    {savingId === formState.id || savingId === "new" ? "Saving..." : "Save event"}
                   </Button>
-                ) : null}
-                <Button type="button" variant="ghost" onClick={closeEditor}>Cancel</Button>
-                <span className="form-note">
-                  {isPersistenceConfigured ? "Changes save to the shared event records." : "Changes are kept for this browser session."}
-                </span>
-              </div>
+                  {isEditing && editorEvent ? (
+                    <Button type="button" variant="ghost" onClick={() => handleDeleteEvent(editorEvent)} disabled={savingId === editorEvent.id}>
+                      Delete
+                    </Button>
+                  ) : null}
+                  <Button type="button" variant="ghost" onClick={closeEditor}>Cancel</Button>
+                  <span className="form-note">
+                    {isPersistenceConfigured ? "Changes save to the shared event records." : "Changes are kept for this browser session."}
+                  </span>
+                </div>
+              </section>
               {saveMessage ? <p className="form-status form-status--success">{saveMessage}</p> : null}
               {saveError ? <p className="form-status form-status--error">{saveError}</p> : null}
             </form>
@@ -629,6 +643,18 @@ function formatEventRowSummary(event: EventRecord) {
   return [event.time, event.location]
     .filter(isMeaningfulEventValue)
     .join(" · ");
+}
+
+function getSlideOverSubtitle(form: EventFormState) {
+  return [form.type, form.status, formatSlideOverDate(form.startDate)]
+    .filter(isMeaningfulEventValue)
+    .join(" • ");
+}
+
+function formatSlideOverDate(value: string) {
+  if (!value) return "";
+
+  return new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric" }).format(parseEventDate(value));
 }
 
 function getStartOfToday(today = new Date()) {

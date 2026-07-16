@@ -48,6 +48,9 @@ const emptyBirthdayForm = {
   instagramHandle: ""
 };
 
+const birthdayPageSize = 8;
+type BirthdayListView = "current" | "upcoming" | "past";
+
 interface OperationsProps {
   eventRecords: EventRecord[];
   memberRecords: MemberRecord[];
@@ -72,6 +75,9 @@ export function Operations({
   const [savingMemberId, setSavingMemberId] = useState<string | null>(null);
   const [birthdayMessage, setBirthdayMessage] = useState("");
   const [birthdayError, setBirthdayError] = useState("");
+  const [birthdayListView, setBirthdayListView] = useState<BirthdayListView>("current");
+  const [expandedBirthdayMonth, setExpandedBirthdayMonth] = useState(String(today.getMonth() + 1));
+  const [visibleBirthdayCount, setVisibleBirthdayCount] = useState(birthdayPageSize);
   const [selectedAccount, setSelectedAccount] = useState<SharedAccount | null>(null);
   const [credentialMessage, setCredentialMessage] = useState("");
   const metrics = getBranchMetrics(eventRecords, {
@@ -81,6 +87,10 @@ export function Operations({
   const sharedAccounts = getSharedAccounts();
   const annualReport = getAnnualBranchReport(eventRecords, selectedYear);
   const sortedMembers = [...memberRecords].sort(compareBirthdayMembers);
+  const birthdayGroups = getBirthdayGroups(sortedMembers, birthdayListView, today);
+  const activeBirthdayMonth = birthdayGroups.some((group) => group.month === expandedBirthdayMonth)
+    ? expandedBirthdayMonth
+    : birthdayGroups[0]?.month ?? "";
 
   function editMember(member: MemberRecord) {
     setBirthdayForm({
@@ -103,6 +113,17 @@ export function Operations({
 
   function updateBirthdayForm(field: keyof typeof emptyBirthdayForm, value: string) {
     setBirthdayForm((current) => ({ ...current, [field]: value }));
+  }
+
+  function changeBirthdayListView(view: BirthdayListView) {
+    setBirthdayListView(view);
+    setVisibleBirthdayCount(birthdayPageSize);
+    setExpandedBirthdayMonth(getDefaultExpandedBirthdayMonth(view, today));
+  }
+
+  function toggleBirthdayMonth(month: string) {
+    setExpandedBirthdayMonth((current) => current === month ? "" : month);
+    setVisibleBirthdayCount(birthdayPageSize);
   }
 
   async function saveBirthday(event: FormEvent<HTMLFormElement>) {
@@ -273,22 +294,75 @@ export function Operations({
             </div>
           </form>
           {sortedMembers.length > 0 ? (
-            <div className="birthday-management-list">
-              {sortedMembers.map((member) => (
-                <article className="birthday-management-row" key={member.id}>
-                  <span>
-                    <strong>{formatMemberName(member)}</strong>
-                    <em>{formatBirthday(member)}{member.instagramHandle ? ` · ${member.instagramHandle}` : ""}</em>
-                  </span>
-                  <div className="record-row__actions">
-                    <Button type="button" variant="secondary" onClick={() => editMember(member)}>Edit</Button>
-                    <Button type="button" variant="ghost" onClick={() => deleteBirthday(member)} disabled={savingMemberId === member.id}>
-                      Delete
-                    </Button>
-                  </div>
-                </article>
-              ))}
-            </div>
+            <section className="birthday-list-panel" aria-labelledby="birthday-list-title">
+              <div className="birthday-list-header">
+                <div>
+                  <h3 id="birthday-list-title">Birthday List</h3>
+                  <p>Grouped to keep member birthdays easy to scan and maintain.</p>
+                </div>
+                <div className="segmented-control" aria-label="Birthday list view">
+                  <Button type="button" variant={birthdayListView === "current" ? "primary" : "secondary"} onClick={() => changeBirthdayListView("current")}>
+                    Current Month
+                  </Button>
+                  <Button type="button" variant={birthdayListView === "upcoming" ? "primary" : "secondary"} onClick={() => changeBirthdayListView("upcoming")}>
+                    Upcoming
+                  </Button>
+                  <Button type="button" variant={birthdayListView === "past" ? "primary" : "secondary"} onClick={() => changeBirthdayListView("past")}>
+                    Past
+                  </Button>
+                </div>
+              </div>
+              {birthdayGroups.length > 0 ? (
+                <div className="birthday-month-groups">
+                  {birthdayGroups.map((group) => {
+                    const isExpanded = activeBirthdayMonth === group.month;
+                    const visibleMembers = group.members.slice(0, visibleBirthdayCount);
+                    const hiddenCount = group.members.length - visibleMembers.length;
+
+                    return (
+                      <section className="birthday-month-group" key={group.month}>
+                        <button
+                          className="birthday-month-header"
+                          type="button"
+                          onClick={() => toggleBirthdayMonth(group.month)}
+                          aria-expanded={isExpanded}
+                        >
+                          <span>{group.label}</span>
+                          <em>{group.members.length} {group.members.length === 1 ? "birthday" : "birthdays"} · {isExpanded ? "Collapse" : "Expand"}</em>
+                        </button>
+                        {isExpanded ? (
+                          <>
+                            <div className="birthday-management-list">
+                              {visibleMembers.map((member) => (
+                                <article className="birthday-management-row" key={member.id}>
+                                  <span>
+                                    <strong>{formatMemberName(member)}</strong>
+                                    <em>{formatBirthday(member)}{member.instagramHandle ? ` · ${member.instagramHandle}` : ""}</em>
+                                  </span>
+                                  <div className="record-row__actions">
+                                    <Button type="button" variant="secondary" onClick={() => editMember(member)}>Edit</Button>
+                                    <Button type="button" variant="ghost" onClick={() => deleteBirthday(member)} disabled={savingMemberId === member.id}>
+                                      Delete
+                                    </Button>
+                                  </div>
+                                </article>
+                              ))}
+                            </div>
+                            {hiddenCount > 0 ? (
+                              <Button type="button" variant="ghost" onClick={() => setVisibleBirthdayCount((current) => current + birthdayPageSize)}>
+                                Load More
+                              </Button>
+                            ) : null}
+                          </>
+                        ) : null}
+                      </section>
+                    );
+                  })}
+                </div>
+              ) : (
+                <EmptyState title={getBirthdayEmptyTitle(birthdayListView)} />
+              )}
+            </section>
           ) : (
             <EmptyState title="No birthdays have been added." />
           )}
@@ -464,6 +538,51 @@ function AnnualReportSummary({ report }: { report: AnnualBranchReport }) {
       ))}
     </div>
   );
+}
+
+function getBirthdayGroups(members: MemberRecord[], view: BirthdayListView, today: Date) {
+  const currentMonth = today.getMonth() + 1;
+  const currentDay = today.getDate();
+  const filteredMembers = members.filter((member) => {
+    if (!member.birthdayMonth || !member.birthdayDay) return view === "current";
+    if (view === "current") return member.birthdayMonth === currentMonth;
+    if (view === "upcoming") return member.birthdayMonth > currentMonth || (member.birthdayMonth === currentMonth && member.birthdayDay >= currentDay);
+    return member.birthdayMonth < currentMonth || (member.birthdayMonth === currentMonth && member.birthdayDay < currentDay);
+  });
+  const groups = new Map<string, MemberRecord[]>();
+
+  filteredMembers.forEach((member) => {
+    const key = member.birthdayMonth ? String(member.birthdayMonth) : "unscheduled";
+    groups.set(key, [...(groups.get(key) ?? []), member]);
+  });
+
+  return Array.from(groups.entries())
+    .map(([month, groupMembers]) => ({
+      month,
+      label: month === "unscheduled" ? "Needs Date" : monthOptions[Number(month)].label,
+      members: groupMembers.sort(compareBirthdayMembers)
+    }))
+    .sort((a, b) => getBirthdayGroupSortValue(a.month, currentMonth) - getBirthdayGroupSortValue(b.month, currentMonth));
+}
+
+function getBirthdayGroupSortValue(month: string, currentMonth: number) {
+  if (month === "unscheduled") return 99;
+
+  const numericMonth = Number(month);
+  return numericMonth >= currentMonth ? numericMonth - currentMonth : numericMonth + 12 - currentMonth;
+}
+
+function getDefaultExpandedBirthdayMonth(view: BirthdayListView, today: Date) {
+  const currentMonth = today.getMonth() + 1;
+  if (view === "current") return String(currentMonth);
+  if (view === "upcoming") return String(currentMonth === 12 ? 1 : currentMonth + 1);
+  return String(currentMonth === 1 ? 12 : currentMonth - 1);
+}
+
+function getBirthdayEmptyTitle(view: BirthdayListView) {
+  if (view === "current") return "No birthdays this month.";
+  if (view === "upcoming") return "No upcoming birthdays.";
+  return "No past birthdays to show.";
 }
 
 function formatDate(value: string) {

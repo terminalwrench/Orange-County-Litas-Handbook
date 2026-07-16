@@ -72,9 +72,9 @@ export function RidePlanner({
 }: RidePlannerProps) {
   const ridePlans = useMemo(() => buildRidePlans(eventRecords, rideRecords), [eventRecords, rideRecords]);
   const [expandedRideId, setExpandedRideId] = useState<string | undefined>();
-  const [hasInitializedQueue, setHasInitializedQueue] = useState(false);
   const selectedRide = expandedRideId ? ridePlans.find((ride) => ride.id === expandedRideId) : undefined;
   const [formState, setFormState] = useState<RidePlan | null>(selectedRide ?? null);
+  const [isNewRideOpen, setIsNewRideOpen] = useState(false);
   const [newRideState, setNewRideState] = useState<RidePlan>(() => createBlankRidePlan());
   const [savingId, setSavingId] = useState<string | null>(null);
   const [saveMessage, setSaveMessage] = useState("");
@@ -90,16 +90,10 @@ export function RidePlanner({
       return;
     }
 
-    if (!hasInitializedQueue) {
-      setExpandedRideId(ridePlans[0].id);
-      setHasInitializedQueue(true);
-      return;
-    }
-
     if (expandedRideId && !ridePlans.some((ride) => ride.id === expandedRideId)) {
-      setExpandedRideId(ridePlans[0].id);
+      setExpandedRideId(undefined);
     }
-  }, [expandedRideId, hasInitializedQueue, ridePlans]);
+  }, [expandedRideId, ridePlans]);
 
   useEffect(() => {
     setFormState(selectedRide ?? null);
@@ -114,7 +108,16 @@ export function RidePlanner({
   }
 
   function startNewRide() {
+    setIsNewRideOpen(true);
+    setExpandedRideId(undefined);
     newRideRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    setNewRideMessage("");
+    setNewRideError("");
+  }
+
+  function cancelNewRide() {
+    setNewRideState(createBlankRidePlan());
+    setIsNewRideOpen(false);
     setNewRideMessage("");
     setNewRideError("");
   }
@@ -207,6 +210,7 @@ export function RidePlanner({
 
         if (mode === "new") {
           setNewRideState(createBlankRidePlan());
+          setIsNewRideOpen(false);
           setNewRideMessage(result.source === "supabase" ? "Ride plan created." : "Saved locally for this session.");
         } else {
           setSaveMessage(result.source === "supabase" ? "Ride plan saved." : "Saved locally for this session.");
@@ -258,7 +262,7 @@ export function RidePlanner({
       </div>
       <div className="ride-planner-flow">
         <DashboardCard>
-          <SectionHeader title="Ride Queue" action={<Button type="button" variant="secondary" onClick={startNewRide}>Add Ride</Button>} />
+          <SectionHeader title="Ride Queue" action={<Button type="button" variant="secondary" onClick={startNewRide}>+ New Ride</Button>} />
           {isLoading ? (
             <EmptyState title="Loading rides" message="Checking the shared ride records." />
           ) : ridePlans.length > 0 ? (
@@ -320,22 +324,33 @@ export function RidePlanner({
         </DashboardCard>
         <div ref={newRideRef}>
           <DashboardCard className="new-ride-card">
-            <SectionHeader title="New Ride" />
-            <RidePlannerEditor
-              ride={newRideState}
-              flyerUrl={undefined}
-              idPrefix="new-ride"
-              savingId={savingId}
-              saveMessage={newRideMessage}
-              saveError={newRideError}
-              isPersistenceConfigured={isPersistenceConfigured}
-              onUpdateField={updateNewRideField}
-              onUpdateStop={updateNewRideStop}
-              onAddStop={addNewRideStop}
-              onRemoveStop={removeNewRideStop}
-              onMoveStop={moveNewRideStop}
-              onSave={handleSaveNewRide}
-            />
+            <button
+              className="new-ride-toggle"
+              type="button"
+              onClick={() => isNewRideOpen ? cancelNewRide() : startNewRide()}
+              aria-expanded={isNewRideOpen}
+            >
+              <strong>+ New Ride</strong>
+              <span>{isNewRideOpen ? "Collapse" : "Create a new ride plan"}</span>
+            </button>
+            {isNewRideOpen ? (
+              <RidePlannerEditor
+                ride={newRideState}
+                flyerUrl={undefined}
+                idPrefix="new-ride"
+                savingId={savingId}
+                saveMessage={newRideMessage}
+                saveError={newRideError}
+                isPersistenceConfigured={isPersistenceConfigured}
+                onUpdateField={updateNewRideField}
+                onUpdateStop={updateNewRideStop}
+                onAddStop={addNewRideStop}
+                onRemoveStop={removeNewRideStop}
+                onMoveStop={moveNewRideStop}
+                onSave={handleSaveNewRide}
+                onCancel={cancelNewRide}
+              />
+            ) : null}
           </DashboardCard>
         </div>
       </div>
@@ -357,6 +372,7 @@ function RidePlannerEditor({
   onRemoveStop,
   onMoveStop,
   onSave,
+  onCancel,
   onDelete
 }: {
   ride: RidePlan;
@@ -372,6 +388,7 @@ function RidePlannerEditor({
   onRemoveStop: (stopId: string) => void;
   onMoveStop: (stopId: string, direction: -1 | 1) => void;
   onSave: () => void;
+  onCancel?: () => void;
   onDelete?: () => void;
 }) {
   const isSaving = savingId === ride.id;
@@ -535,6 +552,11 @@ function RidePlannerEditor({
             {onDelete ? (
               <Button type="button" variant="secondary" onClick={onDelete} disabled={!ride.recordId || isSaving}>
                 Delete ride
+              </Button>
+            ) : null}
+            {onCancel ? (
+              <Button type="button" variant="ghost" onClick={onCancel} disabled={isSaving}>
+                Cancel
               </Button>
             ) : null}
             <Button type="button" variant="primary" onClick={onSave} disabled={isSaving}>
