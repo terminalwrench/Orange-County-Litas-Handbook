@@ -292,6 +292,7 @@ export function RidePlanner({
                     {isExpanded && formState ? (
                       <RidePlannerEditor
                         ride={formState}
+                        flyerUrl={getRideFlyerUrl(formState, eventRecords)}
                         idPrefix={`ride-${ride.id}`}
                         savingId={savingId}
                         saveMessage={saveMessage}
@@ -322,6 +323,7 @@ export function RidePlanner({
             <SectionHeader title="New Ride" />
             <RidePlannerEditor
               ride={newRideState}
+              flyerUrl={undefined}
               idPrefix="new-ride"
               savingId={savingId}
               saveMessage={newRideMessage}
@@ -343,6 +345,7 @@ export function RidePlanner({
 
 function RidePlannerEditor({
   ride,
+  flyerUrl,
   idPrefix,
   savingId,
   saveMessage,
@@ -357,6 +360,7 @@ function RidePlannerEditor({
   onDelete
 }: {
   ride: RidePlan;
+  flyerUrl?: string;
   idPrefix: string;
   savingId: string | null;
   saveMessage: string;
@@ -374,108 +378,87 @@ function RidePlannerEditor({
 
   return (
     <div className="ride-inline-planner">
-      <section className="ride-planner-section">
-        <SectionHeader
-          title="Ride Overview"
-          action={(
-            <Button type="button" variant="secondary" onClick={onSave} disabled={isSaving}>
-              {isSaving ? "Saving..." : "Save ride"}
-            </Button>
-          )}
-        />
-        <div className="form-grid">
-          <FormField label="Ride Leader" htmlFor={`${idPrefix}-leader`}>
-            <SelectInput id={`${idPrefix}-leader`} value={ride.rideLeader} onChange={(event) => onUpdateField("rideLeader", event.target.value)}>
-              <option value="">Blank</option>
-              {memberOptions.map((member) => <option key={member} value={member}>{member}</option>)}
-            </SelectInput>
-          </FormField>
-          <FormField label="Ride Name" htmlFor={`${idPrefix}-name`}>
-            <TextInput id={`${idPrefix}-name`} value={ride.title} onChange={(event) => onUpdateField("title", event.target.value)} />
-          </FormField>
-          <FormField label="Date" htmlFor={`${idPrefix}-date`}>
-            <DateInput id={`${idPrefix}-date`} value={ride.date} onChange={(event) => onUpdateField("date", event.target.value)} />
-          </FormField>
-          <FormField label="Sweep" htmlFor={`${idPrefix}-sweep`}>
-            <SelectInput id={`${idPrefix}-sweep`} value={ride.sweep} onChange={(event) => onUpdateField("sweep", event.target.value)}>
-              <option value="">Blank</option>
-              {memberOptions.map((member) => <option key={member} value={member}>{member}</option>)}
-            </SelectInput>
-          </FormField>
-          <FormField label="Difficulty" htmlFor={`${idPrefix}-difficulty`}>
-            <SelectInput id={`${idPrefix}-difficulty`} value={ride.difficulty} onChange={(event) => onUpdateField("difficulty", event.target.value)}>
-              {difficultyOptions.map((difficulty) => <option key={difficulty} value={difficulty}>{difficulty}</option>)}
-            </SelectInput>
-          </FormField>
-          <FormField label="Status" htmlFor={`${idPrefix}-status`}>
-            <SelectInput id={`${idPrefix}-status`} value={ride.status} onChange={(event) => onUpdateField("status", event.target.value)}>
-              {statusOptions.map((status) => <option key={status} value={status}>{status}</option>)}
-            </SelectInput>
-          </FormField>
-          <FormField label="Estimated Distance" htmlFor={`${idPrefix}-distance`}>
-            <TextInput id={`${idPrefix}-distance`} type="number" min="0" inputMode="decimal" value={ride.estimatedDistance} onChange={(event) => onUpdateField("estimatedDistance", event.target.value)} />
-          </FormField>
-          <FormField label="Estimated Ride Time" htmlFor={`${idPrefix}-duration`}>
-            <SelectInput id={`${idPrefix}-duration`} value={ride.estimatedRideTime} onChange={(event) => onUpdateField("estimatedRideTime", event.target.value)}>
-              {rideTimeOptions.map((duration) => <option key={duration} value={duration}>{duration}</option>)}
-            </SelectInput>
-          </FormField>
-          <FormField label="Ride Type" htmlFor={`${idPrefix}-type`}>
-            <SelectInput id={`${idPrefix}-type`} value={ride.rideType} onChange={(event) => onUpdateField("rideType", event.target.value)}>
-              {rideTypeOptions.map((type) => <option key={type} value={type}>{type}</option>)}
-            </SelectInput>
-          </FormField>
-          <FormField label="Visibility" htmlFor={`${idPrefix}-visibility`}>
-            <SelectInput id={`${idPrefix}-visibility`} value={ride.visibility} onChange={(event) => onUpdateField("visibility", event.target.value)}>
-              {visibilityOptions.map((visibility) => <option key={visibility} value={visibility}>{visibility}</option>)}
-            </SelectInput>
-          </FormField>
-          <FormField label="Weather Policy" htmlFor={`${idPrefix}-weather-policy`}>
-            <SelectInput id={`${idPrefix}-weather-policy`} value={ride.weatherPolicy} onChange={(event) => onUpdateField("weatherPolicy", event.target.value)}>
-              {weatherPolicyOptions.map((policy) => <option key={policy} value={policy}>{policy}</option>)}
-            </SelectInput>
-          </FormField>
+      <div className={flyerUrl ? "ride-mission-layout ride-mission-layout--with-flyer" : "ride-mission-layout"}>
+        <div className="ride-mission-layout__main">
+          <section className="ride-planner-section ride-planner-section--overview">
+            <SectionHeader title="Overview" />
+            <div className="ride-field-grid ride-field-grid--overview">
+              <FormField label="Ride Name" htmlFor={`${idPrefix}-name`}>
+                <TextInput id={`${idPrefix}-name`} value={ride.title} onChange={(event) => onUpdateField("title", event.target.value)} />
+              </FormField>
+              <FormField label="Date" htmlFor={`${idPrefix}-date`}>
+                <DateInput id={`${idPrefix}-date`} value={ride.date} onChange={(event) => onUpdateField("date", event.target.value)} />
+              </FormField>
+              <FormField label="Status" htmlFor={`${idPrefix}-status`}>
+                <SelectInput id={`${idPrefix}-status`} value={ride.status} onChange={(event) => onUpdateField("status", event.target.value)}>
+                  {statusOptions.map((status) => <option key={status} value={status}>{status}</option>)}
+                </SelectInput>
+              </FormField>
+              <FormField label="Difficulty" htmlFor={`${idPrefix}-difficulty`}>
+                <SelectInput id={`${idPrefix}-difficulty`} value={ride.difficulty} onChange={(event) => onUpdateField("difficulty", event.target.value)}>
+                  {difficultyOptions.map((difficulty) => <option key={difficulty} value={difficulty}>{difficulty}</option>)}
+                </SelectInput>
+              </FormField>
+              <FormField label="Meetup Time" htmlFor={`${idPrefix}-kickstands-up`}>
+                <TimeInput id={`${idPrefix}-kickstands-up`} value={ride.kickstandsUp} onChange={(event) => onUpdateField("kickstandsUp", event.target.value)} />
+              </FormField>
+            </div>
+          </section>
+          <section className="ride-planner-section">
+            <SectionHeader title="Route" />
+            <div className="ride-field-grid">
+              <FormField label="Starting Location" htmlFor={`${idPrefix}-starting-location`}>
+                <TextInput id={`${idPrefix}-starting-location`} value={ride.startingLocation} onChange={(event) => onUpdateField("startingLocation", event.target.value)} />
+              </FormField>
+              <FormField label="Destination" htmlFor={`${idPrefix}-destination`}>
+                <TextInput id={`${idPrefix}-destination`} value={ride.destination} onChange={(event) => onUpdateField("destination", event.target.value)} />
+              </FormField>
+              <FormField label="Estimated Distance" htmlFor={`${idPrefix}-distance`}>
+                <TextInput id={`${idPrefix}-distance`} type="number" min="0" inputMode="decimal" value={ride.estimatedDistance} onChange={(event) => onUpdateField("estimatedDistance", event.target.value)} />
+              </FormField>
+              <FormField label="Estimated Ride Time" htmlFor={`${idPrefix}-duration`}>
+                <SelectInput id={`${idPrefix}-duration`} value={ride.estimatedRideTime} onChange={(event) => onUpdateField("estimatedRideTime", event.target.value)}>
+                  {rideTimeOptions.map((duration) => <option key={duration} value={duration}>{duration}</option>)}
+                </SelectInput>
+              </FormField>
+              <FormField label="Freeways" htmlFor={`${idPrefix}-freeways`}>
+                <SelectInput id={`${idPrefix}-freeways`} value={ride.freeways ? "yes" : "no"} onChange={(event) => onUpdateField("freeways", event.target.value === "yes")}>
+                  <option value="yes">Yes</option>
+                  <option value="no">No</option>
+                </SelectInput>
+              </FormField>
+              <FormField label="Primary Route Link" htmlFor={`${idPrefix}-primary-route`}>
+                <TextInput id={`${idPrefix}-primary-route`} type="url" value={ride.primaryRouteLink} onChange={(event) => onUpdateField("primaryRouteLink", event.target.value)} />
+              </FormField>
+              <FormField label="Alternate Route Link" htmlFor={`${idPrefix}-alternative-route`}>
+                <TextInput id={`${idPrefix}-alternative-route`} type="url" value={ride.alternativeRouteLink} onChange={(event) => onUpdateField("alternativeRouteLink", event.target.value)} />
+              </FormField>
+              <FormField label="Route Distance" htmlFor={`${idPrefix}-total-distance`}>
+                <TextInput id={`${idPrefix}-total-distance`} type="number" min="0" inputMode="decimal" value={ride.totalDistance} onChange={(event) => onUpdateField("totalDistance", event.target.value)} />
+              </FormField>
+              <FormField label="Route Time Override" htmlFor={`${idPrefix}-route-duration`}>
+                <SelectInput id={`${idPrefix}-route-duration`} value={ride.routeDuration} onChange={(event) => onUpdateField("routeDuration", event.target.value)}>
+                  <option value="">No override</option>
+                  {rideTimeOptions.map((duration) => <option key={duration} value={duration}>{duration}</option>)}
+                </SelectInput>
+              </FormField>
+            </div>
+          </section>
         </div>
-      </section>
+        {flyerUrl ? (
+          <aside className="ride-flyer-preview" aria-label="Linked event flyer">
+            <span>Event Flyer</span>
+            <img src={flyerUrl} alt={`${ride.title || "Ride"} flyer`} loading="lazy" />
+          </aside>
+        ) : null}
+      </div>
       <section className="ride-planner-section">
-        <SectionHeader title="Route Plan" action={<Button type="button" variant="secondary" onClick={onAddStop}>+ Add Stop</Button>} />
-        <div className="form-grid">
-          <FormField label="Starting Location" htmlFor={`${idPrefix}-starting-location`}>
-            <TextInput id={`${idPrefix}-starting-location`} value={ride.startingLocation} onChange={(event) => onUpdateField("startingLocation", event.target.value)} />
-          </FormField>
-          <FormField label="Meetup Time" htmlFor={`${idPrefix}-kickstands-up`}>
-            <TimeInput id={`${idPrefix}-kickstands-up`} value={ride.kickstandsUp} onChange={(event) => onUpdateField("kickstandsUp", event.target.value)} />
-          </FormField>
-          <FormField label="Primary Route Link" htmlFor={`${idPrefix}-primary-route`}>
-            <TextInput id={`${idPrefix}-primary-route`} type="url" value={ride.primaryRouteLink} onChange={(event) => onUpdateField("primaryRouteLink", event.target.value)} />
-          </FormField>
-          <FormField label="Alternative Route Link" htmlFor={`${idPrefix}-alternative-route`}>
-            <TextInput id={`${idPrefix}-alternative-route`} type="url" value={ride.alternativeRouteLink} onChange={(event) => onUpdateField("alternativeRouteLink", event.target.value)} />
-          </FormField>
-          <FormField label="Total Distance" htmlFor={`${idPrefix}-total-distance`}>
-            <TextInput id={`${idPrefix}-total-distance`} type="number" min="0" inputMode="decimal" value={ride.totalDistance} onChange={(event) => onUpdateField("totalDistance", event.target.value)} />
-          </FormField>
-          <FormField label="Estimated Ride Time" htmlFor={`${idPrefix}-route-duration`}>
-            <SelectInput id={`${idPrefix}-route-duration`} value={ride.routeDuration} onChange={(event) => onUpdateField("routeDuration", event.target.value)}>
-              <option value="">No override</option>
-              {rideTimeOptions.map((duration) => <option key={duration} value={duration}>{duration}</option>)}
-            </SelectInput>
-          </FormField>
-          <FormField label="Destination" htmlFor={`${idPrefix}-destination`}>
-            <TextInput id={`${idPrefix}-destination`} value={ride.destination} onChange={(event) => onUpdateField("destination", event.target.value)} />
-          </FormField>
-          <FormField label="Freeways" htmlFor={`${idPrefix}-freeways`}>
-            <SelectInput id={`${idPrefix}-freeways`} value={ride.freeways ? "yes" : "no"} onChange={(event) => onUpdateField("freeways", event.target.value === "yes")}>
-              <option value="yes">Yes</option>
-              <option value="no">No</option>
-            </SelectInput>
-          </FormField>
-        </div>
+        <SectionHeader title="Stops" action={<Button type="button" variant="secondary" onClick={onAddStop}>+ Add Stop</Button>} />
         {ride.stops.length > 0 ? (
           <div className="ride-stop-list">
             {ride.stops.map((stop, index) => (
               <article className="ride-stop-row" key={stop.id}>
-                <div className="form-grid">
+                <div className="ride-field-grid">
                   <FormField label="Stop Type" htmlFor={`${idPrefix}-stop-type-${stop.id}`}>
                     <SelectInput id={`${idPrefix}-stop-type-${stop.id}`} value={stop.type} onChange={(event) => onUpdateStop(stop.id, "type", event.target.value)}>
                       {stopTypeOptions.map((type) => <option key={type} value={type}>{type}</option>)}
@@ -500,30 +483,64 @@ function RidePlannerEditor({
             ))}
           </div>
         ) : (
-          <EmptyState title="No stops added" message="Add gas, food, restroom, photo, meetup, scenic, or other ride stops." />
+          <EmptyState title="No stops added yet." message="Future stops can cover gas, food, scenic, rest, meetup, or other ride needs." />
         )}
+      </section>
+      <section className="ride-planner-section">
+        <SectionHeader title="Assignments" />
+        <div className="ride-field-grid ride-field-grid--assignments">
+          <FormField label="Ride Leader" htmlFor={`${idPrefix}-leader`}>
+            <SelectInput id={`${idPrefix}-leader`} value={ride.rideLeader} onChange={(event) => onUpdateField("rideLeader", event.target.value)}>
+              <option value="">Blank</option>
+              {memberOptions.map((member) => <option key={member} value={member}>{member}</option>)}
+            </SelectInput>
+          </FormField>
+          <FormField label="Sweep" htmlFor={`${idPrefix}-sweep`}>
+            <SelectInput id={`${idPrefix}-sweep`} value={ride.sweep} onChange={(event) => onUpdateField("sweep", event.target.value)}>
+              <option value="">Blank</option>
+              {memberOptions.map((member) => <option key={member} value={member}>{member}</option>)}
+            </SelectInput>
+          </FormField>
+          <FormField label="Ride Type" htmlFor={`${idPrefix}-type`}>
+            <SelectInput id={`${idPrefix}-type`} value={ride.rideType} onChange={(event) => onUpdateField("rideType", event.target.value)}>
+              {rideTypeOptions.map((type) => <option key={type} value={type}>{type}</option>)}
+            </SelectInput>
+          </FormField>
+          <FormField label="Visibility" htmlFor={`${idPrefix}-visibility`}>
+            <SelectInput id={`${idPrefix}-visibility`} value={ride.visibility} onChange={(event) => onUpdateField("visibility", event.target.value)}>
+              {visibilityOptions.map((visibility) => <option key={visibility} value={visibility}>{visibility}</option>)}
+            </SelectInput>
+          </FormField>
+          <FormField label="Weather Policy" htmlFor={`${idPrefix}-weather-policy`}>
+            <SelectInput id={`${idPrefix}-weather-policy`} value={ride.weatherPolicy} onChange={(event) => onUpdateField("weatherPolicy", event.target.value)}>
+              {weatherPolicyOptions.map((policy) => <option key={policy} value={policy}>{policy}</option>)}
+            </SelectInput>
+          </FormField>
+        </div>
       </section>
       <section className="ride-planner-section">
         <SectionHeader title="Notes" />
         <FormField label="Ride Notes" htmlFor={`${idPrefix}-notes`}>
-          <Textarea id={`${idPrefix}-notes`} value={ride.notes} onChange={(event) => onUpdateField("notes", event.target.value)} />
+          <Textarea id={`${idPrefix}-notes`} placeholder="Ride briefing notes, regroup reminders, food notes, hazards, weather calls, or rider instructions." value={ride.notes} onChange={(event) => onUpdateField("notes", event.target.value)} />
         </FormField>
       </section>
       <section className="ride-planner-section ride-planner-actions">
         <div className="ride-action-footer">
           <div className="ride-action-footer__primary">
-            <Button type="button" variant="primary" onClick={onSave} disabled={isSaving}>
-              {isSaving ? "Saving..." : "Save ride"}
-            </Button>
             <span className="form-note">
               {isPersistenceConfigured ? "Changes save to the shared ride records." : "Changes are kept for this browser session."}
             </span>
           </div>
-          {onDelete ? (
-            <Button type="button" variant="secondary" onClick={onDelete} disabled={!ride.recordId || isSaving}>
-              Delete ride
+          <div className="ride-action-footer__actions">
+            {onDelete ? (
+              <Button type="button" variant="secondary" onClick={onDelete} disabled={!ride.recordId || isSaving}>
+                Delete ride
+              </Button>
+            ) : null}
+            <Button type="button" variant="primary" onClick={onSave} disabled={isSaving}>
+              {isSaving ? "Saving..." : "Save ride"}
             </Button>
-          ) : null}
+          </div>
         </div>
         {saveMessage ? <p className="form-status form-status--success">{saveMessage}</p> : null}
         {saveError ? <p className="form-status form-status--error">{saveError}</p> : null}
@@ -582,6 +599,12 @@ function buildRidePlans(events: EventRecord[], rides: RideRecord[]): RidePlan[] 
     .map(fromRideEvent);
   const savedRidePlans = getUpcomingSavedRides(rides).map(fromSavedRide);
   return [...eventPlans, ...savedRidePlans];
+}
+
+function getRideFlyerUrl(ride: RidePlan, events: EventRecord[]) {
+  if (!ride.eventId) return undefined;
+
+  return events.find((event) => event.id === ride.eventId)?.flyerUrl;
 }
 
 function fromRideEvent(event: EventRecord): RidePlan {

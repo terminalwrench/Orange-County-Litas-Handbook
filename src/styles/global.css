@@ -1752,6 +1752,21 @@ a {
   padding: 0.15rem 0.85rem 1rem;
 }
 
+.ride-mission-layout {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.ride-mission-layout--with-flyer {
+  grid-template-columns: minmax(0, 1fr) minmax(9.5rem, 11.25rem);
+  align-items: start;
+}
+
+.ride-mission-layout__main {
+  display: grid;
+  gap: 0.85rem;
+}
+
 .ride-planner-section {
   display: grid;
   gap: 0.9rem;
@@ -1761,8 +1776,54 @@ a {
   background: rgba(0, 0, 0, 0.14);
 }
 
+.ride-planner-section--overview {
+  background: rgba(255, 255, 255, 0.026);
+}
+
+.ride-field-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9.75rem, 1fr));
+  gap: 0.85rem;
+}
+
+.ride-field-grid--overview {
+  grid-template-columns: minmax(14rem, 1.5fr) repeat(4, minmax(8.5rem, 1fr));
+}
+
+.ride-field-grid--assignments {
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+}
+
+.ride-flyer-preview {
+  display: grid;
+  gap: 0.65rem;
+  justify-items: center;
+  padding: 0.85rem;
+  border: var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.026);
+}
+
+.ride-flyer-preview span {
+  justify-self: start;
+  color: rgba(248, 245, 239, 0.58);
+  font-size: 0.68rem;
+  font-weight: 760;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.ride-flyer-preview img {
+  width: min(100%, 10.75rem);
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(0, 0, 0, 0.24);
+}
+
 .ride-planner-actions {
-  padding-block: 0.85rem;
+  padding-block: 0.95rem;
 }
 
 .ride-action-footer {
@@ -1777,6 +1838,13 @@ a {
   flex-wrap: wrap;
   gap: 0.75rem;
   align-items: center;
+}
+
+.ride-action-footer__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  justify-content: flex-end;
 }
 
 .new-ride-card .ride-inline-planner {
@@ -2491,8 +2559,26 @@ a {
     padding: 0.15rem 0.5rem 0.75rem;
   }
 
+  .ride-mission-layout--with-flyer {
+    grid-template-columns: 1fr;
+  }
+
   .ride-planner-section {
     padding: 0.85rem;
+  }
+
+  .ride-field-grid,
+  .ride-field-grid--overview,
+  .ride-field-grid--assignments {
+    grid-template-columns: 1fr;
+  }
+
+  .ride-flyer-preview {
+    justify-items: start;
+  }
+
+  .ride-flyer-preview img {
+    width: min(100%, 10rem);
   }
 
   .ride-action-footer {
@@ -2500,7 +2586,11 @@ a {
     align-items: stretch;
   }
 
-  .ride-action-footer > .button,
+  .ride-action-footer__actions {
+    justify-content: stretch;
+  }
+
+  .ride-action-footer__actions .button,
   .ride-action-footer__primary .button {
     width: 100%;
   }
