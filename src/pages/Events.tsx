@@ -210,7 +210,6 @@ function EventHistoryByYear({
 
 export function Events({
   eventRecords,
-  eventRecordsSource,
   isLoading,
   isPersistenceConfigured,
   isCalendarImportAvailable,
@@ -231,8 +230,7 @@ export function Events({
   const [saveError, setSaveError] = useState("");
   const [expandedHistoryYears, setExpandedHistoryYears] = useState<Record<string, boolean>>({});
   const [visibleHistoryCounts, setVisibleHistoryCounts] = useState<Record<string, number>>({});
-  const selectedEvent = eventRecords.find((event) => event.id === selectedEventId);
-  const currentEvent = selectedEvent;
+  const editorEvent = formState.id ? eventRecords.find((event) => event.id === formState.id) : undefined;
   const isEditing = Boolean(formState.id);
   const isCalendarImportDisabled = isImportingCalendar || !isPersistenceConfigured || !isCalendarImportAvailable;
 
@@ -241,12 +239,23 @@ export function Events({
     if (eventRecords.some((event) => event.id === selectedEventId)) return;
 
     setSelectedEventId(undefined);
+    setEditorOpen(false);
+    setFormState(emptyEventForm);
   }, [eventRecords, selectedEventId]);
 
+  useEffect(() => {
+    if (!editorOpen) return;
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") closeEditor();
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [editorOpen]);
+
   function handleViewEvent(event: EventRecord) {
-    setSelectedEventId(event.id);
-    setSaveMessage("");
-    setSaveError("");
+    openEditForm(event);
   }
 
   function openNewEventForm() {
@@ -258,7 +267,10 @@ export function Events({
   }
 
   function openEditForm(event: EventRecord) {
-    setFormState(toEventFormState(event));
+    setFormState({
+      ...toEventFormState(event),
+      status: getDisplayEventStatus(event, today)
+    });
     setSelectedEventId(event.id);
     setEditorOpen(true);
     setSaveMessage("");
@@ -268,6 +280,7 @@ export function Events({
   function closeEditor() {
     setFormState(emptyEventForm);
     setEditorOpen(false);
+    setSelectedEventId(undefined);
     setSaveMessage("");
     setSaveError("");
   }
@@ -321,7 +334,10 @@ export function Events({
       } else {
         setSaveMessage(result.source === "supabase" ? "Event deleted." : "Event deleted locally for this session.");
         if (selectedEventId === event.id) setSelectedEventId(undefined);
-        if (formState.id === event.id) closeEditor();
+        if (formState.id === event.id) {
+          setFormState(emptyEventForm);
+          setEditorOpen(false);
+        }
       }
     } catch (error) {
       console.warn("[events] Unable to delete event.", error);
@@ -373,7 +389,7 @@ export function Events({
         <span>Events</span>
         <h1>Manage branch events</h1>
       </div>
-      <div className="module-grid module-grid--wide-left">
+      <div className="events-workspace">
         <DashboardCard>
           <SectionHeader
             title="Upcoming Events"
@@ -407,19 +423,40 @@ export function Events({
           {saveError ? <p className="form-status form-status--error">{saveError}</p> : null}
         </DashboardCard>
         <DashboardCard>
-          <SectionHeader
-            title={editorOpen ? (isEditing ? "Edit Event" : "Add Event") : "Event Detail"}
-            action={!editorOpen && currentEvent ? (
-              <div className="section-actions">
-                <Button type="button" variant="secondary" onClick={() => openEditForm(currentEvent)}>Edit</Button>
-                <Button type="button" variant="ghost" onClick={() => handleDeleteEvent(currentEvent)} disabled={savingId === currentEvent.id}>
-                  Delete
-                </Button>
+          <SectionHeader title="Past / History" />
+          {pastEvents.length > 0 ? (
+            <EventHistoryByYear
+              events={pastEvents}
+              selectedId={selectedEventId}
+              today={today}
+              expandedYears={expandedHistoryYears}
+              visibleCounts={visibleHistoryCounts}
+              onSelect={handleViewEvent}
+              onToggleYear={toggleHistoryYear}
+              onShowMore={showMoreHistory}
+            />
+          ) : (
+            <EmptyState title="No archived events yet." message="Past events will appear here automatically after their event dates pass." />
+          )}
+        </DashboardCard>
+      </div>
+      {editorOpen ? (
+        <div className="slide-over-backdrop" role="presentation" onMouseDown={closeEditor}>
+          <aside
+            className="slide-over-panel"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="event-slide-over-title"
+            onMouseDown={(event) => event.stopPropagation()}
+          >
+            <div className="slide-over-panel__header">
+              <div>
+                <span>{isEditing ? "Event Editor" : "New Event"}</span>
+                <h2 id="event-slide-over-title">{isEditing ? "Edit event" : "Add event"}</h2>
               </div>
-            ) : null}
-          />
-          {editorOpen ? (
-            <form className="form-grid" aria-label={isEditing ? "Edit event" : "Add event"} onSubmit={handleSubmit}>
+              <Button type="button" variant="ghost" onClick={closeEditor}>Close</Button>
+            </div>
+            <form className="form-grid slide-over-form" aria-label={isEditing ? "Edit event" : "Add event"} onSubmit={handleSubmit}>
               <FormField label="Title" htmlFor="event-title">
                 <TextInput id="event-title" value={formState.title} onChange={(event) => updateForm("title", event.target.value)} required />
               </FormField>
@@ -480,59 +517,45 @@ export function Events({
               <FormField label="Notes / Description" htmlFor="event-notes">
                 <Textarea id="event-notes" value={formState.notes} onChange={(event) => updateForm("notes", event.target.value)} />
               </FormField>
+              <section className="event-flyer-preview-panel" aria-labelledby="event-flyer-preview-title">
+                <h3 id="event-flyer-preview-title">Flyer Preview</h3>
+                {formState.flyerUrl ? (
+                  <button
+                    className="event-flyer-preview-button"
+                    type="button"
+                    onClick={() => setPreviewMemory({
+                      title: formState.title || "Event Flyer",
+                      type: "Flyer",
+                      url: formState.flyerUrl,
+                      description: formState.title
+                    })}
+                  >
+                    <img src={formState.flyerUrl} alt={`${formState.title || "Event"} flyer`} />
+                  </button>
+                ) : (
+                  <EmptyState title="No flyer attached." />
+                )}
+              </section>
               <div className="form-actions">
                 <Button type="submit" variant="primary" disabled={savingId === formState.id || savingId === "new"}>
                   {savingId === formState.id || savingId === "new" ? "Saving..." : "Save event"}
                 </Button>
+                {isEditing && editorEvent ? (
+                  <Button type="button" variant="ghost" onClick={() => handleDeleteEvent(editorEvent)} disabled={savingId === editorEvent.id}>
+                    Delete
+                  </Button>
+                ) : null}
                 <Button type="button" variant="ghost" onClick={closeEditor}>Cancel</Button>
                 <span className="form-note">
                   {isPersistenceConfigured ? "Changes save to the shared event records." : "Changes are kept for this browser session."}
                 </span>
               </div>
+              {saveMessage ? <p className="form-status form-status--success">{saveMessage}</p> : null}
+              {saveError ? <p className="form-status form-status--error">{saveError}</p> : null}
             </form>
-          ) : (
-            <div className="detail-card">
-              <h2>{currentEvent?.title ?? getEventDetailEmptyTitle(eventRecords.length)}</h2>
-              {currentEvent ? (
-                <div className="metadata-grid">
-                  {getEventMetadata(currentEvent).map((item) => (
-                    <article className="metadata-item" key={item.label}>
-                      <span>{item.label}</span>
-                      <strong>{item.value}</strong>
-                    </article>
-                  ))}
-                </div>
-              ) : (
-                <p>{getEventDetailEmptyMessage(eventRecords.length, eventRecordsSource, isPersistenceConfigured)}</p>
-              )}
-              {currentEvent && isMeaningfulEventValue(currentEvent.notes) ? <p>{currentEvent.notes}</p> : null}
-              {getSourceNote(eventRecordsSource, isPersistenceConfigured) ? (
-                <p className="form-note">{getSourceNote(eventRecordsSource, isPersistenceConfigured)}</p>
-              ) : null}
-              {currentEvent?.status === "Completed" ? (
-                <EventMemories event={currentEvent} onPreview={setPreviewMemory} />
-              ) : null}
-            </div>
-          )}
-        </DashboardCard>
-        <DashboardCard className="span-all">
-          <SectionHeader title="Past / History" />
-          {pastEvents.length > 0 ? (
-            <EventHistoryByYear
-              events={pastEvents}
-              selectedId={selectedEventId}
-              today={today}
-              expandedYears={expandedHistoryYears}
-              visibleCounts={visibleHistoryCounts}
-              onSelect={handleViewEvent}
-              onToggleYear={toggleHistoryYear}
-              onShowMore={showMoreHistory}
-            />
-          ) : (
-            <EmptyState title="No archived events yet." message="Past events will appear here automatically after their event dates pass." />
-          )}
-        </DashboardCard>
-      </div>
+          </aside>
+        </div>
+      ) : null}
       {previewMemory ? (
         <PreviewModal
           title={previewMemory.title}
@@ -543,62 +566,6 @@ export function Events({
         />
       ) : null}
     </PageContainer>
-  );
-}
-
-function EventMemories({
-  event,
-  onPreview
-}: {
-  event: EventRecord;
-  onPreview: (memory: { title: string; type: string; url: string; description?: string }) => void;
-}) {
-  const imageMemories = [
-    event.flyerUrl ? { title: "Event Flyer", type: "Flyer", url: event.flyerUrl, description: event.title } : null,
-    event.groupPhotoUrl ? { title: "Group Photo", type: "Photo", url: event.groupPhotoUrl, description: event.title } : null,
-    event.routeImageUrl && event.type === "Ride" ? { title: "Ride Route", type: "Route Screenshot", url: event.routeImageUrl, description: event.title } : null
-  ].filter((item): item is { title: string; type: string; url: string; description: string } => Boolean(item));
-  const linkMemories = [
-    event.instagramUrl ? { title: "Instagram", url: event.instagramUrl } : null,
-    event.appleAlbumUrl ? { title: "Apple Shared Album", url: event.appleAlbumUrl } : null
-  ].filter((item): item is { title: string; url: string } => Boolean(item));
-  const hasMemories = imageMemories.length > 0 || linkMemories.length > 0;
-
-  return (
-    <section className="memory-section" aria-labelledby="event-memories-title">
-      <h3 id="event-memories-title">Memories</h3>
-      {hasMemories ? (
-        <>
-          {imageMemories.length > 0 ? (
-            <div className="memory-grid">
-              {imageMemories.map((memory) => (
-                <button className="memory-card" type="button" key={memory.title} onClick={() => onPreview(memory)}>
-                  <span className="memory-card__image">
-                    <img src={memory.url} alt="" />
-                  </span>
-                  <strong>{memory.title}</strong>
-                  <em>{memory.type}</em>
-                </button>
-              ))}
-            </div>
-          ) : null}
-          {linkMemories.length > 0 ? (
-            <div className="memory-links">
-              {linkMemories.map((memory) => (
-                <a className="button button--secondary" key={memory.title} href={memory.url} target="_blank" rel="noreferrer">
-                  {memory.title}
-                </a>
-              ))}
-            </div>
-          ) : null}
-        </>
-      ) : (
-        <EmptyState
-          title="No memories added yet."
-          message="Flyers, photos, routes, and event links will appear here when they are added to this completed event."
-        />
-      )}
-    </section>
   );
 }
 
@@ -664,20 +631,6 @@ function formatEventRowSummary(event: EventRecord) {
     .join(" · ");
 }
 
-function getEventMetadata(event: EventRecord) {
-  const displayStatus = getDisplayEventStatus(event);
-
-  return [
-    { label: "Date", value: event.startDate },
-    { label: "Time", value: event.time },
-    { label: "Location", value: event.location },
-    { label: "City", value: event.city },
-    { label: "Type", value: event.type },
-    { label: "Difficulty", value: event.rideDifficulty },
-    { label: "Status", value: displayStatus }
-  ].filter((item): item is { label: string; value: string } => isMeaningfulEventValue(item.value));
-}
-
 function getStartOfToday(today = new Date()) {
   return new Date(today.getFullYear(), today.getMonth(), today.getDate());
 }
@@ -712,31 +665,4 @@ function toDisplayTime(value: string) {
   const displayHour = hours % 12 || 12;
 
   return `${displayHour}:${minutes} ${period}`;
-}
-
-function getSourceNote(source: EventsProps["eventRecordsSource"], isPersistenceConfigured: boolean) {
-  if (source === "supabase" || source === "ics") return "";
-  if (isPersistenceConfigured) return "Shared event records could not be reached, so saved backup records are shown.";
-  return "Sample records are shown until the shared event source is connected.";
-}
-
-function getEmptySourceMessage(source: EventsProps["eventRecordsSource"], isPersistenceConfigured: boolean) {
-  if (source === "supabase") return "No events have been added yet.";
-  if (source === "ics") return "The calendar source has no events.";
-  if (isPersistenceConfigured) return "Shared event records could not be reached.";
-  return "Sample records are available until the shared event source is connected.";
-}
-
-function getEventDetailEmptyTitle(eventCount: number) {
-  return eventCount > 0 ? "Select an event" : "No events yet";
-}
-
-function getEventDetailEmptyMessage(
-  eventCount: number,
-  source: EventsProps["eventRecordsSource"],
-  isPersistenceConfigured: boolean
-) {
-  if (eventCount > 0) return "Choose an event from Upcoming Events or Past / History to view details.";
-
-  return getEmptySourceMessage(source, isPersistenceConfigured);
 }
