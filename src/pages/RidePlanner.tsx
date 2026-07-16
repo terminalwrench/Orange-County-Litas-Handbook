@@ -105,6 +105,7 @@ export function RidePlanner({
 
   function toggleRide(ride: RidePlan) {
     setExpandedRideId((current) => current === ride.id ? undefined : ride.id);
+    setIsNewRideOpen(false);
     setSaveMessage("");
     setSaveError("");
   }
@@ -207,14 +208,16 @@ export function RidePlanner({
         }
       } else {
         const savedRide = fromSavedRide(result.data);
-        setExpandedRideId(result.data.id);
-        setFormState(savedRide);
 
         if (mode === "new") {
           setNewRideState(createBlankRidePlan());
           setIsNewRideOpen(false);
+          setExpandedRideId(undefined);
+          setFormState(null);
           setNewRideMessage(result.source === "supabase" ? "Ride plan created." : "Saved locally for this session.");
         } else {
+          setExpandedRideId(result.data.id);
+          setFormState(savedRide);
           setSaveMessage(result.source === "supabase" ? "Ride plan saved." : "Saved locally for this session.");
         }
       }
@@ -334,7 +337,7 @@ export function RidePlanner({
               aria-expanded={isNewRideOpen}
             >
               <strong>+ New Ride</strong>
-              <span>{isNewRideOpen ? "Collapse" : "Create a new ride plan"}</span>
+              <span>{isNewRideOpen ? "Collapse" : "Create a new ride plan"} {isNewRideOpen ? "⌃" : "⌄"}</span>
             </button>
             {isNewRideOpen ? (
               <RidePlannerEditor
@@ -451,6 +454,12 @@ function RidePlannerEditor({
                   {rideTimeOptions.map((duration) => <option key={duration} value={duration}>{duration}</option>)}
                 </SelectInput>
               </FormField>
+              <FormField label="Freeways" htmlFor={`${idPrefix}-freeways`}>
+                <SelectInput id={`${idPrefix}-freeways`} value={ride.freeways ? "yes" : "no"} onChange={(event) => onUpdateField("freeways", event.target.value === "yes")}>
+                  <option value="yes">Yes</option>
+                  <option value="no">No</option>
+                </SelectInput>
+              </FormField>
               <FormField label="Primary Route Link" htmlFor={`${idPrefix}-primary-route`}>
                 <TextInput id={`${idPrefix}-primary-route`} type="url" value={ride.primaryRouteLink} onChange={(event) => onUpdateField("primaryRouteLink", event.target.value)} />
               </FormField>
@@ -535,17 +544,6 @@ function RidePlannerEditor({
           <FormField label="Ride Type" htmlFor={`${idPrefix}-type`}>
             <SelectInput id={`${idPrefix}-type`} value={ride.rideType} onChange={(event) => onUpdateField("rideType", event.target.value)}>
               {rideTypeOptions.map((type) => <option key={type} value={type}>{type}</option>)}
-            </SelectInput>
-          </FormField>
-        </div>
-      </section>
-      <section className="ride-planner-section">
-        <SectionHeader title="Safety" />
-        <div className="ride-field-grid ride-field-grid--assignments">
-          <FormField label="Freeways" htmlFor={`${idPrefix}-freeways`}>
-            <SelectInput id={`${idPrefix}-freeways`} value={ride.freeways ? "yes" : "no"} onChange={(event) => onUpdateField("freeways", event.target.value === "yes")}>
-              <option value="yes">Yes</option>
-              <option value="no">No</option>
             </SelectInput>
           </FormField>
           <FormField label="Visibility" htmlFor={`${idPrefix}-visibility`}>
