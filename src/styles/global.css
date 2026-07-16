@@ -2152,6 +2152,196 @@ a {
   background: rgba(0, 0, 0, 0.18);
 }
 
+.ride-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(9.5rem, 11.25rem);
+  gap: 1.05rem;
+  align-items: start;
+  padding-top: 0.95rem;
+}
+
+.ride-workspace__main {
+  min-width: 0;
+}
+
+.ride-workspace-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.9rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.078);
+}
+
+.ride-workspace-header h2 {
+  margin: 0;
+  color: var(--color-white);
+  font-size: clamp(1.15rem, 2vw, 1.55rem);
+  font-weight: 560;
+  letter-spacing: 0;
+  line-height: 1.15;
+}
+
+.ride-summary-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.1rem;
+  margin: 0.75rem 0 0;
+}
+
+.ride-summary-strip div,
+.ride-info-item {
+  display: grid;
+  gap: 0.16rem;
+  min-width: 0;
+}
+
+.ride-summary-strip dt,
+.ride-info-item dt {
+  color: rgba(248, 245, 239, 0.48);
+  font-size: 0.66rem;
+  font-weight: 760;
+  letter-spacing: 0.045em;
+  text-transform: uppercase;
+}
+
+.ride-summary-strip dd,
+.ride-info-item dd {
+  min-width: 0;
+  margin: 0;
+  color: rgba(248, 245, 239, 0.88);
+  font-size: 0.84rem;
+  font-weight: 520;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.ride-workspace-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.078);
+}
+
+.ride-workspace-tab {
+  min-height: 2.15rem;
+  padding: 0 0.78rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-muted);
+  font-size: 0.8rem;
+  font-weight: 720;
+  cursor: pointer;
+  transition: color var(--motion-fast), background var(--motion-fast), border-color var(--motion-fast), transform var(--motion-fast);
+}
+
+.ride-workspace-tab:hover,
+.ride-workspace-tab:focus-visible {
+  color: var(--color-white);
+  background: rgba(255, 255, 255, 0.038);
+  outline: none;
+}
+
+.ride-workspace-tab--active {
+  border-color: rgba(255, 107, 0, 0.28);
+  background: rgba(255, 107, 0, 0.07);
+  color: var(--color-orange);
+}
+
+.ride-tab-panel {
+  display: grid;
+  gap: 0.9rem;
+  padding: 0.95rem 0 0.2rem;
+  animation: tab-panel-in 160ms ease-out;
+}
+
+.ride-tab-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.ride-tab-panel__header span {
+  color: rgba(248, 245, 239, 0.78);
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ride-tab-panel__header .button {
+  min-height: 2.2rem;
+  padding-inline: 0.72rem;
+  font-size: 0.78rem;
+}
+
+.ride-tab-panel__tools {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.ride-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  gap: 0.7rem 0.85rem;
+  margin: 0;
+}
+
+.ride-info-item {
+  min-height: 3.45rem;
+  padding: 0.72rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.065);
+}
+
+.ride-stop-summary-list {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.ride-stop-summary {
+  display: grid;
+  gap: 0.18rem;
+  padding: 0.68rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.065);
+}
+
+.ride-stop-summary span {
+  color: var(--color-orange);
+  font-size: 0.68rem;
+  font-weight: 780;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.ride-stop-summary strong {
+  color: var(--color-white);
+  font-size: 0.9rem;
+}
+
+.ride-stop-summary em,
+.ride-notes-preview {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 0.82rem;
+  font-style: normal;
+  line-height: 1.55;
+}
+
+@keyframes tab-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.2rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .ride-mission-layout {
   display: grid;
   gap: 0;
@@ -3038,6 +3228,33 @@ a {
     margin: 0.15rem 0.2rem 0.85rem;
     padding: 0.1rem 0.85rem 0.2rem;
     background: rgba(5, 6, 6, 0.96);
+  }
+
+  .ride-workspace {
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
+    padding-top: 0.85rem;
+  }
+
+  .ride-workspace-header {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .ride-summary-strip {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.65rem;
+  }
+
+  .ride-workspace-tabs {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 0.65rem;
+  }
+
+  .ride-workspace-tab {
+    flex: 0 0 auto;
   }
 
   .ride-mission-layout--with-flyer {

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { PageContainer } from "../components/layout/PageContainer";
 import { Button } from "../components/ui/Button";
 import { DashboardCard } from "../components/ui/DashboardCard";
@@ -52,6 +52,7 @@ interface RidePlan {
 }
 
 type RideFieldValue = string | boolean | RideStop[];
+type RidePlannerTab = "overview" | "route" | "stops" | "assignments" | "notes";
 
 const memberOptions = getBranchSettings().currentCofounders;
 const difficultyOptions = ["Beginner", "Intermediate", "Advanced"];
@@ -61,6 +62,13 @@ const stopTypeOptions = ["Gas", "Food", "Restroom", "Photo", "Meetup", "Scenic",
 const rideTypeOptions = ["Beginner Ride", "Intermediate Ride", "Advanced Ride", "Group Ride", "Poker Run", "Meet & Greet Ride", "Overnight", "Charity Ride", "Other"];
 const visibilityOptions = ["Founders Only", "Chapter Only", "Public"];
 const weatherPolicyOptions = ["Rain Cancels", "Rain or Shine", "Leader Decision"];
+const ridePlannerTabs: Array<{ id: RidePlannerTab; label: string }> = [
+  { id: "overview", label: "Overview" },
+  { id: "route", label: "Route" },
+  { id: "stops", label: "Stops" },
+  { id: "assignments", label: "Assignments" },
+  { id: "notes", label: "Notes" }
+];
 
 export function RidePlanner({
   eventRecords,
@@ -408,74 +416,205 @@ function RidePlannerEditor({
   onDelete?: () => void;
 }) {
   const isSaving = savingId === ride.id;
+  const isNewRide = idPrefix === "new-ride";
+  const [activeTab, setActiveTab] = useState<RidePlannerTab>("overview");
+  const [editingTab, setEditingTab] = useState<RidePlannerTab | undefined>(isNewRide ? "overview" : undefined);
+  const activeTabLabel = ridePlannerTabs.find((tab) => tab.id === activeTab)?.label ?? "Overview";
+  const isEditingCurrentTab = editingTab === activeTab;
+
+  function openTab(tab: RidePlannerTab) {
+    setActiveTab(tab);
+    if (editingTab && editingTab !== tab) setEditingTab(undefined);
+  }
 
   return (
     <div className="ride-inline-planner">
-      <div className={flyerUrl ? "ride-mission-layout ride-mission-layout--with-flyer" : "ride-mission-layout"}>
-        <div className="ride-mission-layout__main">
-          <section className="ride-planner-section ride-planner-section--overview">
-            <SectionHeader title="Overview" />
-            <div className="ride-field-grid ride-field-grid--overview">
-              <FormField label="Ride Name" htmlFor={`${idPrefix}-name`}>
-                <TextInput id={`${idPrefix}-name`} value={ride.title} onChange={(event) => onUpdateField("title", event.target.value)} />
-              </FormField>
-              <FormField label="Date" htmlFor={`${idPrefix}-date`}>
-                <DateInput id={`${idPrefix}-date`} value={ride.date} onChange={(event) => onUpdateField("date", event.target.value)} />
-              </FormField>
-              <FormField label="Status" htmlFor={`${idPrefix}-status`}>
-                <SelectInput id={`${idPrefix}-status`} value={ride.status} onChange={(event) => onUpdateField("status", event.target.value)}>
-                  {statusOptions.map((status) => <option key={status} value={status}>{status}</option>)}
-                </SelectInput>
-              </FormField>
-              <FormField label="Difficulty" htmlFor={`${idPrefix}-difficulty`}>
-                <SelectInput id={`${idPrefix}-difficulty`} value={ride.difficulty} onChange={(event) => onUpdateField("difficulty", event.target.value)}>
-                  {difficultyOptions.map((difficulty) => <option key={difficulty} value={difficulty}>{difficulty}</option>)}
-                </SelectInput>
-              </FormField>
-              <FormField label="Meetup Time" htmlFor={`${idPrefix}-kickstands-up`}>
-                <TimeInput id={`${idPrefix}-kickstands-up`} value={ride.kickstandsUp} onChange={(event) => onUpdateField("kickstandsUp", event.target.value)} />
-              </FormField>
+      <div className="ride-workspace">
+        <div className="ride-workspace__main">
+          <header className="ride-workspace-header">
+            <div>
+              <h2>{ride.title || "Untitled ride"}</h2>
+              <dl className="ride-summary-strip">
+                <RideSummaryItem label="Meetup Time" value={ride.kickstandsUp || "Not set"} />
+                <RideSummaryItem label="Start" value={ride.startingLocation || "Starting location not set"} />
+                <RideSummaryItem label="Destination" value={ride.destination || "Destination not set"} />
+                <RideSummaryItem label="Distance" value={ride.estimatedDistance ? `${ride.estimatedDistance} mi` : "Not set"} />
+              </dl>
             </div>
-          </section>
-          <section className="ride-planner-section">
-            <SectionHeader title="Route" />
-            <div className="ride-field-grid">
-              <FormField label="Starting Location" htmlFor={`${idPrefix}-starting-location`}>
-                <TextInput id={`${idPrefix}-starting-location`} value={ride.startingLocation} onChange={(event) => onUpdateField("startingLocation", event.target.value)} />
-              </FormField>
-              <FormField label="Destination" htmlFor={`${idPrefix}-destination`}>
-                <TextInput id={`${idPrefix}-destination`} value={ride.destination} onChange={(event) => onUpdateField("destination", event.target.value)} />
-              </FormField>
-              <FormField label="Estimated Distance" htmlFor={`${idPrefix}-distance`}>
-                <TextInput id={`${idPrefix}-distance`} type="number" min="0" inputMode="decimal" value={ride.estimatedDistance} onChange={(event) => onUpdateField("estimatedDistance", event.target.value)} />
-              </FormField>
-              <FormField label="Estimated Ride Time" htmlFor={`${idPrefix}-duration`}>
-                <SelectInput id={`${idPrefix}-duration`} value={ride.estimatedRideTime} onChange={(event) => onUpdateField("estimatedRideTime", event.target.value)}>
-                  {rideTimeOptions.map((duration) => <option key={duration} value={duration}>{duration}</option>)}
-                </SelectInput>
-              </FormField>
-              <FormField label="Freeways" htmlFor={`${idPrefix}-freeways`}>
-                <SelectInput id={`${idPrefix}-freeways`} value={ride.freeways ? "yes" : "no"} onChange={(event) => onUpdateField("freeways", event.target.value === "yes")}>
-                  <option value="yes">Yes</option>
-                  <option value="no">No</option>
-                </SelectInput>
-              </FormField>
-              <FormField label="Primary Route Link" htmlFor={`${idPrefix}-primary-route`}>
-                <TextInput id={`${idPrefix}-primary-route`} type="url" value={ride.primaryRouteLink} onChange={(event) => onUpdateField("primaryRouteLink", event.target.value)} />
-              </FormField>
-              <FormField label="Alternate Route Link" htmlFor={`${idPrefix}-alternative-route`}>
-                <TextInput id={`${idPrefix}-alternative-route`} type="url" value={ride.alternativeRouteLink} onChange={(event) => onUpdateField("alternativeRouteLink", event.target.value)} />
-              </FormField>
-              <FormField label="Route Distance" htmlFor={`${idPrefix}-total-distance`}>
-                <TextInput id={`${idPrefix}-total-distance`} type="number" min="0" inputMode="decimal" value={ride.totalDistance} onChange={(event) => onUpdateField("totalDistance", event.target.value)} />
-              </FormField>
-              <FormField label="Route Time Override" htmlFor={`${idPrefix}-route-duration`}>
-                <SelectInput id={`${idPrefix}-route-duration`} value={ride.routeDuration} onChange={(event) => onUpdateField("routeDuration", event.target.value)}>
-                  <option value="">No override</option>
-                  {rideTimeOptions.map((duration) => <option key={duration} value={duration}>{duration}</option>)}
-                </SelectInput>
-              </FormField>
+            <StatusChip label={ride.status} tone={getStatusTone(ride.status)} />
+          </header>
+          <nav className="ride-workspace-tabs" aria-label={`${ride.title || "Ride"} planner sections`}>
+            {ridePlannerTabs.map((tab) => (
+              <button
+                className={activeTab === tab.id ? "ride-workspace-tab ride-workspace-tab--active" : "ride-workspace-tab"}
+                type="button"
+                key={tab.id}
+                onClick={() => openTab(tab.id)}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </nav>
+          <section className="ride-tab-panel" aria-label={activeTabLabel}>
+            <div className="ride-tab-panel__header">
+              <span>{activeTabLabel}</span>
+              {isEditingCurrentTab ? (
+                <Button type="button" variant="ghost" onClick={() => setEditingTab(undefined)}>
+                  Done
+                </Button>
+              ) : (
+                <Button type="button" variant="secondary" onClick={() => setEditingTab(activeTab)}>
+                  Edit
+                </Button>
+              )}
             </div>
+            {activeTab === "overview" ? (
+              isEditingCurrentTab ? (
+                <div className="ride-field-grid ride-field-grid--overview">
+                  <FormField label="Ride Name" htmlFor={`${idPrefix}-name`}>
+                    <TextInput id={`${idPrefix}-name`} value={ride.title} onChange={(event) => onUpdateField("title", event.target.value)} />
+                  </FormField>
+                  <FormField label="Date" htmlFor={`${idPrefix}-date`}>
+                    <DateInput id={`${idPrefix}-date`} value={ride.date} onChange={(event) => onUpdateField("date", event.target.value)} />
+                  </FormField>
+                  <FormField label="Status" htmlFor={`${idPrefix}-status`}>
+                    <SelectInput id={`${idPrefix}-status`} value={ride.status} onChange={(event) => onUpdateField("status", event.target.value)}>
+                      {statusOptions.map((status) => <option key={status} value={status}>{status}</option>)}
+                    </SelectInput>
+                  </FormField>
+                  <FormField label="Difficulty" htmlFor={`${idPrefix}-difficulty`}>
+                    <SelectInput id={`${idPrefix}-difficulty`} value={ride.difficulty} onChange={(event) => onUpdateField("difficulty", event.target.value)}>
+                      {difficultyOptions.map((difficulty) => <option key={difficulty} value={difficulty}>{difficulty}</option>)}
+                    </SelectInput>
+                  </FormField>
+                  <FormField label="Meetup Time" htmlFor={`${idPrefix}-kickstands-up`}>
+                    <TimeInput id={`${idPrefix}-kickstands-up`} value={ride.kickstandsUp} onChange={(event) => onUpdateField("kickstandsUp", event.target.value)} />
+                  </FormField>
+                </div>
+              ) : (
+                <RideInfoGrid>
+                  <RideInfoItem label="Ride Name" value={ride.title || "Untitled ride"} />
+                  <RideInfoItem label="Date" value={ride.date || "Date not set"} />
+                  <RideInfoItem label="Status" value={ride.status} />
+                  <RideInfoItem label="Difficulty" value={ride.difficulty} />
+                  <RideInfoItem label="Meetup Time" value={ride.kickstandsUp || "Not set"} />
+                </RideInfoGrid>
+              )
+            ) : null}
+            {activeTab === "route" ? (
+              isEditingCurrentTab ? (
+                <div className="ride-field-grid">
+                  <FormField label="Starting Location" htmlFor={`${idPrefix}-starting-location`}>
+                    <TextInput id={`${idPrefix}-starting-location`} value={ride.startingLocation} onChange={(event) => onUpdateField("startingLocation", event.target.value)} />
+                  </FormField>
+                  <FormField label="Destination" htmlFor={`${idPrefix}-destination`}>
+                    <TextInput id={`${idPrefix}-destination`} value={ride.destination} onChange={(event) => onUpdateField("destination", event.target.value)} />
+                  </FormField>
+                  <FormField label="Estimated Distance" htmlFor={`${idPrefix}-distance`}>
+                    <TextInput id={`${idPrefix}-distance`} type="number" min="0" inputMode="decimal" value={ride.estimatedDistance} onChange={(event) => onUpdateField("estimatedDistance", event.target.value)} />
+                  </FormField>
+                  <FormField label="Estimated Ride Time" htmlFor={`${idPrefix}-duration`}>
+                    <SelectInput id={`${idPrefix}-duration`} value={ride.estimatedRideTime} onChange={(event) => onUpdateField("estimatedRideTime", event.target.value)}>
+                      {rideTimeOptions.map((duration) => <option key={duration} value={duration}>{duration}</option>)}
+                    </SelectInput>
+                  </FormField>
+                  <FormField label="Freeways" htmlFor={`${idPrefix}-freeways`}>
+                    <SelectInput id={`${idPrefix}-freeways`} value={ride.freeways ? "yes" : "no"} onChange={(event) => onUpdateField("freeways", event.target.value === "yes")}>
+                      <option value="yes">Yes</option>
+                      <option value="no">No</option>
+                    </SelectInput>
+                  </FormField>
+                  <FormField label="Primary Route Link" htmlFor={`${idPrefix}-primary-route`}>
+                    <TextInput id={`${idPrefix}-primary-route`} type="url" value={ride.primaryRouteLink} onChange={(event) => onUpdateField("primaryRouteLink", event.target.value)} />
+                  </FormField>
+                  <FormField label="Alternate Route Link" htmlFor={`${idPrefix}-alternative-route`}>
+                    <TextInput id={`${idPrefix}-alternative-route`} type="url" value={ride.alternativeRouteLink} onChange={(event) => onUpdateField("alternativeRouteLink", event.target.value)} />
+                  </FormField>
+                  <FormField label="Route Distance" htmlFor={`${idPrefix}-total-distance`}>
+                    <TextInput id={`${idPrefix}-total-distance`} type="number" min="0" inputMode="decimal" value={ride.totalDistance} onChange={(event) => onUpdateField("totalDistance", event.target.value)} />
+                  </FormField>
+                  <FormField label="Route Time Override" htmlFor={`${idPrefix}-route-duration`}>
+                    <SelectInput id={`${idPrefix}-route-duration`} value={ride.routeDuration} onChange={(event) => onUpdateField("routeDuration", event.target.value)}>
+                      <option value="">No override</option>
+                      {rideTimeOptions.map((duration) => <option key={duration} value={duration}>{duration}</option>)}
+                    </SelectInput>
+                  </FormField>
+                </div>
+              ) : (
+                <RideInfoGrid>
+                  <RideInfoItem label="Starting Location" value={ride.startingLocation || "Starting location not set"} />
+                  <RideInfoItem label="Destination" value={ride.destination || "Destination not set"} />
+                  <RideInfoItem label="Estimated Distance" value={ride.estimatedDistance ? `${ride.estimatedDistance} mi` : "Not set"} />
+                  <RideInfoItem label="Estimated Ride Time" value={ride.estimatedRideTime || "Flexible"} />
+                  <RideInfoItem label="Freeways" value={ride.freeways ? "Yes" : "No"} />
+                  <RideInfoItem label="Primary Route Link" value={ride.primaryRouteLink || "Not set"} />
+                  <RideInfoItem label="Alternate Route Link" value={ride.alternativeRouteLink || "Not set"} />
+                  <RideInfoItem label="Route Distance" value={ride.totalDistance ? `${ride.totalDistance} mi` : "Not set"} />
+                  <RideInfoItem label="Route Time Override" value={ride.routeDuration || "No override"} />
+                </RideInfoGrid>
+              )
+            ) : null}
+            {activeTab === "stops" ? (
+              <RideStopsPanel
+                ride={ride}
+                idPrefix={idPrefix}
+                isEditing={isEditingCurrentTab}
+                onAddStop={onAddStop}
+                onUpdateStop={onUpdateStop}
+                onMoveStop={onMoveStop}
+                onRemoveStop={onRemoveStop}
+              />
+            ) : null}
+            {activeTab === "assignments" ? (
+              isEditingCurrentTab ? (
+                <div className="ride-field-grid ride-field-grid--assignments">
+                  <FormField label="Ride Leader" htmlFor={`${idPrefix}-leader`}>
+                    <SelectInput id={`${idPrefix}-leader`} value={ride.rideLeader} onChange={(event) => onUpdateField("rideLeader", event.target.value)}>
+                      <option value="">Blank</option>
+                      {memberOptions.map((member) => <option key={member} value={member}>{member}</option>)}
+                    </SelectInput>
+                  </FormField>
+                  <FormField label="Sweep" htmlFor={`${idPrefix}-sweep`}>
+                    <SelectInput id={`${idPrefix}-sweep`} value={ride.sweep} onChange={(event) => onUpdateField("sweep", event.target.value)}>
+                      <option value="">Blank</option>
+                      {memberOptions.map((member) => <option key={member} value={member}>{member}</option>)}
+                    </SelectInput>
+                  </FormField>
+                  <FormField label="Ride Type" htmlFor={`${idPrefix}-type`}>
+                    <SelectInput id={`${idPrefix}-type`} value={ride.rideType} onChange={(event) => onUpdateField("rideType", event.target.value)}>
+                      {rideTypeOptions.map((type) => <option key={type} value={type}>{type}</option>)}
+                    </SelectInput>
+                  </FormField>
+                  <FormField label="Visibility" htmlFor={`${idPrefix}-visibility`}>
+                    <SelectInput id={`${idPrefix}-visibility`} value={ride.visibility} onChange={(event) => onUpdateField("visibility", event.target.value)}>
+                      {visibilityOptions.map((visibility) => <option key={visibility} value={visibility}>{visibility}</option>)}
+                    </SelectInput>
+                  </FormField>
+                  <FormField label="Weather Policy" htmlFor={`${idPrefix}-weather-policy`}>
+                    <SelectInput id={`${idPrefix}-weather-policy`} value={ride.weatherPolicy} onChange={(event) => onUpdateField("weatherPolicy", event.target.value)}>
+                      {weatherPolicyOptions.map((policy) => <option key={policy} value={policy}>{policy}</option>)}
+                    </SelectInput>
+                  </FormField>
+                </div>
+              ) : (
+                <RideInfoGrid>
+                  <RideInfoItem label="Ride Leader" value={ride.rideLeader || "Blank"} />
+                  <RideInfoItem label="Sweep" value={ride.sweep || "Blank"} />
+                  <RideInfoItem label="Ride Type" value={ride.rideType || "Group Ride"} />
+                  <RideInfoItem label="Visibility" value={ride.visibility || "Chapter Only"} />
+                  <RideInfoItem label="Weather Policy" value={ride.weatherPolicy || "Leader Decision"} />
+                </RideInfoGrid>
+              )
+            ) : null}
+            {activeTab === "notes" ? (
+              isEditingCurrentTab ? (
+                <FormField label="Ride Notes" htmlFor={`${idPrefix}-notes`}>
+                  <Textarea id={`${idPrefix}-notes`} placeholder="Ride briefing notes, regroup reminders, food notes, hazards, weather calls, or rider instructions." value={ride.notes} onChange={(event) => onUpdateField("notes", event.target.value)} />
+                </FormField>
+              ) : (
+                <p className="ride-notes-preview">{ride.notes || "No ride notes yet."}</p>
+              )
+            ) : null}
           </section>
         </div>
         <aside className={flyerUrl ? "ride-flyer-preview" : "ride-flyer-preview ride-flyer-preview--empty"} aria-label="Linked event flyer">
@@ -492,78 +631,6 @@ function RidePlannerEditor({
           )}
         </aside>
       </div>
-      <section className="ride-planner-section">
-        <SectionHeader title="Stops" action={<Button type="button" variant="secondary" onClick={onAddStop}>+ Add Stop</Button>} />
-        {ride.stops.length > 0 ? (
-          <div className="ride-stop-list">
-            {ride.stops.map((stop, index) => (
-              <article className="ride-stop-row" key={stop.id}>
-                <div className="ride-field-grid">
-                  <FormField label="Stop Type" htmlFor={`${idPrefix}-stop-type-${stop.id}`}>
-                    <SelectInput id={`${idPrefix}-stop-type-${stop.id}`} value={stop.type} onChange={(event) => onUpdateStop(stop.id, "type", event.target.value)}>
-                      {stopTypeOptions.map((type) => <option key={type} value={type}>{type}</option>)}
-                    </SelectInput>
-                  </FormField>
-                  <FormField label="Location" htmlFor={`${idPrefix}-stop-location-${stop.id}`}>
-                    <TextInput id={`${idPrefix}-stop-location-${stop.id}`} value={stop.location} onChange={(event) => onUpdateStop(stop.id, "location", event.target.value)} />
-                  </FormField>
-                  <FormField label="Arrival Time" htmlFor={`${idPrefix}-stop-arrival-${stop.id}`}>
-                    <TimeInput id={`${idPrefix}-stop-arrival-${stop.id}`} value={stop.arrivalTime ?? ""} onChange={(event) => onUpdateStop(stop.id, "arrivalTime", event.target.value)} />
-                  </FormField>
-                  <FormField label="Notes" htmlFor={`${idPrefix}-stop-notes-${stop.id}`}>
-                    <TextInput id={`${idPrefix}-stop-notes-${stop.id}`} value={stop.notes ?? ""} onChange={(event) => onUpdateStop(stop.id, "notes", event.target.value)} />
-                  </FormField>
-                </div>
-                <div className="record-row__actions">
-                  <Button type="button" variant="ghost" onClick={() => onMoveStop(stop.id, -1)} disabled={index === 0}>Up</Button>
-                  <Button type="button" variant="ghost" onClick={() => onMoveStop(stop.id, 1)} disabled={index === ride.stops.length - 1}>Down</Button>
-                  <Button type="button" variant="ghost" onClick={() => onRemoveStop(stop.id)}>Remove</Button>
-                </div>
-              </article>
-            ))}
-          </div>
-        ) : (
-          <EmptyState title="No stops added yet." message="Future stops can cover gas, food, scenic, rest, meetup, or other ride needs." />
-        )}
-      </section>
-      <section className="ride-planner-section">
-        <SectionHeader title="Assignments" />
-        <div className="ride-field-grid ride-field-grid--assignments">
-          <FormField label="Ride Leader" htmlFor={`${idPrefix}-leader`}>
-            <SelectInput id={`${idPrefix}-leader`} value={ride.rideLeader} onChange={(event) => onUpdateField("rideLeader", event.target.value)}>
-              <option value="">Blank</option>
-              {memberOptions.map((member) => <option key={member} value={member}>{member}</option>)}
-            </SelectInput>
-          </FormField>
-          <FormField label="Sweep" htmlFor={`${idPrefix}-sweep`}>
-            <SelectInput id={`${idPrefix}-sweep`} value={ride.sweep} onChange={(event) => onUpdateField("sweep", event.target.value)}>
-              <option value="">Blank</option>
-              {memberOptions.map((member) => <option key={member} value={member}>{member}</option>)}
-            </SelectInput>
-          </FormField>
-          <FormField label="Ride Type" htmlFor={`${idPrefix}-type`}>
-            <SelectInput id={`${idPrefix}-type`} value={ride.rideType} onChange={(event) => onUpdateField("rideType", event.target.value)}>
-              {rideTypeOptions.map((type) => <option key={type} value={type}>{type}</option>)}
-            </SelectInput>
-          </FormField>
-          <FormField label="Visibility" htmlFor={`${idPrefix}-visibility`}>
-            <SelectInput id={`${idPrefix}-visibility`} value={ride.visibility} onChange={(event) => onUpdateField("visibility", event.target.value)}>
-              {visibilityOptions.map((visibility) => <option key={visibility} value={visibility}>{visibility}</option>)}
-            </SelectInput>
-          </FormField>
-          <FormField label="Weather Policy" htmlFor={`${idPrefix}-weather-policy`}>
-            <SelectInput id={`${idPrefix}-weather-policy`} value={ride.weatherPolicy} onChange={(event) => onUpdateField("weatherPolicy", event.target.value)}>
-              {weatherPolicyOptions.map((policy) => <option key={policy} value={policy}>{policy}</option>)}
-            </SelectInput>
-          </FormField>
-        </div>
-      </section>
-      <section className="ride-planner-section">
-        <SectionHeader title="Notes" />
-        <FormField label="Ride Notes" htmlFor={`${idPrefix}-notes`}>
-          <Textarea id={`${idPrefix}-notes`} placeholder="Ride briefing notes, regroup reminders, food notes, hazards, weather calls, or rider instructions." value={ride.notes} onChange={(event) => onUpdateField("notes", event.target.value)} />
-        </FormField>
-      </section>
       <section className="ride-planner-section ride-planner-actions">
         <div className="ride-action-footer">
           <div className="ride-action-footer__primary">
@@ -591,6 +658,101 @@ function RidePlannerEditor({
         {saveError ? <p className="form-status form-status--error">{saveError}</p> : null}
       </section>
     </div>
+  );
+}
+
+function RideSummaryItem({ label, value }: { label: string; value: string }) {
+  return (
+    <div>
+      <dt>{label}</dt>
+      <dd>{value}</dd>
+    </div>
+  );
+}
+
+function RideInfoGrid({ children }: { children: ReactNode }) {
+  return <dl className="ride-info-grid">{children}</dl>;
+}
+
+function RideInfoItem({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="ride-info-item">
+      <dt>{label}</dt>
+      <dd>{value}</dd>
+    </div>
+  );
+}
+
+function RideStopsPanel({
+  ride,
+  idPrefix,
+  isEditing,
+  onAddStop,
+  onUpdateStop,
+  onMoveStop,
+  onRemoveStop
+}: {
+  ride: RidePlan;
+  idPrefix: string;
+  isEditing: boolean;
+  onAddStop: () => void;
+  onUpdateStop: (stopId: string, field: keyof RideStop, value: string) => void;
+  onMoveStop: (stopId: string, direction: -1 | 1) => void;
+  onRemoveStop: (stopId: string) => void;
+}) {
+  if (!isEditing) {
+    return ride.stops.length > 0 ? (
+      <div className="ride-stop-summary-list">
+        {ride.stops.map((stop) => (
+          <article className="ride-stop-summary" key={stop.id}>
+            <span>{stop.type}</span>
+            <strong>{stop.location || "Location not set"}</strong>
+            <em>{[stop.arrivalTime, stop.notes].filter(Boolean).join(" · ") || "No notes"}</em>
+          </article>
+        ))}
+      </div>
+    ) : (
+      <EmptyState title="No stops added yet." message="Edit this tab to add gas, food, scenic, rest, meetup, or other ride stops." />
+    );
+  }
+
+  return (
+    <>
+      <div className="ride-tab-panel__tools">
+        <Button type="button" variant="secondary" onClick={onAddStop}>+ Add Stop</Button>
+      </div>
+      {ride.stops.length > 0 ? (
+        <div className="ride-stop-list">
+          {ride.stops.map((stop, index) => (
+            <article className="ride-stop-row" key={stop.id}>
+              <div className="ride-field-grid">
+                <FormField label="Stop Type" htmlFor={`${idPrefix}-stop-type-${stop.id}`}>
+                  <SelectInput id={`${idPrefix}-stop-type-${stop.id}`} value={stop.type} onChange={(event) => onUpdateStop(stop.id, "type", event.target.value)}>
+                    {stopTypeOptions.map((type) => <option key={type} value={type}>{type}</option>)}
+                  </SelectInput>
+                </FormField>
+                <FormField label="Location" htmlFor={`${idPrefix}-stop-location-${stop.id}`}>
+                  <TextInput id={`${idPrefix}-stop-location-${stop.id}`} value={stop.location} onChange={(event) => onUpdateStop(stop.id, "location", event.target.value)} />
+                </FormField>
+                <FormField label="Arrival Time" htmlFor={`${idPrefix}-stop-arrival-${stop.id}`}>
+                  <TimeInput id={`${idPrefix}-stop-arrival-${stop.id}`} value={stop.arrivalTime ?? ""} onChange={(event) => onUpdateStop(stop.id, "arrivalTime", event.target.value)} />
+                </FormField>
+                <FormField label="Notes" htmlFor={`${idPrefix}-stop-notes-${stop.id}`}>
+                  <TextInput id={`${idPrefix}-stop-notes-${stop.id}`} value={stop.notes ?? ""} onChange={(event) => onUpdateStop(stop.id, "notes", event.target.value)} />
+                </FormField>
+              </div>
+              <div className="record-row__actions">
+                <Button type="button" variant="ghost" onClick={() => onMoveStop(stop.id, -1)} disabled={index === 0}>Up</Button>
+                <Button type="button" variant="ghost" onClick={() => onMoveStop(stop.id, 1)} disabled={index === ride.stops.length - 1}>Down</Button>
+                <Button type="button" variant="ghost" onClick={() => onRemoveStop(stop.id)}>Remove</Button>
+              </div>
+            </article>
+          ))}
+        </div>
+      ) : (
+        <EmptyState title="No stops added yet." message="Add gas, food, scenic, rest, meetup, or other ride stops." />
+      )}
+    </>
   );
 }
 
