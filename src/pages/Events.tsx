@@ -154,7 +154,7 @@ function EventHistoryByYear({
   events,
   selectedId,
   today,
-  expandedYears,
+  expandedYear,
   visibleCounts,
   onSelect,
   onToggleYear,
@@ -163,19 +163,18 @@ function EventHistoryByYear({
   events: EventRecord[];
   selectedId?: string;
   today: Date;
-  expandedYears: Record<string, boolean>;
+  expandedYear?: string;
   visibleCounts: Record<string, number>;
   onSelect: (event: EventRecord) => void;
   onToggleYear: (year: string) => void;
   onShowMore: (year: string) => void;
 }) {
   const groups = groupEventsByYear(events);
-  const currentYear = String(today.getFullYear());
 
   return (
     <div className="history-year-list">
       {groups.map((group) => {
-        const isExpanded = expandedYears[group.year] ?? group.year === currentYear;
+        const isExpanded = expandedYear === group.year;
         const visibleCount = visibleCounts[group.year] ?? HISTORY_BATCH_SIZE;
         const visibleEvents = group.events.slice(0, visibleCount);
         const hiddenCount = group.events.length - visibleEvents.length;
@@ -228,7 +227,7 @@ export function Events({
   const [previewMemory, setPreviewMemory] = useState<{ title: string; type: string; url: string; description?: string } | null>(null);
   const [saveMessage, setSaveMessage] = useState("");
   const [saveError, setSaveError] = useState("");
-  const [expandedHistoryYears, setExpandedHistoryYears] = useState<Record<string, boolean>>({});
+  const [expandedHistoryYear, setExpandedHistoryYear] = useState<string | undefined>();
   const [visibleHistoryCounts, setVisibleHistoryCounts] = useState<Record<string, number>>({});
   const editorEvent = formState.id ? eventRecords.find((event) => event.id === formState.id) : undefined;
   const isEditing = Boolean(formState.id);
@@ -250,8 +249,13 @@ export function Events({
       if (event.key === "Escape") closeEditor();
     }
 
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
     window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = previousOverflow;
+    };
   }, [editorOpen]);
 
   function handleViewEvent(event: EventRecord) {
@@ -370,10 +374,7 @@ export function Events({
   }
 
   function toggleHistoryYear(year: string) {
-    setExpandedHistoryYears((current) => ({
-      ...current,
-      [year]: !(current[year] ?? year === String(today.getFullYear()))
-    }));
+    setExpandedHistoryYear((current) => current === year ? undefined : year);
   }
 
   function showMoreHistory(year: string) {
@@ -429,7 +430,7 @@ export function Events({
               events={pastEvents}
               selectedId={selectedEventId}
               today={today}
-              expandedYears={expandedHistoryYears}
+              expandedYear={expandedHistoryYear}
               visibleCounts={visibleHistoryCounts}
               onSelect={handleViewEvent}
               onToggleYear={toggleHistoryYear}

@@ -5,6 +5,7 @@ import { DashboardCard } from "../components/ui/DashboardCard";
 import { DateBadge } from "../components/ui/DateBadge";
 import { EmptyState } from "../components/ui/EmptyState";
 import { FormField } from "../components/ui/FormField";
+import { PreviewModal } from "../components/ui/PreviewModal";
 import { SectionHeader } from "../components/ui/SectionHeader";
 import { StatusChip } from "../components/ui/StatusChip";
 import { DateInput, SelectInput, Textarea, TextInput, TimeInput } from "../components/ui/inputs";
@@ -81,6 +82,7 @@ export function RidePlanner({
   const [saveError, setSaveError] = useState("");
   const [newRideMessage, setNewRideMessage] = useState("");
   const [newRideError, setNewRideError] = useState("");
+  const [previewFlyer, setPreviewFlyer] = useState<{ title: string; url: string } | null>(null);
   const newRideRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -308,6 +310,7 @@ export function RidePlanner({
                         onRemoveStop={removeStop}
                         onMoveStop={moveStop}
                         onSave={handleSaveRide}
+                        onPreviewFlyer={(url, title) => setPreviewFlyer({ url, title })}
                         onDelete={handleDeleteRide}
                       />
                     ) : null}
@@ -354,6 +357,14 @@ export function RidePlanner({
           </DashboardCard>
         </div>
       </div>
+      {previewFlyer ? (
+        <PreviewModal
+          title={previewFlyer.title}
+          subtitle="Ride Flyer"
+          imageUrl={previewFlyer.url}
+          onClose={() => setPreviewFlyer(null)}
+        />
+      ) : null}
     </PageContainer>
   );
 }
@@ -372,6 +383,7 @@ function RidePlannerEditor({
   onRemoveStop,
   onMoveStop,
   onSave,
+  onPreviewFlyer,
   onCancel,
   onDelete
 }: {
@@ -388,6 +400,7 @@ function RidePlannerEditor({
   onRemoveStop: (stopId: string) => void;
   onMoveStop: (stopId: string, direction: -1 | 1) => void;
   onSave: () => void;
+  onPreviewFlyer?: (url: string, title: string) => void;
   onCancel?: () => void;
   onDelete?: () => void;
 }) {
@@ -438,12 +451,6 @@ function RidePlannerEditor({
                   {rideTimeOptions.map((duration) => <option key={duration} value={duration}>{duration}</option>)}
                 </SelectInput>
               </FormField>
-              <FormField label="Freeways" htmlFor={`${idPrefix}-freeways`}>
-                <SelectInput id={`${idPrefix}-freeways`} value={ride.freeways ? "yes" : "no"} onChange={(event) => onUpdateField("freeways", event.target.value === "yes")}>
-                  <option value="yes">Yes</option>
-                  <option value="no">No</option>
-                </SelectInput>
-              </FormField>
               <FormField label="Primary Route Link" htmlFor={`${idPrefix}-primary-route`}>
                 <TextInput id={`${idPrefix}-primary-route`} type="url" value={ride.primaryRouteLink} onChange={(event) => onUpdateField("primaryRouteLink", event.target.value)} />
               </FormField>
@@ -462,12 +469,19 @@ function RidePlannerEditor({
             </div>
           </section>
         </div>
-        {flyerUrl ? (
-          <aside className="ride-flyer-preview" aria-label="Linked event flyer">
+        <aside className={flyerUrl ? "ride-flyer-preview" : "ride-flyer-preview ride-flyer-preview--empty"} aria-label="Linked event flyer">
+          {flyerUrl ? (
+            <button className="ride-flyer-preview__button" type="button" onClick={() => onPreviewFlyer?.(flyerUrl, ride.title || "Ride Flyer")}>
+              <span>Event Flyer</span>
+              <img src={flyerUrl} alt={`${ride.title || "Ride"} flyer`} loading="lazy" />
+            </button>
+          ) : (
+            <>
             <span>Event Flyer</span>
-            <img src={flyerUrl} alt={`${ride.title || "Ride"} flyer`} loading="lazy" />
-          </aside>
-        ) : null}
+            <strong>No flyer attached.</strong>
+            </>
+          )}
+        </aside>
       </div>
       <section className="ride-planner-section">
         <SectionHeader title="Stops" action={<Button type="button" variant="secondary" onClick={onAddStop}>+ Add Stop</Button>} />
@@ -521,6 +535,17 @@ function RidePlannerEditor({
           <FormField label="Ride Type" htmlFor={`${idPrefix}-type`}>
             <SelectInput id={`${idPrefix}-type`} value={ride.rideType} onChange={(event) => onUpdateField("rideType", event.target.value)}>
               {rideTypeOptions.map((type) => <option key={type} value={type}>{type}</option>)}
+            </SelectInput>
+          </FormField>
+        </div>
+      </section>
+      <section className="ride-planner-section">
+        <SectionHeader title="Safety" />
+        <div className="ride-field-grid ride-field-grid--assignments">
+          <FormField label="Freeways" htmlFor={`${idPrefix}-freeways`}>
+            <SelectInput id={`${idPrefix}-freeways`} value={ride.freeways ? "yes" : "no"} onChange={(event) => onUpdateField("freeways", event.target.value === "yes")}>
+              <option value="yes">Yes</option>
+              <option value="no">No</option>
             </SelectInput>
           </FormField>
           <FormField label="Visibility" htmlFor={`${idPrefix}-visibility`}>

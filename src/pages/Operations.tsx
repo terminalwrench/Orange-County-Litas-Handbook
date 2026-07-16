@@ -49,7 +49,6 @@ const emptyBirthdayForm = {
 };
 
 const birthdayPageSize = 8;
-type BirthdayListView = "current" | "upcoming" | "past";
 
 interface OperationsProps {
   eventRecords: EventRecord[];
@@ -75,8 +74,8 @@ export function Operations({
   const [savingMemberId, setSavingMemberId] = useState<string | null>(null);
   const [birthdayMessage, setBirthdayMessage] = useState("");
   const [birthdayError, setBirthdayError] = useState("");
-  const [birthdayListView, setBirthdayListView] = useState<BirthdayListView>("current");
-  const [expandedBirthdayMonth, setExpandedBirthdayMonth] = useState(String(today.getMonth() + 1));
+  const [isBirthdayFormOpen, setIsBirthdayFormOpen] = useState(false);
+  const [expandedBirthdayMonth, setExpandedBirthdayMonth] = useState<string | undefined>();
   const [visibleBirthdayCount, setVisibleBirthdayCount] = useState(birthdayPageSize);
   const [selectedAccount, setSelectedAccount] = useState<SharedAccount | null>(null);
   const [credentialMessage, setCredentialMessage] = useState("");
@@ -87,10 +86,7 @@ export function Operations({
   const sharedAccounts = getSharedAccounts();
   const annualReport = getAnnualBranchReport(eventRecords, selectedYear);
   const sortedMembers = [...memberRecords].sort(compareBirthdayMembers);
-  const birthdayGroups = getBirthdayGroups(sortedMembers, birthdayListView, today);
-  const activeBirthdayMonth = birthdayGroups.some((group) => group.month === expandedBirthdayMonth)
-    ? expandedBirthdayMonth
-    : birthdayGroups[0]?.month ?? "";
+  const birthdayGroups = getBirthdayGroups(sortedMembers);
 
   function editMember(member: MemberRecord) {
     setBirthdayForm({
@@ -101,12 +97,14 @@ export function Operations({
       birthdayDay: member.birthdayDay ? String(member.birthdayDay) : "",
       instagramHandle: member.instagramHandle ?? ""
     });
+    setIsBirthdayFormOpen(true);
     setBirthdayMessage("");
     setBirthdayError("");
   }
 
   function resetBirthdayForm() {
     setBirthdayForm(emptyBirthdayForm);
+    setIsBirthdayFormOpen(false);
     setBirthdayMessage("");
     setBirthdayError("");
   }
@@ -115,15 +113,16 @@ export function Operations({
     setBirthdayForm((current) => ({ ...current, [field]: value }));
   }
 
-  function changeBirthdayListView(view: BirthdayListView) {
-    setBirthdayListView(view);
+  function toggleBirthdayMonth(month: string) {
+    setExpandedBirthdayMonth((current) => current === month ? undefined : month);
     setVisibleBirthdayCount(birthdayPageSize);
-    setExpandedBirthdayMonth(getDefaultExpandedBirthdayMonth(view, today));
   }
 
-  function toggleBirthdayMonth(month: string) {
-    setExpandedBirthdayMonth((current) => current === month ? "" : month);
-    setVisibleBirthdayCount(birthdayPageSize);
+  function openNewBirthdayForm() {
+    setBirthdayForm(emptyBirthdayForm);
+    setIsBirthdayFormOpen(true);
+    setBirthdayMessage("");
+    setBirthdayError("");
   }
 
   async function saveBirthday(event: FormEvent<HTMLFormElement>) {
@@ -148,6 +147,7 @@ export function Operations({
       } else {
         setBirthdayMessage(result.source === "supabase" ? "Birthday saved." : "Birthday saved for this browser session.");
         setBirthdayForm(emptyBirthdayForm);
+        setIsBirthdayFormOpen(false);
       }
     } catch (error) {
       const validation = error as { errors?: Record<string, string> };
@@ -171,6 +171,7 @@ export function Operations({
       } else {
         setBirthdayMessage(result.source === "supabase" ? "Birthday deleted." : "Birthday deleted for this browser session.");
         if (birthdayForm.id === member.id) setBirthdayForm(emptyBirthdayForm);
+        if (birthdayForm.id === member.id) setIsBirthdayFormOpen(false);
       }
     } catch (error) {
       console.warn("[operations] Unable to delete birthday.", error);
@@ -240,59 +241,78 @@ export function Operations({
         <DashboardCard className="span-all">
           <SectionHeader
             title="Birthday Management"
-            action={birthdayForm.id ? <Button type="button" variant="ghost" onClick={resetBirthdayForm}>Cancel Edit</Button> : null}
+            action={isBirthdayFormOpen ? (
+              <Button type="button" variant="ghost" onClick={resetBirthdayForm}>Cancel</Button>
+            ) : (
+              <Button type="button" variant="secondary" onClick={openNewBirthdayForm}>+ Add Birthday</Button>
+            )}
           />
-          <form className="form-grid birthday-management-form" onSubmit={saveBirthday}>
-            <FormField label="First Name" htmlFor="birthday-first-name">
-              <TextInput
-                id="birthday-first-name"
-                value={birthdayForm.firstName}
-                onChange={(event) => updateBirthdayForm("firstName", event.target.value)}
-                required
-              />
-            </FormField>
-            <FormField label="Last Initial" htmlFor="birthday-last-initial">
-              <TextInput
-                id="birthday-last-initial"
-                value={birthdayForm.lastInitial}
-                maxLength={2}
-                onChange={(event) => updateBirthdayForm("lastInitial", event.target.value)}
-              />
-            </FormField>
-            <FormField label="Month" htmlFor="birthday-month">
-              <SelectInput
-                id="birthday-month"
-                value={birthdayForm.birthdayMonth}
-                onChange={(event) => updateBirthdayForm("birthdayMonth", event.target.value)}
-              >
-                {monthOptions.map((month) => <option key={month.value || "empty"} value={month.value}>{month.label}</option>)}
-              </SelectInput>
-            </FormField>
-            <FormField label="Day" htmlFor="birthday-day">
-              <TextInput
-                id="birthday-day"
-                type="number"
-                min="1"
-                max="31"
-                inputMode="numeric"
-                value={birthdayForm.birthdayDay}
-                onChange={(event) => updateBirthdayForm("birthdayDay", event.target.value)}
-              />
-            </FormField>
-            <FormField label="Instagram" htmlFor="birthday-instagram">
-              <TextInput
-                id="birthday-instagram"
-                value={birthdayForm.instagramHandle}
-                onChange={(event) => updateBirthdayForm("instagramHandle", event.target.value)}
-                placeholder="@handle"
-              />
-            </FormField>
-            <div className="form-actions birthday-management-actions">
-              <Button type="submit" variant="primary" disabled={savingMemberId === (birthdayForm.id ?? "new")}>
-                {savingMemberId === (birthdayForm.id ?? "new") ? "Saving..." : birthdayForm.id ? "Save Birthday" : "Add Birthday"}
-              </Button>
-            </div>
-          </form>
+          {isBirthdayFormOpen ? (
+            <form className="form-grid birthday-management-form" onSubmit={saveBirthday}>
+              <FormField label="First Name" htmlFor="birthday-first-name">
+                <TextInput
+                  id="birthday-first-name"
+                  value={birthdayForm.firstName}
+                  onChange={(event) => updateBirthdayForm("firstName", event.target.value)}
+                  required
+                />
+              </FormField>
+              <FormField label="Last Initial" htmlFor="birthday-last-initial">
+                <TextInput
+                  id="birthday-last-initial"
+                  value={birthdayForm.lastInitial}
+                  maxLength={2}
+                  onChange={(event) => updateBirthdayForm("lastInitial", event.target.value)}
+                />
+              </FormField>
+              <FormField label="Month" htmlFor="birthday-month">
+                <SelectInput
+                  id="birthday-month"
+                  value={birthdayForm.birthdayMonth}
+                  onChange={(event) => updateBirthdayForm("birthdayMonth", event.target.value)}
+                >
+                  {monthOptions.map((month) => <option key={month.value || "empty"} value={month.value}>{month.label}</option>)}
+                </SelectInput>
+              </FormField>
+              <FormField label="Day" htmlFor="birthday-day">
+                <TextInput
+                  id="birthday-day"
+                  type="number"
+                  min="1"
+                  max="31"
+                  inputMode="numeric"
+                  value={birthdayForm.birthdayDay}
+                  onChange={(event) => updateBirthdayForm("birthdayDay", event.target.value)}
+                />
+              </FormField>
+              <FormField label="Instagram" htmlFor="birthday-instagram">
+                <TextInput
+                  id="birthday-instagram"
+                  value={birthdayForm.instagramHandle}
+                  onChange={(event) => updateBirthdayForm("instagramHandle", event.target.value)}
+                  placeholder="@handle"
+                />
+              </FormField>
+              <div className="form-actions birthday-management-actions">
+                <Button type="submit" variant="primary" disabled={savingMemberId === (birthdayForm.id ?? "new")}>
+                  {savingMemberId === (birthdayForm.id ?? "new") ? "Saving..." : birthdayForm.id ? "Save Birthday" : "Add Birthday"}
+                </Button>
+                {birthdayForm.id ? (
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    onClick={() => {
+                      const selectedMember = memberRecords.find((member) => member.id === birthdayForm.id);
+                      if (selectedMember) void deleteBirthday(selectedMember);
+                    }}
+                    disabled={savingMemberId === birthdayForm.id}
+                  >
+                    Delete
+                  </Button>
+                ) : null}
+              </div>
+            </form>
+          ) : null}
           {sortedMembers.length > 0 ? (
             <section className="birthday-list-panel" aria-labelledby="birthday-list-title">
               <div className="birthday-list-header">
@@ -300,22 +320,11 @@ export function Operations({
                   <h3 id="birthday-list-title">Birthday List</h3>
                   <p>Grouped to keep member birthdays easy to scan and maintain.</p>
                 </div>
-                <div className="segmented-control" aria-label="Birthday list view">
-                  <Button type="button" variant={birthdayListView === "current" ? "primary" : "secondary"} onClick={() => changeBirthdayListView("current")}>
-                    Current Month
-                  </Button>
-                  <Button type="button" variant={birthdayListView === "upcoming" ? "primary" : "secondary"} onClick={() => changeBirthdayListView("upcoming")}>
-                    Upcoming
-                  </Button>
-                  <Button type="button" variant={birthdayListView === "past" ? "primary" : "secondary"} onClick={() => changeBirthdayListView("past")}>
-                    Past
-                  </Button>
-                </div>
               </div>
               {birthdayGroups.length > 0 ? (
                 <div className="birthday-month-groups">
                   {birthdayGroups.map((group) => {
-                    const isExpanded = activeBirthdayMonth === group.month;
+                    const isExpanded = expandedBirthdayMonth === group.month;
                     const visibleMembers = group.members.slice(0, visibleBirthdayCount);
                     const hiddenCount = group.members.length - visibleMembers.length;
 
@@ -334,18 +343,12 @@ export function Operations({
                           <>
                             <div className="birthday-management-list">
                               {visibleMembers.map((member) => (
-                                <article className="birthday-management-row" key={member.id}>
+                                <button className="birthday-management-row" type="button" key={member.id} onClick={() => editMember(member)}>
                                   <span>
                                     <strong>{formatMemberName(member)}</strong>
                                     <em>{formatBirthday(member)}{member.instagramHandle ? ` · ${member.instagramHandle}` : ""}</em>
                                   </span>
-                                  <div className="record-row__actions">
-                                    <Button type="button" variant="secondary" onClick={() => editMember(member)}>Edit</Button>
-                                    <Button type="button" variant="ghost" onClick={() => deleteBirthday(member)} disabled={savingMemberId === member.id}>
-                                      Delete
-                                    </Button>
-                                  </div>
-                                </article>
+                                </button>
                               ))}
                             </div>
                             {hiddenCount > 0 ? (
@@ -360,7 +363,7 @@ export function Operations({
                   })}
                 </div>
               ) : (
-                <EmptyState title={getBirthdayEmptyTitle(birthdayListView)} />
+                <EmptyState title="No birthdays have been added." />
               )}
             </section>
           ) : (
@@ -540,18 +543,14 @@ function AnnualReportSummary({ report }: { report: AnnualBranchReport }) {
   );
 }
 
-function getBirthdayGroups(members: MemberRecord[], view: BirthdayListView, today: Date) {
-  const currentMonth = today.getMonth() + 1;
-  const currentDay = today.getDate();
-  const filteredMembers = members.filter((member) => {
-    if (!member.birthdayMonth || !member.birthdayDay) return view === "current";
-    if (view === "current") return member.birthdayMonth === currentMonth;
-    if (view === "upcoming") return member.birthdayMonth > currentMonth || (member.birthdayMonth === currentMonth && member.birthdayDay >= currentDay);
-    return member.birthdayMonth < currentMonth || (member.birthdayMonth === currentMonth && member.birthdayDay < currentDay);
-  });
+function getBirthdayGroups(members: MemberRecord[]) {
   const groups = new Map<string, MemberRecord[]>();
+  monthOptions
+    .filter((month) => month.value)
+    .forEach((month) => groups.set(month.value, []));
+  groups.set("unscheduled", []);
 
-  filteredMembers.forEach((member) => {
+  members.forEach((member) => {
     const key = member.birthdayMonth ? String(member.birthdayMonth) : "unscheduled";
     groups.set(key, [...(groups.get(key) ?? []), member]);
   });
@@ -562,27 +561,12 @@ function getBirthdayGroups(members: MemberRecord[], view: BirthdayListView, toda
       label: month === "unscheduled" ? "Needs Date" : monthOptions[Number(month)].label,
       members: groupMembers.sort(compareBirthdayMembers)
     }))
-    .sort((a, b) => getBirthdayGroupSortValue(a.month, currentMonth) - getBirthdayGroupSortValue(b.month, currentMonth));
+    .sort((a, b) => getBirthdayGroupSortValue(a.month) - getBirthdayGroupSortValue(b.month));
 }
 
-function getBirthdayGroupSortValue(month: string, currentMonth: number) {
-  if (month === "unscheduled") return 99;
-
-  const numericMonth = Number(month);
-  return numericMonth >= currentMonth ? numericMonth - currentMonth : numericMonth + 12 - currentMonth;
-}
-
-function getDefaultExpandedBirthdayMonth(view: BirthdayListView, today: Date) {
-  const currentMonth = today.getMonth() + 1;
-  if (view === "current") return String(currentMonth);
-  if (view === "upcoming") return String(currentMonth === 12 ? 1 : currentMonth + 1);
-  return String(currentMonth === 1 ? 12 : currentMonth - 1);
-}
-
-function getBirthdayEmptyTitle(view: BirthdayListView) {
-  if (view === "current") return "No birthdays this month.";
-  if (view === "upcoming") return "No upcoming birthdays.";
-  return "No past birthdays to show.";
+function getBirthdayGroupSortValue(month: string) {
+  if (month === "unscheduled") return 13;
+  return Number(month);
 }
 
 function formatDate(value: string) {

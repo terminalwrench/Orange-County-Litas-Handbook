@@ -1230,13 +1230,31 @@ a {
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 0.85rem;
   align-items: center;
+  width: 100%;
   min-height: 3.45rem;
   padding: 0.72rem 0.15rem;
+  border: 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.075);
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--motion-fast), color var(--motion-fast);
 }
 
 .birthday-management-row:last-child {
   border-bottom: 0;
+}
+
+.birthday-management-row:hover,
+.birthday-management-row:focus-visible {
+  background: rgba(255, 107, 0, 0.045);
+  outline: none;
+}
+
+.birthday-management-row:hover strong,
+.birthday-management-row:focus-visible strong {
+  color: var(--color-orange);
 }
 
 .birthday-management-row strong {
@@ -1616,6 +1634,18 @@ a {
 
   to {
     opacity: 1;
+  }
+}
+
+@keyframes accordion-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(-0.25rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
@@ -2022,6 +2052,11 @@ a {
   background: rgba(255, 255, 255, 0.026);
 }
 
+.ride-flyer-preview--empty {
+  min-height: 8.5rem;
+  align-content: center;
+}
+
 .ride-flyer-preview span {
   justify-self: start;
   color: rgba(248, 245, 239, 0.58);
@@ -2031,6 +2066,27 @@ a {
   text-transform: uppercase;
 }
 
+.ride-flyer-preview strong {
+  color: rgba(248, 245, 239, 0.72);
+  font-size: 0.9rem;
+  font-weight: 560;
+}
+
+.ride-flyer-preview__button {
+  display: grid;
+  gap: 0.65rem;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.ride-flyer-preview__button:focus-visible {
+  outline: none;
+}
+
 .ride-flyer-preview img {
   width: min(100%, 10.75rem);
   aspect-ratio: 3 / 4;
@@ -2038,6 +2094,13 @@ a {
   border-radius: var(--radius-md);
   border: 1px solid rgba(255, 255, 255, 0.12);
   background: rgba(0, 0, 0, 0.24);
+  transition: border-color var(--motion-fast), transform var(--motion-fast);
+}
+
+.ride-flyer-preview__button:hover img,
+.ride-flyer-preview__button:focus-visible img {
+  border-color: rgba(255, 107, 0, 0.58);
+  transform: translateY(-1px);
 }
 
 .ride-planner-actions {
@@ -2063,6 +2126,13 @@ a {
   flex-wrap: wrap;
   gap: 0.65rem;
   justify-content: flex-end;
+}
+
+.history-year > .record-list,
+.birthday-month-group > .birthday-management-list,
+.ride-accordion-item--expanded .ride-inline-planner,
+.new-ride-card .ride-inline-planner {
+  animation: accordion-reveal 180ms ease-out;
 }
 
 .new-ride-card .ride-inline-planner {
