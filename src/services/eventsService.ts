@@ -221,11 +221,17 @@ async function resolveEventSaveTarget(input: EventSaveInput): Promise<EventSaveT
 export async function deleteEventRecord(event: EventRecord): Promise<PersistenceResult<EventRecord>> {
   const supabase = getPersistenceClient();
 
-  if (!supabase || !isUuid(event.id)) {
+  if (!supabase) {
     return {
       data: event,
       source: "fallback"
     };
+  }
+
+  if (!isUuid(event.id)) {
+    const error = new Error("Event delete requires a Supabase UUID primary key.");
+    logEventDeleteError(event, error);
+    throw createEventDeleteError(event, error);
   }
 
   const { error } = await supabase
@@ -234,11 +240,8 @@ export async function deleteEventRecord(event: EventRecord): Promise<Persistence
     .eq("id", event.id);
 
   if (error) {
-    warnAndUseFallback("Unable to delete event from Supabase. Keeping local UI state stable.", error);
-    return {
-      data: event,
-      source: "fallback"
-    };
+    logEventDeleteError(event, error);
+    throw createEventDeleteError(event, error);
   }
 
   return {
@@ -673,6 +676,31 @@ function createEventSaveError(action: string, eventId: string | undefined, paylo
     eventId,
     payloadKeys: Object.keys(payload),
     payload,
+    supabaseError: details,
+    cause: error
+  });
+
+  return nextError;
+}
+
+function logEventDeleteError(event: EventRecord, error: unknown) {
+  console.error("[events] Supabase event delete failed.", {
+    eventId: event.id,
+    eventTitle: event.title,
+    supabaseError: getSupabaseErrorDetails(error),
+    error
+  });
+}
+
+function createEventDeleteError(event: EventRecord, error: unknown) {
+  const details = getSupabaseErrorDetails(error);
+  const message = details.message || (error instanceof Error ? error.message : "Event could not be deleted from Supabase.");
+  const nextError = new Error(message);
+
+  Object.assign(nextError, {
+    action: "delete",
+    eventId: event.id,
+    eventTitle: event.title,
     supabaseError: details,
     cause: error
   });

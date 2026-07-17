@@ -1229,15 +1229,16 @@ a {
 .birthday-month-tile {
   display: grid;
   align-content: center;
-  justify-items: start;
-  gap: 0.28rem;
-  min-height: 7.2rem;
-  padding: 1rem;
+  justify-items: center;
+  gap: 0.45rem;
+  aspect-ratio: 1 / 1;
+  min-height: 5.8rem;
+  padding: 0.85rem;
   border: 1px solid rgba(255, 255, 255, 0.085);
   border-radius: var(--radius-md);
   background: rgba(255, 255, 255, 0.024);
   color: inherit;
-  text-align: left;
+  text-align: center;
   cursor: pointer;
   transition:
     border-color var(--motion-fast),
@@ -1276,11 +1277,11 @@ a {
 
 .birthday-month-tile__abbr,
 .birthday-month-tile__icon {
-  min-height: 1.45rem;
   color: var(--color-orange);
   font-size: 0.78rem;
   font-weight: 820;
   letter-spacing: 0.14em;
+  line-height: 1;
 }
 
 .birthday-month-tile__icon {
@@ -1295,28 +1296,12 @@ a {
   height: 1.25rem;
 }
 
-.birthday-month-tile__icon em {
-  position: absolute;
-  right: -0.45rem;
-  bottom: -0.2rem;
-  color: var(--color-white);
-  font-size: 0.68rem;
-  font-style: normal;
-  letter-spacing: 0;
-}
-
 .birthday-month-tile strong {
   color: var(--color-white);
-  font-size: clamp(1.9rem, 4vw, 2.6rem);
+  font-size: clamp(1.8rem, 4vw, 2.45rem);
   font-weight: 620;
   letter-spacing: 0;
   line-height: 0.95;
-}
-
-.birthday-month-tile em {
-  color: var(--color-muted);
-  font-size: 0.75rem;
-  font-style: normal;
 }
 
 .birthday-month-drawer {
@@ -1667,6 +1652,32 @@ a {
   font-weight: 520;
   letter-spacing: 0;
   line-height: 1.2;
+}
+
+.slide-over-close-button {
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.035);
+  color: rgba(248, 245, 239, 0.84);
+  font-size: 0.78rem;
+  font-weight: 760;
+  line-height: 1;
+  cursor: pointer;
+  transition: border-color var(--motion-fast), background var(--motion-fast), color var(--motion-fast), transform var(--motion-fast);
+}
+
+.slide-over-close-button:hover,
+.slide-over-close-button:focus-visible {
+  border-color: rgba(255, 107, 0, 0.44);
+  background: rgba(255, 107, 0, 0.09);
+  color: var(--color-white);
+  outline: none;
+  transform: translateY(-1px);
 }
 
 .slide-over-form {
@@ -3189,11 +3200,16 @@ a {
     padding-inline: 0.45rem;
   }
 
+  .slide-over-backdrop {
+    padding: 0.5rem;
+    background: rgba(0, 0, 0, 0.58);
+  }
+
   .slide-over-panel {
     width: min(100%, 29rem);
     padding: 0.95rem;
     background:
-      linear-gradient(180deg, rgba(14, 15, 15, 0.98), rgba(5, 6, 6, 0.98)),
+      linear-gradient(180deg, rgba(14, 15, 15, 0.985), rgba(5, 6, 6, 0.99)),
       #070808;
     backdrop-filter: none;
     box-shadow: -0.65rem 0 1.5rem rgba(0, 0, 0, 0.34);

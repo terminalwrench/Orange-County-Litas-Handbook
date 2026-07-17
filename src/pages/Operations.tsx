@@ -342,13 +342,11 @@ export function Operations({
                     {group.month === "unscheduled" ? (
                       <span className="birthday-month-tile__icon" aria-hidden="true">
                         <Icon name="calendar" />
-                        <em>?</em>
                       </span>
                     ) : (
                       <span className="birthday-month-tile__abbr">{getMonthAbbreviation(group.month)}</span>
                     )}
                     <strong>{group.members.length}</strong>
-                    <em>{group.members.length === 1 ? "birthday" : "birthdays"}</em>
                   </button>
                 );
               })}

@@ -227,11 +227,14 @@ export function Events({
   const [previewMemory, setPreviewMemory] = useState<{ title: string; type: string; url: string; description?: string } | null>(null);
   const [saveMessage, setSaveMessage] = useState("");
   const [saveError, setSaveError] = useState("");
+  const [invalidFlyerUrl, setInvalidFlyerUrl] = useState("");
   const [expandedHistoryYear, setExpandedHistoryYear] = useState<string | undefined>();
   const [visibleHistoryCounts, setVisibleHistoryCounts] = useState<Record<string, number>>({});
   const editorEvent = formState.id ? eventRecords.find((event) => event.id === formState.id) : undefined;
   const isEditing = Boolean(formState.id);
   const isCalendarImportDisabled = isImportingCalendar || !isPersistenceConfigured || !isCalendarImportAvailable;
+  const flyerPreviewUrl = formState.flyerUrl.trim();
+  const shouldShowFlyerPreview = Boolean(flyerPreviewUrl) && invalidFlyerUrl !== flyerPreviewUrl;
 
   useEffect(() => {
     if (!selectedEventId) return;
@@ -264,6 +267,7 @@ export function Events({
 
   function openNewEventForm() {
     setFormState(emptyEventForm);
+    setInvalidFlyerUrl("");
     setEditorOpen(true);
     setSelectedEventId(undefined);
     setSaveMessage("");
@@ -275,6 +279,7 @@ export function Events({
       ...toEventFormState(event),
       status: getDisplayEventStatus(event, today)
     });
+    setInvalidFlyerUrl("");
     setSelectedEventId(event.id);
     setEditorOpen(true);
     setSaveMessage("");
@@ -283,6 +288,7 @@ export function Events({
 
   function closeEditor() {
     setFormState(emptyEventForm);
+    setInvalidFlyerUrl("");
     setEditorOpen(false);
     setSelectedEventId(undefined);
     setSaveMessage("");
@@ -290,6 +296,7 @@ export function Events({
   }
 
   function updateForm(field: keyof EventFormState, value: string) {
+    if (field === "flyerUrl") setInvalidFlyerUrl("");
     setFormState((current) => ({ ...current, [field]: value }));
   }
 
@@ -317,7 +324,7 @@ export function Events({
         setSaveMessage(result.source === "supabase" ? (isEditing ? "Event updated." : "Event added.") : "Saved locally for this session.");
       }
     } catch (error) {
-      console.warn("[events] Unable to save event.", error);
+      console.error("[events] Unable to save event.", error);
       setSaveError("Event could not be saved to the shared records.");
     } finally {
       setSavingId(null);
@@ -344,7 +351,7 @@ export function Events({
         }
       }
     } catch (error) {
-      console.warn("[events] Unable to delete event.", error);
+      console.error("[events] Unable to delete event.", error);
       setSaveError("Event could not be deleted. Try again in a moment.");
     } finally {
       setSavingId(null);
@@ -455,7 +462,9 @@ export function Events({
                 <h2 id="event-slide-over-title">{formState.title || (isEditing ? "Untitled event" : "New event")}</h2>
                 <span>{getSlideOverSubtitle(formState)}</span>
               </div>
-              <Button type="button" variant="ghost" onClick={closeEditor}>Close</Button>
+              <button className="slide-over-close-button" type="button" onClick={closeEditor} aria-label="Close event editor">
+                X
+              </button>
             </div>
             <form className="form-grid slide-over-form" aria-label={isEditing ? "Edit event" : "Add event"} onSubmit={handleSubmit}>
               <section className="slide-over-section">
@@ -531,18 +540,22 @@ export function Events({
               </section>
               <section className="slide-over-section event-flyer-preview-panel" aria-labelledby="event-flyer-preview-title">
                 <h3 id="event-flyer-preview-title">Flyer Preview</h3>
-                {formState.flyerUrl ? (
+                {shouldShowFlyerPreview ? (
                   <button
                     className="event-flyer-preview-button"
                     type="button"
                     onClick={() => setPreviewMemory({
                       title: formState.title || "Event Flyer",
                       type: "Flyer",
-                      url: formState.flyerUrl,
+                      url: flyerPreviewUrl,
                       description: formState.title
                     })}
                   >
-                    <img src={formState.flyerUrl} alt={`${formState.title || "Event"} flyer`} />
+                    <img
+                      src={flyerPreviewUrl}
+                      alt={`${formState.title || "Event"} flyer`}
+                      onError={() => setInvalidFlyerUrl(flyerPreviewUrl)}
+                    />
                   </button>
                 ) : (
                   <EmptyState title="No flyer attached." />
