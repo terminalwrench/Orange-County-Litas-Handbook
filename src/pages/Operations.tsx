@@ -1,4 +1,4 @@
-import { useMemo, useState, type FormEvent } from "react";
+import { Fragment, useEffect, useMemo, useState, type FormEvent } from "react";
 import { PageContainer } from "../components/layout/PageContainer";
 import { Button } from "../components/ui/Button";
 import { DashboardCard } from "../components/ui/DashboardCard";
@@ -77,6 +77,7 @@ export function Operations({
   const [isBirthdayFormOpen, setIsBirthdayFormOpen] = useState(false);
   const [expandedBirthdayMonth, setExpandedBirthdayMonth] = useState<string | undefined>();
   const [visibleBirthdayCount, setVisibleBirthdayCount] = useState(birthdayPageSize);
+  const isMobileBirthdayGrid = useMobileBirthdayGrid();
   const [selectedAccount, setSelectedAccount] = useState<SharedAccount | null>(null);
   const [credentialMessage, setCredentialMessage] = useState("");
   const metrics = getBranchMetrics(eventRecords, {
@@ -87,6 +88,13 @@ export function Operations({
   const annualReport = getAnnualBranchReport(eventRecords, selectedYear);
   const sortedMembers = [...memberRecords].sort(compareBirthdayMembers);
   const birthdayGroups = getBirthdayGroups(sortedMembers);
+  const selectedBirthdayGroup = birthdayGroups.find((group) => group.month === expandedBirthdayMonth);
+  const selectedBirthdayIndex = expandedBirthdayMonth
+    ? birthdayGroups.findIndex((group) => group.month === expandedBirthdayMonth)
+    : -1;
+  const mobileBirthdayDrawerIndex = isMobileBirthdayGrid && selectedBirthdayIndex >= 0
+    ? Math.min(birthdayGroups.length - 1, selectedBirthdayIndex + (selectedBirthdayIndex % 2 === 0 ? 1 : 0))
+    : -1;
 
   function editMember(member: MemberRecord) {
     setBirthdayForm({
@@ -321,39 +329,49 @@ export function Operations({
               </div>
             </div>
             <div className="birthday-month-groups">
-              {birthdayGroups.map((group) => {
+              {birthdayGroups.map((group, index) => {
                 const isSelected = expandedBirthdayMonth === group.month;
                 const isCurrent = group.month === String(today.getMonth() + 1);
                 const isMuted = group.members.length === 0;
+                const showInlineDrawer = isMobileBirthdayGrid && index === mobileBirthdayDrawerIndex;
 
                 return (
-                  <button
-                    className={[
-                      "birthday-month-tile",
-                      isMuted ? "birthday-month-tile--muted" : "",
-                      isCurrent ? "birthday-month-tile--current" : "",
-                      isSelected ? "birthday-month-tile--selected" : ""
-                    ].filter(Boolean).join(" ")}
-                    type="button"
-                    key={group.month}
-                    onClick={() => toggleBirthdayMonth(group.month)}
-                    aria-expanded={isSelected}
-                  >
-                    {group.month === "unscheduled" ? (
-                      <span className="birthday-month-tile__icon" aria-hidden="true">
-                        <Icon name="calendar" />
-                      </span>
-                    ) : (
-                      <span className="birthday-month-tile__abbr">{getMonthAbbreviation(group.month)}</span>
-                    )}
-                    <strong>{group.members.length}</strong>
-                  </button>
+                  <Fragment key={group.month}>
+                    <button
+                      className={[
+                        "birthday-month-tile",
+                        isMuted ? "birthday-month-tile--muted" : "",
+                        isCurrent && (!isMuted || isSelected) ? "birthday-month-tile--current" : "",
+                        isSelected ? "birthday-month-tile--selected" : ""
+                      ].filter(Boolean).join(" ")}
+                      type="button"
+                      onClick={() => toggleBirthdayMonth(group.month)}
+                      aria-expanded={isSelected}
+                    >
+                      {group.month === "unscheduled" ? (
+                        <span className="birthday-month-tile__icon" aria-hidden="true">
+                          <Icon name="calendar" />
+                        </span>
+                      ) : (
+                        <span className="birthday-month-tile__abbr">{getMonthAbbreviation(group.month)}</span>
+                      )}
+                      <strong>{group.members.length}</strong>
+                    </button>
+                    {showInlineDrawer ? (
+                      <BirthdayMonthDrawer
+                        group={selectedBirthdayGroup}
+                        visibleCount={visibleBirthdayCount}
+                        onEditMember={editMember}
+                        onShowMore={() => setVisibleBirthdayCount((current) => current + birthdayPageSize)}
+                      />
+                    ) : null}
+                  </Fragment>
                 );
               })}
             </div>
-            {expandedBirthdayMonth ? (
+            {expandedBirthdayMonth && !isMobileBirthdayGrid ? (
               <BirthdayMonthDrawer
-                group={birthdayGroups.find((group) => group.month === expandedBirthdayMonth)}
+                group={selectedBirthdayGroup}
                 visibleCount={visibleBirthdayCount}
                 onEditMember={editMember}
                 onShowMore={() => setVisibleBirthdayCount((current) => current + birthdayPageSize)}
@@ -380,6 +398,23 @@ export function Operations({
       ) : null}
     </PageContainer>
   );
+}
+
+function useMobileBirthdayGrid() {
+  const [isMobile, setIsMobile] = useState(() => (
+    typeof window === "undefined" ? false : window.matchMedia("(max-width: 720px)").matches
+  ));
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 720px)");
+    const update = () => setIsMobile(mediaQuery.matches);
+
+    update();
+    mediaQuery.addEventListener("change", update);
+    return () => mediaQuery.removeEventListener("change", update);
+  }, []);
+
+  return isMobile;
 }
 
 function BirthdayMonthDrawer({
