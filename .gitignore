@@ -8,3 +8,7 @@ __MACOSX/
 .env
 .env.local
 .env.*.local
+
+# Supabase CLI scratch state (project ref, pooler URL, versions)
+supabase/.temp
+supabase/.temp/
