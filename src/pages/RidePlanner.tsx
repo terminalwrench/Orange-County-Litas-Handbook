@@ -53,6 +53,19 @@ interface RidePlan {
 
 type RideFieldValue = string | boolean | RideStop[];
 type RidePlannerTab = "overview" | "route" | "stops" | "assignments" | "notes";
+type RideQueueView = "upcoming" | "calendar" | "templates";
+
+interface RideTemplate {
+  id: string;
+  title: string;
+  difficulty: string;
+  estimatedRideTime: string;
+  rideType: string;
+  freeways: boolean;
+  visibility: string;
+  weatherPolicy: string;
+  notes: string;
+}
 
 const memberOptions = getBranchSettings().currentCofounders;
 const difficultyOptions = ["Beginner", "Intermediate", "Advanced"];
@@ -69,6 +82,46 @@ const ridePlannerTabs: Array<{ id: RidePlannerTab; label: string }> = [
   { id: "assignments", label: "Assignments" },
   { id: "notes", label: "Notes" }
 ];
+const rideQueueTabs: Array<{ id: RideQueueView; label: string }> = [
+  { id: "upcoming", label: "Upcoming" },
+  { id: "calendar", label: "Calendar" },
+  { id: "templates", label: "Templates" }
+];
+const rideTemplates: RideTemplate[] = [
+  {
+    id: "beginner-branch-ride",
+    title: "Beginner Branch Ride",
+    difficulty: "Beginner",
+    estimatedRideTime: "1–2 hours",
+    rideType: "Beginner Ride",
+    freeways: false,
+    visibility: "Chapter Only",
+    weatherPolicy: "Leader Decision",
+    notes: "Confirm meetup instructions, beginner pace, regroup points, and direct-arrival option."
+  },
+  {
+    id: "meet-and-greet-ride",
+    title: "Meet & Greet Ride",
+    difficulty: "Beginner",
+    estimatedRideTime: "Under 1 hour",
+    rideType: "Meet & Greet Ride",
+    freeways: false,
+    visibility: "Public",
+    weatherPolicy: "Leader Decision",
+    notes: "Keep route simple, confirm parking, and include arrival instructions for new riders."
+  },
+  {
+    id: "scenic-group-ride",
+    title: "Scenic Group Ride",
+    difficulty: "Intermediate",
+    estimatedRideTime: "2–4 hours",
+    rideType: "Group Ride",
+    freeways: false,
+    visibility: "Chapter Only",
+    weatherPolicy: "Leader Decision",
+    notes: "Confirm scenic stops, fuel range, food timing, and regroup plan."
+  }
+];
 
 export function RidePlanner({
   eventRecords,
@@ -84,6 +137,7 @@ export function RidePlanner({
   const selectedRide = expandedRideId ? ridePlans.find((ride) => ride.id === expandedRideId) : undefined;
   const [formState, setFormState] = useState<RidePlan | null>(selectedRide ?? null);
   const [isNewRideOpen, setIsNewRideOpen] = useState(false);
+  const [queueView, setQueueView] = useState<RideQueueView>("upcoming");
   const [newRideState, setNewRideState] = useState<RidePlan>(() => createBlankRidePlan());
   const [savingId, setSavingId] = useState<string | null>(null);
   const [saveMessage, setSaveMessage] = useState("");
@@ -121,9 +175,24 @@ export function RidePlanner({
   function startNewRide() {
     setIsNewRideOpen(true);
     setExpandedRideId(undefined);
-    newRideRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    window.setTimeout(() => newRideRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 0);
     setNewRideMessage("");
     setNewRideError("");
+  }
+
+  function createRideFromTemplate(template: RideTemplate) {
+    setNewRideState({
+      ...createBlankRidePlan(),
+      title: template.title,
+      difficulty: template.difficulty,
+      estimatedRideTime: template.estimatedRideTime,
+      rideType: template.rideType,
+      freeways: template.freeways,
+      visibility: template.visibility,
+      weatherPolicy: template.weatherPolicy,
+      notes: template.notes
+    });
+    startNewRide();
   }
 
   function cancelNewRide() {
@@ -177,6 +246,57 @@ export function RidePlanner({
     if (!formState) return;
 
     await saveRidePlan(formState, "existing");
+  }
+
+  function handleDuplicateRide() {
+    if (!formState) return;
+
+    setNewRideState({
+      ...formState,
+      id: createLocalRideId(),
+      recordId: undefined,
+      eventId: undefined,
+      title: `${formState.title || "Ride"} Copy`,
+      status: "Planning"
+    });
+    startNewRide();
+    setNewRideMessage("Duplicated ride details. Review and save when ready.");
+  }
+
+  async function handleShareRide() {
+    if (!formState) return;
+
+    const rideBrief = buildRideShareText(formState);
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: formState.title || "Ride Plan", text: rideBrief });
+        setSaveMessage("Ride brief shared.");
+      } else {
+        await navigator.clipboard.writeText(rideBrief);
+        setSaveMessage("Ride brief copied.");
+      }
+      setSaveError("");
+    } catch (error) {
+      if (error instanceof DOMException && error.name === "AbortError") return;
+      console.warn("[ride-planner] Unable to share ride.", error);
+      setSaveMessage("");
+      setSaveError("Ride brief could not be shared.");
+    }
+  }
+
+  function handleExportRide() {
+    if (!formState) return;
+
+    const payload = JSON.stringify(toRideSaveInput(formState), null, 2);
+    const blob = new Blob([payload], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `${slugify(formState.title || "ride-plan")}.json`;
+    link.click();
+    URL.revokeObjectURL(url);
+    setSaveError("");
+    setSaveMessage("Ride plan exported.");
   }
 
   async function handleSaveNewRide() {
@@ -275,7 +395,7 @@ export function RidePlanner({
           <p>Plan rides. Build routes. Bring us together.</p>
         </div>
         <div className="ride-planner-hero__actions">
-          <Button type="button" variant="ghost" aria-label="Open ride calendar" disabled>
+          <Button type="button" variant="ghost" aria-label="Open ride calendar" onClick={() => setQueueView("calendar")}>
             <Icon name="calendar" />
           </Button>
           <Button type="button" variant="primary" onClick={startNewRide}>
@@ -286,48 +406,28 @@ export function RidePlanner({
       <div className="ride-planner-layout">
         <DashboardCard className="ride-queue-panel">
           <div className="ride-queue-tabs" aria-label="Ride list views">
-            <button className="ride-queue-tab ride-queue-tab--active" type="button">Upcoming</button>
-            <button className="ride-queue-tab" type="button" disabled>Calendar</button>
-            <button className="ride-queue-tab" type="button" disabled>Templates</button>
+            {rideQueueTabs.map((tab) => (
+              <button
+                className={queueView === tab.id ? "ride-queue-tab ride-queue-tab--active" : "ride-queue-tab"}
+                type="button"
+                key={tab.id}
+                onClick={() => setQueueView(tab.id)}
+              >
+                {tab.label}
+              </button>
+            ))}
           </div>
           {isLoading ? (
             <EmptyState title="Loading rides" message="Checking the shared ride records." />
-          ) : ridePlans.length > 0 ? (
-            <div className="ride-accordion-list">
-              {ridePlans.map((ride) => {
-                const isExpanded = ride.id === expandedRideId;
-
-                return (
-                  <article className={isExpanded ? "ride-accordion-item ride-accordion-item--expanded" : "ride-accordion-item"} key={ride.id}>
-                    <button
-                      className={isExpanded ? "event-record-row record-row--selected ride-accordion-row" : "event-record-row ride-accordion-row"}
-                      type="button"
-                      onClick={() => toggleRide(ride)}
-                      aria-pressed={isExpanded}
-                    >
-                      <DateBadge
-                        month={getRideMonth(ride.date)}
-                        day={getRideDay(ride.date)}
-                        dateTime={ride.date}
-                        compact
-                      />
-                      <span className="event-record-row__details">
-                        <strong>{ride.title || "Untitled ride"}</strong>
-                        <em>{ride.date || "Date not set"} · {ride.startingLocation || "Starting location not set"}</em>
-                      </span>
-                      <span className="event-record-row__status">
-                        <StatusChip label={ride.status} tone={getStatusTone(ride.status)} />
-                      </span>
-                    </button>
-                  </article>
-                );
-              })}
-              <Button className="ride-queue-view-all" type="button" variant="ghost" disabled>
-                View all rides <Icon name="arrow" />
-              </Button>
-            </div>
           ) : (
-            <EmptyState title="No ride plans available." message="Ride plans will appear here when ride events or saved routes are available." />
+            <RideQueueContent
+              ridePlans={ridePlans}
+              queueView={queueView}
+              selectedRideId={expandedRideId}
+              onSelectRide={toggleRide}
+              onViewAll={() => setQueueView("calendar")}
+              onUseTemplate={createRideFromTemplate}
+            />
           )}
           <p className="form-note">
             {getSourceNote(rideRecordsSource, isPersistenceConfigured)}
@@ -347,19 +447,18 @@ export function RidePlanner({
             onRemoveStop={removeStop}
             onMoveStop={moveStop}
             onSave={handleSaveRide}
+            flyerUrl={getRideFlyerUrl(formState, eventRecords)}
+            onPreviewFlyer={(url, title) => setPreviewFlyer({ url, title })}
+            onDelete={formState?.recordId ? handleDeleteRide : undefined}
+            onDuplicate={handleDuplicateRide}
+            onShare={handleShareRide}
+            onExport={handleExportRide}
           />
         ) : (
           <DashboardCard className="ride-detail-card">
             <EmptyState title="Select a ride" message="Choose a ride from the queue to open the planner workspace." />
           </DashboardCard>
         )}
-        <RideUtilityPanel
-          ride={formState}
-          flyerUrl={formState ? getRideFlyerUrl(formState, eventRecords) : undefined}
-          isSaving={Boolean(formState && savingId === formState.id)}
-          onPreviewFlyer={(url, title) => setPreviewFlyer({ url, title })}
-          onDelete={formState?.recordId ? handleDeleteRide : undefined}
-        />
         <div className="ride-new-ride-region" ref={newRideRef}>
           <DashboardCard className="new-ride-card">
             <button
@@ -386,6 +485,9 @@ export function RidePlanner({
                 onMoveStop={moveNewRideStop}
                 onSave={handleSaveNewRide}
                 onCancel={cancelNewRide}
+                onDuplicate={undefined}
+                onShare={undefined}
+                onExport={undefined}
               />
             ) : null}
           </DashboardCard>
@@ -405,6 +507,7 @@ export function RidePlanner({
 
 function RidePlannerEditor({
   ride,
+  flyerUrl,
   idPrefix,
   savingId,
   saveMessage,
@@ -416,9 +519,15 @@ function RidePlannerEditor({
   onRemoveStop,
   onMoveStop,
   onSave,
+  onPreviewFlyer,
   onCancel,
+  onDelete,
+  onDuplicate,
+  onShare,
+  onExport
 }: {
   ride: RidePlan;
+  flyerUrl?: string;
   idPrefix: string;
   savingId: string | null;
   saveMessage: string;
@@ -430,7 +539,12 @@ function RidePlannerEditor({
   onRemoveStop: (stopId: string) => void;
   onMoveStop: (stopId: string, direction: -1 | 1) => void;
   onSave: () => void;
+  onPreviewFlyer?: (url: string, title: string) => void;
   onCancel?: () => void;
+  onDelete?: () => void;
+  onDuplicate?: () => void;
+  onShare?: () => void;
+  onExport?: () => void;
 }) {
   const isSaving = savingId === ride.id;
   const isNewRide = idPrefix === "new-ride";
@@ -451,13 +565,9 @@ function RidePlannerEditor({
           <h2>{ride.title || "Untitled ride"}</h2>
           <StatusChip label={ride.status} tone={getStatusTone(ride.status)} />
         </div>
-        <div className="ride-detail-card__tools">
-          <Button type="button" variant="ghost" onClick={() => setEditingTab(activeTab)} aria-label="Edit active ride tab">Edit</Button>
-          <Button type="button" variant="ghost" disabled aria-label="More ride actions">More</Button>
-        </div>
       </div>
       <RideMetadataStrip ride={ride} />
-      <div className="ride-workspace">
+      <div className="ride-workspace-shell">
         <div className="ride-workspace__main">
           <nav className="ride-workspace-tabs" aria-label={`${ride.title || "Ride"} planner sections`}>
             {ridePlannerTabs.map((tab) => (
@@ -627,6 +737,16 @@ function RidePlannerEditor({
             ) : null}
           </section>
         </div>
+        <RideUtilityPanel
+          ride={ride}
+          flyerUrl={flyerUrl}
+          isSaving={isSaving}
+          onPreviewFlyer={onPreviewFlyer}
+          onDelete={onDelete}
+          onDuplicate={onDuplicate}
+          onShare={onShare}
+          onExport={onExport}
+        />
       </div>
       <section className="ride-planner-section ride-planner-actions">
         <div className="ride-action-footer">
@@ -662,6 +782,117 @@ function RideMetadataStrip({ ride }: { ride: RidePlan }) {
       <RideMetadataItem icon="bike" label={ride.difficulty || "Difficulty not set"} value={ride.freeways ? "Freeways" : "No Freeways"} />
       <RideMetadataItem icon="clock" label={ride.estimatedRideTime || "Flexible"} value="Ride Time" />
     </dl>
+  );
+}
+
+function RideQueueContent({
+  ridePlans,
+  queueView,
+  selectedRideId,
+  onSelectRide,
+  onViewAll,
+  onUseTemplate
+}: {
+  ridePlans: RidePlan[];
+  queueView: RideQueueView;
+  selectedRideId?: string;
+  onSelectRide: (ride: RidePlan) => void;
+  onViewAll: () => void;
+  onUseTemplate: (template: RideTemplate) => void;
+}) {
+  if (queueView === "templates") {
+    return (
+      <div className="ride-template-list">
+        {rideTemplates.map((template) => (
+          <article className="ride-template-card" key={template.id}>
+            <div>
+              <strong>{template.title}</strong>
+              <em>{template.rideType} · {template.difficulty} · {template.estimatedRideTime}</em>
+            </div>
+            <Button type="button" variant="secondary" onClick={() => onUseTemplate(template)}>
+              Use
+            </Button>
+          </article>
+        ))}
+      </div>
+    );
+  }
+
+  if (ridePlans.length === 0) {
+    return <EmptyState title="No ride plans available." message="Ride plans will appear here when ride events or saved routes are available." />;
+  }
+
+  if (queueView === "calendar") {
+    return (
+      <div className="ride-calendar-list">
+        {groupRidesByMonth(ridePlans).map((group) => (
+          <section className="ride-calendar-group" key={group.label}>
+            <h3>{group.label}</h3>
+            <div className="ride-calendar-group__rows">
+              {group.rides.map((ride) => (
+                <RideQueueRow
+                  ride={ride}
+                  key={ride.id}
+                  isSelected={ride.id === selectedRideId}
+                  onSelectRide={onSelectRide}
+                />
+              ))}
+            </div>
+          </section>
+        ))}
+      </div>
+    );
+  }
+
+  return (
+    <div className="ride-accordion-list">
+      {ridePlans.map((ride) => (
+        <RideQueueRow
+          ride={ride}
+          key={ride.id}
+          isSelected={ride.id === selectedRideId}
+          onSelectRide={onSelectRide}
+        />
+      ))}
+      <Button className="ride-queue-view-all" type="button" variant="ghost" onClick={onViewAll}>
+        View all rides <Icon name="arrow" />
+      </Button>
+    </div>
+  );
+}
+
+function RideQueueRow({
+  ride,
+  isSelected,
+  onSelectRide
+}: {
+  ride: RidePlan;
+  isSelected: boolean;
+  onSelectRide: (ride: RidePlan) => void;
+}) {
+  return (
+    <article className={isSelected ? "ride-accordion-item ride-accordion-item--expanded" : "ride-accordion-item"} key={ride.id}>
+      <button
+        className={isSelected ? "event-record-row record-row--selected ride-accordion-row" : "event-record-row ride-accordion-row"}
+        type="button"
+        onClick={() => onSelectRide(ride)}
+        aria-pressed={isSelected}
+      >
+        <DateBadge
+          month={getRideMonth(ride.date)}
+          day={getRideDay(ride.date)}
+          dateTime={ride.date}
+          compact
+        />
+        <span className="event-record-row__details">
+          <strong>{ride.title || "Untitled ride"}</strong>
+          <em>{formatQueueRideMeta(ride)}</em>
+        </span>
+        <span className="event-record-row__status">
+          <StatusChip label={ride.status} tone={getStatusTone(ride.status)} />
+        </span>
+      </button>
+    </article>
   );
 }
 
@@ -707,11 +938,6 @@ function RouteMapPreview({ ride }: { ride: RidePlan }) {
       <span className="ride-route-map__label ride-route-map__label--start">{ride.startingLocation || "Start"}</span>
       <span className="ride-route-map__line" aria-hidden="true" />
       <span className="ride-route-map__label ride-route-map__label--end">{ride.destination || "Destination"}</span>
-      <div className="ride-route-map__controls" aria-hidden="true">
-        <span><Icon name="arrow" /></span>
-        <span><Icon name="plus" /></span>
-        <span>-</span>
-      </div>
     </div>
   );
 }
@@ -740,24 +966,31 @@ function RideUtilityPanel({
   flyerUrl,
   isSaving,
   onPreviewFlyer,
-  onDelete
+  onDelete,
+  onDuplicate,
+  onShare,
+  onExport
 }: {
   ride: RidePlan | null;
   flyerUrl?: string;
   isSaving: boolean;
-  onPreviewFlyer: (url: string, title: string) => void;
+  onPreviewFlyer?: (url: string, title: string) => void;
   onDelete?: () => void;
+  onDuplicate?: () => void;
+  onShare?: () => void;
+  onExport?: () => void;
 }) {
   const checklist = ride ? buildRideChecklist(ride, flyerUrl) : [];
   const completedCount = checklist.filter((item) => item.complete).length;
+  const hasQuickActions = Boolean(onDuplicate || onShare || onExport || onDelete);
 
   return (
-    <DashboardCard className="ride-utility-panel">
+    <aside className="ride-utility-panel">
       {ride ? (
         <>
           <section className="ride-utility-section">
             <h3>Event Flyer</h3>
-            {flyerUrl ? (
+            {flyerUrl && onPreviewFlyer ? (
               <button
                 className="ride-flyer-preview__button ride-flyer-preview__button--rail"
                 type="button"
@@ -770,9 +1003,6 @@ function RideUtilityPanel({
                 <strong>No flyer attached.</strong>
               </div>
             )}
-            <Button type="button" variant="secondary" disabled>
-              Change Flyer
-            </Button>
           </section>
           <section className="ride-utility-section">
             <div className="ride-utility-section__heading">
@@ -788,28 +1018,38 @@ function RideUtilityPanel({
               ))}
             </ul>
           </section>
-          <section className="ride-utility-section">
-            <h3>Quick Actions</h3>
-            <div className="ride-quick-actions">
-              <Button type="button" variant="ghost" disabled>
-                Duplicate Ride
-              </Button>
-              <Button type="button" variant="ghost" disabled>
-                Share Ride
-              </Button>
-              <Button type="button" variant="ghost" disabled>
-                Export Route
-              </Button>
-              <Button type="button" variant="ghost" className="ride-delete-action" onClick={onDelete} disabled={!onDelete || isSaving}>
-                Delete Ride
-              </Button>
-            </div>
-          </section>
+          {hasQuickActions ? (
+            <section className="ride-utility-section">
+              <h3>Quick Actions</h3>
+              <div className="ride-quick-actions">
+                {onDuplicate ? (
+                  <Button type="button" variant="ghost" onClick={onDuplicate}>
+                    Duplicate Ride
+                  </Button>
+                ) : null}
+                {onShare ? (
+                  <Button type="button" variant="ghost" onClick={onShare}>
+                    Share Ride
+                  </Button>
+                ) : null}
+                {onExport ? (
+                  <Button type="button" variant="ghost" onClick={onExport}>
+                    Export Route
+                  </Button>
+                ) : null}
+                {onDelete ? (
+                  <Button type="button" variant="ghost" className="ride-delete-action" onClick={onDelete} disabled={isSaving}>
+                    Delete Ride
+                  </Button>
+                ) : null}
+              </div>
+            </section>
+          ) : null}
         </>
       ) : (
         <EmptyState title="No ride selected" message="Select a ride to view flyer, checklist, and available actions." />
       )}
-    </DashboardCard>
+    </aside>
   );
 }
 
@@ -984,6 +1224,64 @@ function buildRideChecklist(ride: RidePlan, flyerUrl?: string) {
     { label: "Safety brief", complete: ride.notes.toLowerCase().includes("safety") },
     { label: "Final headcount", complete: false }
   ];
+}
+
+function groupRidesByMonth(rides: RidePlan[]) {
+  const groups = new Map<string, RidePlan[]>();
+
+  rides.forEach((ride) => {
+    const label = ride.date
+      ? new Intl.DateTimeFormat("en-US", { month: "long", year: "numeric" }).format(new Date(`${ride.date}T00:00:00`))
+      : "Unscheduled";
+    groups.set(label, [...(groups.get(label) ?? []), ride]);
+  });
+
+  return Array.from(groups.entries()).map(([label, groupRides]) => ({
+    label,
+    rides: groupRides
+  }));
+}
+
+function formatQueueRideMeta(ride: RidePlan) {
+  const values = [
+    ride.kickstandsUp || (ride.date ? formatShortDate(ride.date) : ""),
+    ride.startingLocation,
+    ride.destination
+  ].filter(Boolean);
+
+  return values.length > 0 ? values.join(" · ") : "Details not set";
+}
+
+function formatShortDate(date: string) {
+  if (!date) return "";
+
+  return new Intl.DateTimeFormat("en-US", {
+    month: "numeric",
+    day: "numeric",
+    year: "numeric"
+  }).format(new Date(`${date}T00:00:00`));
+}
+
+function buildRideShareText(ride: RidePlan) {
+  return [
+    ride.title || "Ride Plan",
+    ride.date ? `Date: ${formatRideDate(ride.date)}` : "",
+    ride.kickstandsUp ? `Meetup Time: ${ride.kickstandsUp}` : "",
+    ride.startingLocation ? `Start: ${ride.startingLocation}` : "",
+    ride.destination ? `Destination: ${ride.destination}` : "",
+    ride.estimatedDistance ? `Distance: ${ride.estimatedDistance} miles` : "",
+    ride.estimatedRideTime ? `Ride Time: ${ride.estimatedRideTime}` : "",
+    ride.difficulty ? `Difficulty: ${ride.difficulty}` : "",
+    ride.freeways ? "Freeways: Yes" : "Freeways: No",
+    ride.notes ? `Notes: ${ride.notes}` : ""
+  ].filter(Boolean).join("\n");
+}
+
+function slugify(value: string) {
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "") || "ride-plan";
 }
 
 function buildRidePlans(events: EventRecord[], rides: RideRecord[]): RidePlan[] {

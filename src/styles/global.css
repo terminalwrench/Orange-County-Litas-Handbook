@@ -2471,28 +2471,25 @@ a {
 
 .ride-planner-layout {
   display: grid;
-  grid-template-columns: minmax(18rem, 20rem) minmax(34rem, 1fr) minmax(14rem, 16rem);
+  grid-template-columns: minmax(18rem, 21rem) minmax(0, 1fr);
   gap: 1rem;
   align-items: stretch;
 }
 
 .ride-queue-panel,
 .ride-detail-card,
-.ride-utility-panel,
 .new-ride-card {
   background:
     linear-gradient(135deg, rgba(255, 255, 255, 0.025), rgba(255, 255, 255, 0.01)),
     rgba(10, 12, 12, 0.78);
 }
 
-.ride-queue-panel,
-.ride-utility-panel {
+.ride-queue-panel {
   padding: 1rem;
 }
 
 .ride-planner-layout > .ride-queue-panel,
-.ride-planner-layout > .ride-detail-card,
-.ride-planner-layout > .ride-utility-panel {
+.ride-planner-layout > .ride-detail-card {
   height: 100%;
   margin: 0;
 }
@@ -2535,6 +2532,62 @@ a {
 .ride-queue-tab:disabled {
   cursor: not-allowed;
   opacity: 0.62;
+}
+
+.ride-template-list,
+.ride-calendar-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.ride-template-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.85rem;
+  border: var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.018);
+}
+
+.ride-template-card strong,
+.ride-calendar-group h3 {
+  color: var(--color-white);
+}
+
+.ride-template-card em {
+  display: block;
+  margin-top: 0.2rem;
+  color: var(--color-muted);
+  font-size: 0.78rem;
+  font-style: normal;
+  line-height: 1.35;
+}
+
+.ride-template-card .button {
+  min-height: 2.3rem;
+  padding-inline: 0.8rem;
+  font-size: 0.8rem;
+}
+
+.ride-calendar-group {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.ride-calendar-group h3 {
+  margin: 0;
+  color: rgba(248, 245, 239, 0.72);
+  font-size: 0.72rem;
+  font-weight: 820;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.ride-calendar-group__rows {
+  display: grid;
+  gap: 0.55rem;
 }
 
 .ride-accordion-list {
@@ -2618,13 +2671,20 @@ a {
   padding-top: 0;
 }
 
+.ride-workspace-shell {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(13rem, 15.5rem);
+  gap: 1.05rem;
+  align-items: start;
+}
+
 .ride-workspace__main {
   min-width: 0;
 }
 
 .ride-detail-card {
-  min-height: 33rem;
-  padding: 1rem;
+  min-height: 31rem;
+  padding: 1.2rem;
 }
 
 .ride-detail-card__topline {
@@ -2669,9 +2729,9 @@ a {
 
 .ride-metadata-strip {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 0.8rem;
-  margin: 1.2rem 0 0;
+  grid-template-columns: repeat(5, minmax(7rem, 1fr));
+  gap: 0.65rem;
+  margin: 1rem 0 0;
   padding: 0.9rem;
   border: var(--border-subtle);
   border-radius: var(--radius-md);
@@ -2747,7 +2807,7 @@ a {
   display: flex;
   flex-wrap: wrap;
   gap: 0;
-  padding: 0.9rem 0 0;
+  padding: 0.85rem 0 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.078);
 }
 
@@ -2786,7 +2846,7 @@ a {
 .ride-tab-panel {
   display: grid;
   gap: 1rem;
-  padding: 1rem 0 0;
+  padding: 0.9rem 0 0;
   animation: tab-panel-in 160ms ease-out;
 }
 
@@ -2859,7 +2919,7 @@ a {
 
 .ride-route-map {
   position: relative;
-  min-height: 21.5rem;
+  min-height: 18.5rem;
   border: var(--border-subtle);
   border-radius: var(--radius-md);
   background:
@@ -2918,38 +2978,8 @@ a {
   bottom: 17%;
 }
 
-.ride-route-map__controls {
-  position: absolute;
-  z-index: 1;
-  top: 0.7rem;
-  right: 0.7rem;
-  display: grid;
-  border: var(--border-subtle);
-  border-radius: var(--radius-md);
-  background: rgba(6, 8, 9, 0.78);
-  overflow: hidden;
-}
-
-.ride-route-map__controls span {
-  display: grid;
-  place-items: center;
-  width: 2.35rem;
-  height: 2.35rem;
-  color: rgba(248, 245, 239, 0.86);
-  border-bottom: var(--border-subtle);
-}
-
-.ride-route-map__controls svg {
-  width: 1rem;
-  height: 1rem;
-}
-
-.ride-route-map__controls span:last-child {
-  border-bottom: 0;
-}
-
 .ride-route-timeline {
-  padding-top: 1rem;
+  padding-top: 0.9rem;
   border-top: var(--border-subtle);
 }
 
@@ -3117,7 +3147,7 @@ a {
 
 .ride-flyer-preview__button--rail img {
   width: 100%;
-  max-height: 17rem;
+  max-height: 12.5rem;
   aspect-ratio: 3 / 4;
   object-fit: cover;
 }
@@ -3174,7 +3204,7 @@ a {
 }
 
 .ride-planner-actions {
-  margin-top: 1rem;
+  margin-top: 0.9rem;
   padding: 1rem 0 0;
   border-top: var(--border-subtle);
 }
@@ -3203,13 +3233,17 @@ a {
 .ride-utility-panel {
   display: grid;
   align-content: start;
-  gap: 1rem;
+  gap: 0.85rem;
+  padding: 0.95rem;
+  border: var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.018);
 }
 
 .ride-utility-section {
   display: grid;
-  gap: 0.75rem;
-  padding-bottom: 1rem;
+  gap: 0.65rem;
+  padding-bottom: 0.85rem;
   border-bottom: var(--border-subtle);
 }
 
@@ -3241,7 +3275,7 @@ a {
 
 .ride-checklist {
   display: grid;
-  gap: 0.65rem;
+  gap: 0.52rem;
   padding: 0;
   margin: 0;
   list-style: none;
@@ -3284,7 +3318,13 @@ a {
 
 .ride-quick-actions {
   display: grid;
-  gap: 0.55rem;
+  gap: 0.45rem;
+}
+
+.ride-quick-actions .button {
+  min-height: 2.35rem;
+  padding-inline: 0.75rem;
+  font-size: 0.82rem;
 }
 
 .ride-delete-action {
@@ -3852,8 +3892,11 @@ a {
     grid-template-columns: minmax(16rem, 0.75fr) minmax(0, 1.25fr);
   }
 
+  .ride-workspace-shell {
+    grid-template-columns: 1fr;
+  }
+
   .ride-utility-panel {
-    grid-column: 1 / -1;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     align-items: start;
   }
@@ -3861,12 +3904,8 @@ a {
   .ride-utility-section {
     height: 100%;
     padding: 0 1rem 0 0;
-    border-right: var(--border-subtle);
-    border-bottom: 0;
-  }
-
-  .ride-utility-section:last-child {
     border-right: 0;
+    border-bottom: 0;
   }
 
   .ride-overview-layout {
@@ -3893,8 +3932,11 @@ a {
     grid-template-columns: minmax(16rem, 0.72fr) minmax(0, 1.28fr);
   }
 
+  .ride-workspace-shell {
+    grid-template-columns: 1fr;
+  }
+
   .ride-utility-panel {
-    grid-column: 1 / -1;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     align-items: start;
   }
@@ -3902,12 +3944,8 @@ a {
   .ride-utility-section {
     height: 100%;
     padding: 0 1rem 0 0;
-    border-right: var(--border-subtle);
-    border-bottom: 0;
-  }
-
-  .ride-utility-section:last-child {
     border-right: 0;
+    border-bottom: 0;
   }
 }
 
