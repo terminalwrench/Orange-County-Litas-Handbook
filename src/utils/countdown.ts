@@ -2,7 +2,11 @@ import type { CountdownDisplay, CountdownStatus, EventRecord } from "../types";
 import { daysBetweenDates, parseDate } from "./date";
 
 export function getCountdownLabel(eventDate: string, today = new Date()): string {
-  const daysRemaining = daysBetweenDates(today, parseDate(eventDate));
+  const parsed = parseDate(eventDate);
+  if (!parsed) {
+    return "Date TBD";
+  }
+  const daysRemaining = daysBetweenDates(today, parsed);
 
   if (daysRemaining === 0) {
     return "Today";
@@ -16,8 +20,20 @@ export function getCountdownLabel(eventDate: string, today = new Date()): string
 }
 
 export function getCountdownDisplay(eventDate: string, today = new Date()): CountdownDisplay {
-  const daysRemaining = daysBetweenDates(today, parseDate(eventDate));
   const label = getCountdownLabel(eventDate, today);
+  const parsed = parseDate(eventDate);
+
+  if (!parsed) {
+    return {
+      daysRemaining: Number.NaN,
+      label,
+      value: "TBD",
+      unit: "",
+      ariaLabel: "Event date to be determined"
+    };
+  }
+
+  const daysRemaining = daysBetweenDates(today, parsed);
 
   if (daysRemaining === 0) {
     return {
@@ -50,8 +66,11 @@ export function getCountdownDisplay(eventDate: string, today = new Date()): Coun
 
 export function getUpcomingEvents(events: EventRecord[], today = new Date()) {
   return [...events]
-    .filter((event) => daysBetweenDates(today, parseDate(event.startDate)) >= 0)
-    .sort((a, b) => parseDate(a.startDate).getTime() - parseDate(b.startDate).getTime());
+    .filter((event) => {
+      const date = parseDate(event.startDate);
+      return date !== null && daysBetweenDates(today, date) >= 0;
+    })
+    .sort((a, b) => (parseDate(a.startDate)?.getTime() ?? 0) - (parseDate(b.startDate)?.getTime() ?? 0));
 }
 
 export function getNextEvent(events: EventRecord[], today = new Date()) {

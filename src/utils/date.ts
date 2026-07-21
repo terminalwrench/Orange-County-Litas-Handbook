@@ -1,8 +1,11 @@
-export function parseDate(value: string): Date {
+// Returns null (instead of throwing) on any non-YYYY-MM-DD input so a single
+// malformed date from Supabase or an ICS import cannot white-screen the app.
+// Callers must handle null by skipping/filtering the offending record.
+export function parseDate(value: string): Date | null {
   const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
 
   if (!match) {
-    throw new Error(`Invalid date value: ${value}`);
+    return null;
   }
 
   const year = Number(match[1]);
@@ -27,6 +30,9 @@ export function daysBetweenDates(from: Date, to: Date): number {
 export function isWithinCurrentWeek(dateValue: string, referenceValue: string): boolean {
   const date = parseDate(dateValue);
   const reference = parseDate(referenceValue);
+  if (!date || !reference) {
+    return false;
+  }
   const day = reference.getDay();
   const mondayOffset = day === 0 ? -6 : 1 - day;
   const start = new Date(reference);

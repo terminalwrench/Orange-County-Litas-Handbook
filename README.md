@@ -52,7 +52,14 @@ Current Supabase-backed app tables:
 - `operation_items`
 - `members`
 
-Row Level Security is enabled in [supabase/schema.sql](supabase/schema.sql). Unauthenticated visitors cannot read or write portal data. Authenticated founder/admin users can manage the current portal tables. If public signup is ever enabled, replace the simple authenticated policies with role or profile-based authorization first.
+Row Level Security is enabled in [supabase/schema.sql](supabase/schema.sql). Unauthenticated visitors cannot read or write portal data.
+
+Access now requires a **founder** role (defense in depth). Migration [supabase/migrations/202607200001_harden_rls_founder_role.sql](supabase/migrations/202607200001_harden_rls_founder_role.sql) adds a `public.profiles` table keyed to `auth.users(id)` and switches every table policy from blanket `using (true)` to `using (public.is_founder())`. The invariant:
+
+- Existing accounts are backfilled to `role = 'founder'`, so current founders keep full access.
+- Any **new** auth user is provisioned with `role = 'member'` and has no access by default. Enabling public signup no longer exposes portal data — a founder must explicitly promote a user: `update public.profiles set role = 'founder' where id = '<auth-user-uuid>';`.
+
+Public signup should still stay disabled unless the access model is intentionally changed; the role check is a safety net, not a replacement for that setting.
 
 ## Reference Content
 

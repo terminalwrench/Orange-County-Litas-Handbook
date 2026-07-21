@@ -12,6 +12,9 @@ export function getUpcomingDeadlines(today = new Date(), days = 5): Deadline[] {
 
   return getDeadlines().filter((deadline) => {
     const date = parseDate(deadline.date);
+    if (!date) {
+      return false;
+    }
     const value = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
     return value >= start && value <= end;
   });
