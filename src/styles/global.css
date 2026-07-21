@@ -1087,6 +1087,11 @@ a {
   overflow: auto;
 }
 
+.birthday-month-modal .birthday-management-list {
+  max-height: min(28rem, 56vh);
+  overflow: auto;
+}
+
 .credentials-list {
   display: grid;
   gap: 0.65rem;

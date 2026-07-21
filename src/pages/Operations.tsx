@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useMemo, useState, type FormEvent } from "react";
+import { useMemo, useState, type FormEvent } from "react";
 import { PageContainer } from "../components/layout/PageContainer";
 import { Button } from "../components/ui/Button";
 import { DashboardCard } from "../components/ui/DashboardCard";
@@ -79,7 +79,6 @@ export function Operations({
   const [isBirthdayFormOpen, setIsBirthdayFormOpen] = useState(false);
   const [expandedBirthdayMonth, setExpandedBirthdayMonth] = useState<string | undefined>();
   const [visibleBirthdayCount, setVisibleBirthdayCount] = useState(birthdayPageSize);
-  const isMobileBirthdayGrid = useMobileBirthdayGrid();
   const [selectedAccount, setSelectedAccount] = useState<SharedAccount | null>(null);
   const [isMemberYearsOpen, setIsMemberYearsOpen] = useState(false);
   const [credentialMessage, setCredentialMessage] = useState("");
@@ -93,16 +92,6 @@ export function Operations({
   const birthdayGroups = getBirthdayGroups(sortedMembers);
   const memberJoinYearGroups = getMemberJoinYearGroups(memberRecords);
   const selectedBirthdayGroup = birthdayGroups.find((group) => group.month === expandedBirthdayMonth);
-  const selectedBirthdayIndex = expandedBirthdayMonth
-    ? birthdayGroups.findIndex((group) => group.month === expandedBirthdayMonth)
-    : -1;
-  const selectedBirthdayGridIndex = selectedBirthdayIndex >= 0 ? selectedBirthdayIndex + 1 : -1;
-  const mobileBirthdayDrawerIndex = isMobileBirthdayGrid && selectedBirthdayGridIndex >= 0
-    ? Math.min(
-      birthdayGroups.length - 1,
-      selectedBirthdayGridIndex + (selectedBirthdayGridIndex % 2 === 0 ? 1 : 0) - 1
-    )
-    : -1;
 
   function editMember(member: MemberRecord) {
     setBirthdayForm({
@@ -129,8 +118,8 @@ export function Operations({
     setBirthdayForm((current) => ({ ...current, [field]: value }));
   }
 
-  function toggleBirthdayMonth(month: string) {
-    setExpandedBirthdayMonth((current) => current === month ? undefined : month);
+  function openBirthdayMonth(month: string) {
+    setExpandedBirthdayMonth(month);
     setVisibleBirthdayCount(birthdayPageSize);
   }
 
@@ -345,54 +334,36 @@ export function Operations({
                 <span className="birthday-month-tile__abbr">TOTAL</span>
                 <strong>{memberRecords.length}</strong>
               </button>
-              {birthdayGroups.map((group, index) => {
+              {birthdayGroups.map((group) => {
                 const isSelected = expandedBirthdayMonth === group.month;
                 const isCurrent = group.month === String(today.getMonth() + 1);
                 const isMuted = group.members.length === 0;
-                const showInlineDrawer = isMobileBirthdayGrid && index === mobileBirthdayDrawerIndex;
 
                 return (
-                  <Fragment key={group.month}>
-                    <button
-                      className={[
-                        "birthday-month-tile",
-                        isMuted ? "birthday-month-tile--muted" : "",
-                        isCurrent && (!isMuted || isSelected) ? "birthday-month-tile--current" : "",
-                        isSelected ? "birthday-month-tile--selected" : ""
-                      ].filter(Boolean).join(" ")}
-                      type="button"
-                      onClick={() => toggleBirthdayMonth(group.month)}
-                      aria-expanded={isSelected}
-                    >
-                      {group.month === "unscheduled" ? (
-                        <span className="birthday-month-tile__icon" aria-hidden="true">
-                          <Icon name="calendar" />
-                        </span>
-                      ) : (
-                        <span className="birthday-month-tile__abbr">{getMonthAbbreviation(group.month)}</span>
-                      )}
-                      <strong>{group.members.length}</strong>
-                    </button>
-                    {showInlineDrawer ? (
-                      <BirthdayMonthDrawer
-                        group={selectedBirthdayGroup}
-                        visibleCount={visibleBirthdayCount}
-                        onEditMember={editMember}
-                        onShowMore={() => setVisibleBirthdayCount((current) => current + birthdayPageSize)}
-                      />
-                    ) : null}
-                  </Fragment>
+                  <button
+                    className={[
+                      "birthday-month-tile",
+                      isMuted ? "birthday-month-tile--muted" : "",
+                      isCurrent && (!isMuted || isSelected) ? "birthday-month-tile--current" : "",
+                      isSelected ? "birthday-month-tile--selected" : ""
+                    ].filter(Boolean).join(" ")}
+                    type="button"
+                    key={group.month}
+                    onClick={() => openBirthdayMonth(group.month)}
+                    aria-expanded={isSelected}
+                  >
+                    {group.month === "unscheduled" ? (
+                      <span className="birthday-month-tile__icon" aria-hidden="true">
+                        <Icon name="calendar" />
+                      </span>
+                    ) : (
+                      <span className="birthday-month-tile__abbr">{getMonthAbbreviation(group.month)}</span>
+                    )}
+                    <strong>{group.members.length}</strong>
+                  </button>
                 );
               })}
             </div>
-            {expandedBirthdayMonth && !isMobileBirthdayGrid ? (
-              <BirthdayMonthDrawer
-                group={selectedBirthdayGroup}
-                visibleCount={visibleBirthdayCount}
-                onEditMember={editMember}
-                onShowMore={() => setVisibleBirthdayCount((current) => current + birthdayPageSize)}
-              />
-            ) : null}
           </section>
           {birthdayMessage ? <p className="form-status form-status--success">{birthdayMessage}</p> : null}
           {birthdayError ? <p className="form-status form-status--error">{birthdayError}</p> : null}
@@ -419,70 +390,77 @@ export function Operations({
           onClose={() => setIsMemberYearsOpen(false)}
         />
       ) : null}
+      {selectedBirthdayGroup ? (
+        <BirthdayMonthModal
+          group={selectedBirthdayGroup}
+          visibleCount={visibleBirthdayCount}
+          onEditMember={(member) => {
+            editMember(member);
+            setExpandedBirthdayMonth(undefined);
+          }}
+          onShowMore={() => setVisibleBirthdayCount((current) => current + birthdayPageSize)}
+          onClose={() => setExpandedBirthdayMonth(undefined)}
+        />
+      ) : null}
     </PageContainer>
   );
 }
 
-function useMobileBirthdayGrid() {
-  const [isMobile, setIsMobile] = useState(() => (
-    typeof window === "undefined" ? false : window.matchMedia("(max-width: 720px)").matches
-  ));
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia("(max-width: 720px)");
-    const update = () => setIsMobile(mediaQuery.matches);
-
-    update();
-    mediaQuery.addEventListener("change", update);
-    return () => mediaQuery.removeEventListener("change", update);
-  }, []);
-
-  return isMobile;
-}
-
-function BirthdayMonthDrawer({
+function BirthdayMonthModal({
   group,
   visibleCount,
   onEditMember,
-  onShowMore
+  onShowMore,
+  onClose
 }: {
-  group?: ReturnType<typeof getBirthdayGroups>[number];
+  group: ReturnType<typeof getBirthdayGroups>[number];
   visibleCount: number;
   onEditMember: (member: MemberRecord) => void;
   onShowMore: () => void;
+  onClose: () => void;
 }) {
-  if (!group) return null;
-
   const visibleMembers = group.members.slice(0, visibleCount);
   const hiddenCount = group.members.length - visibleMembers.length;
 
   return (
-    <div className="birthday-month-drawer">
-      <div className="birthday-month-drawer__header">
-        <strong>{group.label}</strong>
-        <span>{group.members.length} {group.members.length === 1 ? "birthday" : "birthdays"}</span>
-      </div>
-      {visibleMembers.length > 0 ? (
-        <>
-          <div className="birthday-management-list">
-            {visibleMembers.map((member) => (
-              <button className="birthday-management-row" type="button" key={member.id} onClick={() => onEditMember(member)}>
-                <span>
-                  <strong>{formatMemberName(member)}</strong>
-                  <em>{formatBirthday(member)}{member.instagramHandle ? ` · ${member.instagramHandle}` : ""}</em>
-                </span>
-              </button>
-            ))}
-          </div>
-          {hiddenCount > 0 ? (
-            <Button type="button" variant="ghost" onClick={onShowMore}>
-              Load More
-            </Button>
-          ) : null}
-        </>
-      ) : (
-        <EmptyState title={`No birthdays in ${group.label}.`} />
-      )}
+    <div className="preview-modal-backdrop" role="presentation" onMouseDown={onClose}>
+      <section
+        className="credentials-modal member-years-modal birthday-month-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="birthday-month-modal-title"
+        onMouseDown={(event) => event.stopPropagation()}
+      >
+        <div className="credentials-modal__header">
+          <span>Birthdays</span>
+          <h2 id="birthday-month-modal-title">{group.label}</h2>
+          <p>{group.members.length} {group.members.length === 1 ? "birthday" : "birthdays"} currently listed.</p>
+        </div>
+        {visibleMembers.length > 0 ? (
+          <>
+            <div className="birthday-management-list">
+              {visibleMembers.map((member) => (
+                <button className="birthday-management-row" type="button" key={member.id} onClick={() => onEditMember(member)}>
+                  <span>
+                    <strong>{formatMemberName(member)}</strong>
+                    <em>{formatBirthday(member)}{member.instagramHandle ? ` · ${member.instagramHandle}` : ""}</em>
+                  </span>
+                </button>
+              ))}
+            </div>
+            {hiddenCount > 0 ? (
+              <Button type="button" variant="ghost" onClick={onShowMore}>
+                Load More
+              </Button>
+            ) : null}
+          </>
+        ) : (
+          <EmptyState title={`No birthdays in ${group.label}.`} />
+        )}
+        <div className="form-actions">
+          <Button type="button" variant="ghost" onClick={onClose}>Close</Button>
+        </div>
+      </section>
     </div>
   );
 }
