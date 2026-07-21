@@ -741,8 +741,11 @@ a {
 }
 
 .weather-card {
+  min-height: 10.5rem;
   width: 100%;
   align-self: stretch;
+  display: grid;
+  align-content: start;
   padding: 0.95rem 1.15rem;
 }
 
