@@ -377,14 +377,20 @@ export async function loadEventRecords(
 
 export function getUpcomingEvents(events: EventRecord[] = getEvents(), today = new Date()) {
   return [...events]
-    .filter((event) => daysUntil(event, today) >= 0)
-    .sort((a, b) => parseDate(a.startDate).getTime() - parseDate(b.startDate).getTime());
+    .filter((event) => {
+      const days = daysUntil(event, today);
+      return days !== null && days >= 0;
+    })
+    .sort((a, b) => (parseDate(a.startDate)?.getTime() ?? 0) - (parseDate(b.startDate)?.getTime() ?? 0));
 }
 
 export function getPastEvents(events: EventRecord[] = getEvents(), today = new Date()) {
   return [...events]
-    .filter((event) => daysUntil(event, today) < 0)
-    .sort((a, b) => parseDate(b.startDate).getTime() - parseDate(a.startDate).getTime());
+    .filter((event) => {
+      const days = daysUntil(event, today);
+      return days !== null && days < 0;
+    })
+    .sort((a, b) => (parseDate(b.startDate)?.getTime() ?? 0) - (parseDate(a.startDate)?.getTime() ?? 0));
 }
 
 export function getNextEvent(events: EventRecord[] = getEvents(), today = new Date()) {
@@ -422,31 +428,37 @@ export function buildEventDashboardData(
   };
 }
 
-function daysUntil(event: EventRecord, today: Date) {
+function daysUntil(event: EventRecord, today: Date): number | null {
   const eventDate = parseDate(event.startDate);
+  if (!eventDate) {
+    return null;
+  }
   const start = Date.UTC(today.getFullYear(), today.getMonth(), today.getDate());
   const end = Date.UTC(eventDate.getFullYear(), eventDate.getMonth(), eventDate.getDate());
   return Math.round((end - start) / 86_400_000);
 }
 
 function getMonth(date: string) {
-  return shortDateFormatter.format(parseDate(date)).split(" ")[0];
+  const parsed = parseDate(date);
+  return parsed ? shortDateFormatter.format(parsed).split(" ")[0] : "";
 }
 
 function getDay(date: string) {
-  return String(parseDate(date).getDate());
+  const parsed = parseDate(date);
+  return parsed ? String(parsed.getDate()) : "";
 }
 
 function toDashboardEvent(event: EventRecord, today = new Date()): DashboardEvent {
+  const startDate = parseDate(event.startDate);
   return {
     id: event.id,
     title: event.title,
     date: event.startDate,
     month: getMonth(event.startDate),
     day: getDay(event.startDate),
-    weekday: weekdayFormatter.format(parseDate(event.startDate)),
+    weekday: startDate ? weekdayFormatter.format(startDate) : "",
     time: event.time,
-    dateLine: dateLineFormatter.format(parseDate(event.startDate)),
+    dateLine: startDate ? dateLineFormatter.format(startDate) : "",
     venue: event.location,
     city: event.city,
     countdown: getCountdownDisplay(event.startDate, today),
@@ -485,7 +497,11 @@ function formatFeaturedEventDate(event: EventRecord) {
   const startDate = parseDate(event.startDate);
   const endDate = parseDate(event.endDate || event.startDate);
 
-  if (event.endDate && event.endDate !== event.startDate) {
+  if (!startDate) {
+    return "Date TBD";
+  }
+
+  if (endDate && event.endDate && event.endDate !== event.startDate) {
     const sameYear = startDate.getFullYear() === endDate.getFullYear();
     const sameMonth = sameYear && startDate.getMonth() === endDate.getMonth();
 
@@ -506,9 +522,11 @@ function formatFeaturedEventDate(event: EventRecord) {
 function toRideWeather(event: EventRecord | null, today = new Date()): RideWeather | null {
   if (!event) return null;
 
+  const startDate = parseDate(event.startDate);
+
   return {
     eventDate: event.startDate,
-    label: `Ride Weather (${dateLineFormatter.format(parseDate(event.startDate))})`,
+    label: startDate ? `Ride Weather (${dateLineFormatter.format(startDate)})` : "Ride Weather",
     isForecastAvailable: isWithinCurrentWeek(event.startDate, toDateValue(today)),
     ...rideWeatherForecast
   };
@@ -585,7 +603,7 @@ function normalizeSupabaseEventRows(rows: SupabaseEventRow[]) {
 
   return Array.from(recordsByKey.values())
     .map(fromSupabaseEvent)
-    .sort((a, b) => parseDate(a.startDate).getTime() - parseDate(b.startDate).getTime());
+    .sort((a, b) => (parseDate(a.startDate)?.getTime() ?? 0) - (parseDate(b.startDate)?.getTime() ?? 0));
 }
 
 function getSupabaseEventIdentityKey(row: SupabaseEventRow) {
