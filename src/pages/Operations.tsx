@@ -79,6 +79,7 @@ export function Operations({
   const [visibleBirthdayCount, setVisibleBirthdayCount] = useState(birthdayPageSize);
   const isMobileBirthdayGrid = useMobileBirthdayGrid();
   const [selectedAccount, setSelectedAccount] = useState<SharedAccount | null>(null);
+  const [isMemberYearsOpen, setIsMemberYearsOpen] = useState(false);
   const [credentialMessage, setCredentialMessage] = useState("");
   const metrics = getBranchMetrics(eventRecords, {
     memberCount: memberRecords.length,
@@ -88,12 +89,17 @@ export function Operations({
   const annualReport = getAnnualBranchReport(eventRecords, selectedYear);
   const sortedMembers = [...memberRecords].sort(compareBirthdayMembers);
   const birthdayGroups = getBirthdayGroups(sortedMembers);
+  const memberJoinYearGroups = getMemberJoinYearGroups(memberRecords);
   const selectedBirthdayGroup = birthdayGroups.find((group) => group.month === expandedBirthdayMonth);
   const selectedBirthdayIndex = expandedBirthdayMonth
     ? birthdayGroups.findIndex((group) => group.month === expandedBirthdayMonth)
     : -1;
-  const mobileBirthdayDrawerIndex = isMobileBirthdayGrid && selectedBirthdayIndex >= 0
-    ? Math.min(birthdayGroups.length - 1, selectedBirthdayIndex + (selectedBirthdayIndex % 2 === 0 ? 1 : 0))
+  const selectedBirthdayGridIndex = selectedBirthdayIndex >= 0 ? selectedBirthdayIndex + 1 : -1;
+  const mobileBirthdayDrawerIndex = isMobileBirthdayGrid && selectedBirthdayGridIndex >= 0
+    ? Math.min(
+      birthdayGroups.length - 1,
+      selectedBirthdayGridIndex + (selectedBirthdayGridIndex % 2 === 0 ? 1 : 0) - 1
+    )
     : -1;
 
   function editMember(member: MemberRecord) {
@@ -329,6 +335,14 @@ export function Operations({
               </div>
             </div>
             <div className="birthday-month-groups">
+              <button
+                className="birthday-month-tile birthday-month-tile--summary"
+                type="button"
+                onClick={() => setIsMemberYearsOpen(true)}
+              >
+                <span className="birthday-month-tile__abbr">TOTAL</span>
+                <strong>{memberRecords.length}</strong>
+              </button>
               {birthdayGroups.map((group, index) => {
                 const isSelected = expandedBirthdayMonth === group.month;
                 const isCurrent = group.month === String(today.getMonth() + 1);
@@ -396,6 +410,13 @@ export function Operations({
           }}
         />
       ) : null}
+      {isMemberYearsOpen ? (
+        <MemberYearsModal
+          yearGroups={memberJoinYearGroups}
+          totalMembers={memberRecords.length}
+          onClose={() => setIsMemberYearsOpen(false)}
+        />
+      ) : null}
     </PageContainer>
   );
 }
@@ -460,6 +481,45 @@ function BirthdayMonthDrawer({
       ) : (
         <EmptyState title={`No birthdays in ${group.label}.`} />
       )}
+    </div>
+  );
+}
+
+function MemberYearsModal({
+  yearGroups,
+  totalMembers,
+  onClose
+}: {
+  yearGroups: ReturnType<typeof getMemberJoinYearGroups>;
+  totalMembers: number;
+  onClose: () => void;
+}) {
+  return (
+    <div className="preview-modal-backdrop" role="presentation" onMouseDown={onClose}>
+      <section
+        className="credentials-modal member-years-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="member-years-modal-title"
+        onMouseDown={(event) => event.stopPropagation()}
+      >
+        <div className="credentials-modal__header">
+          <span>Members</span>
+          <h2 id="member-years-modal-title">{totalMembers} Total Members</h2>
+          <p>Imported member records grouped by join year.</p>
+        </div>
+        <div className="member-years-list">
+          {yearGroups.map((group) => (
+            <article className="report-row" key={group.year}>
+              <span>{group.year}</span>
+              <strong>{group.count}</strong>
+            </article>
+          ))}
+        </div>
+        <div className="form-actions">
+          <Button type="button" variant="ghost" onClick={onClose}>Close</Button>
+        </div>
+      </section>
     </div>
   );
 }
@@ -635,6 +695,23 @@ function getBirthdayGroups(members: MemberRecord[]) {
       members: groupMembers.sort(compareBirthdayMembers)
     }))
     .sort((a, b) => getBirthdayGroupSortValue(a.month) - getBirthdayGroupSortValue(b.month));
+}
+
+function getMemberJoinYearGroups(members: MemberRecord[]) {
+  const groups = new Map<string, number>();
+
+  members.forEach((member) => {
+    const year = member.dateJoined ? member.dateJoined.slice(0, 4) : "No Date";
+    groups.set(year, (groups.get(year) ?? 0) + 1);
+  });
+
+  return Array.from(groups.entries())
+    .map(([year, count]) => ({ year, count }))
+    .sort((a, b) => {
+      if (a.year === "No Date") return 1;
+      if (b.year === "No Date") return -1;
+      return Number(b.year) - Number(a.year);
+    });
 }
 
 function getBirthdayGroupSortValue(month: string) {

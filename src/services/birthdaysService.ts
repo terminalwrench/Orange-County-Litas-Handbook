@@ -5,7 +5,12 @@ import { getPersistenceClient, warnAndUseFallback, type PersistenceResult } from
 interface SupabaseMemberRow {
   id: string;
   first_name: string | null;
+  last_name: string | null;
   last_initial: string | null;
+  email: string | null;
+  phone_number: string | null;
+  member_role: string | null;
+  date_joined: string | null;
   birthday_month: number | null;
   birthday_day: number | null;
   instagram_handle: string | null;
@@ -52,7 +57,7 @@ export async function loadMemberRecords(): Promise<MemberLoadResult> {
 
   const { data, error } = await supabase
     .from("members")
-    .select("id, first_name, last_initial, birthday_month, birthday_day, instagram_handle")
+    .select("id, first_name, last_name, last_initial, email, phone_number, member_role, date_joined, birthday_month, birthday_day, instagram_handle")
     .order("birthday_month", { ascending: true, nullsFirst: false })
     .order("birthday_day", { ascending: true, nullsFirst: false })
     .order("first_name", { ascending: true });
@@ -84,7 +89,7 @@ export async function loadBirthdaysThisMonth(today = new Date()): Promise<Birthd
 
   const { data, error } = await supabase
     .from("members")
-    .select("id, first_name, last_initial, birthday_month, birthday_day, instagram_handle")
+    .select("id, first_name, last_name, last_initial, email, phone_number, member_role, date_joined, birthday_month, birthday_day, instagram_handle")
     .eq("birthday_month", currentMonth)
     .not("birthday_day", "is", null)
     .order("birthday_day", { ascending: true });
@@ -238,7 +243,12 @@ function fromSupabaseMember(row: SupabaseMemberRow): MemberRecord {
   return {
     id: row.id,
     firstName: row.first_name ?? "",
+    lastName: normalizeOptionalString(row.last_name),
     lastInitial: normalizeLastInitial(row.last_initial),
+    email: normalizeOptionalString(row.email),
+    phoneNumber: normalizeOptionalString(row.phone_number),
+    memberRole: normalizeOptionalString(row.member_role),
+    dateJoined: normalizeOptionalString(row.date_joined),
     birthdayMonth: row.birthday_month ?? undefined,
     birthdayDay: row.birthday_day ?? undefined,
     instagramHandle: normalizeInstagramHandle(row.instagram_handle)
@@ -249,7 +259,12 @@ function toLocalMemberRecord(input: MemberSaveInput): MemberRecord {
   return {
     id: input.id ?? createLocalId("member"),
     firstName: input.firstName.trim(),
+    lastName: normalizeOptionalString(input.lastName),
     lastInitial: normalizeLastInitial(input.lastInitial),
+    email: normalizeEmail(input.email),
+    phoneNumber: normalizeOptionalString(input.phoneNumber),
+    memberRole: normalizeOptionalString(input.memberRole),
+    dateJoined: normalizeOptionalString(input.dateJoined),
     birthdayMonth: normalizeOptionalNumber(input.birthdayMonth),
     birthdayDay: normalizeOptionalNumber(input.birthdayDay),
     instagramHandle: normalizeInstagramHandle(input.instagramHandle)
@@ -257,13 +272,21 @@ function toLocalMemberRecord(input: MemberSaveInput): MemberRecord {
 }
 
 function toSupabaseMemberPayload(input: MemberSaveInput) {
-  return {
+  const payload: Record<string, string | number | null> = {
     first_name: input.firstName.trim(),
     last_initial: normalizeLastInitial(input.lastInitial) ?? null,
     birthday_month: normalizeOptionalNumber(input.birthdayMonth) ?? null,
     birthday_day: normalizeOptionalNumber(input.birthdayDay) ?? null,
     instagram_handle: normalizeInstagramHandle(input.instagramHandle) ?? null
   };
+
+  if (input.lastName !== undefined) payload.last_name = normalizeOptionalString(input.lastName) ?? null;
+  if (input.email !== undefined) payload.email = normalizeEmail(input.email) ?? null;
+  if (input.phoneNumber !== undefined) payload.phone_number = normalizeOptionalString(input.phoneNumber) ?? null;
+  if (input.memberRole !== undefined) payload.member_role = normalizeOptionalString(input.memberRole) ?? null;
+  if (input.dateJoined !== undefined) payload.date_joined = normalizeOptionalString(input.dateJoined) ?? null;
+
+  return payload;
 }
 
 function formatMemberName(firstName: string, lastInitial?: string | null) {
@@ -286,6 +309,16 @@ function normalizeInstagramHandle(value?: string | null) {
   const normalized = value?.trim();
   if (!normalized) return undefined;
   return normalized.startsWith("@") ? normalized : `@${normalized}`;
+}
+
+function normalizeOptionalString(value?: string | null) {
+  const normalized = value?.trim();
+  return normalized || undefined;
+}
+
+function normalizeEmail(value?: string | null) {
+  const normalized = normalizeOptionalString(value)?.toLowerCase();
+  return normalized;
 }
 
 function normalizeOptionalNumber(value: number | null | undefined) {

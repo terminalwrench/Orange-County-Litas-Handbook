@@ -115,6 +115,11 @@ create table if not exists public.operation_items (
 create table if not exists public.members (
   id uuid primary key default gen_random_uuid(),
   first_name text not null,
+  last_name text,
+  email text,
+  phone_number text,
+  member_role text,
+  date_joined date,
   last_initial text,
   birthday_month integer,
   birthday_day integer,
@@ -125,6 +130,11 @@ create table if not exists public.members (
 
 alter table public.members
   add column if not exists first_name text,
+  add column if not exists last_name text,
+  add column if not exists email text,
+  add column if not exists phone_number text,
+  add column if not exists member_role text,
+  add column if not exists date_joined date,
   add column if not exists last_initial text,
   add column if not exists birthday_month integer,
   add column if not exists birthday_day integer,
@@ -135,6 +145,14 @@ alter table public.members
 create index if not exists members_birthday_month_day_idx
 on public.members (birthday_month, birthday_day)
 where birthday_month is not null and birthday_day is not null;
+
+create unique index if not exists members_email_key
+on public.members (email)
+where email is not null;
+
+create index if not exists members_date_joined_idx
+on public.members (date_joined)
+where date_joined is not null;
 
 do $$
 begin
