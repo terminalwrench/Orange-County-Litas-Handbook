@@ -5,11 +5,11 @@ import { DashboardCard } from "../components/ui/DashboardCard";
 import { DateBadge } from "../components/ui/DateBadge";
 import { EmptyState } from "../components/ui/EmptyState";
 import { FormField } from "../components/ui/FormField";
+import { Icon } from "../components/ui/Icon";
 import { PreviewModal } from "../components/ui/PreviewModal";
-import { SectionHeader } from "../components/ui/SectionHeader";
 import { StatusChip } from "../components/ui/StatusChip";
 import { DateInput, SelectInput, Textarea, TextInput, TimeInput } from "../components/ui/inputs";
-import type { EventRecord, RideRecord, RideStop } from "../types";
+import type { EventRecord, IconName, RideRecord, RideStop } from "../types";
 import { getUpcomingRides, type RideSaveInput } from "../services/ridesService";
 import type { PersistenceResult } from "../services/persistence";
 import { getBranchSettings } from "../services/settingsService";
@@ -100,8 +100,8 @@ export function RidePlanner({
       return;
     }
 
-    if (expandedRideId && !ridePlans.some((ride) => ride.id === expandedRideId)) {
-      setExpandedRideId(undefined);
+    if (!expandedRideId || !ridePlans.some((ride) => ride.id === expandedRideId)) {
+      setExpandedRideId(ridePlans[0].id);
     }
   }, [expandedRideId, ridePlans]);
 
@@ -112,7 +112,7 @@ export function RidePlanner({
   }, [selectedRide?.id]);
 
   function toggleRide(ride: RidePlan) {
-    setExpandedRideId((current) => current === ride.id ? undefined : ride.id);
+    setExpandedRideId(ride.id);
     setIsNewRideOpen(false);
     setSaveMessage("");
     setSaveError("");
@@ -218,10 +218,10 @@ export function RidePlanner({
         const savedRide = fromSavedRide(result.data);
 
         if (mode === "new") {
+          setExpandedRideId(result.data.id);
+          setFormState(savedRide);
           setNewRideState(createBlankRidePlan());
           setIsNewRideOpen(false);
-          setExpandedRideId(undefined);
-          setFormState(null);
           setNewRideMessage(result.source === "supabase" ? "Ride plan created." : "Saved locally for this session.");
         } else {
           setExpandedRideId(result.data.id);
@@ -268,14 +268,28 @@ export function RidePlanner({
   }
 
   return (
-    <PageContainer>
-      <div className="page-title">
-        <span>Ride Planner</span>
-        <h1>Build the ride plan</h1>
+    <PageContainer className="ride-planner-page">
+      <div className="ride-planner-hero">
+        <div>
+          <h1>Ride Planner</h1>
+          <p>Plan rides. Build routes. Bring us together.</p>
+        </div>
+        <div className="ride-planner-hero__actions">
+          <Button type="button" variant="ghost" aria-label="Open ride calendar" disabled>
+            <Icon name="calendar" />
+          </Button>
+          <Button type="button" variant="primary" onClick={startNewRide}>
+            <Icon name="plus" /> New Ride
+          </Button>
+        </div>
       </div>
-      <div className="ride-planner-flow">
-        <DashboardCard>
-          <SectionHeader title="Ride Queue" action={<Button type="button" variant="secondary" onClick={startNewRide}>+ New Ride</Button>} />
+      <div className="ride-planner-layout">
+        <DashboardCard className="ride-queue-panel">
+          <div className="ride-queue-tabs" aria-label="Ride list views">
+            <button className="ride-queue-tab ride-queue-tab--active" type="button">Upcoming</button>
+            <button className="ride-queue-tab" type="button" disabled>Calendar</button>
+            <button className="ride-queue-tab" type="button" disabled>Templates</button>
+          </div>
           {isLoading ? (
             <EmptyState title="Loading rides" message="Checking the shared ride records." />
           ) : ridePlans.length > 0 ? (
@@ -289,7 +303,7 @@ export function RidePlanner({
                       className={isExpanded ? "event-record-row record-row--selected ride-accordion-row" : "event-record-row ride-accordion-row"}
                       type="button"
                       onClick={() => toggleRide(ride)}
-                      aria-expanded={isExpanded}
+                      aria-pressed={isExpanded}
                     >
                       <DateBadge
                         month={getRideMonth(ride.date)}
@@ -304,30 +318,13 @@ export function RidePlanner({
                       <span className="event-record-row__status">
                         <StatusChip label={ride.status} tone={getStatusTone(ride.status)} />
                       </span>
-                      <span className="ride-accordion-row__chevron" aria-hidden="true">{isExpanded ? "⌃" : "⌄"}</span>
                     </button>
-                    {isExpanded && formState ? (
-                      <RidePlannerEditor
-                        ride={formState}
-                        flyerUrl={getRideFlyerUrl(formState, eventRecords)}
-                        idPrefix={`ride-${ride.id}`}
-                        savingId={savingId}
-                        saveMessage={saveMessage}
-                        saveError={saveError}
-                        isPersistenceConfigured={isPersistenceConfigured}
-                        onUpdateField={updateField}
-                        onUpdateStop={updateStop}
-                        onAddStop={addStop}
-                        onRemoveStop={removeStop}
-                        onMoveStop={moveStop}
-                        onSave={handleSaveRide}
-                        onPreviewFlyer={(url, title) => setPreviewFlyer({ url, title })}
-                        onDelete={handleDeleteRide}
-                      />
-                    ) : null}
                   </article>
                 );
               })}
+              <Button className="ride-queue-view-all" type="button" variant="ghost" disabled>
+                View all rides <Icon name="arrow" />
+              </Button>
             </div>
           ) : (
             <EmptyState title="No ride plans available." message="Ride plans will appear here when ride events or saved routes are available." />
@@ -336,7 +333,34 @@ export function RidePlanner({
             {getSourceNote(rideRecordsSource, isPersistenceConfigured)}
           </p>
         </DashboardCard>
-        <div ref={newRideRef}>
+        {formState ? (
+          <RidePlannerEditor
+            ride={formState}
+            idPrefix={`ride-${formState.id}`}
+            savingId={savingId}
+            saveMessage={saveMessage}
+            saveError={saveError}
+            isPersistenceConfigured={isPersistenceConfigured}
+            onUpdateField={updateField}
+            onUpdateStop={updateStop}
+            onAddStop={addStop}
+            onRemoveStop={removeStop}
+            onMoveStop={moveStop}
+            onSave={handleSaveRide}
+          />
+        ) : (
+          <DashboardCard className="ride-detail-card">
+            <EmptyState title="Select a ride" message="Choose a ride from the queue to open the planner workspace." />
+          </DashboardCard>
+        )}
+        <RideUtilityPanel
+          ride={formState}
+          flyerUrl={formState ? getRideFlyerUrl(formState, eventRecords) : undefined}
+          isSaving={Boolean(formState && savingId === formState.id)}
+          onPreviewFlyer={(url, title) => setPreviewFlyer({ url, title })}
+          onDelete={formState?.recordId ? handleDeleteRide : undefined}
+        />
+        <div className="ride-new-ride-region" ref={newRideRef}>
           <DashboardCard className="new-ride-card">
             <button
               className="new-ride-toggle"
@@ -350,7 +374,6 @@ export function RidePlanner({
             {isNewRideOpen ? (
               <RidePlannerEditor
                 ride={newRideState}
-                flyerUrl={undefined}
                 idPrefix="new-ride"
                 savingId={savingId}
                 saveMessage={newRideMessage}
@@ -382,7 +405,6 @@ export function RidePlanner({
 
 function RidePlannerEditor({
   ride,
-  flyerUrl,
   idPrefix,
   savingId,
   saveMessage,
@@ -394,12 +416,9 @@ function RidePlannerEditor({
   onRemoveStop,
   onMoveStop,
   onSave,
-  onPreviewFlyer,
   onCancel,
-  onDelete
 }: {
   ride: RidePlan;
-  flyerUrl?: string;
   idPrefix: string;
   savingId: string | null;
   saveMessage: string;
@@ -411,9 +430,7 @@ function RidePlannerEditor({
   onRemoveStop: (stopId: string) => void;
   onMoveStop: (stopId: string, direction: -1 | 1) => void;
   onSave: () => void;
-  onPreviewFlyer?: (url: string, title: string) => void;
   onCancel?: () => void;
-  onDelete?: () => void;
 }) {
   const isSaving = savingId === ride.id;
   const isNewRide = idPrefix === "new-ride";
@@ -428,21 +445,20 @@ function RidePlannerEditor({
   }
 
   return (
-    <div className="ride-inline-planner">
+    <DashboardCard className="ride-detail-card">
+      <div className="ride-detail-card__topline">
+        <div>
+          <h2>{ride.title || "Untitled ride"}</h2>
+          <StatusChip label={ride.status} tone={getStatusTone(ride.status)} />
+        </div>
+        <div className="ride-detail-card__tools">
+          <Button type="button" variant="ghost" onClick={() => setEditingTab(activeTab)} aria-label="Edit active ride tab">Edit</Button>
+          <Button type="button" variant="ghost" disabled aria-label="More ride actions">More</Button>
+        </div>
+      </div>
+      <RideMetadataStrip ride={ride} />
       <div className="ride-workspace">
         <div className="ride-workspace__main">
-          <header className="ride-workspace-header">
-            <div>
-              <h2>{ride.title || "Untitled ride"}</h2>
-              <dl className="ride-summary-strip">
-                <RideSummaryItem label="Meetup Time" value={ride.kickstandsUp || "Not set"} />
-                <RideSummaryItem label="Start" value={ride.startingLocation || "Starting location not set"} />
-                <RideSummaryItem label="Destination" value={ride.destination || "Destination not set"} />
-                <RideSummaryItem label="Distance" value={ride.estimatedDistance ? `${ride.estimatedDistance} mi` : "Not set"} />
-              </dl>
-            </div>
-            <StatusChip label={ride.status} tone={getStatusTone(ride.status)} />
-          </header>
           <nav className="ride-workspace-tabs" aria-label={`${ride.title || "Ride"} planner sections`}>
             {ridePlannerTabs.map((tab) => (
               <button
@@ -492,13 +508,7 @@ function RidePlannerEditor({
                   </FormField>
                 </div>
               ) : (
-                <RideInfoGrid>
-                  <RideInfoItem label="Ride Name" value={ride.title || "Untitled ride"} />
-                  <RideInfoItem label="Date" value={ride.date || "Date not set"} />
-                  <RideInfoItem label="Status" value={ride.status} />
-                  <RideInfoItem label="Difficulty" value={ride.difficulty} />
-                  <RideInfoItem label="Meetup Time" value={ride.kickstandsUp || "Not set"} />
-                </RideInfoGrid>
+                <RideOverviewPanel ride={ride} />
               )
             ) : null}
             {activeTab === "route" ? (
@@ -617,19 +627,6 @@ function RidePlannerEditor({
             ) : null}
           </section>
         </div>
-        <aside className={flyerUrl ? "ride-flyer-preview" : "ride-flyer-preview ride-flyer-preview--empty"} aria-label="Linked event flyer">
-          {flyerUrl ? (
-            <button className="ride-flyer-preview__button" type="button" onClick={() => onPreviewFlyer?.(flyerUrl, ride.title || "Ride Flyer")}>
-              <span>Event Flyer</span>
-              <img src={flyerUrl} alt={`${ride.title || "Ride"} flyer`} loading="lazy" />
-            </button>
-          ) : (
-            <>
-            <span>Event Flyer</span>
-            <strong>No flyer attached.</strong>
-            </>
-          )}
-        </aside>
       </div>
       <section className="ride-planner-section ride-planner-actions">
         <div className="ride-action-footer">
@@ -639,11 +636,6 @@ function RidePlannerEditor({
             </span>
           </div>
           <div className="ride-action-footer__actions">
-            {onDelete ? (
-              <Button type="button" variant="secondary" onClick={onDelete} disabled={!ride.recordId || isSaving}>
-                Delete ride
-              </Button>
-            ) : null}
             {onCancel ? (
               <Button type="button" variant="ghost" onClick={onCancel} disabled={isSaving}>
                 Cancel
@@ -657,16 +649,167 @@ function RidePlannerEditor({
         {saveMessage ? <p className="form-status form-status--success">{saveMessage}</p> : null}
         {saveError ? <p className="form-status form-status--error">{saveError}</p> : null}
       </section>
+    </DashboardCard>
+  );
+}
+
+function RideMetadataStrip({ ride }: { ride: RidePlan }) {
+  return (
+    <dl className="ride-metadata-strip">
+      <RideMetadataItem icon="calendar" label={formatRideDate(ride.date)} value={ride.kickstandsUp || "Time not set"} />
+      <RideMetadataItem icon="pin" label={ride.startingLocation || "Start not set"} value={ride.destination || "Destination not set"} />
+      <RideMetadataItem icon="route" label={ride.estimatedDistance ? `${ride.estimatedDistance} miles` : "Distance not set"} value={ride.rideType || "Group Ride"} />
+      <RideMetadataItem icon="bike" label={ride.difficulty || "Difficulty not set"} value={ride.freeways ? "Freeways" : "No Freeways"} />
+      <RideMetadataItem icon="clock" label={ride.estimatedRideTime || "Flexible"} value="Ride Time" />
+    </dl>
+  );
+}
+
+function RideMetadataItem({ icon, label, value }: { icon: IconName; label: string; value: string }) {
+  return (
+    <div>
+      <Icon name={icon} />
+      <span>
+        <dt>{label}</dt>
+        <dd>{value}</dd>
+      </span>
     </div>
   );
 }
 
-function RideSummaryItem({ label, value }: { label: string; value: string }) {
+function RideOverviewPanel({ ride }: { ride: RidePlan }) {
   return (
-    <div>
-      <dt>{label}</dt>
-      <dd>{value}</dd>
+    <div className="ride-overview-stack">
+      <div className="ride-overview-layout">
+        <div className="ride-overview-copy">
+          <h3>Ride Overview</h3>
+          <p>{ride.notes || `Meet at ${ride.startingLocation || "the starting location"} and ride toward ${ride.destination || "the destination"}.`}</p>
+          <h3>Ride Details</h3>
+          <RideInfoGrid>
+            <RideInfoItem label="Ride Type" value={ride.rideType || "Group Ride"} />
+            <RideInfoItem label="Difficulty" value={ride.difficulty} />
+            <RideInfoItem label="Freeways" value={ride.freeways ? "Yes" : "No"} />
+            <RideInfoItem label="Ride Time" value={ride.estimatedRideTime || "Flexible"} />
+            <RideInfoItem label="Estimated Distance" value={ride.estimatedDistance ? `${ride.estimatedDistance} miles` : "Not set"} />
+            <RideInfoItem label="Weather" value={ride.weatherPolicy || "Leader Decision"} />
+          </RideInfoGrid>
+        </div>
+        <RouteMapPreview ride={ride} />
+      </div>
+      <RouteTimeline ride={ride} />
     </div>
+  );
+}
+
+function RouteMapPreview({ ride }: { ride: RidePlan }) {
+  return (
+    <div className="ride-route-map" aria-label="Route preview">
+      <span className="ride-route-map__label ride-route-map__label--start">{ride.startingLocation || "Start"}</span>
+      <span className="ride-route-map__line" aria-hidden="true" />
+      <span className="ride-route-map__label ride-route-map__label--end">{ride.destination || "Destination"}</span>
+      <div className="ride-route-map__controls" aria-hidden="true">
+        <span><Icon name="arrow" /></span>
+        <span><Icon name="plus" /></span>
+        <span>-</span>
+      </div>
+    </div>
+  );
+}
+
+function RouteTimeline({ ride }: { ride: RidePlan }) {
+  const routeStops = buildRouteTimeline(ride);
+
+  return (
+    <div className="ride-route-timeline" aria-label="Route timeline">
+      <h3>Route Timeline</h3>
+      <div className="ride-route-timeline__track">
+        {routeStops.map((stop) => (
+          <article className="ride-route-timeline__stop" key={stop.id}>
+            <span><Icon name={stop.icon} /></span>
+            <strong>{stop.title}</strong>
+            <em>{stop.meta}</em>
+          </article>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function RideUtilityPanel({
+  ride,
+  flyerUrl,
+  isSaving,
+  onPreviewFlyer,
+  onDelete
+}: {
+  ride: RidePlan | null;
+  flyerUrl?: string;
+  isSaving: boolean;
+  onPreviewFlyer: (url: string, title: string) => void;
+  onDelete?: () => void;
+}) {
+  const checklist = ride ? buildRideChecklist(ride, flyerUrl) : [];
+  const completedCount = checklist.filter((item) => item.complete).length;
+
+  return (
+    <DashboardCard className="ride-utility-panel">
+      {ride ? (
+        <>
+          <section className="ride-utility-section">
+            <h3>Event Flyer</h3>
+            {flyerUrl ? (
+              <button
+                className="ride-flyer-preview__button ride-flyer-preview__button--rail"
+                type="button"
+                onClick={() => onPreviewFlyer(flyerUrl, ride.title)}
+              >
+                <img src={flyerUrl} alt={`${ride.title} flyer`} />
+              </button>
+            ) : (
+              <div className="ride-flyer-preview ride-flyer-preview--empty ride-flyer-preview--rail">
+                <strong>No flyer attached.</strong>
+              </div>
+            )}
+            <Button type="button" variant="secondary" disabled>
+              Change Flyer
+            </Button>
+          </section>
+          <section className="ride-utility-section">
+            <div className="ride-utility-section__heading">
+              <h3>Ride Checklist</h3>
+              <span>{completedCount} / {checklist.length}</span>
+            </div>
+            <ul className="ride-checklist">
+              {checklist.map((item) => (
+                <li className={item.complete ? "ride-checklist__item ride-checklist__item--complete" : "ride-checklist__item"} key={item.label}>
+                  <span>{item.complete ? <Icon name="check" /> : null}</span>
+                  {item.label}
+                </li>
+              ))}
+            </ul>
+          </section>
+          <section className="ride-utility-section">
+            <h3>Quick Actions</h3>
+            <div className="ride-quick-actions">
+              <Button type="button" variant="ghost" disabled>
+                Duplicate Ride
+              </Button>
+              <Button type="button" variant="ghost" disabled>
+                Share Ride
+              </Button>
+              <Button type="button" variant="ghost" disabled>
+                Export Route
+              </Button>
+              <Button type="button" variant="ghost" className="ride-delete-action" onClick={onDelete} disabled={!onDelete || isSaving}>
+                Delete Ride
+              </Button>
+            </div>
+          </section>
+        </>
+      ) : (
+        <EmptyState title="No ride selected" message="Select a ride to view flyer, checklist, and available actions." />
+      )}
+    </DashboardCard>
   );
 }
 
@@ -797,6 +940,50 @@ function moveStopInRide(ride: RidePlan, stopId: string, direction: -1 | 1): Ride
   stops.splice(nextIndex, 0, stop);
 
   return { ...ride, stops };
+}
+
+function buildRouteTimeline(ride: RidePlan) {
+  const start = {
+    id: "start",
+    icon: "pin" as IconName,
+    title: ride.startingLocation || "Starting location",
+    meta: [ride.kickstandsUp || "Time not set", ride.estimatedDistance ? "Start" : ""].filter(Boolean).join(" · ")
+  };
+  const stops = ride.stops.map((stop) => ({
+    id: stop.id,
+    icon: getStopIcon(stop.type),
+    title: stop.location || `${stop.type} stop`,
+    meta: [stop.type, stop.arrivalTime, stop.notes].filter(Boolean).join(" · ")
+  }));
+  const destination = {
+    id: "destination",
+    icon: "route" as IconName,
+    title: ride.destination || "Destination",
+    meta: [ride.totalDistance || ride.estimatedDistance ? `~${ride.totalDistance || ride.estimatedDistance} miles` : "", "Destination"].filter(Boolean).join(" · ")
+  };
+
+  return [start, ...stops, destination];
+}
+
+function getStopIcon(type: string): IconName {
+  if (type === "Food") return "box";
+  if (type === "Restroom") return "clock";
+  if (type === "Photo" || type === "Scenic") return "image";
+  if (type === "Meetup") return "calendar";
+  if (type === "Gas") return "settings";
+  return "map";
+}
+
+function buildRideChecklist(ride: RidePlan, flyerUrl?: string) {
+  return [
+    { label: "Route planned", complete: Boolean(ride.primaryRouteLink || (ride.startingLocation && ride.destination)) },
+    { label: "Stops confirmed", complete: ride.stops.length > 0 },
+    { label: "Flyer created", complete: Boolean(flyerUrl) },
+    { label: "Assignments made", complete: Boolean(ride.rideLeader || ride.sweep) },
+    { label: "Weather checked", complete: Boolean(ride.weatherPolicy) },
+    { label: "Safety brief", complete: ride.notes.toLowerCase().includes("safety") },
+    { label: "Final headcount", complete: false }
+  ];
 }
 
 function buildRidePlans(events: EventRecord[], rides: RideRecord[]): RidePlan[] {
@@ -1013,6 +1200,16 @@ function getRideDay(date: string) {
   if (!date) return "-";
 
   return String(new Date(`${date}T00:00:00`).getDate());
+}
+
+function formatRideDate(date: string) {
+  if (!date) return "Date not set";
+
+  return new Intl.DateTimeFormat("en-US", {
+    weekday: "short",
+    month: "short",
+    day: "numeric"
+  }).format(new Date(`${date}T00:00:00`));
 }
 
 function getUpcomingSavedRides(rides: RideRecord[]) {
