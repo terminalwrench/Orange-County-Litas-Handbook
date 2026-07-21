@@ -49,6 +49,8 @@ const emptyBirthdayForm = {
 };
 
 const birthdayPageSize = 8;
+const legacyMemberCutoffDate = "2023-09-01";
+const legacyMemberPeriodLabel = "Pre-OC23 Legacy";
 
 interface OperationsProps {
   eventRecords: EventRecord[];
@@ -701,8 +703,8 @@ function getMemberJoinYearGroups(members: MemberRecord[]) {
   const groups = new Map<string, number>();
 
   members.forEach((member) => {
-    const year = member.dateJoined ? member.dateJoined.slice(0, 4) : "No Date";
-    groups.set(year, (groups.get(year) ?? 0) + 1);
+    const period = getMemberJoinPeriod(member.dateJoined);
+    groups.set(period, (groups.get(period) ?? 0) + 1);
   });
 
   return Array.from(groups.entries())
@@ -710,8 +712,16 @@ function getMemberJoinYearGroups(members: MemberRecord[]) {
     .sort((a, b) => {
       if (a.year === "No Date") return 1;
       if (b.year === "No Date") return -1;
+      if (a.year === legacyMemberPeriodLabel) return 1;
+      if (b.year === legacyMemberPeriodLabel) return -1;
       return Number(b.year) - Number(a.year);
     });
+}
+
+function getMemberJoinPeriod(dateJoined?: string) {
+  if (!dateJoined) return "No Date";
+  if (dateJoined < legacyMemberCutoffDate) return legacyMemberPeriodLabel;
+  return dateJoined.slice(0, 4);
 }
 
 function getBirthdayGroupSortValue(month: string) {
