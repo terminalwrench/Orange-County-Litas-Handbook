@@ -187,7 +187,7 @@ export function Operations({
   }
 
   return (
-    <PageContainer>
+    <PageContainer className="operations-page">
       <div className="page-title">
         <span>Operations</span>
         <h1>Branch operations overview</h1>
