@@ -2,6 +2,287 @@
   box-sizing: border-box;
 }
 
+/* Operations page polish: keep changes scoped to the existing workspace. */
+.operations-page {
+  padding-top: 1.05rem;
+}
+
+.operations-page .page-title {
+  margin-bottom: 0.8rem;
+  padding-bottom: 0.78rem;
+  border-bottom-color: rgba(255, 255, 255, 0.075);
+}
+
+.operations-page .page-title h1 {
+  margin-top: 0.22rem;
+  font-size: clamp(1.42rem, 2vw, 1.85rem);
+  font-weight: 500;
+  line-height: 1.12;
+}
+
+.operations-page .module-grid,
+.operations-page.module-grid {
+  gap: 0.8rem;
+}
+
+.operations-page .module-grid--wide-left {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.operations-page .dashboard-card {
+  padding: 0.95rem 1.05rem;
+  border-color: rgba(255, 255, 255, 0.075);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.022), transparent 52%), rgba(12, 14, 16, 0.82);
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.16);
+}
+
+.operations-page .section-header h2 {
+  font-size: 0.76rem;
+  font-weight: 730;
+  letter-spacing: 0.045em;
+}
+
+.operations-page .section-header > .button {
+  min-height: 2.25rem;
+  padding-inline: 0.78rem;
+  font-size: 0.78rem;
+}
+
+.operations-page .metrics-grid--operations {
+  gap: 0;
+  margin-top: 0.72rem;
+  padding-block: 0.12rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.065);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.065);
+}
+
+.operations-page .metrics-grid--operations .metric-tile {
+  min-height: 3.35rem;
+  padding: 0.55rem 0.7rem;
+  border: 0;
+  border-right: 1px solid rgba(255, 255, 255, 0.065);
+  border-radius: 0;
+  background: transparent;
+}
+
+.operations-page .metrics-grid--operations .metric-tile:last-child {
+  border-right: 0;
+}
+
+.operations-page .metrics-grid--operations .metric-tile strong {
+  font-size: 1.18rem;
+  font-weight: 640;
+}
+
+.operations-page .metrics-grid--operations .metric-tile span {
+  margin-top: 0.28rem;
+  color: rgba(248, 245, 239, 0.58);
+  font-size: 0.68rem;
+}
+
+.operations-page .operations-card-note {
+  margin-top: 0.62rem;
+  font-size: 0.76rem;
+}
+
+.operations-page .account-list,
+.operations-page .report-list {
+  margin-top: 0.75rem;
+}
+
+.operations-page .account-row,
+.operations-page .report-row {
+  min-height: 3.2rem;
+  padding: 0.58rem 0.1rem;
+  border-bottom-color: rgba(255, 255, 255, 0.06);
+}
+
+.operations-page .account-row {
+  grid-template-columns: 1.25rem minmax(0, 1fr) auto;
+  gap: 0.68rem;
+}
+
+.operations-page .account-row svg {
+  width: 1.05rem;
+  height: 1.05rem;
+}
+
+.operations-page .account-row strong {
+  font-size: 0.88rem;
+  font-weight: 620;
+}
+
+.operations-page .account-row em,
+.operations-page .account-row small,
+.operations-page .report-row span {
+  font-size: 0.73rem;
+}
+
+.operations-page .account-row__actions {
+  gap: 0.35rem;
+}
+
+.operations-page .account-row__actions .button,
+.operations-page .account-row__actions .status-chip {
+  min-height: 2rem;
+  padding-inline: 0.58rem;
+  border-color: rgba(255, 255, 255, 0.085);
+  border-radius: var(--radius-sm);
+  font-size: 0.7rem;
+}
+
+.operations-page .account-row__actions .status-chip--success {
+  border-color: rgba(67, 186, 88, 0.2);
+}
+
+.operations-page .report-year-select {
+  width: 6.2rem;
+}
+
+.operations-page .report-year-select .form-control {
+  height: 2.2rem;
+  font-size: 0.78rem;
+}
+
+.operations-page .report-row strong {
+  font-size: 0.95rem;
+  font-weight: 640;
+}
+
+.operations-page .birthday-list-panel {
+  gap: 0.78rem;
+  margin-top: 0.9rem;
+  padding-top: 0.85rem;
+  border-top-color: rgba(255, 255, 255, 0.065);
+}
+
+.operations-page .birthday-list-header h3 {
+  font-size: 0.88rem;
+  font-weight: 620;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.operations-page .birthday-list-header p {
+  margin-top: 0.2rem;
+  font-size: 0.76rem;
+}
+
+.operations-page .birthday-month-groups {
+  gap: 0.55rem;
+}
+
+.operations-page .birthday-month-tile {
+  aspect-ratio: 1.35 / 1;
+  min-height: 4.35rem;
+  gap: 0.26rem;
+  padding: 0.55rem;
+  border-color: rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.018);
+}
+
+.operations-page .birthday-month-tile--current {
+  border-color: rgba(255, 107, 0, 0.3);
+  box-shadow: 0 0 0 1px rgba(255, 107, 0, 0.055);
+}
+
+.operations-page .birthday-month-tile--summary {
+  border-color: rgba(255, 107, 0, 0.22);
+  background: rgba(255, 107, 0, 0.025);
+}
+
+.operations-page .birthday-month-tile__abbr,
+.operations-page .birthday-month-tile__icon {
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+}
+
+.operations-page .birthday-month-tile strong {
+  font-size: clamp(1.28rem, 2vw, 1.68rem);
+  font-weight: 590;
+}
+
+.operations-page .birthday-management-form {
+  margin-top: 0.85rem;
+}
+
+@media (max-width: 1020px) {
+  .operations-page .module-grid--wide-left {
+    grid-template-columns: 1fr;
+  }
+
+  .operations-page .metrics-grid--operations .metric-tile {
+    border-right: 1px solid rgba(255, 255, 255, 0.065);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.065);
+  }
+
+  .operations-page .metrics-grid--operations .metric-tile:nth-child(3n) {
+    border-right: 0;
+  }
+
+  .operations-page .metrics-grid--operations .metric-tile:nth-last-child(-n + 3) {
+    border-bottom: 0;
+  }
+}
+
+@media (max-width: 720px) {
+  .operations-page {
+    padding-top: 0.9rem;
+  }
+
+  .operations-page .page-title {
+    margin-bottom: 0.7rem;
+    padding-bottom: 0.7rem;
+  }
+
+  .operations-page .dashboard-card {
+    padding: 0.9rem 0.95rem;
+    border-radius: 0.78rem;
+  }
+
+  .operations-page .metrics-grid--operations .metric-tile,
+  .operations-page .metrics-grid--operations .metric-tile:nth-child(3n) {
+    border-right: 1px solid rgba(255, 255, 255, 0.065);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.065);
+  }
+
+  .operations-page .metrics-grid--operations .metric-tile:nth-child(2n) {
+    border-right: 0;
+  }
+
+  .operations-page .metrics-grid--operations .metric-tile:nth-last-child(-n + 2) {
+    border-bottom: 0;
+  }
+
+  .operations-page .account-row {
+    grid-template-columns: 1.25rem minmax(0, 1fr);
+    gap: 0.55rem 0.65rem;
+    padding-block: 0.68rem;
+  }
+
+  .operations-page .account-row__actions {
+    display: grid;
+    grid-column: 2;
+    grid-template-columns: minmax(0, 1fr) repeat(2, auto);
+    width: 100%;
+  }
+
+  .operations-page .account-row__actions .button,
+  .operations-page .account-row__actions .status-chip {
+    padding-inline: 0.5rem;
+  }
+
+  .operations-page .birthday-month-groups {
+    gap: 0.5rem;
+  }
+
+  .operations-page .birthday-month-tile {
+    aspect-ratio: auto;
+    min-height: 4.25rem;
+    padding: 0.5rem;
+  }
+}
+
 html {
   min-height: 100%;
   background: var(--color-black);
