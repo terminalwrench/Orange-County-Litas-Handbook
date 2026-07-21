@@ -3,7 +3,25 @@
 -- duplicate inserts and avoid overwriting founder-edited rows.
 
 alter table public.rides
-  add column if not exists meetup_time time;
+  add column if not exists status text,
+  add column if not exists meetup text,
+  add column if not exists destination text,
+  add column if not exists mileage text,
+  add column if not exists duration text,
+  add column if not exists difficulty text,
+  add column if not exists estimated_distance text,
+  add column if not exists estimated_ride_time text,
+  add column if not exists freeways boolean default false,
+  add column if not exists meetup_time time,
+  add column if not exists starting_location text,
+  add column if not exists kickstands_up text,
+  add column if not exists total_distance text,
+  add column if not exists route_duration text,
+  add column if not exists ride_type text,
+  add column if not exists visibility text,
+  add column if not exists weather_policy text,
+  add column if not exists stops jsonb default '[]'::jsonb,
+  add column if not exists notes text;
 
 insert into public.rides (
   id,
