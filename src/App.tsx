@@ -312,7 +312,7 @@ export function App() {
     }
   }
 
-  if (isAuthLoading || !authSession) {
+  if (isAuthLoading || (!authSession && isAuthConfigured())) {
     return (
       <Login
         isCheckingSession={isAuthLoading}

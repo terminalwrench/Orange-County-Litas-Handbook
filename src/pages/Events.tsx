@@ -392,7 +392,7 @@ export function Events({
   }
 
   return (
-    <PageContainer>
+    <PageContainer className="events-page">
       <div className="page-title">
         <span>Events</span>
         <h1>Manage branch events</h1>
